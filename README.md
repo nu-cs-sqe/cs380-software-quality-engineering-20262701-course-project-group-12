@@ -1,8 +1,9 @@
-# YOUR PROJECT NAME
+# CHESS
 
 ## Contributors
-- PERSON
-- PERSON
+- Souvenir Turinumugisha
+- Jay Yegon
+- Vanessa Ikirezi Nsenga
 
 ## Dependencies
 - JDK 11
