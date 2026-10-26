@@ -42,7 +42,7 @@ Step 2/3:
   - `Player 2: <name> (Black)`
   - `Current player: <name of the player to move>`
 
-- **TC4: normal names, Player 1 to move** ( :x: )
+- **TC4: normal names, Player 1 to move** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `playerToMove()` is Player 1.
     - **Expected output**: the view shows
         - `Player 1: Ada (White)`
