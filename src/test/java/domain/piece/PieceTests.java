@@ -67,6 +67,11 @@ public class PieceTests {
         assertPiece(PieceType.KING, PieceColor.BLACK);
     }
 
+    @Test
+    public void Piece_NullType_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new Piece(null, PieceColor.WHITE));
+    }
+
     private void assertPiece(PieceType type, PieceColor color) {
         Piece piece = new Piece(type, color);
 
