@@ -6,6 +6,7 @@ public class Game {
     private boolean started;
     private Player playerOne;
     private Player playerTwo;
+    private Player playerToMove;
 
     public boolean start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -14,6 +15,7 @@ public class Game {
 
         playerOne = new Player(player1Name, PieceColor.WHITE);
         playerTwo = new Player(player2Name, PieceColor.BLACK);
+        playerToMove = playerOne;
         started = true;
         return true;
     }
@@ -34,5 +36,12 @@ public class Game {
             throw new IllegalStateException();
         }
         return playerTwo;
+    }
+
+    public Player playerToMove() {
+        if (!started) {
+            throw new IllegalStateException();
+        }
+        return playerToMove;
     }
 }
