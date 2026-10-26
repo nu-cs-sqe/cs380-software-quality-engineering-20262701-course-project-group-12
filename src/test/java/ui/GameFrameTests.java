@@ -1,5 +1,6 @@
 package ui;
 
+import domain.Board;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.JPanel;
@@ -15,7 +16,7 @@ public class GameFrameTests {
                 "Player 1: Ada (White)",
                 "Player 2: Bo (Black)",
                 "Current player: Ada");
-        BoardView board = new BoardView();
+        BoardView board = new BoardView(new BoardController(new Board()));
         JPanel content = new JPanel();
 
         GameFrame.arrange(content, stats, board);
