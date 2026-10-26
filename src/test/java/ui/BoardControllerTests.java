@@ -60,4 +60,16 @@ public class BoardControllerTests {
         assertNull(controller.pieceAt(a3));
         verify(board);
     }
+
+    @Test
+    public void PieceAt_NullLocation_ThrowsIllegalArgumentException() {
+        Board board = mock(Board.class);
+        expect(board.pieceAt(null)).andThrow(new IllegalArgumentException());
+        replay(board);
+
+        BoardController controller = new BoardController(board);
+
+        assertThrows(IllegalArgumentException.class, () -> controller.pieceAt(null));
+        verify(board);
+    }
 }
