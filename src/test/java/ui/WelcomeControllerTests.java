@@ -3,6 +3,7 @@ package ui;
 import domain.Game;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -39,6 +40,15 @@ public class WelcomeControllerTests {
 
         assertTrue(view.namesRequiredShown);
         assertTrue(!game.isStarted());
+    }
+
+    @Test
+    public void WelcomeView_ShowNamesRequired_DisplaysRequiredNamesMessage() {
+        WelcomeView view = new WelcomeView();
+
+        view.showNamesRequired();
+
+        assertEquals("Both player names are required.", view.errorMessage());
     }
 
     @Test
