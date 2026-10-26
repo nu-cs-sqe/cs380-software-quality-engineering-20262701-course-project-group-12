@@ -83,6 +83,18 @@ public class GameTests {
     }
 
     @Test
+    public void StartedGame_AccessorsReturnSetupState() {
+        Game game = new Game();
+
+        assertTrue(game.start("Alice", "Bob"));
+
+        assertEquals("Alice", game.playerOne().getName());
+        assertEquals("Bob", game.playerTwo().getName());
+        assertEquals(game.playerOne(), game.playerToMove());
+        assertTrue(game.board() != null);
+    }
+
+    @Test
     public void Start_WithValidNames_CreatesWhitePlayerOne() {
         Game game = new Game();
 
