@@ -14,4 +14,12 @@ public class LocationTests {
         assertEquals(0, location.getFile());
         assertEquals(1, location.getRank());
     }
+
+    @Test
+    public void Location_File7Rank8_StoresBothHighs() {
+        Location location = new Location(7, 8);
+
+        assertEquals(7, location.getFile());
+        assertEquals(8, location.getRank());
+    }
 }
