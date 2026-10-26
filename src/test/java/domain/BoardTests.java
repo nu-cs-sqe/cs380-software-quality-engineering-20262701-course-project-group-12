@@ -1,0 +1,32 @@
+package domain;
+
+import domain.piece.Piece;
+import domain.piece.PieceColor;
+import domain.piece.PieceType;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+public class BoardTests {
+
+    @Test
+    public void PieceAt_A1_ReturnsWhiteRook() {
+        assertOccupant(0, 1, PieceType.ROOK, PieceColor.WHITE);
+    }
+
+    private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
+        Board board = new Board();
+        Piece piece = board.pieceAt(new Location(file, rank));
+
+        assertEquals(type, piece.getType());
+        assertEquals(color, piece.getColor());
+    }
+
+    private void assertEmpty(int file, int rank) {
+        Board board = new Board();
+
+        assertNull(board.pieceAt(new Location(file, rank)));
+    }
+}

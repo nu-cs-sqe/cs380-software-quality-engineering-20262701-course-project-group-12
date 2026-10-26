@@ -33,7 +33,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC1: a1, both lows | a new `Board`; location `(0, 1)` | white rook | :x: |
+| TC1: a1, both lows | a new `Board`; location `(0, 1)` | white rook | :white_check_mark: |
 | TC2: h1, high file and low rank | a new `Board`; location `(7, 1)` | white rook | :x: |
 | TC3: b1, white knight | a new `Board`; location `(1, 1)` | white knight | :x: |
 | TC4: c1, white bishop | a new `Board`; location `(2, 1)` | white bishop | :x: |
