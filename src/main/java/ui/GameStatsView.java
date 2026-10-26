@@ -1,6 +1,10 @@
 package ui;
 
-public class GameStatsView {
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class GameStatsView extends JPanel {
     private final String playerOneLine;
     private final String playerTwoLine;
     private final String currentPlayerLine;
@@ -9,6 +13,10 @@ public class GameStatsView {
         this.playerOneLine = playerOneLine;
         this.playerTwoLine = playerTwoLine;
         this.currentPlayerLine = currentPlayerLine;
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        add(new JLabel(playerOneLine));
+        add(new JLabel(playerTwoLine));
+        add(new JLabel(currentPlayerLine));
     }
 
     public String playerOneLine() {
