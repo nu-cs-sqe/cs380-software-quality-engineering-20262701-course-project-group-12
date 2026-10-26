@@ -3,17 +3,27 @@ package ui;
 import domain.Game;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.Container;
 
 public class GameFrame extends JFrame {
     public GameFrame(Game game) {
-        super("Chess");
-        setLayout(new BorderLayout());
-        add(new GameStatsController(game).createView(), BorderLayout.NORTH);
-        add(new BoardView(new BoardController(game.board())), BorderLayout.CENTER);
+        this(
+                new GameStatsController(game).createView(),
+                new BoardView(new BoardController(game.board())));
+        setTitle("Chess");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
+    }
+
+    public GameFrame(GameStatsView statsView, BoardView boardView) {
+        arrange(getContentPane(), statsView, boardView);
+    }
+
+    static void arrange(Container container, GameStatsView statsView, BoardView boardView) {
+        container.setLayout(new BorderLayout());
+        container.add(statsView, BorderLayout.NORTH);
+        container.add(boardView, BorderLayout.CENTER);
     }
 }
