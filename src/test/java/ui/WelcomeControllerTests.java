@@ -93,6 +93,20 @@ public class WelcomeControllerTests {
         assertTrue(game.isStarted());
     }
 
+    @Test
+    public void StartButton_WithMissingName_ShowsRequiredNames() {
+        Game game = new Game();
+        WelcomeController controller = new WelcomeController(game);
+        WelcomeView view = new WelcomeView(controller);
+        controller.setView(view);
+
+        view.playerOneField().setText("Alice");
+        view.startButton().doClick();
+
+        assertEquals("Both player names are required.", view.errorMessage());
+        assertTrue(!game.isStarted());
+    }
+
     private static class RecordingWelcomeView extends WelcomeView {
         private boolean namesRequiredShown;
         private boolean closed;
