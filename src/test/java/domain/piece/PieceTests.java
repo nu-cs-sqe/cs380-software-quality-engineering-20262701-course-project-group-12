@@ -47,6 +47,11 @@ public class PieceTests {
         assertPiece(PieceType.BISHOP, PieceColor.BLACK);
     }
 
+    @Test
+    public void Piece_WhiteQueen_StoresTypeAndColor() {
+        assertPiece(PieceType.QUEEN, PieceColor.WHITE);
+    }
+
     private void assertPiece(PieceType type, PieceColor color) {
         Piece piece = new Piece(type, color);
 
