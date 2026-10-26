@@ -118,6 +118,20 @@ public class BoardTests {
         assertThrows(IllegalArgumentException.class, () -> board.pieceAt(null));
     }
 
+    @Test
+    public void PieceAt_CalledTwiceOnA1_StillReturnsWhiteRook() {
+        Board board = new Board();
+        Location a1 = new Location(0, 1);
+
+        Piece first = board.pieceAt(a1);
+        Piece second = board.pieceAt(a1);
+
+        assertEquals(PieceType.ROOK, first.getType());
+        assertEquals(PieceColor.WHITE, first.getColor());
+        assertEquals(PieceType.ROOK, second.getType());
+        assertEquals(PieceColor.WHITE, second.getColor());
+    }
+
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
         Board board = new Board();
         Piece piece = board.pieceAt(new Location(file, rank));
