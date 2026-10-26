@@ -5,7 +5,7 @@ public class Location {
     private final int rank;
 
     public Location(int file, int rank) {
-        if (file < 0 || file > 7) {
+        if (file < 0 || file > 7 || rank < 1 || rank > 8) {
             throw new IllegalArgumentException();
         }
         this.file = file;
