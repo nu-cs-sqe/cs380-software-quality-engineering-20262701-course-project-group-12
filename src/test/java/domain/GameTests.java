@@ -20,4 +20,12 @@ public class GameTests {
         assertFalse(game.start("Alice", ""));
         assertFalse(game.isStarted());
     }
+
+    @Test
+    public void Start_WithWhitespaceOnlyPlayerOneName_RejectsStart() {
+        Game game = new Game();
+
+        assertFalse(game.start("   ", "Bob"));
+        assertFalse(game.isStarted());
+    }
 }
