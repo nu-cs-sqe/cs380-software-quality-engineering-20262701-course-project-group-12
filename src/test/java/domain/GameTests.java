@@ -49,4 +49,14 @@ public class GameTests {
         assertEquals("Alice", game.playerOne().getName());
         assertEquals(PieceColor.WHITE, game.playerOne().getColor());
     }
+
+    @Test
+    public void Start_WithValidNames_CreatesBlackPlayerTwo() {
+        Game game = new Game();
+
+        game.start("Alice", " Bob ");
+
+        assertEquals("Bob", game.playerTwo().getName());
+        assertEquals(PieceColor.BLACK, game.playerTwo().getColor());
+    }
 }

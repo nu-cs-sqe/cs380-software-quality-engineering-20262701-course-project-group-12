@@ -113,6 +113,13 @@ cases below use the game's public behavior to observe its state.
   - **Expected output**: `start` returns `true`; the game is started with
     both players, a board, and Player 1 to move.
 
+- **TC-START-09 — Create Player 2 as Black** (implemented)
+  - **Method(s) under test**: `start(String, String)`, `playerTwo()`
+  - **State of the system**: New game; `start("Alice", " Bob ")` returns
+    `true`.
+  - **Expected output**: `playerTwo()` returns a player named `Bob` with
+    color `BLACK`.
+
 ### Method under test: `isStarted()`
 
 - **TC-IS-STARTED-01 — Check a new game** (not implemented)
