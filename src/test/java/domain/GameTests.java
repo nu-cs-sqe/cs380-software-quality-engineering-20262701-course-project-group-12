@@ -40,6 +40,14 @@ public class GameTests {
     }
 
     @Test
+    public void Start_WithWhitespaceOnlyPlayerTwoName_RejectsStart() {
+        Game game = new Game();
+
+        assertFalse(game.start("Alice", "   "));
+        assertFalse(game.isStarted());
+    }
+
+    @Test
     public void Start_WithTwoValidNames_StartsGame() {
         Game game = new Game();
 
