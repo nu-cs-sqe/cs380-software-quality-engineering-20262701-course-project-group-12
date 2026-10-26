@@ -28,12 +28,31 @@ public class WelcomeControllerTests {
         assertTrue(!game.isStarted());
     }
 
+    @Test
+    public void StartGame_WithValidNames_ClosesWelcomeView() {
+        Game game = new Game();
+        WelcomeController controller = new WelcomeController(game);
+        RecordingWelcomeView view = new RecordingWelcomeView();
+        controller.setView(view);
+
+        controller.startGame("Alice", "Bob");
+
+        assertTrue(view.closed);
+        assertTrue(game.isStarted());
+    }
+
     private static class RecordingWelcomeView extends WelcomeView {
         private boolean namesRequiredShown;
+        private boolean closed;
 
         @Override
         public void showNamesRequired() {
             namesRequiredShown = true;
+        }
+
+        @Override
+        public void close() {
+            closed = true;
         }
     }
 }

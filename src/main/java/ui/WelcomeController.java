@@ -20,6 +20,8 @@ public class WelcomeController {
     public void startGame(String player1Name, String player2Name) {
         if (!game.start(player1Name, player2Name)) {
             view.showNamesRequired();
+            return;
         }
+        view.close();
     }
 }
