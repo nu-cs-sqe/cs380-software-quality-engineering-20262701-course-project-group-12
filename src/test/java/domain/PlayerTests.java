@@ -13,4 +13,12 @@ public class PlayerTests {
         assertEquals("A", player.getName());
         assertEquals(PieceColor.WHITE, player.getColor());
     }
+
+    @Test
+    public void Constructor_WithBlackPlayer_StoresNameAndColor() {
+        Player player = new Player("B", PieceColor.BLACK);
+
+        assertEquals("B", player.getName());
+        assertEquals(PieceColor.BLACK, player.getColor());
+    }
 }
