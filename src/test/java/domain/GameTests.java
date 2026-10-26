@@ -24,6 +24,14 @@ public class GameTests {
     }
 
     @Test
+    public void Start_WithBothNamesEmpty_RejectsStart() {
+        Game game = new Game();
+
+        assertFalse(game.start("", ""));
+        assertFalse(game.isStarted());
+    }
+
+    @Test
     public void Start_WithEmptyPlayerTwoName_RejectsStart() {
         Game game = new Game();
 
