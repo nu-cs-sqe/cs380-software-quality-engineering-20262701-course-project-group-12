@@ -5,7 +5,7 @@ public class Piece {
     private final PieceColor color;
 
     public Piece(PieceType type, PieceColor color) {
-        if (type == null) {
+        if (type == null || color == null) {
             throw new IllegalArgumentException();
         }
         this.type = type;
