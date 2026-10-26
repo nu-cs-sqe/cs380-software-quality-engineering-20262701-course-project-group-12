@@ -5,6 +5,9 @@ public class Location {
     private final int rank;
 
     public Location(int file, int rank) {
+        if (file < 0 || file > 7) {
+            throw new IllegalArgumentException();
+        }
         this.file = file;
         this.rank = rank;
     }

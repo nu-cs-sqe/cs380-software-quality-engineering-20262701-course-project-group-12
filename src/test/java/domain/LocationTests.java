@@ -38,4 +38,9 @@ public class LocationTests {
         assertEquals(7, location.getFile());
         assertEquals(1, location.getRank());
     }
+
+    @Test
+    public void Location_FileJustBelowInterval_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new Location(-1, 1));
+    }
 }
