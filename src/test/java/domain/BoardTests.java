@@ -101,6 +101,11 @@ public class BoardTests {
         assertOccupant(3, 8, PieceType.QUEEN, PieceColor.BLACK);
     }
 
+    @Test
+    public void PieceAt_E8_ReturnsBlackKing() {
+        assertOccupant(4, 8, PieceType.KING, PieceColor.BLACK);
+    }
+
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
         Board board = new Board();
         Piece piece = board.pieceAt(new Location(file, rank));

@@ -32,6 +32,7 @@ public class Board {
         squares[7][1] = new Piece(PieceType.KNIGHT, PieceColor.BLACK);
         squares[7][2] = new Piece(PieceType.BISHOP, PieceColor.BLACK);
         squares[7][3] = new Piece(PieceType.QUEEN, PieceColor.BLACK);
+        squares[7][4] = new Piece(PieceType.KING, PieceColor.BLACK);
     }
 
     public Piece pieceAt(Location location) {
