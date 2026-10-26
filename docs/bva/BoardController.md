@@ -40,5 +40,5 @@ The starting position itself is specified on `Board`. These cases check the pass
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC3: the square has a piece | controller from TC1; the board returns a white rook for the location | returns that same white rook | :white_check_mark: |
-| TC4: the square is empty | controller from TC1; the board returns null for the location | returns null | :x: |
+| TC4: the square is empty | controller from TC1; the board returns null for the location | returns null | :white_check_mark: |
 | TC5: the location is null | controller from TC1; the board throws `IllegalArgumentException` for that call | throws that same `IllegalArgumentException` | :x: |

@@ -47,4 +47,17 @@ public class BoardControllerTests {
         assertSame(whiteRook, controller.pieceAt(a1));
         verify(board);
     }
+
+    @Test
+    public void PieceAt_EmptySquare_ReturnsNull() {
+        Board board = mock(Board.class);
+        Location a3 = new Location(0, 3);
+        expect(board.pieceAt(a3)).andReturn(null);
+        replay(board);
+
+        BoardController controller = new BoardController(board);
+
+        assertNull(controller.pieceAt(a3));
+        verify(board);
+    }
 }
