@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class GameStatsControllerTests {
 
@@ -17,5 +18,14 @@ public class GameStatsControllerTests {
         replay(game);
 
         assertDoesNotThrow(() -> new GameStatsController(game));
+    }
+
+    @Test
+    void unstartedGameIsRejected() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(false);
+        replay(game);
+
+        assertThrows(IllegalArgumentException.class, () -> new GameStatsController(game));
     }
 }

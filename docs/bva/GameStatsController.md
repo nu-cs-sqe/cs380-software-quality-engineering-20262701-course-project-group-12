@@ -20,7 +20,7 @@ The design says the constructor requires a started game.
     - **State of the system**: `game.isStarted()` is true. Player 1 is Ada / White. Player 2 is Bo / Black. `playerToMove()` is Player 1.
     - **Expected output**: the controller is created
 
-- **TC2: game has not been started** ( :x: )
+- **TC2: game has not been started** ( :white_check_mark: )
     - **State of the system**: `game.isStarted()` is false
     - **Expected output**: `IllegalArgumentException`
 
