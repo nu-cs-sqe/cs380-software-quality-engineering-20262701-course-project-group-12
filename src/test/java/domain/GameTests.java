@@ -1,7 +1,9 @@
 package domain;
 
+import domain.piece.PieceColor;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -36,5 +38,15 @@ public class GameTests {
 
         assertTrue(game.start("Alice", "Bob"));
         assertTrue(game.isStarted());
+    }
+
+    @Test
+    public void Start_WithValidNames_CreatesWhitePlayerOne() {
+        Game game = new Game();
+
+        game.start(" Alice ", "Bob");
+
+        assertEquals("Alice", game.playerOne().getName());
+        assertEquals(PieceColor.WHITE, game.playerOne().getColor());
     }
 }

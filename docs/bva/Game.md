@@ -91,7 +91,7 @@ cases below use the game's public behavior to observe its state.
   - **Expected output**: `start` returns `true`; `isStarted()` returns
     `true`; setup completes.
 
-- **TC-START-06 — Trim surrounding whitespace** (not implemented)
+- **TC-START-06 — Trim surrounding whitespace** (implemented)
   - **Method(s) under test**: `start(String, String)`, `playerOne()`,
     `playerTwo()`
   - **State of the system**: New game; Player 1's name is `" Alice "` and
