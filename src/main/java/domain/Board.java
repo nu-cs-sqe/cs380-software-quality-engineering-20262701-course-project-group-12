@@ -12,6 +12,7 @@ public class Board {
         squares[0][0] = new Piece(PieceType.ROOK, PieceColor.WHITE);
         squares[0][7] = new Piece(PieceType.ROOK, PieceColor.WHITE);
         squares[0][1] = new Piece(PieceType.KNIGHT, PieceColor.WHITE);
+        squares[0][2] = new Piece(PieceType.BISHOP, PieceColor.WHITE);
     }
 
     public Piece pieceAt(Location location) {

@@ -26,6 +26,11 @@ public class BoardTests {
         assertOccupant(1, 1, PieceType.KNIGHT, PieceColor.WHITE);
     }
 
+    @Test
+    public void PieceAt_C1_ReturnsWhiteBishop() {
+        assertOccupant(2, 1, PieceType.BISHOP, PieceColor.WHITE);
+    }
+
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
         Board board = new Board();
         Piece piece = board.pieceAt(new Location(file, rank));
