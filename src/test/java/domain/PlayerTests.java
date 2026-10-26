@@ -21,4 +21,11 @@ public class PlayerTests {
         assertEquals("B", player.getName());
         assertEquals(PieceColor.BLACK, player.getColor());
     }
+
+    @Test
+    public void Constructor_WithSurroundingWhitespace_TrimsName() {
+        Player player = new Player(" Alice ", PieceColor.WHITE);
+
+        assertEquals("Alice", player.getName());
+    }
 }

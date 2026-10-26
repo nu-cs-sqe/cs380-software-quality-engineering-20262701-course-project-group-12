@@ -7,7 +7,7 @@ public class Player {
     private final PieceColor color;
 
     public Player(String name, PieceColor color) {
-        this.name = name;
+        this.name = name.trim();
         this.color = color;
     }
 
