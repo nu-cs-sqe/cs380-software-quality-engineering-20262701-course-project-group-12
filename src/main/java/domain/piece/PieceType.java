@@ -2,5 +2,6 @@ package domain.piece;
 
 public enum PieceType {
     PAWN,
-    ROOK
+    ROOK,
+    KNIGHT
 }
