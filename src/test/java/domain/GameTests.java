@@ -3,6 +3,7 @@ package domain;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameTests {
     @Test
@@ -27,5 +28,13 @@ public class GameTests {
 
         assertFalse(game.start("   ", "Bob"));
         assertFalse(game.isStarted());
+    }
+
+    @Test
+    public void Start_WithTwoValidNames_StartsGame() {
+        Game game = new Game();
+
+        assertTrue(game.start("Alice", "Bob"));
+        assertTrue(game.isStarted());
     }
 }
