@@ -63,7 +63,7 @@ Step 2/3:
         - `Player 2: Li Wei (Black)`
         - `Current player: Ann Marie`
 
-- **TC7: both players have the same name** ( :x: )
+- **TC7: both players have the same name** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Ada / Black. `playerToMove()` is Player 1.
     - **Expected output**: the view shows
         - `Player 1: Ada (White)`

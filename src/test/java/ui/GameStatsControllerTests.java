@@ -95,4 +95,24 @@ public class GameStatsControllerTests {
         assertEquals("Player 2: Li Wei (Black)", view.playerTwoLine());
         assertEquals("Current player: Ann Marie", view.currentPlayerLine());
     }
+
+    @Test
+    void createViewAllowsDuplicateNames() {
+        Player playerOne = createMock(Player.class);
+        Player playerTwo = createMock(Player.class);
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOne()).andStubReturn(playerOne);
+        expect(game.playerTwo()).andStubReturn(playerTwo);
+        expect(game.playerToMove()).andStubReturn(playerOne);
+        expect(playerOne.getName()).andStubReturn("Ada");
+        expect(playerTwo.getName()).andStubReturn("Ada");
+        replay(game, playerOne, playerTwo);
+
+        GameStatsView view = new GameStatsController(game).createView();
+
+        assertEquals("Player 1: Ada (White)", view.playerOneLine());
+        assertEquals("Player 2: Ada (Black)", view.playerTwoLine());
+        assertEquals("Current player: Ada", view.currentPlayerLine());
+    }
 }
