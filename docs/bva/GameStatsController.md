@@ -16,7 +16,7 @@ Step 2/3:
 
 The design says the constructor requires a started game.
 
-- **TC1: started game** ( :x: )
+- **TC1: started game** ( :white_check_mark: )
     - **State of the system**: `game.isStarted()` is true. Player 1 is Ada / White. Player 2 is Bo / Black. `playerToMove()` is Player 1.
     - **Expected output**: the controller is created
 
