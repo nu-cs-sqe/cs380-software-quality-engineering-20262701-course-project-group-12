@@ -38,7 +38,7 @@ Type and color are small sets of cases, and every pair is possible, so Step 4 us
 | TC9: white queen | `type = QUEEN`, `color = WHITE` | piece is created; `getType()` is `QUEEN`; `getColor()` is `WHITE` | :white_check_mark: |
 | TC10: black queen | `type = QUEEN`, `color = BLACK` | piece is created; `getType()` is `QUEEN`; `getColor()` is `BLACK` | :white_check_mark: |
 | TC11: white king | `type = KING`, `color = WHITE` | piece is created; `getType()` is `KING`; `getColor()` is `WHITE` | :white_check_mark: |
-| TC12: black king | `type = KING`, `color = BLACK` | piece is created; `getType()` is `KING`; `getColor()` is `BLACK` | :x: |
+| TC12: black king | `type = KING`, `color = BLACK` | piece is created; `getType()` is `KING`; `getColor()` is `BLACK` | :white_check_mark: |
 | TC13: missing type | `type = null`, `color = WHITE` | throws `IllegalArgumentException` | :x: |
 | TC14: missing color | `type = PAWN`, `color = null` | throws `IllegalArgumentException` | :x: |
 
