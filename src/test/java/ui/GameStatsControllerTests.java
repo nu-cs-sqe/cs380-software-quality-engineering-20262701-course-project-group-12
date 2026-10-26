@@ -75,4 +75,24 @@ public class GameStatsControllerTests {
         assertEquals("Player 2: B (Black)", view.playerTwoLine());
         assertEquals("Current player: A", view.currentPlayerLine());
     }
+
+    @Test
+    void createViewShowsNamesWithSpaces() {
+        Player annMarie = createMock(Player.class);
+        Player liWei = createMock(Player.class);
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOne()).andStubReturn(annMarie);
+        expect(game.playerTwo()).andStubReturn(liWei);
+        expect(game.playerToMove()).andStubReturn(annMarie);
+        expect(annMarie.getName()).andStubReturn("Ann Marie");
+        expect(liWei.getName()).andStubReturn("Li Wei");
+        replay(game, annMarie, liWei);
+
+        GameStatsView view = new GameStatsController(game).createView();
+
+        assertEquals("Player 1: Ann Marie (White)", view.playerOneLine());
+        assertEquals("Player 2: Li Wei (Black)", view.playerTwoLine());
+        assertEquals("Current player: Ann Marie", view.currentPlayerLine());
+    }
 }

@@ -56,7 +56,7 @@ Step 2/3:
         - `Player 2: B (Black)`
         - `Current player: A`
 
-- **TC6: names with a space in the middle** ( :x: )
+- **TC6: names with a space in the middle** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ann Marie / White. Player 2 Li Wei / Black. `playerToMove()` is Player 1.
     - **Expected output**: the view shows
         - `Player 1: Ann Marie (White)`
