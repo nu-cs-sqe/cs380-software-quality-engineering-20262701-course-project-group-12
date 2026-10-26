@@ -66,6 +66,11 @@ public class BoardTests {
         assertEmpty(0, 6);
     }
 
+    @Test
+    public void PieceAt_H6_ReturnsEmpty() {
+        assertEmpty(7, 6);
+    }
+
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
         Board board = new Board();
         Piece piece = board.pieceAt(new Location(file, rank));
