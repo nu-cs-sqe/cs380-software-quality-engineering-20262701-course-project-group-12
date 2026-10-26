@@ -43,7 +43,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC8: h2, last file of the white pawns | a new `Board`; location `(7, 2)` | white pawn | :white_check_mark: |
 | TC9: a3, first empty rank at file 0 | a new `Board`; location `(0, 3)` | null | :white_check_mark: |
 | TC10: h3, first empty rank at file 7 | a new `Board`; location `(7, 3)` | null | :white_check_mark: |
-| TC11: a6, last empty rank at file 0 | a new `Board`; location `(0, 6)` | null | :x: |
+| TC11: a6, last empty rank at file 0 | a new `Board`; location `(0, 6)` | null | :white_check_mark: |
 | TC12: h6, last empty rank at file 7 | a new `Board`; location `(7, 6)` | null | :x: |
 | TC13: a7, first file of the black pawns | a new `Board`; location `(0, 7)` | black pawn | :x: |
 | TC14: h7, last file of the black pawns | a new `Board`; location `(7, 7)` | black pawn | :x: |
