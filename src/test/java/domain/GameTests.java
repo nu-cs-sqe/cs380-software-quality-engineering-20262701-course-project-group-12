@@ -12,4 +12,12 @@ public class GameTests {
         assertFalse(game.start("", "Bob"));
         assertFalse(game.isStarted());
     }
+
+    @Test
+    public void Start_WithEmptyPlayerTwoName_RejectsStart() {
+        Game game = new Game();
+
+        assertFalse(game.start("Alice", ""));
+        assertFalse(game.isStarted());
+    }
 }
