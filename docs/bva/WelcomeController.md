@@ -51,7 +51,7 @@ public behavior and mocked view/model collaborators to observe the result.
 
 ### Method under test: `startGame(String player1Name, String player2Name)`
 
-- **TC-STARTGAME-01 — Reject an empty Player 1 name** (not implemented)
+- **TC-STARTGAME-01 — Reject an empty Player 1 name** (implemented)
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Player 1's name is empty and Player 2's name is `Bob`.
@@ -60,7 +60,7 @@ public behavior and mocked view/model collaborators to observe the result.
     calls `showNamesRequired()`, and does not close the welcome view or open
     the game window.
 
-- **TC-STARTGAME-02 — Reject an empty Player 2 name** (not implemented)
+- **TC-STARTGAME-02 — Reject an empty Player 2 name** (implemented)
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Player 1's name is `Alice` and Player 2's name is empty.
@@ -69,7 +69,7 @@ public behavior and mocked view/model collaborators to observe the result.
     calls `showNamesRequired()`, and does not close the welcome view or open
     the game window.
 
-- **TC-STARTGAME-03 — Reject whitespace-only names** (not implemented)
+- **TC-STARTGAME-03 — Reject whitespace-only names** (implemented)
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Player 1's name is `"   "` and Player 2's name is `"\t"`.
@@ -78,7 +78,7 @@ public behavior and mocked view/model collaborators to observe the result.
     not close the welcome view or open the game window.
 
 - **TC-STARTGAME-04 — Start with the smallest valid names**
-  (not implemented)
+  (implemented)
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Player 1's name is `A` and Player 2's name is `B`.
@@ -87,7 +87,7 @@ public behavior and mocked view/model collaborators to observe the result.
     game window.
 
 - **TC-STARTGAME-05 — Pass names with surrounding whitespace**
-  (not implemented)
+  (implemented)
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Player 1's name is `" Alice "` and Player 2's name is
@@ -96,7 +96,7 @@ public behavior and mocked view/model collaborators to observe the result.
     `Game.start`, closes the welcome view, and opens the game window.
 
 - **TC-STARTGAME-06 — Allow duplicate valid names**
-  (not implemented)
+  (implemented)
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Both player names are `Alex`. `Game.start` returns `true`.
@@ -104,7 +104,7 @@ public behavior and mocked view/model collaborators to observe the result.
     game window.
 
 - **TC-STARTGAME-07 — Start after both names are valid**
-  (not implemented)
+  (implemented)
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Player 1's name is `Alice` and Player 2's name is `Bob`.

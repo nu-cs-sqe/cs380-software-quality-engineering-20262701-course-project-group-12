@@ -40,7 +40,7 @@ below use the player's public behavior to observe the stored values.
 ### Method under test: `Player(String name, PieceColor color)`
 
 - **TC-PLAYER-CONSTRUCTOR-01 — Construct a White player**
-  (not implemented)
+  (implemented)
   - **Method(s) under test**: `Player(String, PieceColor)`, `getName()`,
     `getColor()`
   - **State of the system**: Construct a player with name `A` and color
@@ -48,7 +48,7 @@ below use the player's public behavior to observe the stored values.
   - **Expected output**: The player stores name `A` and color `WHITE`.
 
 - **TC-PLAYER-CONSTRUCTOR-02 — Construct a Black player**
-  (not implemented)
+  (implemented)
   - **Method(s) under test**: `Player(String, PieceColor)`, `getName()`,
     `getColor()`
   - **State of the system**: Construct a player with name `B` and color
@@ -57,14 +57,14 @@ below use the player's public behavior to observe the stored values.
 
 ### Method under test: `getName()`
 
-- **TC-PLAYER-NAME-01 — Return a one-character name** (not implemented)
+- **TC-PLAYER-NAME-01 — Return a one-character name** (implemented)
   - **Method(s) under test**: `Player(String, PieceColor)`, `getName()`
   - **State of the system**: Player constructed with name `A` and color
     `WHITE`.
   - **Expected output**: Returns `A`.
 
 - **TC-PLAYER-NAME-02 — Return the trimmed name from setup**
-  (not implemented)
+  (implemented)
   - **Method(s) under test**: `Player(String, PieceColor)`, `getName()`
   - **State of the system**: `Game.start` receives `" Alice "` and creates
     the player with the trimmed name `Alice`.
@@ -72,13 +72,13 @@ below use the player's public behavior to observe the stored values.
 
 ### Method under test: `getColor()`
 
-- **TC-PLAYER-COLOR-01 — Return White** (not implemented)
+- **TC-PLAYER-COLOR-01 — Return White** (implemented)
   - **Method(s) under test**: `Player(String, PieceColor)`, `getColor()
   - **State of the system**: Player constructed with name `Alice` and color
     `PieceColor.WHITE`.
   - **Expected output**: Returns `PieceColor.WHITE`.
 
-- **TC-PLAYER-COLOR-02 — Return Black** (not implemented)
+- **TC-PLAYER-COLOR-02 — Return Black** (implemented)
   - **Method(s) under test**: `Player(String, PieceColor)`, `getColor()`
   - **State of the system**: Player constructed with name `Bob` and color
     `PieceColor.BLACK`.

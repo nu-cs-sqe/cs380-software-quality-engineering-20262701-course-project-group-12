@@ -56,35 +56,35 @@ cases below use the game's public behavior to observe its state.
 
 ### Method under test: `start(String player1Name, String player2Name)`
 
-- **TC-START-01 — Reject two empty names** (not implemented)
+- **TC-START-01 — Reject two empty names** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: New game; Player 1's name is empty and Player
     2's name is empty.
   - **Expected output**: `start` returns `false`; `isStarted()` returns
     `false`; no players or board are created.
 
-- **TC-START-02 — Reject an empty Player 1 name** (not implemented)
+- **TC-START-02 — Reject an empty Player 1 name** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: New game; Player 1's name is empty and Player
     2's name is `Bob`.
   - **Expected output**: `start` returns `false`; the game remains
     unstarted.
 
-- **TC-START-03 — Reject an empty Player 2 name** (not implemented)
+- **TC-START-03 — Reject an empty Player 2 name** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: New game; Player 1's name is `Alice` and Player
     2's name is empty.
   - **Expected output**: `start` returns `false`; the game remains
     unstarted.
 
-- **TC-START-04 — Reject whitespace-only names** (not implemented)
+- **TC-START-04 — Reject whitespace-only names** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: New game; Player 1's name is `"   "` and Player
     2's name is `"\t"`.
   - **Expected output**: `start` returns `false`; no players or board are
     created; the game remains unstarted.
 
-- **TC-START-05 — Accept one-character names** (not implemented)
+- **TC-START-05 — Accept one-character names** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: New game; Player 1's name is `A` and Player 2's
     name is `B`.
@@ -106,7 +106,7 @@ cases below use the game's public behavior to observe its state.
   - **Expected output**: `start` returns `true`; both players are created
     with the name `Alex`.
 
-- **TC-START-08 — Start with two valid names** (not implemented)
+- **TC-START-08 — Start with two valid names** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: New game; Player 1's name is `Alice` and Player
     2's name is `Bob`.
@@ -136,13 +136,13 @@ cases below use the game's public behavior to observe its state.
 
 ### Method under test: `isStarted()`
 
-- **TC-IS-STARTED-01 — Check a new game** (not implemented)
+- **TC-IS-STARTED-01 — Check a new game** (implemented)
   - **Method(s) under test**: `isStarted()`
   - **State of the system**: Newly constructed game before `start` succeeds.
   - **Expected output**: Returns `false`.
 
 - **TC-IS-STARTED-02 — Check a successfully started game**
-  (not implemented)
+  (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: `start("Alice", "Bob")` has returned `true`.
   - **Expected output**: Returns `true`.
@@ -150,14 +150,14 @@ cases below use the game's public behavior to observe its state.
 ### Methods under test: `playerOne()`, `playerTwo()`, `playerToMove()`, and
 `board()`
 
-- **TC-ACCESSORS-01 — Reject access before setup** (not implemented)
+- **TC-ACCESSORS-01 — Reject access before setup** (implemented)
   - **Method(s) under test**: `playerOne()`, `playerTwo()`, `playerToMove()`,
     `board()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Each accessor throws `IllegalStateException`.
 
 - **TC-ACCESSORS-02 — Return setup state after a valid start**
-  (not implemented)
+  (implemented)
   - **Method(s) under test**: `start(String, String)`, `playerOne()`,
     `playerTwo()`, `playerToMove()`, `board()`
   - **State of the system**: `start("Alice", "Bob")` has returned `true`.
