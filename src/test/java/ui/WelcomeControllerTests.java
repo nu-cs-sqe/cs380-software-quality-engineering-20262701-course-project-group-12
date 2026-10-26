@@ -29,6 +29,19 @@ public class WelcomeControllerTests {
     }
 
     @Test
+    public void StartGame_WithMissingPlayerTwoName_ShowsRequiredNames() {
+        Game game = new Game();
+        WelcomeController controller = new WelcomeController(game);
+        RecordingWelcomeView view = new RecordingWelcomeView();
+        controller.setView(view);
+
+        controller.startGame("Alice", "");
+
+        assertTrue(view.namesRequiredShown);
+        assertTrue(!game.isStarted());
+    }
+
+    @Test
     public void StartGame_WithValidNames_ClosesWelcomeView() {
         Game game = new Game();
         WelcomeController controller = new WelcomeController(game);
