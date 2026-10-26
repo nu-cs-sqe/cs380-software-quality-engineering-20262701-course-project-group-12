@@ -24,7 +24,7 @@ The design says the constructor requires a started game.
     - **State of the system**: `game.isStarted()` is false
     - **Expected output**: `IllegalArgumentException`
 
-- **TC3: game is null** ( :x: )
+- **TC3: game is null** ( :white_check_mark: )
     - **State of the system**: `game` is null
     - **Expected output**: `IllegalArgumentException`
 

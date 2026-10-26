@@ -28,4 +28,9 @@ public class GameStatsControllerTests {
 
         assertThrows(IllegalArgumentException.class, () -> new GameStatsController(game));
     }
+
+    @Test
+    void nullGameIsRejected() {
+        assertThrows(IllegalArgumentException.class, () -> new GameStatsController(null));
+    }
 }
