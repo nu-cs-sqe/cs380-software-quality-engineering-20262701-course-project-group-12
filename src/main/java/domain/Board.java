@@ -5,10 +5,12 @@ import domain.piece.PieceColor;
 import domain.piece.PieceType;
 
 public class Board {
+    private static final int FILES = 8;
+    private static final int RANKS = 8;
     private final Piece[][] squares;
 
     public Board() {
-        squares = new Piece[8][8];
+        squares = new Piece[RANKS][FILES];
         PieceType[] backRank = {
             PieceType.ROOK,
             PieceType.KNIGHT,
@@ -19,20 +21,12 @@ public class Board {
             PieceType.KNIGHT,
             PieceType.ROOK
         };
-        for (int file = 0; file < 8; file++) {
+        for (int file = 0; file < FILES; file++) {
             squares[0][file] = new Piece(backRank[file], PieceColor.WHITE);
-        }
-        for (int file = 0; file < 8; file++) {
             squares[1][file] = new Piece(PieceType.PAWN, PieceColor.WHITE);
-        }
-        for (int file = 0; file < 8; file++) {
             squares[6][file] = new Piece(PieceType.PAWN, PieceColor.BLACK);
+            squares[7][file] = new Piece(backRank[file], PieceColor.BLACK);
         }
-        squares[7][0] = new Piece(PieceType.ROOK, PieceColor.BLACK);
-        squares[7][1] = new Piece(PieceType.KNIGHT, PieceColor.BLACK);
-        squares[7][2] = new Piece(PieceType.BISHOP, PieceColor.BLACK);
-        squares[7][3] = new Piece(PieceType.QUEEN, PieceColor.BLACK);
-        squares[7][4] = new Piece(PieceType.KING, PieceColor.BLACK);
     }
 
     public Piece pieceAt(Location location) {
