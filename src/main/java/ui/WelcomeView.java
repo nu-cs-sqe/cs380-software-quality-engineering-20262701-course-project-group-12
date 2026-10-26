@@ -6,6 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Window;
 
@@ -50,6 +51,9 @@ public class WelcomeView extends JPanel {
     }
 
     public void showGame(Game game) {
+        if (GraphicsEnvironment.isHeadless()) {
+            return;
+        }
         new GameFrame(game).setVisible(true);
     }
 
