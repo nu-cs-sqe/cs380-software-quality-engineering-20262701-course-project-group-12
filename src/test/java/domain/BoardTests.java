@@ -41,6 +41,11 @@ public class BoardTests {
         assertOccupant(4, 1, PieceType.KING, PieceColor.WHITE);
     }
 
+    @Test
+    public void PieceAt_A2_ReturnsWhitePawn() {
+        assertOccupant(0, 2, PieceType.PAWN, PieceColor.WHITE);
+    }
+
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
         Board board = new Board();
         Piece piece = board.pieceAt(new Location(file, rank));

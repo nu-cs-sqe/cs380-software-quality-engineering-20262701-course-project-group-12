@@ -22,6 +22,7 @@ public class Board {
         for (int file = 0; file < 8; file++) {
             squares[0][file] = new Piece(backRank[file], PieceColor.WHITE);
         }
+        squares[1][0] = new Piece(PieceType.PAWN, PieceColor.WHITE);
     }
 
     public Piece pieceAt(Location location) {
