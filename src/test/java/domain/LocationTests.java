@@ -43,4 +43,9 @@ public class LocationTests {
     public void Location_FileJustBelowInterval_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> new Location(-1, 1));
     }
+
+    @Test
+    public void Location_FileJustAboveInterval_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new Location(8, 1));
+    }
 }
