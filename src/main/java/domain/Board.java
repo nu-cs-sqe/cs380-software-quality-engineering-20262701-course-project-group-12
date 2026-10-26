@@ -28,6 +28,7 @@ public class Board {
         for (int file = 0; file < 8; file++) {
             squares[6][file] = new Piece(PieceType.PAWN, PieceColor.BLACK);
         }
+        squares[7][0] = new Piece(PieceType.ROOK, PieceColor.BLACK);
     }
 
     public Piece pieceAt(Location location) {
