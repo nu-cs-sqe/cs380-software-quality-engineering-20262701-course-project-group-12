@@ -22,4 +22,12 @@ public class LocationTests {
         assertEquals(7, location.getFile());
         assertEquals(8, location.getRank());
     }
+
+    @Test
+    public void Location_File0Rank8_StoresLowFileAndHighRank() {
+        Location location = new Location(0, 8);
+
+        assertEquals(0, location.getFile());
+        assertEquals(8, location.getRank());
+    }
 }
