@@ -33,7 +33,7 @@ The starting position itself is specified on `Board`. These cases check the pass
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC1: a board is provided | `board` is a `Board` | the controller is created | :white_check_mark: |
-| TC2: the board is missing | `board` is null | throws `IllegalArgumentException` | :x: |
+| TC2: the board is missing | `board` is null | throws `IllegalArgumentException` | :white_check_mark: |
 
 ### Method under test: `pieceAt(Location location)`
 

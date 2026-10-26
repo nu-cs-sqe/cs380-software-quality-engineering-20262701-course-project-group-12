@@ -28,4 +28,9 @@ public class BoardControllerTests {
         assertNotNull(controller);
         verify(board);
     }
+
+    @Test
+    public void BoardController_NullBoard_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new BoardController(null));
+    }
 }
