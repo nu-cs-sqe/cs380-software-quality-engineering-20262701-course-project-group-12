@@ -41,6 +41,21 @@ public class WelcomeControllerTests {
         assertTrue(game.isStarted());
     }
 
+    @Test
+    public void StartGame_WithSurroundingWhitespace_PassesNamesToGame() {
+        Game game = new Game();
+        WelcomeController controller = new WelcomeController(game);
+        RecordingWelcomeView view = new RecordingWelcomeView();
+        controller.setView(view);
+
+        controller.startGame(" Alice ", "\tBob\n");
+
+        assertTrue(game.isStarted());
+        assertTrue(view.closed);
+        org.junit.jupiter.api.Assertions.assertEquals("Alice", game.playerOne().getName());
+        org.junit.jupiter.api.Assertions.assertEquals("Bob", game.playerTwo().getName());
+    }
+
     private static class RecordingWelcomeView extends WelcomeView {
         private boolean namesRequiredShown;
         private boolean closed;
