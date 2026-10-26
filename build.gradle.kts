@@ -1,9 +1,14 @@
 plugins {
     id("java")
+    id("application")
 }
 
 group = "nu.csse.sqe"
 version = "1.0"
+
+application {
+    mainClass = "ui.Main"
+}
 
 repositories {
     mavenCentral()
