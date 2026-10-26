@@ -62,6 +62,7 @@ public class WelcomeControllerTests {
 
         assertTrue(view.closed);
         assertTrue(game.isStarted());
+        assertTrue(view.gameShown);
     }
 
     @Test
@@ -110,6 +111,7 @@ public class WelcomeControllerTests {
     private static class RecordingWelcomeView extends WelcomeView {
         private boolean namesRequiredShown;
         private boolean closed;
+        private boolean gameShown;
 
         @Override
         public void showNamesRequired() {
@@ -119,6 +121,11 @@ public class WelcomeControllerTests {
         @Override
         public void close() {
             closed = true;
+        }
+
+        @Override
+        public void showGame(Game game) {
+            gameShown = true;
         }
     }
 }

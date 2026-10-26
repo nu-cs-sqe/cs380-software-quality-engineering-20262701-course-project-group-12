@@ -23,5 +23,6 @@ public class WelcomeController {
             return;
         }
         view.close();
+        view.showGame(game);
     }
 }

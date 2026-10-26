@@ -1,5 +1,7 @@
 package ui;
 
+import domain.Game;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -45,6 +47,10 @@ public class WelcomeView extends JPanel {
         if (window != null) {
             window.dispose();
         }
+    }
+
+    public void showGame(Game game) {
+        new GameFrame(game).setVisible(true);
     }
 
     public String errorMessage() {
