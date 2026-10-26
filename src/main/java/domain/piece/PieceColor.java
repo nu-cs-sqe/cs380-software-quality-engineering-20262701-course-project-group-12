@@ -1,5 +1,6 @@
 package domain.piece;
 
 public enum PieceColor {
-    WHITE
+    WHITE,
+    BLACK
 }

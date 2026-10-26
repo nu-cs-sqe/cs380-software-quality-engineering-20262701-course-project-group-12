@@ -12,6 +12,11 @@ public class PieceTests {
         assertPiece(PieceType.PAWN, PieceColor.WHITE);
     }
 
+    @Test
+    public void Piece_BlackPawn_StoresTypeAndColor() {
+        assertPiece(PieceType.PAWN, PieceColor.BLACK);
+    }
+
     private void assertPiece(PieceType type, PieceColor color) {
         Piece piece = new Piece(type, color);
 
