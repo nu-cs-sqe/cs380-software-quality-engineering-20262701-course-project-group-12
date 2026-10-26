@@ -33,7 +33,7 @@ Every value from Step 3 is used in at least one test case. `-1` and `8` are each
 | TC1: both lows, a1 | `file = 0`, `rank = 1` | location is created; `getFile()` is `0`; `getRank()` is `1` | :white_check_mark: |
 | TC2: both highs, h8 | `file = 7`, `rank = 8` | location is created; `getFile()` is `7`; `getRank()` is `8` | :white_check_mark: |
 | TC3: low file and high rank, a8 | `file = 0`, `rank = 8` | location is created; `getFile()` is `0`; `getRank()` is `8` | :white_check_mark: |
-| TC4: high file and low rank, h1 | `file = 7`, `rank = 1` | location is created; `getFile()` is `7`; `getRank()` is `1` | :x: |
+| TC4: high file and low rank, h1 | `file = 7`, `rank = 1` | location is created; `getFile()` is `7`; `getRank()` is `1` | :white_check_mark: |
 | TC5: file just below the interval | `file = -1`, `rank = 1` | throws `IllegalArgumentException` | :x: |
 | TC6: file just above the interval | `file = 8`, `rank = 1` | throws `IllegalArgumentException` | :x: |
 | TC7: rank just below the interval | `file = 0`, `rank = 0` | throws `IllegalArgumentException` | :x: |
