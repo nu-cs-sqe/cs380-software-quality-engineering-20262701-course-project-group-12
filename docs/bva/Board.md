@@ -53,7 +53,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC18: d8, black queen | a new `Board`; location `(3, 8)` | black queen | :white_check_mark: |
 | TC19: e8, black king | a new `Board`; location `(4, 8)` | black king | :white_check_mark: |
 | TC20: h8, both highs | a new `Board`; location `(7, 8)` | black rook | :white_check_mark: |
-| TC21: null location | a new `Board`; location is null | throws `IllegalArgumentException` | :x: |
+| TC21: null location | a new `Board`; location is null | throws `IllegalArgumentException` | :white_check_mark: |
 | TC22: the board is unchanged | a new `Board`; call `pieceAt` on `(0, 1)` twice | both calls return a white rook | :x: |
 
 ### Method under test: `Board()`

@@ -111,6 +111,13 @@ public class BoardTests {
         assertOccupant(7, 8, PieceType.ROOK, PieceColor.BLACK);
     }
 
+    @Test
+    public void PieceAt_NullLocation_ThrowsIllegalArgumentException() {
+        Board board = new Board();
+
+        assertThrows(IllegalArgumentException.class, () -> board.pieceAt(null));
+    }
+
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
         Board board = new Board();
         Piece piece = board.pieceAt(new Location(file, rank));

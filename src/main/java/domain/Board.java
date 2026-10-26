@@ -30,6 +30,9 @@ public class Board {
     }
 
     public Piece pieceAt(Location location) {
+        if (location == null) {
+            throw new IllegalArgumentException();
+        }
         return squares[location.getRank() - 1][location.getFile()];
     }
 }
