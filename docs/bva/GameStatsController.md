@@ -49,7 +49,7 @@ Step 2/3:
         - `Player 2: Bo (Black)`
         - `Current player: Ada`
 
-- **TC5: one-character names** ( :x: )
+- **TC5: one-character names** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 A / White. Player 2 B / Black. `playerToMove()` is Player 1.
     - **Expected output**: the view shows
         - `Player 1: A (White)`
