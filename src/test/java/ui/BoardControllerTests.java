@@ -33,4 +33,18 @@ public class BoardControllerTests {
     public void BoardController_NullBoard_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> new BoardController(null));
     }
+
+    @Test
+    public void PieceAt_OccupiedSquare_ReturnsTheBoardsPiece() {
+        Board board = mock(Board.class);
+        Location a1 = new Location(0, 1);
+        Piece whiteRook = new Piece(PieceType.ROOK, PieceColor.WHITE);
+        expect(board.pieceAt(a1)).andReturn(whiteRook);
+        replay(board);
+
+        BoardController controller = new BoardController(board);
+
+        assertSame(whiteRook, controller.pieceAt(a1));
+        verify(board);
+    }
 }
