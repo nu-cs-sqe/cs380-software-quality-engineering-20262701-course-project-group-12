@@ -9,6 +9,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameTests {
     @Test
+    public void NewGame_IsNotStarted() {
+        Game game = new Game();
+
+        assertFalse(game.isStarted());
+    }
+
+    @Test
     public void Start_WithEmptyPlayerOneName_RejectsStart() {
         Game game = new Game();
 
