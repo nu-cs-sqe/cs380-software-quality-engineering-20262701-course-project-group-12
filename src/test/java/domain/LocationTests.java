@@ -53,4 +53,9 @@ public class LocationTests {
     public void Location_RankJustBelowInterval_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> new Location(0, 0));
     }
+
+    @Test
+    public void Location_RankJustAboveInterval_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new Location(0, 9));
+    }
 }
