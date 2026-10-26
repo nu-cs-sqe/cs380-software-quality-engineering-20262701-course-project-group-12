@@ -27,7 +27,7 @@ Type and color are small sets of cases, and every pair is possible, so Step 4 us
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC1: white pawn | `type = PAWN`, `color = WHITE` | piece is created; `getType()` is `PAWN`; `getColor()` is `WHITE` | :x: |
+| TC1: white pawn | `type = PAWN`, `color = WHITE` | piece is created; `getType()` is `PAWN`; `getColor()` is `WHITE` | :white_check_mark: |
 | TC2: black pawn | `type = PAWN`, `color = BLACK` | piece is created; `getType()` is `PAWN`; `getColor()` is `BLACK` | :x: |
 | TC3: white rook | `type = ROOK`, `color = WHITE` | piece is created; `getType()` is `ROOK`; `getColor()` is `WHITE` | :x: |
 | TC4: black rook | `type = ROOK`, `color = BLACK` | piece is created; `getType()` is `ROOK`; `getColor()` is `BLACK` | :x: |
