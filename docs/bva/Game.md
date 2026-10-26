@@ -99,7 +99,7 @@ cases below use the game's public behavior to observe its state.
   - **Expected output**: `start` returns `true`; the stored names are
     `Alice` and `Bob`.
 
-- **TC-START-07 — Allow duplicate names** (not implemented)
+- **TC-START-07 — Allow duplicate names** (implemented)
   - **Method(s) under test**: `start(String, String)`, `playerOne()`,
     `playerTwo()`
   - **State of the system**: New game; both names are `Alex`.

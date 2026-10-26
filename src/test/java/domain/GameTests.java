@@ -77,4 +77,13 @@ public class GameTests {
 
         assertTrue(game.board() != null);
     }
+
+    @Test
+    public void Start_WithDuplicateNames_AllowsStart() {
+        Game game = new Game();
+
+        assertTrue(game.start("Alex", "Alex"));
+        assertEquals("Alex", game.playerOne().getName());
+        assertEquals("Alex", game.playerTwo().getName());
+    }
 }
