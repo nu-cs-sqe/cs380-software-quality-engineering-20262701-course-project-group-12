@@ -70,7 +70,7 @@ Step 2/3:
         - `Player 2: Ada (Black)`
         - `Current player: Ada`
 
-- **TC8: Player 2 is to move** ( :x: )
+- **TC8: Player 2 is to move** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `playerToMove()` is Player 2.
     - **Expected output**: the view shows
         - `Player 1: Ada (White)`

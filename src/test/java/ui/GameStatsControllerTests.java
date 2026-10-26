@@ -115,4 +115,24 @@ public class GameStatsControllerTests {
         assertEquals("Player 2: Ada (Black)", view.playerTwoLine());
         assertEquals("Current player: Ada", view.currentPlayerLine());
     }
+
+    @Test
+    void createViewShowsPlayerTwoToMove() {
+        Player ada = createMock(Player.class);
+        Player bo = createMock(Player.class);
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOne()).andStubReturn(ada);
+        expect(game.playerTwo()).andStubReturn(bo);
+        expect(game.playerToMove()).andStubReturn(bo);
+        expect(ada.getName()).andStubReturn("Ada");
+        expect(bo.getName()).andStubReturn("Bo");
+        replay(game, ada, bo);
+
+        GameStatsView view = new GameStatsController(game).createView();
+
+        assertEquals("Player 1: Ada (White)", view.playerOneLine());
+        assertEquals("Player 2: Bo (Black)", view.playerTwoLine());
+        assertEquals("Current player: Bo", view.currentPlayerLine());
+    }
 }
