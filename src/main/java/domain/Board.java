@@ -29,6 +29,7 @@ public class Board {
             squares[6][file] = new Piece(PieceType.PAWN, PieceColor.BLACK);
         }
         squares[7][0] = new Piece(PieceType.ROOK, PieceColor.BLACK);
+        squares[7][1] = new Piece(PieceType.KNIGHT, PieceColor.BLACK);
     }
 
     public Piece pieceAt(Location location) {
