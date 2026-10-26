@@ -73,7 +73,7 @@ below use the player's public behavior to observe the stored values.
 ### Method under test: `getColor()`
 
 - **TC-PLAYER-COLOR-01 — Return White** (not implemented)
-  - **Method(s) under test**: `Player(String, PieceColor)`, `getColor()`
+  - **Method(s) under test**: `Player(String, PieceColor)`, `getColor()
   - **State of the system**: Player constructed with name `Alice` and color
     `PieceColor.WHITE`.
   - **Expected output**: Returns `PieceColor.WHITE`.

@@ -32,7 +32,7 @@ public behavior and mocked view/model collaborators to observe the result.
 
 - `startGame(String, String)` passes both field values to `Game.start`.
 - The controller does not trim or validate names; `Game.start` owns that rule.
-- A failed game start keeps the welcome window open and shows the required-names
+- A failed game start keeps the welcome window open and shows the required-name
   message.
 - A successful game start closes the welcome window and opens the game window.
 - Duplicate names are valid because the game accepts any two non-blank names.
