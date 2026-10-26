@@ -34,7 +34,7 @@ Type and color are small sets of cases, and every pair is possible, so Step 4 us
 | TC5: white knight | `type = KNIGHT`, `color = WHITE` | piece is created; `getType()` is `KNIGHT`; `getColor()` is `WHITE` | :white_check_mark: |
 | TC6: black knight | `type = KNIGHT`, `color = BLACK` | piece is created; `getType()` is `KNIGHT`; `getColor()` is `BLACK` | :white_check_mark: |
 | TC7: white bishop | `type = BISHOP`, `color = WHITE` | piece is created; `getType()` is `BISHOP`; `getColor()` is `WHITE` | :white_check_mark: |
-| TC8: black bishop | `type = BISHOP`, `color = BLACK` | piece is created; `getType()` is `BISHOP`; `getColor()` is `BLACK` | :x: |
+| TC8: black bishop | `type = BISHOP`, `color = BLACK` | piece is created; `getType()` is `BISHOP`; `getColor()` is `BLACK` | :white_check_mark: |
 | TC9: white queen | `type = QUEEN`, `color = WHITE` | piece is created; `getType()` is `QUEEN`; `getColor()` is `WHITE` | :x: |
 | TC10: black queen | `type = QUEEN`, `color = BLACK` | piece is created; `getType()` is `QUEEN`; `getColor()` is `BLACK` | :x: |
 | TC11: white king | `type = KING`, `color = WHITE` | piece is created; `getType()` is `KING`; `getColor()` is `WHITE` | :x: |
