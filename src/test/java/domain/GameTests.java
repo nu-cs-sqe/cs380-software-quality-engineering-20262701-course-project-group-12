@@ -56,6 +56,14 @@ public class GameTests {
     }
 
     @Test
+    public void Start_WithOneCharacterNames_StartsGame() {
+        Game game = new Game();
+
+        assertTrue(game.start("A", "B"));
+        assertTrue(game.isStarted());
+    }
+
+    @Test
     public void Start_WithValidNames_CreatesWhitePlayerOne() {
         Game game = new Game();
 
