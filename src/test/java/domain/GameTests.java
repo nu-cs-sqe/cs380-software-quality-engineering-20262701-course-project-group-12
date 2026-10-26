@@ -68,4 +68,13 @@ public class GameTests {
 
         assertEquals(game.playerOne(), game.playerToMove());
     }
+
+    @Test
+    public void Start_WithValidNames_CreatesBoard() {
+        Game game = new Game();
+
+        game.start("Alice", "Bob");
+
+        assertTrue(game.board() != null);
+    }
 }

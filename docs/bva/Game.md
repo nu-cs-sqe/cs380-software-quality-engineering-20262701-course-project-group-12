@@ -128,6 +128,12 @@ cases below use the game's public behavior to observe its state.
   - **Expected output**: `playerToMove()` returns the same Player 1 object
     returned by `playerOne()`.
 
+- **TC-START-11 — Create a board after a valid start** (implemented)
+  - **Method(s) under test**: `start(String, String)`, `board()`
+  - **State of the system**: New game; `start("Alice", "Bob")` returns
+    `true`.
+  - **Expected output**: `board()` returns a non-null starting board.
+
 ### Method under test: `isStarted()`
 
 - **TC-IS-STARTED-01 — Check a new game** (not implemented)
