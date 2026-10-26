@@ -38,7 +38,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC3: b1, white knight | a new `Board`; location `(1, 1)` | white knight | :white_check_mark: |
 | TC4: c1, white bishop | a new `Board`; location `(2, 1)` | white bishop | :white_check_mark: |
 | TC5: d1, white queen | a new `Board`; location `(3, 1)` | white queen | :white_check_mark: |
-| TC6: e1, white king | a new `Board`; location `(4, 1)` | white king | :x: |
+| TC6: e1, white king | a new `Board`; location `(4, 1)` | white king | :white_check_mark: |
 | TC7: a2, first file of the white pawns | a new `Board`; location `(0, 2)` | white pawn | :x: |
 | TC8: h2, last file of the white pawns | a new `Board`; location `(7, 2)` | white pawn | :x: |
 | TC9: a3, first empty rank at file 0 | a new `Board`; location `(0, 3)` | null | :x: |
