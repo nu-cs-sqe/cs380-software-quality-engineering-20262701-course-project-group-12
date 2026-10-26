@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameTests {
@@ -69,6 +70,16 @@ public class GameTests {
 
         assertTrue(game.start("A", "B"));
         assertTrue(game.isStarted());
+    }
+
+    @Test
+    public void NewGame_AccessorsRejectAccessBeforeStart() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::playerOne);
+        assertThrows(IllegalStateException.class, game::playerTwo);
+        assertThrows(IllegalStateException.class, game::playerToMove);
+        assertThrows(IllegalStateException.class, game::board);
     }
 
     @Test
