@@ -79,6 +79,20 @@ public class WelcomeControllerTests {
         org.junit.jupiter.api.Assertions.assertEquals("Bob", game.playerTwo().getName());
     }
 
+    @Test
+    public void StartButton_WithValidNames_StartsGame() {
+        Game game = new Game();
+        WelcomeController controller = new WelcomeController(game);
+        WelcomeView view = new WelcomeView(controller);
+        controller.setView(view);
+
+        view.playerOneField().setText("Alice");
+        view.playerTwoField().setText("Bob");
+        view.startButton().doClick();
+
+        assertTrue(game.isStarted());
+    }
+
     private static class RecordingWelcomeView extends WelcomeView {
         private boolean namesRequiredShown;
         private boolean closed;
