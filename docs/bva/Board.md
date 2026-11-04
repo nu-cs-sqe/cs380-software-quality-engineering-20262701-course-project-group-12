@@ -127,7 +127,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC38: from low file and high rank, to both lows | a new `Board`; move a8 `(0, 8)` to a1 `(0, 1)` | `pieceAt(a1)` is the black rook that was on a8 | :white_check_mark: |
 | TC39: from high file and low rank, to both highs | a new `Board`; move h1 `(7, 1)` to h8 `(7, 8)` | `pieceAt(h8)` is the white rook that was on h1 | :white_check_mark: |
 | TC40: to the same square | a new `Board`; move a1 `(0, 1)` to a1 `(0, 1)` | `pieceAt(a1)` is still the white rook | :white_check_mark: |
-| TC41: from an empty square | a new `Board`; move a4 `(0, 4)` to a5 `(0, 5)` | throws `IllegalArgumentException` | :x: |
+| TC41: from an empty square | a new `Board`; move a4 `(0, 4)` to a5 `(0, 5)` | throws `IllegalArgumentException` | :white_check_mark: |
 | TC42: null from | a new `Board`; move null to a4 `(0, 4)` | throws `IllegalArgumentException` | :x: |
 | TC43: null to | a new `Board`; move a1 `(0, 1)` to null | throws `IllegalArgumentException` | :x: |
 | TC44: a rejected move leaves the board unchanged | a new `Board`; move a1 `(0, 1)` to null | `pieceAt(a1)` is still the white rook | :x: |
