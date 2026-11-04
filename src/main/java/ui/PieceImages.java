@@ -34,16 +34,20 @@ public class PieceImages {
     private static void load(String path) {
         URL resource = PieceImages.class.getResource(path);
         if (resource == null) {
-            throw new PieceImageException("Cannot load the piece image '" + path + "': the file is missing");
+            throw new PieceImageException(failureMessage(path, "the file is missing"));
         }
-        read(resource);
+        read(path, resource);
     }
 
-    private static void read(URL resource) {
+    private static void read(String path, URL resource) {
         try {
             ImageIO.read(resource);
         } catch (IOException e) {
-            throw new PieceImageException("Cannot load the piece image '" + resource + "': the file cannot be read", e);
+            throw new PieceImageException(failureMessage(path, "the file cannot be read"), e);
         }
+    }
+
+    private static String failureMessage(String path, String reason) {
+        return "Cannot load the piece image '" + path + "': " + reason;
     }
 }
