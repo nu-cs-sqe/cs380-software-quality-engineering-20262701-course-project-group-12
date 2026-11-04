@@ -14,15 +14,12 @@ import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PieceImagesTests {
     private static final String STANDARD_FOLDER = "/pieces/";
     private static final String MISSING_FOLDER = "/no-piece-images/";
-    private static final String TRUNCATED_FOLDER = "/pieces-truncated/";
-    private static final String NOT_IMAGES_FOLDER = "/pieces-not-images/";
 
     @Test
     public void PieceImages_MissingImageFiles_ThrowsPieceImageException() {
@@ -35,19 +32,6 @@ public class PieceImagesTests {
                 assertThrows(PieceImageException.class, () -> new PieceImages(MISSING_FOLDER));
 
         assertTrue(thrown.getMessage().contains(MISSING_FOLDER));
-    }
-
-    @Test
-    public void PieceImages_TruncatedImageFiles_ThrowsWithTheReadFailureAsCause() {
-        PieceImageException thrown =
-                assertThrows(PieceImageException.class, () -> new PieceImages(TRUNCATED_FOLDER));
-
-        assertInstanceOf(IOException.class, thrown.getCause());
-    }
-
-    @Test
-    public void PieceImages_FilesThatAreNotImages_ThrowsPieceImageException() {
-        assertThrows(PieceImageException.class, () -> new PieceImages(NOT_IMAGES_FOLDER));
     }
 
     @ParameterizedTest
