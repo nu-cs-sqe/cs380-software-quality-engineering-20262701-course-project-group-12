@@ -13,6 +13,8 @@ import java.awt.Graphics;
 
 public class BoardView extends JPanel {
     private static final int BOARD_SIZE = 8;
+    private static final int FIRST_RANK = 1;
+    private static final int LAST_RANK = BOARD_SIZE;
     private static final int TILE_SIZE = 80;
     private static final Color LIGHT_SQUARE = new Color(240, 217, 181);
     private static final Color DARK_SQUARE = new Color(181, 136, 99);
@@ -27,7 +29,7 @@ public class BoardView extends JPanel {
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        for (int rank = 8; rank >= 1; rank--) {
+        for (int rank = LAST_RANK; rank >= FIRST_RANK; rank--) {
             for (int file = 0; file < BOARD_SIZE; file++) {
                 paintSquare(graphics, new Location(file, rank));
             }
@@ -38,7 +40,7 @@ public class BoardView extends JPanel {
         int file = location.getFile();
         int rank = location.getRank();
         int x = file * TILE_SIZE;
-        int y = (8 - rank) * TILE_SIZE;
+        int y = (LAST_RANK - rank) * TILE_SIZE;
         graphics.setColor((file + rank) % 2 == 0 ? LIGHT_SQUARE : DARK_SQUARE);
         graphics.fillRect(x, y, TILE_SIZE, TILE_SIZE);
         if (boardController.isOccupied(location)) {
