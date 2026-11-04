@@ -14,6 +14,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardControllerTests {
 
@@ -69,6 +70,19 @@ public class BoardControllerTests {
         BoardController controller = new BoardController(board);
 
         assertThrows(IllegalArgumentException.class, () -> controller.pieceAt(null));
+        verify(board);
+    }
+
+    @Test
+    public void IsOccupied_BoardReportsAPiece_ReturnsTrue() {
+        Board board = mock(Board.class);
+        Location a1 = new Location(0, 1);
+        expect(board.isOccupied(a1)).andReturn(true);
+        replay(board);
+
+        BoardController controller = new BoardController(board);
+
+        assertTrue(controller.isOccupied(a1));
         verify(board);
     }
 }

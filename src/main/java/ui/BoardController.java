@@ -14,6 +14,10 @@ public class BoardController {
         this.board = board;
     }
 
+    public boolean isOccupied(Location location) {
+        return board.isOccupied(location);
+    }
+
     public Piece pieceAt(Location location) {
         return board.pieceAt(location);
     }
