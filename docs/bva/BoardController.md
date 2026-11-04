@@ -59,4 +59,4 @@ The starting position itself is specified on `Board`. These cases check the pass
 | --- | --- | --- | --- |
 | TC6: the square has a piece | controller from TC1; the board answers true for a1 `(0, 1)` | returns true | :white_check_mark: |
 | TC7: the square is empty | controller from TC1; the board answers false for a3 `(0, 3)` | returns false | :white_check_mark: |
-| TC8: the location is null | controller from TC1; the board throws `IllegalArgumentException` for that call | throws that same `IllegalArgumentException` | :x: |
+| TC8: the location is null | controller from TC1; the board throws `IllegalArgumentException` for that call | throws that same `IllegalArgumentException` | :white_check_mark: |

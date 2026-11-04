@@ -99,4 +99,16 @@ public class BoardControllerTests {
         assertFalse(controller.isOccupied(a3));
         verify(board);
     }
+
+    @Test
+    public void IsOccupied_NullLocation_ThrowsIllegalArgumentException() {
+        Board board = mock(Board.class);
+        expect(board.isOccupied(null)).andThrow(new IllegalArgumentException());
+        replay(board);
+
+        BoardController controller = new BoardController(board);
+
+        assertThrows(IllegalArgumentException.class, () -> controller.isOccupied(null));
+        verify(board);
+    }
 }
