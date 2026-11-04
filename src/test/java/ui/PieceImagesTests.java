@@ -10,6 +10,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -58,7 +59,8 @@ public class PieceImagesTests {
     public void ImageOf_EachPiece_ReturnsThatPiecesImage(
             PieceColor color, PieceType type, String fileName) throws IOException {
         PieceImages images = new PieceImages();
-        BufferedImage expected = ImageIO.read(PieceImagesTests.class.getResource(STANDARD_FOLDER + fileName));
+        URL expectedFile = PieceImagesTests.class.getResource(STANDARD_FOLDER + fileName);
+        BufferedImage expected = ImageIO.read(expectedFile);
 
         BufferedImage actual = images.imageOf(new Piece(type, color));
 
