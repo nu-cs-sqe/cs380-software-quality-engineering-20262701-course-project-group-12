@@ -41,9 +41,15 @@ public class PieceImages {
 
     private static void read(String path, URL resource) {
         try {
-            ImageIO.read(resource);
+            decode(path, resource);
         } catch (IOException e) {
             throw new PieceImageException(failureMessage(path, "the file cannot be read"), e);
+        }
+    }
+
+    private static void decode(String path, URL resource) throws IOException {
+        if (ImageIO.read(resource) == null) {
+            throw new PieceImageException(failureMessage(path, "the file is not an image"));
         }
     }
 
