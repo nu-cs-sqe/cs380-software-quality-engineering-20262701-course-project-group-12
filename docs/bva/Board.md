@@ -5,10 +5,13 @@
 - `Board()`: places the starting position. Rank 8, a through h: black rook, knight, bishop, queen, king, bishop, knight, rook. Rank 7: eight black pawns. Ranks 6 through 3: empty. Rank 2: eight white pawns. Rank 1, a through h: white rook, knight, bishop, queen, king, bishop, knight, rook.
 - `boolean isOccupied(Location location)`: returns true when a piece stands on that square and false when it is empty. Requires a non-null location and throws `IllegalArgumentException` otherwise. Does not change the board.
 - `Piece pieceAt(Location location)`: returns the piece on that square. Requires a non-null location of an occupied square and throws `IllegalArgumentException` otherwise. Does not change the board.
+- `void move(Location from, Location to)` (issue #19): puts the piece from `from` on `to`, and `from` becomes empty. A piece already on `to` is replaced; this is the board side of a capture. Moving a piece to its own square leaves the board unchanged. Throws `IllegalArgumentException` when `from` is empty or either square is null, and then leaves the board unchanged. It does not check whether the move is legal, does not change whose turn it is, and does not touch the UI.
 
 No method returns null. The project rules forbid it, so an empty square is reported by `isOccupied` instead of a null from `pieceAt`. Callers ask `isOccupied` before `pieceAt`. TC9 through TC12 used to expect null from `pieceAt` on the empty ranks; they now check those squares with `isOccupied`.
 
-File 0 is the a-file and file 7 is the h-file. The squares are private, so the constructor is checked through `pieceAt` and `isOccupied`.
+Issue #19 says that after a move `pieceAt(from)` returns null. Under the no-null rule, the emptied square is checked with `isOccupied(from)`, which returns false.
+
+File 0 is the a-file and file 7 is the h-file. The squares are private, so the constructor and `move` are checked through `pieceAt` and `isOccupied`.
 
 `BoardView` is a view, and `PieceType` and `PieceColor` are enums, so they have no BVA file.
 
@@ -41,6 +44,25 @@ The same rank blocks apply. Ranks 3 and 6 stand for the empty block, at file 0 a
 | Input: rank of the location | Edges of the rank blocks | `1` white back rank; `2` white pawns; `3` first empty rank; `6` last empty rank; `7` black pawns; `8` black back rank |
 | Input: the pair `(file, rank)` | Pair of intervals | both lows, a1 `(0, 1)`; both highs, h8 `(7, 8)`; a8 `(0, 8)`; h1 `(7, 1)` |
 | Output: the answer | Boolean | true; false |
+
+### `move(Location from, Location to)`
+
+The starting position has a rook on every corner, so each corner can be both a `from` and a `to` square. Each square gets all four corners of its pair of intervals: a1 and h8 move to empty squares and capture; a8 and h1 are captured and then move themselves. a4 and h5 are the empty `to` squares on the same files. The moved piece is checked with `assertSame`, so the test knows it is the same object and not another rook of that color.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the board | Collection of 64 squares | a new `Board` in the starting position |
+| Input: `from` | Pointer | null; a location |
+| Input: `to` | Pointer | null; a location |
+| Input: the pair `(file, rank)` of `from` | Pair of intervals | both lows, a1 `(0, 1)`; both highs, h8 `(7, 8)`; low file and high rank, a8 `(0, 8)`; high file and low rank, h1 `(7, 1)` |
+| Input: the pair `(file, rank)` of `to` | Pair of intervals | both lows, a1 `(0, 1)`; both highs, h8 `(7, 8)`; low file and high rank, a8 `(0, 8)`; high file and low rank, h1 `(7, 1)` |
+| Input: occupant of `from` | Cases | a piece; empty, a4 `(0, 4)` |
+| Input: occupant of `to` | Cases | empty, a4 `(0, 4)` and h5 `(7, 5)`; a piece of the other color |
+| Input: `from` compared with `to` | Cases | different squares; the same square, a1 to a1 |
+| Output: occupant of `to` after the call | Pointer | the same piece that was on `from` |
+| Output: `from` after the call | Boolean, through `isOccupied` | false; still the same piece, when `to` is the same square |
+| Output: the board after a rejected move | Collection | unchanged |
+| Output: signal for a rejected move | Cases | none; `IllegalArgumentException` |
 
 ## Step 4: Test cases (each-choice strategy)
 
@@ -91,3 +113,21 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC23: starting position at the corners and the rank edges | implemented in TC1 through TC20 | the occupants listed in those cases | implemented in TC1 through TC20 |
+
+### Method under test: `move(Location from, Location to)`
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC32: from both lows to an empty square | a new `Board`; move a1 `(0, 1)` to a4 `(0, 4)` | `pieceAt(a4)` is the white rook that was on a1 | :x: |
+| TC33: from both lows leaves that square empty | a new `Board`; move a1 `(0, 1)` to a4 `(0, 4)` | `isOccupied(a1)` is false | :x: |
+| TC34: from both highs to an empty square | a new `Board`; move h8 `(7, 8)` to h5 `(7, 5)` | `pieceAt(h5)` is the black rook that was on h8 | :x: |
+| TC35: from both highs leaves that square empty | a new `Board`; move h8 `(7, 8)` to h5 `(7, 5)` | `isOccupied(h8)` is false | :x: |
+| TC36: to low file and high rank, replacing a black piece | a new `Board`; move a1 `(0, 1)` to a8 `(0, 8)` | `pieceAt(a8)` is the white rook that was on a1 | :x: |
+| TC37: to high file and low rank, replacing a white piece | a new `Board`; move h8 `(7, 8)` to h1 `(7, 1)` | `pieceAt(h1)` is the black rook that was on h8 | :x: |
+| TC38: from low file and high rank, to both lows | a new `Board`; move a8 `(0, 8)` to a1 `(0, 1)` | `pieceAt(a1)` is the black rook that was on a8 | :x: |
+| TC39: from high file and low rank, to both highs | a new `Board`; move h1 `(7, 1)` to h8 `(7, 8)` | `pieceAt(h8)` is the white rook that was on h1 | :x: |
+| TC40: to the same square | a new `Board`; move a1 `(0, 1)` to a1 `(0, 1)` | `pieceAt(a1)` is still the white rook | :x: |
+| TC41: from an empty square | a new `Board`; move a4 `(0, 4)` to a5 `(0, 5)` | throws `IllegalArgumentException` | :x: |
+| TC42: null from | a new `Board`; move null to a4 `(0, 4)` | throws `IllegalArgumentException` | :x: |
+| TC43: null to | a new `Board`; move a1 `(0, 1)` to null | throws `IllegalArgumentException` | :x: |
+| TC44: a rejected move leaves the board unchanged | a new `Board`; move a1 `(0, 1)` to null | `pieceAt(a1)` is still the white rook | :x: |
