@@ -138,6 +138,11 @@ public class BoardTests {
         assertIsOccupied(0, 1);
     }
 
+    @Test
+    public void IsOccupied_H1_ReturnsTrue() {
+        assertIsOccupied(7, 1);
+    }
+
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
         Board board = new Board();
         Piece piece = board.pieceAt(new Location(file, rank));
