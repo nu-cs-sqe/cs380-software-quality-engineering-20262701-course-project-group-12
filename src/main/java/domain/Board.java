@@ -51,6 +51,10 @@ public class Board {
         return squares[rowOf(location)][location.getFile()];
     }
 
+    public boolean isOccupied(Location location) {
+        return false;
+    }
+
     private int rowOf(Location location) {
         return location.getRank() - FIRST_RANK;
     }

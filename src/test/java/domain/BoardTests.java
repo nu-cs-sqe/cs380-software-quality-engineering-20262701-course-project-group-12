@@ -6,6 +6,7 @@ import domain.piece.PieceType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -52,8 +53,8 @@ public class BoardTests {
     }
 
     @Test
-    public void PieceAt_A3_ReturnsEmpty() {
-        assertEmpty(0, 3);
+    public void IsOccupied_A3_ReturnsFalse() {
+        assertNotOccupied(0, 3);
     }
 
     @Test
@@ -138,6 +139,12 @@ public class BoardTests {
 
         assertEquals(type, piece.getType());
         assertEquals(color, piece.getColor());
+    }
+
+    private void assertNotOccupied(int file, int rank) {
+        Board board = new Board();
+
+        assertFalse(board.isOccupied(new Location(file, rank)));
     }
 
     private void assertEmpty(int file, int rank) {

@@ -74,7 +74,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC9: a3, first empty rank at file 0 | a new `Board`; location `(0, 3)` | false | :x: |
+| TC9: a3, first empty rank at file 0 | a new `Board`; location `(0, 3)` | false | :white_check_mark: |
 | TC10: h3, first empty rank at file 7 | a new `Board`; location `(7, 3)` | false | :x: |
 | TC11: a6, last empty rank at file 0 | a new `Board`; location `(0, 6)` | false | :x: |
 | TC12: h6, last empty rank at file 7 | a new `Board`; location `(7, 6)` | false | :x: |
