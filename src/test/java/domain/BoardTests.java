@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class BoardTests {
     private static final Location A1 = new Location(0, 1);
     private static final Location A4 = new Location(0, 4);
+    private static final Location H5 = new Location(7, 5);
+    private static final Location H8 = new Location(7, 8);
 
     @Test
     public void PieceAt_A1_ReturnsWhiteRook() {
@@ -198,6 +200,16 @@ public class BoardTests {
         board.move(A1, A4);
 
         assertFalse(board.isOccupied(A1));
+    }
+
+    @Test
+    public void Move_H8ToEmptyH5_PlacesTheRookOnH5() {
+        Board board = new Board();
+        Piece blackRook = board.pieceAt(H8);
+
+        board.move(H8, H5);
+
+        assertSame(blackRook, board.pieceAt(H5));
     }
 
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
