@@ -46,7 +46,7 @@ public class Board {
 
     public Piece pieceAt(Location location) {
         if (location == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Cannot read a piece from a null square");
         }
         return squares[rowOf(location)][location.getFile()];
     }
