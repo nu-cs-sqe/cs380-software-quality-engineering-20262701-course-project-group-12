@@ -48,6 +48,10 @@ public class Board {
         if (location == null) {
             throw new IllegalArgumentException("Cannot read a piece from a null square");
         }
+        if (!isOccupied(location)) {
+            throw new IllegalArgumentException("Cannot read a piece from the empty square at file "
+                    + location.getFile() + ", rank " + location.getRank());
+        }
         return squares[rowOf(location)][location.getFile()];
     }
 

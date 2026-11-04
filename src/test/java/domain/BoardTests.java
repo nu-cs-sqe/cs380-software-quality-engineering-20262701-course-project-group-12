@@ -120,6 +120,14 @@ public class BoardTests {
     }
 
     @Test
+    public void PieceAt_EmptyA3_ThrowsIllegalArgumentException() {
+        Board board = new Board();
+        Location a3 = new Location(0, 3);
+
+        assertThrows(IllegalArgumentException.class, () -> board.pieceAt(a3));
+    }
+
+    @Test
     public void PieceAt_CalledTwiceOnA1_StillReturnsWhiteRook() {
         Board board = new Board();
         Location a1 = new Location(0, 1);

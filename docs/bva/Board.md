@@ -68,7 +68,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC20: h8, both highs | a new `Board`; location `(7, 8)` | black rook | :white_check_mark: |
 | TC21: null location | a new `Board`; location is null | throws `IllegalArgumentException` | :white_check_mark: |
 | TC22: the board is unchanged | a new `Board`; call `pieceAt` on `(0, 1)` twice | both calls return a white rook | :white_check_mark: |
-| TC31: a3, an empty square | a new `Board`; location `(0, 3)` | throws `IllegalArgumentException` | :x: |
+| TC31: a3, an empty square | a new `Board`; location `(0, 3)` | throws `IllegalArgumentException` | :white_check_mark: |
 
 ### Method under test: `isOccupied(Location location)`
 
