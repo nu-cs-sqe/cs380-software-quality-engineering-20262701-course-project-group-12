@@ -1,15 +1,14 @@
 package ui;
 
 import domain.Location;
-import domain.piece.Piece;
-import domain.piece.PieceColor;
-import domain.piece.PieceType;
 
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 
 public class BoardView extends JPanel {
     private static final int BOARD_SIZE = 8;
@@ -20,6 +19,7 @@ public class BoardView extends JPanel {
     private static final Color DARK_SQUARE = new Color(181, 136, 99);
 
     private final BoardController boardController;
+    private final PieceImages pieceImages = new PieceImages();
 
     public BoardView(BoardController boardController) {
         if (boardController == null) {
@@ -32,11 +32,18 @@ public class BoardView extends JPanel {
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
+        smoothScaledImages(graphics);
         for (int rank = LAST_RANK; rank >= FIRST_RANK; rank--) {
             for (int file = 0; file < BOARD_SIZE; file++) {
                 paintSquare(graphics, new Location(file, rank));
             }
         }
+    }
+
+    private void smoothScaledImages(Graphics graphics) {
+        Graphics2D graphics2D = (Graphics2D) graphics;
+        graphics2D.setRenderingHint(
+                RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
     }
 
     private void paintSquare(Graphics graphics, Location location) {
@@ -49,15 +56,8 @@ public class BoardView extends JPanel {
     }
 
     private void drawPiece(Graphics graphics, Location location) {
-        Piece piece = boardController.pieceAt(location);
-        String letter = symbol(piece.getType());
-        int textX = xOf(location) + TILE_SIZE / 4;
-        int textY = yOf(location) + TILE_SIZE * 2 / 3;
-        graphics.setFont(new Font("SansSerif", Font.BOLD, TILE_SIZE / 2));
-        graphics.setColor(piece.getColor() == PieceColor.WHITE ? Color.BLACK : Color.WHITE);
-        graphics.drawString(letter, textX + 1, textY + 1);
-        graphics.setColor(piece.getColor() == PieceColor.WHITE ? Color.WHITE : Color.BLACK);
-        graphics.drawString(letter, textX, textY);
+        BufferedImage image = pieceImages.imageOf(boardController.pieceAt(location));
+        graphics.drawImage(image, xOf(location), yOf(location), TILE_SIZE, TILE_SIZE, this);
     }
 
     private int xOf(Location location) {
@@ -66,22 +66,5 @@ public class BoardView extends JPanel {
 
     private int yOf(Location location) {
         return (LAST_RANK - location.getRank()) * TILE_SIZE;
-    }
-
-    private String symbol(PieceType type) {
-        switch (type) {
-            case KING:
-                return "K";
-            case QUEEN:
-                return "Q";
-            case ROOK:
-                return "R";
-            case BISHOP:
-                return "B";
-            case KNIGHT:
-                return "N";
-            default:
-                return "P";
-        }
     }
 }
