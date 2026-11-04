@@ -29,6 +29,9 @@ public class PieceImages {
     }
 
     public BufferedImage imageOf(Piece piece) {
+        if (piece == null) {
+            throw new IllegalArgumentException("Cannot find the image of a null piece");
+        }
         return images.get(piece.getColor()).get(piece.getType());
     }
 
