@@ -77,7 +77,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC9: a3, first empty rank at file 0 | a new `Board`; location `(0, 3)` | false | :white_check_mark: |
 | TC10: h3, first empty rank at file 7 | a new `Board`; location `(7, 3)` | false | :white_check_mark: |
 | TC11: a6, last empty rank at file 0 | a new `Board`; location `(0, 6)` | false | :white_check_mark: |
-| TC12: h6, last empty rank at file 7 | a new `Board`; location `(7, 6)` | false | :x: |
+| TC12: h6, last empty rank at file 7 | a new `Board`; location `(7, 6)` | false | :white_check_mark: |
 | TC24: a1, both lows | a new `Board`; location `(0, 1)` | true | :x: |
 | TC25: h1, high file and low rank | a new `Board`; location `(7, 1)` | true | :x: |
 | TC26: h2, last file of the white pawns | a new `Board`; location `(7, 2)` | true | :x: |

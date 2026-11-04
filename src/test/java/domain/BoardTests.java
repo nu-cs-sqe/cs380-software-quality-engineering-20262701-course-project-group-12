@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BoardTests {
@@ -68,8 +67,8 @@ public class BoardTests {
     }
 
     @Test
-    public void PieceAt_H6_ReturnsEmpty() {
-        assertEmpty(7, 6);
+    public void IsOccupied_H6_ReturnsFalse() {
+        assertNotOccupied(7, 6);
     }
 
     @Test
@@ -145,11 +144,5 @@ public class BoardTests {
         Board board = new Board();
 
         assertFalse(board.isOccupied(new Location(file, rank)));
-    }
-
-    private void assertEmpty(int file, int rank) {
-        Board board = new Board();
-
-        assertNull(board.pieceAt(new Location(file, rank)));
     }
 }
