@@ -16,7 +16,8 @@ public class PieceImages {
     private static final String STANDARD_FOLDER = "/pieces/";
     private static final String IMAGE_EXTENSION = ".png";
 
-    private final Map<PieceColor, Map<PieceType, BufferedImage>> images = new EnumMap<>(PieceColor.class);
+    private final Map<PieceColor, Map<PieceType, BufferedImage>> images =
+            new EnumMap<>(PieceColor.class);
 
     public PieceImages() {
         this(STANDARD_FOLDER);
