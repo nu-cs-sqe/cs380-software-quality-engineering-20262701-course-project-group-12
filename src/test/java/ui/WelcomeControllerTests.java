@@ -4,6 +4,7 @@ import domain.Game;
 import org.junit.jupiter.api.Test;
 
 import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -45,7 +46,7 @@ public class WelcomeControllerTests {
 
     @Test
     public void WelcomeView_ShowNamesRequired_DisplaysRequiredNamesMessage() {
-        WelcomeView view = new WelcomeView(mock(WelcomeController.class));
+        WelcomeView view = new WelcomeView(controllerThatIsNeverCalled());
 
         view.showNamesRequired();
 
@@ -109,13 +110,19 @@ public class WelcomeControllerTests {
         assertTrue(!game.isStarted());
     }
 
+    private static WelcomeController controllerThatIsNeverCalled() {
+        WelcomeController controller = mock(WelcomeController.class);
+        replay(controller);
+        return controller;
+    }
+
     private static class RecordingWelcomeView extends WelcomeView {
         private boolean namesRequiredShown;
         private boolean closed;
         private boolean gameShown;
 
         RecordingWelcomeView() {
-            super(mock(WelcomeController.class));
+            super(controllerThatIsNeverCalled());
         }
 
         @Override
