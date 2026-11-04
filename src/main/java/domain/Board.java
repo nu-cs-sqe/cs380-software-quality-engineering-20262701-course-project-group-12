@@ -63,6 +63,9 @@ public class Board {
     }
 
     public void move(Location from, Location to) {
+        if (from == null) {
+            throw new IllegalArgumentException("Cannot move a piece from a null square");
+        }
         if (to == null) {
             throw new IllegalArgumentException("Cannot move a piece to a null square");
         }
