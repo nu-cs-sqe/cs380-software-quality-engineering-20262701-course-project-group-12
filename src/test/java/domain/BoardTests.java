@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardTests {
     private static final Location A1 = new Location(0, 1);
+    private static final Location A3 = new Location(0, 3);
     private static final Location A4 = new Location(0, 4);
     private static final Location A5 = new Location(0, 5);
     private static final Location A8 = new Location(0, 8);
@@ -130,18 +131,16 @@ public class BoardTests {
     @Test
     public void PieceAt_EmptyA3_ThrowsIllegalArgumentException() {
         Board board = new Board();
-        Location a3 = new Location(0, 3);
 
-        assertThrows(IllegalArgumentException.class, () -> board.pieceAt(a3));
+        assertThrows(IllegalArgumentException.class, () -> board.pieceAt(A3));
     }
 
     @Test
     public void PieceAt_CalledTwiceOnA1_StillReturnsWhiteRook() {
         Board board = new Board();
-        Location a1 = new Location(0, 1);
 
-        Piece first = board.pieceAt(a1);
-        Piece second = board.pieceAt(a1);
+        Piece first = board.pieceAt(A1);
+        Piece second = board.pieceAt(A1);
 
         assertEquals(PieceType.ROOK, first.getType());
         assertEquals(PieceColor.WHITE, first.getColor());
