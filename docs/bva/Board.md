@@ -80,7 +80,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC12: h6, last empty rank at file 7 | a new `Board`; location `(7, 6)` | false | :white_check_mark: |
 | TC24: a1, both lows | a new `Board`; location `(0, 1)` | true | :white_check_mark: |
 | TC25: h1, high file and low rank | a new `Board`; location `(7, 1)` | true | :white_check_mark: |
-| TC26: h2, last file of the white pawns | a new `Board`; location `(7, 2)` | true | :x: |
+| TC26: h2, last file of the white pawns | a new `Board`; location `(7, 2)` | true | :white_check_mark: |
 | TC27: a7, first file of the black pawns | a new `Board`; location `(0, 7)` | true | :x: |
 | TC28: a8, low file and high rank | a new `Board`; location `(0, 8)` | true | :x: |
 | TC29: h8, both highs | a new `Board`; location `(7, 8)` | true | :x: |
