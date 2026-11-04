@@ -62,6 +62,10 @@ public class Board {
         return squares[rowOf(location)][location.getFile()] != null;
     }
 
+    public void move(Location from, Location to) {
+        place(pieceAt(from), to);
+    }
+
     private int rowOf(Location location) {
         return location.getRank() - FIRST_RANK;
     }

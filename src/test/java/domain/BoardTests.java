@@ -7,10 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardTests {
+    private static final Location A1 = new Location(0, 1);
+    private static final Location A4 = new Location(0, 4);
 
     @Test
     public void PieceAt_A1_ReturnsWhiteRook() {
@@ -176,6 +179,16 @@ public class BoardTests {
         Board board = new Board();
 
         assertThrows(IllegalArgumentException.class, () -> board.isOccupied(null));
+    }
+
+    @Test
+    public void Move_A1ToEmptyA4_PlacesTheRookOnA4() {
+        Board board = new Board();
+        Piece whiteRook = board.pieceAt(A1);
+
+        board.move(A1, A4);
+
+        assertSame(whiteRook, board.pieceAt(A4));
     }
 
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
