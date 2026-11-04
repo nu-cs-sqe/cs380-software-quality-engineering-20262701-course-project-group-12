@@ -65,6 +65,13 @@ public class PieceImagesTests {
         assertSamePixels(expected, actual);
     }
 
+    @Test
+    public void ImageOf_NullPiece_ThrowsIllegalArgumentException() {
+        PieceImages images = new PieceImages();
+
+        assertThrows(IllegalArgumentException.class, () -> images.imageOf(null));
+    }
+
     private static void assertSamePixels(BufferedImage expected, BufferedImage actual) {
         assertEquals(expected.getWidth(), actual.getWidth());
         assertEquals(expected.getHeight(), actual.getHeight());
