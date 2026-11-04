@@ -13,19 +13,15 @@ import java.util.Locale;
 import java.util.Map;
 
 public class PieceImages {
-    private static final String STANDARD_FOLDER = "/pieces/";
+    private static final String IMAGE_FOLDER = "/pieces/";
     private static final String IMAGE_EXTENSION = ".png";
 
     private final Map<PieceColor, Map<PieceType, BufferedImage>> images =
             new EnumMap<>(PieceColor.class);
 
     public PieceImages() {
-        this(STANDARD_FOLDER);
-    }
-
-    PieceImages(String folder) {
         for (PieceColor color : PieceColor.values()) {
-            images.put(color, loadColor(folder, color));
+            images.put(color, loadColor(color));
         }
     }
 
@@ -36,10 +32,10 @@ public class PieceImages {
         return images.get(piece.getColor()).get(piece.getType());
     }
 
-    private static Map<PieceType, BufferedImage> loadColor(String folder, PieceColor color) {
+    private static Map<PieceType, BufferedImage> loadColor(PieceColor color) {
         Map<PieceType, BufferedImage> imagesOfColor = new EnumMap<>(PieceType.class);
         for (PieceType type : PieceType.values()) {
-            imagesOfColor.put(type, load(folder + fileName(color, type)));
+            imagesOfColor.put(type, load(IMAGE_FOLDER + fileName(color, type)));
         }
         return imagesOfColor;
     }
