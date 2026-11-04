@@ -12,7 +12,6 @@ import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -49,15 +48,15 @@ public class BoardControllerTests {
     }
 
     @Test
-    public void PieceAt_EmptySquare_ReturnsNull() {
+    public void PieceAt_EmptySquare_ThrowsIllegalArgumentException() {
         Board board = mock(Board.class);
         Location a3 = new Location(0, 3);
-        expect(board.pieceAt(a3)).andReturn(null);
+        expect(board.pieceAt(a3)).andThrow(new IllegalArgumentException());
         replay(board);
 
         BoardController controller = new BoardController(board);
 
-        assertNull(controller.pieceAt(a3));
+        assertThrows(IllegalArgumentException.class, () -> controller.pieceAt(a3));
         verify(board);
     }
 
