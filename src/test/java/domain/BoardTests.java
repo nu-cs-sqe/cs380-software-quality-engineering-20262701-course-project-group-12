@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardTests {
 
@@ -132,12 +133,23 @@ public class BoardTests {
         assertEquals(PieceColor.WHITE, second.getColor());
     }
 
+    @Test
+    public void IsOccupied_A1_ReturnsTrue() {
+        assertIsOccupied(0, 1);
+    }
+
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
         Board board = new Board();
         Piece piece = board.pieceAt(new Location(file, rank));
 
         assertEquals(type, piece.getType());
         assertEquals(color, piece.getColor());
+    }
+
+    private void assertIsOccupied(int file, int rank) {
+        Board board = new Board();
+
+        assertTrue(board.isOccupied(new Location(file, rank)));
     }
 
     private void assertNotOccupied(int file, int rank) {

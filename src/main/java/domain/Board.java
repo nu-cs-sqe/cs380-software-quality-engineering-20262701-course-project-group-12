@@ -52,7 +52,7 @@ public class Board {
     }
 
     public boolean isOccupied(Location location) {
-        return false;
+        return squares[rowOf(location)][location.getFile()] != null;
     }
 
     private int rowOf(Location location) {
