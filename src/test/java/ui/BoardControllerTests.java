@@ -11,6 +11,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -83,6 +84,19 @@ public class BoardControllerTests {
         BoardController controller = new BoardController(board);
 
         assertTrue(controller.isOccupied(a1));
+        verify(board);
+    }
+
+    @Test
+    public void IsOccupied_BoardReportsAnEmptySquare_ReturnsFalse() {
+        Board board = mock(Board.class);
+        Location a3 = new Location(0, 3);
+        expect(board.isOccupied(a3)).andReturn(false);
+        replay(board);
+
+        BoardController controller = new BoardController(board);
+
+        assertFalse(controller.isOccupied(a3));
         verify(board);
     }
 }
