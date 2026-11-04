@@ -295,6 +295,16 @@ public class BoardTests {
         assertThrows(IllegalArgumentException.class, () -> board.move(A1, null));
     }
 
+    @Test
+    public void Move_A1ToNull_LeavesTheRookOnA1() {
+        Board board = new Board();
+        Piece whiteRook = board.pieceAt(A1);
+
+        assertThrows(IllegalArgumentException.class, () -> board.move(A1, null));
+
+        assertSame(whiteRook, board.pieceAt(A1));
+    }
+
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
         Board board = new Board();
         Piece piece = board.pieceAt(new Location(file, rank));
