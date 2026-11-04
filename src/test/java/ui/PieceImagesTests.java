@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PieceImagesTests {
     private static final String STANDARD_FOLDER = "/pieces/";
@@ -26,6 +27,14 @@ public class PieceImagesTests {
     @Test
     public void PieceImages_MissingImageFiles_ThrowsPieceImageException() {
         assertThrows(PieceImageException.class, () -> new PieceImages(MISSING_FOLDER));
+    }
+
+    @Test
+    public void PieceImages_MissingImageFiles_NamesTheMissingFileInTheMessage() {
+        PieceImageException thrown =
+                assertThrows(PieceImageException.class, () -> new PieceImages(MISSING_FOLDER));
+
+        assertTrue(thrown.getMessage().contains(MISSING_FOLDER));
     }
 
     @Test
