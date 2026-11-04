@@ -3,6 +3,7 @@ package ui;
 import domain.Game;
 import org.junit.jupiter.api.Test;
 
+import static org.easymock.EasyMock.mock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -44,7 +45,7 @@ public class WelcomeControllerTests {
 
     @Test
     public void WelcomeView_ShowNamesRequired_DisplaysRequiredNamesMessage() {
-        WelcomeView view = new WelcomeView();
+        WelcomeView view = new WelcomeView(mock(WelcomeController.class));
 
         view.showNamesRequired();
 
@@ -112,6 +113,10 @@ public class WelcomeControllerTests {
         private boolean namesRequiredShown;
         private boolean closed;
         private boolean gameShown;
+
+        RecordingWelcomeView() {
+            super(mock(WelcomeController.class));
+        }
 
         @Override
         public void showNamesRequired() {
