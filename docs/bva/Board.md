@@ -83,7 +83,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC26: h2, last file of the white pawns | a new `Board`; location `(7, 2)` | true | :white_check_mark: |
 | TC27: a7, first file of the black pawns | a new `Board`; location `(0, 7)` | true | :white_check_mark: |
 | TC28: a8, low file and high rank | a new `Board`; location `(0, 8)` | true | :white_check_mark: |
-| TC29: h8, both highs | a new `Board`; location `(7, 8)` | true | :x: |
+| TC29: h8, both highs | a new `Board`; location `(7, 8)` | true | :white_check_mark: |
 | TC30: null location | a new `Board`; location is null | throws `IllegalArgumentException` | :x: |
 
 ### Method under test: `Board()`
