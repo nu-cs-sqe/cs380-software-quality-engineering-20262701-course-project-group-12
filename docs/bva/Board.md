@@ -123,7 +123,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC34: from both highs to an empty square | a new `Board`; move h8 `(7, 8)` to h5 `(7, 5)` | `pieceAt(h5)` is the black rook that was on h8 | :white_check_mark: |
 | TC35: from both highs leaves that square empty | a new `Board`; move h8 `(7, 8)` to h5 `(7, 5)` | `isOccupied(h8)` is false | :white_check_mark: |
 | TC36: to low file and high rank, replacing a black piece | a new `Board`; move a1 `(0, 1)` to a8 `(0, 8)` | `pieceAt(a8)` is the white rook that was on a1 | :white_check_mark: |
-| TC37: to high file and low rank, replacing a white piece | a new `Board`; move h8 `(7, 8)` to h1 `(7, 1)` | `pieceAt(h1)` is the black rook that was on h8 | :x: |
+| TC37: to high file and low rank, replacing a white piece | a new `Board`; move h8 `(7, 8)` to h1 `(7, 1)` | `pieceAt(h1)` is the black rook that was on h8 | :white_check_mark: |
 | TC38: from low file and high rank, to both lows | a new `Board`; move a8 `(0, 8)` to a1 `(0, 1)` | `pieceAt(a1)` is the black rook that was on a8 | :x: |
 | TC39: from high file and low rank, to both highs | a new `Board`; move h1 `(7, 1)` to h8 `(7, 8)` | `pieceAt(h8)` is the white rook that was on h1 | :x: |
 | TC40: to the same square | a new `Board`; move a1 `(0, 1)` to a1 `(0, 1)` | `pieceAt(a1)` is still the white rook | :x: |
