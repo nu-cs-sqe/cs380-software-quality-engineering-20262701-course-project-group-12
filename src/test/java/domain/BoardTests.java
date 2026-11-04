@@ -212,6 +212,15 @@ public class BoardTests {
         assertSame(blackRook, board.pieceAt(H5));
     }
 
+    @Test
+    public void Move_H8ToEmptyH5_LeavesH8Empty() {
+        Board board = new Board();
+
+        board.move(H8, H5);
+
+        assertFalse(board.isOccupied(H8));
+    }
+
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
         Board board = new Board();
         Piece piece = board.pieceAt(new Location(file, rank));
