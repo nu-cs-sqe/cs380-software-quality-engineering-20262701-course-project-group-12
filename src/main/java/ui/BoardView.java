@@ -29,19 +29,24 @@ public class BoardView extends JPanel {
         super.paintComponent(graphics);
         for (int rank = 8; rank >= 1; rank--) {
             for (int file = 0; file < BOARD_SIZE; file++) {
-                int x = file * TILE_SIZE;
-                int y = (8 - rank) * TILE_SIZE;
-                graphics.setColor((file + rank) % 2 == 0 ? LIGHT_SQUARE : DARK_SQUARE);
-                graphics.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-                drawPiece(graphics, boardController.pieceAt(new Location(file, rank)), x, y);
+                paintSquare(graphics, new Location(file, rank));
             }
         }
     }
 
-    private void drawPiece(Graphics graphics, Piece piece, int x, int y) {
-        if (piece == null) {
-            return;
+    private void paintSquare(Graphics graphics, Location location) {
+        int file = location.getFile();
+        int rank = location.getRank();
+        int x = file * TILE_SIZE;
+        int y = (8 - rank) * TILE_SIZE;
+        graphics.setColor((file + rank) % 2 == 0 ? LIGHT_SQUARE : DARK_SQUARE);
+        graphics.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+        if (boardController.isOccupied(location)) {
+            drawPiece(graphics, boardController.pieceAt(location), x, y);
         }
+    }
+
+    private void drawPiece(Graphics graphics, Piece piece, int x, int y) {
         String letter = symbol(piece.getType());
         int textX = x + TILE_SIZE / 4;
         int textY = y + TILE_SIZE * 2 / 3;
