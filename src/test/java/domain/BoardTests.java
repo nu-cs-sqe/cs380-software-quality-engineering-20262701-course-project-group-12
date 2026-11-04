@@ -58,8 +58,8 @@ public class BoardTests {
     }
 
     @Test
-    public void PieceAt_H3_ReturnsEmpty() {
-        assertEmpty(7, 3);
+    public void IsOccupied_H3_ReturnsFalse() {
+        assertNotOccupied(7, 3);
     }
 
     @Test
