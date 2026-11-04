@@ -63,8 +63,8 @@ public class BoardTests {
     }
 
     @Test
-    public void PieceAt_A6_ReturnsEmpty() {
-        assertEmpty(0, 6);
+    public void IsOccupied_A6_ReturnsFalse() {
+        assertNotOccupied(0, 6);
     }
 
     @Test
