@@ -191,6 +191,15 @@ public class BoardTests {
         assertSame(whiteRook, board.pieceAt(A4));
     }
 
+    @Test
+    public void Move_A1ToEmptyA4_LeavesA1Empty() {
+        Board board = new Board();
+
+        board.move(A1, A4);
+
+        assertFalse(board.isOccupied(A1));
+    }
+
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
         Board board = new Board();
         Piece piece = board.pieceAt(new Location(file, rank));

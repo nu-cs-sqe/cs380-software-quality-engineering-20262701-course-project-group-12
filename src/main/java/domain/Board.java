@@ -63,7 +63,13 @@ public class Board {
     }
 
     public void move(Location from, Location to) {
-        place(pieceAt(from), to);
+        Piece movingPiece = pieceAt(from);
+        clear(from);
+        place(movingPiece, to);
+    }
+
+    private void clear(Location location) {
+        squares[rowOf(location)][location.getFile()] = null;
     }
 
     private int rowOf(Location location) {
