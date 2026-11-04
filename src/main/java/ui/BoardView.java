@@ -37,26 +37,32 @@ public class BoardView extends JPanel {
     }
 
     private void paintSquare(Graphics graphics, Location location) {
-        int file = location.getFile();
-        int rank = location.getRank();
-        int x = file * TILE_SIZE;
-        int y = (LAST_RANK - rank) * TILE_SIZE;
-        graphics.setColor((file + rank) % 2 == 0 ? LIGHT_SQUARE : DARK_SQUARE);
-        graphics.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+        boolean isLightSquare = (location.getFile() + location.getRank()) % 2 == 0;
+        graphics.setColor(isLightSquare ? LIGHT_SQUARE : DARK_SQUARE);
+        graphics.fillRect(xOf(location), yOf(location), TILE_SIZE, TILE_SIZE);
         if (boardController.isOccupied(location)) {
-            drawPiece(graphics, boardController.pieceAt(location), x, y);
+            drawPiece(graphics, location);
         }
     }
 
-    private void drawPiece(Graphics graphics, Piece piece, int x, int y) {
+    private void drawPiece(Graphics graphics, Location location) {
+        Piece piece = boardController.pieceAt(location);
         String letter = symbol(piece.getType());
-        int textX = x + TILE_SIZE / 4;
-        int textY = y + TILE_SIZE * 2 / 3;
+        int textX = xOf(location) + TILE_SIZE / 4;
+        int textY = yOf(location) + TILE_SIZE * 2 / 3;
         graphics.setFont(new Font("SansSerif", Font.BOLD, TILE_SIZE / 2));
         graphics.setColor(piece.getColor() == PieceColor.WHITE ? Color.BLACK : Color.WHITE);
         graphics.drawString(letter, textX + 1, textY + 1);
         graphics.setColor(piece.getColor() == PieceColor.WHITE ? Color.WHITE : Color.BLACK);
         graphics.drawString(letter, textX, textY);
+    }
+
+    private int xOf(Location location) {
+        return location.getFile() * TILE_SIZE;
+    }
+
+    private int yOf(Location location) {
+        return (LAST_RANK - location.getRank()) * TILE_SIZE;
     }
 
     private String symbol(PieceType type) {
