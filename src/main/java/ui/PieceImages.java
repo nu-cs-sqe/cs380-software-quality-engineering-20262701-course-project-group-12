@@ -1,26 +1,43 @@
 package ui;
 
+import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.EnumMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class PieceImages {
+    private static final String STANDARD_FOLDER = "/pieces/";
     private static final String IMAGE_EXTENSION = ".png";
+
+    private final Map<PieceColor, Map<PieceType, BufferedImage>> images = new EnumMap<>(PieceColor.class);
+
+    public PieceImages() {
+        this(STANDARD_FOLDER);
+    }
 
     PieceImages(String folder) {
         for (PieceColor color : PieceColor.values()) {
-            loadColor(folder, color);
+            images.put(color, loadColor(folder, color));
         }
     }
 
-    private static void loadColor(String folder, PieceColor color) {
+    public BufferedImage imageOf(Piece piece) {
+        return images.get(piece.getColor()).get(piece.getType());
+    }
+
+    private static Map<PieceType, BufferedImage> loadColor(String folder, PieceColor color) {
+        Map<PieceType, BufferedImage> imagesOfColor = new EnumMap<>(PieceType.class);
         for (PieceType type : PieceType.values()) {
-            load(folder + fileName(color, type));
+            imagesOfColor.put(type, load(folder + fileName(color, type)));
         }
+        return imagesOfColor;
     }
 
     private static String fileName(PieceColor color, PieceType type) {
@@ -31,26 +48,28 @@ public class PieceImages {
         return enumName.toLowerCase(Locale.ROOT);
     }
 
-    private static void load(String path) {
+    private static BufferedImage load(String path) {
         URL resource = PieceImages.class.getResource(path);
         if (resource == null) {
             throw new PieceImageException(failureMessage(path, "the file is missing"));
         }
-        read(path, resource);
+        return read(path, resource);
     }
 
-    private static void read(String path, URL resource) {
+    private static BufferedImage read(String path, URL resource) {
         try {
-            decode(path, resource);
+            return decode(path, resource);
         } catch (IOException e) {
             throw new PieceImageException(failureMessage(path, "the file cannot be read"), e);
         }
     }
 
-    private static void decode(String path, URL resource) throws IOException {
-        if (ImageIO.read(resource) == null) {
+    private static BufferedImage decode(String path, URL resource) throws IOException {
+        BufferedImage image = ImageIO.read(resource);
+        if (image == null) {
             throw new PieceImageException(failureMessage(path, "the file is not an image"));
         }
+        return image;
     }
 
     private static String failureMessage(String path, String reason) {
