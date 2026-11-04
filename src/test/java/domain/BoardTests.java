@@ -163,6 +163,13 @@ public class BoardTests {
         assertIsOccupied(7, 8);
     }
 
+    @Test
+    public void IsOccupied_NullLocation_ThrowsIllegalArgumentException() {
+        Board board = new Board();
+
+        assertThrows(IllegalArgumentException.class, () -> board.isOccupied(null));
+    }
+
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
         Board board = new Board();
         Piece piece = board.pieceAt(new Location(file, rank));

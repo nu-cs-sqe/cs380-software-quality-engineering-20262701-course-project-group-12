@@ -52,6 +52,9 @@ public class Board {
     }
 
     public boolean isOccupied(Location location) {
+        if (location == null) {
+            throw new IllegalArgumentException("Cannot check whether a null square is occupied");
+        }
         return squares[rowOf(location)][location.getFile()] != null;
     }
 
