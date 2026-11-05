@@ -55,7 +55,7 @@ public class WelcomeControllerTests {
 
     @Test
     public void WelcomeView_ShowDuplicateNames_DisplaysDifferentNamesMessage() {
-        WelcomeView view = new WelcomeView();
+        WelcomeView view = new WelcomeView(controllerThatIsNeverCalled());
 
         view.showDuplicateNames();
 
