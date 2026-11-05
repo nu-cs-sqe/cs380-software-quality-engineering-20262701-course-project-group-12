@@ -81,6 +81,19 @@ public class WelcomeControllerTests {
     }
 
     @Test
+    public void StartGame_WithOneCharacterNames_ClosesWelcomeView() {
+        Game game = new Game();
+        view.close();
+        view.showGame(game);
+        WelcomeController controller = controllerWithView(game);
+
+        controller.startGame("A", "B");
+
+        verify(view);
+        assertTrue(game.isStarted());
+    }
+
+    @Test
     public void StartGame_WithValidNames_ClosesWelcomeView() {
         Game game = new Game();
         view.close();
