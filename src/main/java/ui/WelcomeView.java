@@ -2,15 +2,15 @@ package ui;
 
 import domain.Game;
 
+import java.awt.GraphicsEnvironment;
+import java.awt.GridLayout;
+import java.awt.Window;
+import java.util.Optional;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridLayout;
-import java.awt.Window;
-import java.util.Optional;
 
 public class WelcomeView extends JPanel {
     private static final int ANY_NUMBER_OF_ROWS = 0;

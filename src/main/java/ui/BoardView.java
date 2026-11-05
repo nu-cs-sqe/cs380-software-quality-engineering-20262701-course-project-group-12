@@ -5,11 +5,11 @@ import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
 
-import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import javax.swing.JPanel;
 
 public class BoardView extends JPanel {
     private static final int BOARD_SIZE = Location.MAX_FILE - Location.MIN_FILE + 1;

@@ -2,9 +2,9 @@ package ui;
 
 import domain.Game;
 
-import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.Container;
+import javax.swing.JFrame;
 
 public class GameFrame extends JFrame {
     public GameFrame(Game game) {
