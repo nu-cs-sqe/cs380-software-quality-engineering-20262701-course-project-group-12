@@ -4,6 +4,7 @@ import domain.Board;
 import domain.Location;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RookTests {
@@ -79,5 +80,15 @@ public class RookTests {
         boolean canMove = rook.canMove(A1, H1, board);
 
         assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_DestinationOffRankAndFile_ReturnsFalse() {
+        Board board = new Board();
+        Rook rook = new Rook(PieceColor.WHITE);
+
+        boolean canMove = rook.canMove(A1, B3, board);
+
+        assertFalse(canMove);
     }
 }

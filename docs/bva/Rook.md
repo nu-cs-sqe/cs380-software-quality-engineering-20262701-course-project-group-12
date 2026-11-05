@@ -137,7 +137,7 @@ through `8`.
     `(1, 5)`. Every square from b1 through h1 is empty.
   - **Expected output**: `true`.
 
-- **TC-ROOK-05 — Reject a destination off the rank and file** ( :x: )
+- **TC-ROOK-05 — Reject a destination off the rank and file** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
     b3 `(1, 3)`. New `Board`; b3 is empty.

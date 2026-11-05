@@ -9,6 +9,6 @@ public class Rook extends Piece {
     }
 
     public boolean canMove(Location from, Location to, Board board) {
-        return true;
+        return from.getFile() == to.getFile() || from.getRank() == to.getRank();
     }
 }
