@@ -168,7 +168,7 @@ through `8`.
     a8 `(0, 8)`. New `Board`; a2 holds the white a-pawn.
   - **Expected output**: `false`.
 
-- **TC-ROOK-10 — Reject a jump over the last square of the path** ( :x: )
+- **TC-ROOK-10 — Reject a jump over the last square of the path** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
     a8 `(0, 8)`. New `Board` after `move` of the a2 pawn to b3 `(1, 3)`,

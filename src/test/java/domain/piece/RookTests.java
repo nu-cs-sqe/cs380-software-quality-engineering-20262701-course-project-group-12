@@ -133,4 +133,15 @@ public class RookTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_LastBetweenSquareOccupied_ReturnsFalse() {
+        Board board = new Board();
+        board.move(A2, B3);
+        Rook rook = new Rook(PieceColor.WHITE);
+
+        boolean canMove = rook.canMove(A1, A8, board);
+
+        assertFalse(canMove);
+    }
 }
