@@ -70,7 +70,7 @@ public behavior and mocked view/model collaborators to observe the result.
   - **State of the system**: `game` has been started with `Alice` and `Bob`.
   - **Expected output**: Throws `IllegalStateException`.
 
-- **TC-CONSTRUCTOR-03 — Reject a missing game** ( :x: )
+- **TC-CONSTRUCTOR-03 — Reject a missing game** ( :white_check_mark: )
   - **Method(s) under test**: `WelcomeController(Game)`
   - **State of the system**: `game` is null.
   - **Expected output**: Throws `IllegalArgumentException`.

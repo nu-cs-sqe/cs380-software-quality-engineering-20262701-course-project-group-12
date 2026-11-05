@@ -7,6 +7,9 @@ public class WelcomeController {
     private WelcomeView view;
 
     public WelcomeController(Game game) {
+        if (game == null) {
+            throw new IllegalArgumentException("Cannot create the welcome controller without a game");
+        }
         if (game.isStarted()) {
             throw new IllegalStateException();
         }
