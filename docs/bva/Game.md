@@ -193,7 +193,7 @@ returns Player 1's name until a later story changes the turn.
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `Bob`.
 
-- **TC-NAMES-04 — Reject reading Player 2's name before a start** ( :x: )
+- **TC-NAMES-04 — Reject reading Player 2's name before a start** ( :white_check_mark: )
   - **Method(s) under test**: `playerTwoName()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
