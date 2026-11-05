@@ -103,7 +103,7 @@ through `8`.
 ### Method under test: `canMove(Location from, Location to, Board board)`
 
 - **TC-ROOK-01 — Move one square along the file onto an empty square**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
     a2 `(0, 2)`. The board is a new `Board` after `move` of the a2 pawn
