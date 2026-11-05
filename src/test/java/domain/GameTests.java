@@ -184,4 +184,11 @@ public class GameTests {
 
         assertEquals("Alice", name);
     }
+
+    @Test
+    public void PlayerToMoveName_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::playerToMoveName);
+    }
 }
