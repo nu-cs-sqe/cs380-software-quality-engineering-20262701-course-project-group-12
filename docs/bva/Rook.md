@@ -197,7 +197,7 @@ through `8`.
     `(0, 2)`. New `Board`.
   - **Expected output**: `IllegalArgumentException`.
 
-- **TC-ROOK-14 — Reject a null to square** ( :x: )
+- **TC-ROOK-14 — Reject a null to square** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
     null. New `Board`.

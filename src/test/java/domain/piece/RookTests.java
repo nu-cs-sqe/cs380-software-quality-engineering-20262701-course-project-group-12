@@ -178,4 +178,12 @@ public class RookTests {
 
         assertThrows(IllegalArgumentException.class, () -> rook.canMove(null, A2, board));
     }
+
+    @Test
+    public void CanMove_NullToSquare_ThrowsIllegalArgumentException() {
+        Board board = new Board();
+        Rook rook = new Rook(PieceColor.WHITE);
+
+        assertThrows(IllegalArgumentException.class, () -> rook.canMove(A1, null, board));
+    }
 }
