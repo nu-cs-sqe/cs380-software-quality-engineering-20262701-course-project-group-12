@@ -13,16 +13,22 @@ public behavior and mocked view/model collaborators to observe the result.
   - only whitespace
   - one non-whitespace character
   - a name with leading or trailing whitespace
+  - mixed case
 - **Input: Player 2 name**
   - empty
   - only whitespace
   - one non-whitespace character
   - a name with leading or trailing whitespace
+  - mixed case
 - **Input: game start result**
-  - unsuccessful start
+  - `MissingPlayerNameException`
+  - `DuplicatePlayerNameException`
   - successful start
-- **Output: unsuccessful start**
+- **Output: missing name**
   - the required-names message is shown
+  - the welcome view remains open
+- **Output: duplicate name**
+  - the different-names message is shown
   - the welcome view remains open
 - **Output: successful start**
   - the welcome view is closed
@@ -31,11 +37,14 @@ public behavior and mocked view/model collaborators to observe the result.
 ### Step 2: Categories
 
 - `startGame(String, String)` passes both field values to `Game.start`.
-- The controller does not trim or validate names; `Game.start` owns that rule.
-- A failed game start keeps the welcome window open and shows the required-name
-  message.
-- A successful game start closes the welcome window and opens the game window.
-- Duplicate names are valid because the game accepts any two non-blank names.
+- The controller does not trim or validate names; `Game.start` owns that
+  rule and throws when a start is rejected.
+- `MissingPlayerNameException` keeps the welcome window open and shows
+  "Both player names are required."
+- `DuplicatePlayerNameException` keeps the welcome window open and shows
+  "Players must use different names."
+- A successful game start closes the welcome window and opens the game
+  window.
 
 ### Step 3: Boundary choices
 
@@ -44,36 +53,37 @@ public behavior and mocked view/model collaborators to observe the result.
 - Check the smallest valid input: one non-whitespace character.
 - Check names with leading or trailing whitespace to verify that the original
   field values are passed to `Game.start`.
-- Check both unsuccessful and successful results from `Game.start`.
-- Check duplicate valid names because duplicate names are explicitly allowed.
+- Check the missing-name exception and the duplicate-name exception.
+- Check exact duplicates and the same name in a different case.
+- Check a successful start with two different valid names.
 
 ## Step 4: Test Cases
 
 ### Method under test: `startGame(String player1Name, String player2Name)`
 
-- **TC-STARTGAME-01 — Reject an empty Player 1 name** (implemented)
+- **TC-STARTGAME-01 — Reject an empty Player 1 name** (:x:)
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Player 1's name is empty and Player 2's name is `Bob`.
-    `Game.start` returns `false`.
+    `Game.start` throws `MissingPlayerNameException`.
   - **Expected output**: The controller passes both names to `Game.start`,
     calls `showNamesRequired()`, and does not close the welcome view or open
     the game window.
 
-- **TC-STARTGAME-02 — Reject an empty Player 2 name** (implemented)
+- **TC-STARTGAME-02 — Reject an empty Player 2 name** (:x:)
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Player 1's name is `Alice` and Player 2's name is empty.
-    `Game.start` returns `false`.
+    `Game.start` throws `MissingPlayerNameException`.
   - **Expected output**: The controller passes both names to `Game.start`,
     calls `showNamesRequired()`, and does not close the welcome view or open
     the game window.
 
-- **TC-STARTGAME-03 — Reject whitespace-only names** (implemented)
+- **TC-STARTGAME-03 — Reject whitespace-only names** (:x:)
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Player 1's name is `"   "` and Player 2's name is `"\t"`.
-    `Game.start` returns `false`.
+    `Game.start` throws `MissingPlayerNameException`.
   - **Expected output**: The controller calls `showNamesRequired()` and does
     not close the welcome view or open the game window.
 
@@ -82,7 +92,7 @@ public behavior and mocked view/model collaborators to observe the result.
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Player 1's name is `A` and Player 2's name is `B`.
-    `Game.start` returns `true`.
+    `Game.start` completes.
   - **Expected output**: The controller closes the welcome view and opens the
     game window.
 
@@ -91,23 +101,33 @@ public behavior and mocked view/model collaborators to observe the result.
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Player 1's name is `" Alice "` and Player 2's name is
-    `"\tBob\n"`. `Game.start` returns `true`.
+    `"\tBob\n"`. `Game.start` completes.
   - **Expected output**: The controller passes the field values to
     `Game.start`, closes the welcome view, and opens the game window.
 
-- **TC-STARTGAME-06 — Allow duplicate valid names**
-  (implemented)
+- **TC-STARTGAME-06 — Reject duplicate valid names** (:x:)
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
-    welcome view. Both player names are `Alex`. `Game.start` returns `true`.
-  - **Expected output**: The controller closes the welcome view and opens the
-    game window.
+    welcome view. Both player names are `Alex`. `Game.start` throws
+    `DuplicatePlayerNameException`.
+  - **Expected output**: The controller calls `showDuplicateNames()`, does
+    not close the welcome view or open the game window, and the game remains
+    unstarted.
 
 - **TC-STARTGAME-07 — Start after both names are valid**
   (implemented)
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Player 1's name is `Alice` and Player 2's name is `Bob`.
-    `Game.start` returns `true`.
+    `Game.start` completes.
   - **Expected output**: The controller closes the welcome view and opens the
     game window for the started game.
+
+- **TC-STARTGAME-08 — Reject the same name in a different case**
+  (:x:)
+  - **Method(s) under test**: `startGame(String, String)`, `Game.start`
+  - **State of the system**: The controller has an unstarted game and a
+    welcome view. Player 1's name is `Alice` and Player 2's name is `ALICE`.
+    `Game.start` throws `DuplicatePlayerNameException`.
+  - **Expected output**: The controller calls `showDuplicateNames()` and does
+    not close the welcome view or open the game window.
