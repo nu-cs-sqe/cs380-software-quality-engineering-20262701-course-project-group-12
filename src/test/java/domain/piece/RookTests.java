@@ -144,4 +144,15 @@ public class RookTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_OpponentAtFarEndOfClearFile_ReturnsTrue() {
+        Board board = new Board();
+        board.move(A2, B3);
+        Rook rook = new Rook(PieceColor.WHITE);
+
+        boolean canMove = rook.canMove(A1, A7, board);
+
+        assertTrue(canMove);
+    }
 }

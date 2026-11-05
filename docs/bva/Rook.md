@@ -176,7 +176,7 @@ through `8`.
   - **Expected output**: `false`.
 
 - **TC-ROOK-11 — Capture an opponent at the far end of a clear file**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
     a7 `(0, 7)`. New `Board` after `move` of the a2 pawn to b3 `(1, 3)`,
