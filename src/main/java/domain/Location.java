@@ -6,7 +6,8 @@ public class Location {
 
     public Location(int file, int rank) {
         if (file < 0 || file > 7 || rank < 1 || rank > 8) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Cannot create a location off the board at file "
+                    + file + ", rank " + rank);
         }
         this.file = file;
         this.rank = rank;
