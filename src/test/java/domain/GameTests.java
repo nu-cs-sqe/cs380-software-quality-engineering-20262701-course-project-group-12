@@ -173,4 +173,14 @@ public class GameTests {
         assertThrows(IllegalArgumentException.class, () -> game.start("Alice", null));
         assertFalse(game.isStarted());
     }
+
+    @Test
+    public void start_MixedCaseNames_KeepsEnteredCase() {
+        Game game = new Game();
+
+        game.start("ALICE", "bob");
+
+        assertEquals("ALICE", game.playerOne().getName());
+        assertEquals("bob", game.playerTwo().getName());
+    }
 }

@@ -179,7 +179,7 @@ cases below use the game's public behavior to observe its state.
   - **Expected output**: `start` throws `IllegalArgumentException`; the game
     remains unstarted.
 
-- **TC-START-16 — Keep the entered case after trim** (:x:)
+- **TC-START-16 — Keep the entered case after trim** (implemented)
   - **Method(s) under test**: `start(String, String)`, `playerOne()`,
     `playerTwo()`
   - **State of the system**: New game; Player 1's name is `ALICE` and Player
