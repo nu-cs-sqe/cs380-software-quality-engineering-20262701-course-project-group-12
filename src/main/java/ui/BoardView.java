@@ -12,9 +12,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 
 public class BoardView extends JPanel {
-    private static final int BOARD_SIZE = 8;
-    private static final int FIRST_RANK = 1;
-    private static final int LAST_RANK = BOARD_SIZE;
+    private static final int BOARD_SIZE = Location.MAX_FILE - Location.MIN_FILE + 1;
+    private static final int FIRST_RANK = Location.MIN_RANK;
+    private static final int LAST_RANK = Location.MAX_RANK;
     private static final int TILE_SIZE = 80;
     private static final Color LIGHT_SQUARE = new Color(240, 217, 181);
     private static final Color DARK_SQUARE = new Color(181, 136, 99);
