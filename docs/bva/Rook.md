@@ -191,7 +191,7 @@ through `8`.
     so h7 is empty.
   - **Expected output**: `true`.
 
-- **TC-ROOK-13 — Reject a null from square** ( :x: )
+- **TC-ROOK-13 — Reject a null from square** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` is null. `to` is a2
     `(0, 2)`. New `Board`.
