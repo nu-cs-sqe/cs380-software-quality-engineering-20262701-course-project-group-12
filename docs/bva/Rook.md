@@ -128,7 +128,7 @@ through `8`.
   - **Expected output**: `true`.
 
 - **TC-ROOK-04 — Move seven squares along the rank onto an empty square**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
     h1 `(7, 1)`. Rank 1 is cleared: b1 knight to a3 `(0, 3)`, c1 bishop
