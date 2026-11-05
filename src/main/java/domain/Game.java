@@ -54,6 +54,10 @@ public class Game {
         return playerTwo().getName();
     }
 
+    public String playerToMoveName() {
+        return playerToMove().getName();
+    }
+
     private void requireStarted(String request) {
         if (!started) {
             throw new IllegalStateException(

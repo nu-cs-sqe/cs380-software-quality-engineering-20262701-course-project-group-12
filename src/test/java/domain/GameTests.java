@@ -174,4 +174,14 @@ public class GameTests {
 
         assertThrows(IllegalStateException.class, game::playerTwoName);
     }
+
+    @Test
+    public void PlayerToMoveName_StartedGame_ReturnsPlayerOneName() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        String name = game.playerToMoveName();
+
+        assertEquals("Alice", name);
+    }
 }

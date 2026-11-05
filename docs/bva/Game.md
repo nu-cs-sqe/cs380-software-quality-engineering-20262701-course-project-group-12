@@ -198,7 +198,7 @@ returns Player 1's name until a later story changes the turn.
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
 
-- **TC-NAMES-05 — Read the name of the player to move after a start** ( :x: )
+- **TC-NAMES-05 — Read the name of the player to move after a start** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `playerToMoveName()`
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `Alice`.
