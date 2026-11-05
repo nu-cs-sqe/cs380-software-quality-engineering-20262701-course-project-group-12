@@ -143,7 +143,7 @@ through `8`.
     b3 `(1, 3)`. New `Board`; b3 is empty.
   - **Expected output**: `false`.
 
-- **TC-ROOK-06 — Reject the square the rook already occupies** ( :x: )
+- **TC-ROOK-06 — Reject the square the rook already occupies** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` and `to` are both a1
     `(0, 1)`. New `Board`.

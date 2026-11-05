@@ -91,4 +91,14 @@ public class RookTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_SameSquare_ReturnsFalse() {
+        Board board = new Board();
+        Rook rook = new Rook(PieceColor.WHITE);
+
+        boolean canMove = rook.canMove(A1, A1, board);
+
+        assertFalse(canMove);
+    }
 }
