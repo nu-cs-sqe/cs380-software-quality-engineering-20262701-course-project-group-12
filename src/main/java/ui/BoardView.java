@@ -31,6 +31,9 @@ public class BoardView extends JPanel {
     private final PieceImages pieceImages = new PieceImages();
 
     public BoardView(BoardController boardController) {
+        if (boardController == null) {
+            throw new IllegalArgumentException("Cannot create the board view without a board controller");
+        }
         this.boardController = boardController;
         int sideLength = BOARD_LENGTH + LABEL_MARGIN;
         setPreferredSize(new Dimension(sideLength, sideLength));
@@ -62,14 +65,13 @@ public class BoardView extends JPanel {
         boolean isLightSquare = (location.getFile() + location.getRank()) % 2 == 0;
         graphics.setColor(isLightSquare ? LIGHT_SQUARE : DARK_SQUARE);
         graphics.fillRect(xOf(location.getFile()), yOf(location.getRank()), TILE_SIZE, TILE_SIZE);
-        drawPiece(graphics, location);
+        if (boardController.isOccupied(location)) {
+            drawPiece(graphics, location);
+        }
     }
 
     private void drawPiece(Graphics graphics, Location location) {
         Piece piece = boardController.pieceAt(location);
-        if (piece == null) {
-            return;
-        }
         BufferedImage image = pieceImages.imageOf(piece);
         int x = xOf(location.getFile());
         int y = yOf(location.getRank());

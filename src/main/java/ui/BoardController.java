@@ -9,9 +9,13 @@ public class BoardController {
 
     public BoardController(Board board) {
         if (board == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Cannot create a board controller without a board");
         }
         this.board = board;
+    }
+
+    public boolean isOccupied(Location location) {
+        return board.isOccupied(location);
     }
 
     public Piece pieceAt(Location location) {
