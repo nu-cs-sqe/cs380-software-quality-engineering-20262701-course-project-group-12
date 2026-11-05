@@ -119,7 +119,7 @@ through `8`.
   - **Expected output**: `true`.
 
 - **TC-ROOK-03 — Move seven squares along the file onto an empty square**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
     a8 `(0, 8)`. The a-file is cleared: a2 pawn to b3 `(1, 3)`, a7 pawn
