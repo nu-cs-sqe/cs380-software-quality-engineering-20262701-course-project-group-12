@@ -42,21 +42,21 @@ The starting position itself is specified on `Board`. These cases check the pass
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC1: a board is provided | `board` is a `Board` | the controller is created | :white_check_mark: |
+| TC1: a board is provided | `board` is a `Board` | the controller is created | implemented in TC3 |
 | TC2: the board is missing | `board` is null | throws `IllegalArgumentException` | :white_check_mark: |
 
 ### Method under test: `pieceAt(Location location)`
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC3: the square has a piece | controller from TC1; the board returns a white rook for the location | returns that same white rook | :white_check_mark: |
-| TC4: the square is empty | controller from TC1; the board throws `IllegalArgumentException` for the empty location | throws that same `IllegalArgumentException` | :white_check_mark: |
-| TC5: the location is null | controller from TC1; the board throws `IllegalArgumentException` for that call | throws that same `IllegalArgumentException` | :white_check_mark: |
+| TC3: the square has a piece | a controller for the mocked board; the board returns a white rook for the location | returns that same white rook | :white_check_mark: |
+| TC4: the square is empty | a controller for the mocked board; the board throws `IllegalArgumentException` for the empty location | throws that same `IllegalArgumentException` | :white_check_mark: |
+| TC5: the location is null | a controller for the mocked board; the board throws `IllegalArgumentException` for that call | throws that same `IllegalArgumentException` | :white_check_mark: |
 
 ### Method under test: `isOccupied(Location location)`
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC6: the square has a piece | controller from TC1; the board answers true for a1 `(0, 1)` | returns true | :white_check_mark: |
-| TC7: the square is empty | controller from TC1; the board answers false for a3 `(0, 3)` | returns false | :white_check_mark: |
-| TC8: the location is null | controller from TC1; the board throws `IllegalArgumentException` for that call | throws that same `IllegalArgumentException` | :white_check_mark: |
+| TC6: the square has a piece | a controller for the mocked board; the board answers true for a1 `(0, 1)` | returns true | :white_check_mark: |
+| TC7: the square is empty | a controller for the mocked board; the board answers false for a3 `(0, 3)` | returns false | :white_check_mark: |
+| TC8: the location is null | a controller for the mocked board; the board throws `IllegalArgumentException` for that call | throws that same `IllegalArgumentException` | :white_check_mark: |

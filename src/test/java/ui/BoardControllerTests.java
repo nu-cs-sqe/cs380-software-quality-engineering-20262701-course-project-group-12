@@ -13,7 +13,6 @@ import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -27,14 +26,6 @@ public class BoardControllerTests {
     @BeforeEach
     public void createBoardMock() {
         board = mock(Board.class);
-    }
-
-    @Test
-    public void BoardController_WithBoard_IsCreated() {
-        BoardController controller = replayedController();
-
-        assertNotNull(controller);
-        verify(board);
     }
 
     @Test
