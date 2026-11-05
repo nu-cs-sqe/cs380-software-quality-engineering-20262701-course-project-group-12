@@ -11,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WelcomeControllerTests {
+    private static final String NAMES_REQUIRED_MESSAGE = "Both player names are required.";
+
     @Test
     public void Constructor_WithStartedGame_RejectsController() {
         Game game = new Game();
@@ -56,7 +58,7 @@ public class WelcomeControllerTests {
 
         view.showNamesRequired();
 
-        assertEquals("Both player names are required.", view.errorMessage());
+        assertEquals(NAMES_REQUIRED_MESSAGE, view.errorMessage());
     }
 
     @Test
@@ -112,7 +114,7 @@ public class WelcomeControllerTests {
         view.playerOneField().setText("Alice");
         view.startButton().doClick();
 
-        assertEquals("Both player names are required.", view.errorMessage());
+        assertEquals(NAMES_REQUIRED_MESSAGE, view.errorMessage());
         assertFalse(game.isStarted());
     }
 
