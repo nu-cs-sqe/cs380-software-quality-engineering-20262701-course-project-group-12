@@ -149,4 +149,12 @@ public class GameTests {
         assertThrows(DuplicatePlayerNameException.class, () -> game.start("Alice", "ALICE"));
         assertFalse(game.isStarted());
     }
+
+    @Test
+    public void start_SameNameAfterTrim_ThrowsDuplicatePlayerNameException() {
+        Game game = new Game();
+
+        assertThrows(DuplicatePlayerNameException.class, () -> game.start(" Alice ", "Alice"));
+        assertFalse(game.isStarted());
+    }
 }

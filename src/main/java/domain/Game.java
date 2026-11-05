@@ -13,7 +13,7 @@ public class Game {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
             throw new MissingPlayerNameException();
         }
-        if (player1Name.equalsIgnoreCase(player2Name)) {
+        if (player1Name.trim().equalsIgnoreCase(player2Name.trim())) {
             throw new DuplicatePlayerNameException();
         }
 
