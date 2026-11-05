@@ -1,5 +1,6 @@
 package ui;
 
+import domain.DuplicatePlayerNameException;
 import domain.Game;
 import domain.MissingPlayerNameException;
 
@@ -23,6 +24,8 @@ public class WelcomeController {
             openStartedGame(player1Name, player2Name);
         } catch (MissingPlayerNameException e) {
             view.showNamesRequired();
+        } catch (DuplicatePlayerNameException e) {
+            view.showDuplicateNames();
         }
     }
 

@@ -13,6 +13,9 @@ public class Game {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
             throw new MissingPlayerNameException();
         }
+        if (player1Name.equals(player2Name)) {
+            throw new DuplicatePlayerNameException();
+        }
 
         playerOne = new Player(player1Name, PieceColor.WHITE);
         playerTwo = new Player(player2Name, PieceColor.BLACK);

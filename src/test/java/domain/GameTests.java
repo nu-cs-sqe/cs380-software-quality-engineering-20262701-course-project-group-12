@@ -135,12 +135,10 @@ public class GameTests {
     }
 
     @Test
-    public void Start_WithDuplicateNames_AllowsStart() {
+    public void start_DuplicateNames_ThrowsDuplicatePlayerNameException() {
         Game game = new Game();
 
-        game.start("Alex", "Alex");
-
-        assertEquals("Alex", game.playerOne().getName());
-        assertEquals("Alex", game.playerTwo().getName());
+        assertThrows(DuplicatePlayerNameException.class, () -> game.start("Alex", "Alex"));
+        assertFalse(game.isStarted());
     }
 }

@@ -105,7 +105,7 @@ public behavior and mocked view/model collaborators to observe the result.
   - **Expected output**: The controller passes the field values to
     `Game.start`, closes the welcome view, and opens the game window.
 
-- **TC-STARTGAME-06 — Reject duplicate valid names** (:x:)
+- **TC-STARTGAME-06 — Reject duplicate valid names** (implemented)
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Both player names are `Alex`. `Game.start` throws

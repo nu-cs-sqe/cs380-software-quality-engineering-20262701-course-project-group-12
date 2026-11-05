@@ -12,6 +12,7 @@ import java.awt.Window;
 
 public class WelcomeView extends JPanel {
     private static final String REQUIRED_NAMES_MESSAGE = "Both player names are required.";
+    private static final String DUPLICATE_NAMES_MESSAGE = "Players must use different names.";
 
     private final JTextField playerOneField = new JTextField();
     private final JTextField playerTwoField = new JTextField();
@@ -41,6 +42,10 @@ public class WelcomeView extends JPanel {
 
     public void showNamesRequired() {
         errorLabel.setText(REQUIRED_NAMES_MESSAGE);
+    }
+
+    public void showDuplicateNames() {
+        errorLabel.setText(DUPLICATE_NAMES_MESSAGE);
     }
 
     public void close() {

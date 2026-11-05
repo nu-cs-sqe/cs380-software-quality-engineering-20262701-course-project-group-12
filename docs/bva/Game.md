@@ -120,7 +120,7 @@ cases below use the game's public behavior to observe its state.
   - **Expected output**: `start` completes; the stored names are `Alice`
     and `Bob`.
 
-- **TC-START-07 — Reject duplicate names** (:x:)
+- **TC-START-07 — Reject duplicate names** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: New game; both names are `Alex`.
   - **Expected output**: `start` throws `DuplicatePlayerNameException`;
