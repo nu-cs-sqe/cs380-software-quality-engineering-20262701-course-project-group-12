@@ -76,28 +76,28 @@ cases below use the game's public behavior to observe its state.
 
 ### Method under test: `start(String player1Name, String player2Name)`
 
-- **TC-START-01 — Reject two empty names** (:x:)
+- **TC-START-01 — Reject two empty names** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: New game; Player 1's name is empty and Player
     2's name is empty.
   - **Expected output**: `start` throws `MissingPlayerNameException`;
     `isStarted()` returns `false`; no players or board are created.
 
-- **TC-START-02 — Reject an empty Player 1 name** (:x:)
+- **TC-START-02 — Reject an empty Player 1 name** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: New game; Player 1's name is empty and Player
     2's name is `Bob`.
   - **Expected output**: `start` throws `MissingPlayerNameException`; the
     game remains unstarted.
 
-- **TC-START-03 — Reject an empty Player 2 name** (:x:)
+- **TC-START-03 — Reject an empty Player 2 name** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: New game; Player 1's name is `Alice` and Player
     2's name is empty.
   - **Expected output**: `start` throws `MissingPlayerNameException`; the
     game remains unstarted.
 
-- **TC-START-04 — Reject whitespace-only names** (:x:)
+- **TC-START-04 — Reject whitespace-only names** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: New game; Player 1's name is `"   "` and Player
     2's name is `"\t"`.
