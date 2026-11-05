@@ -27,30 +27,29 @@ public class Game {
     }
 
     public Player playerOne() {
-        if (!started) {
-            throw new IllegalStateException();
-        }
+        requireStarted("player one");
         return playerOne;
     }
 
     public Player playerTwo() {
-        if (!started) {
-            throw new IllegalStateException();
-        }
+        requireStarted("player two");
         return playerTwo;
     }
 
     public Player playerToMove() {
-        if (!started) {
-            throw new IllegalStateException();
-        }
+        requireStarted("the player to move");
         return playerToMove;
     }
 
     public Board board() {
-        if (!started) {
-            throw new IllegalStateException();
-        }
+        requireStarted("the board");
         return board;
+    }
+
+    private void requireStarted(String request) {
+        if (!started) {
+            throw new IllegalStateException(
+                    "Cannot read " + request + " before the game has started");
+        }
     }
 }
