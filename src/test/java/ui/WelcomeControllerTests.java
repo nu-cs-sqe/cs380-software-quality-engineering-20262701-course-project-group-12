@@ -23,7 +23,7 @@ public class WelcomeControllerTests {
     }
 
     @Test
-    public void Constructor_WithStartedGame_RejectsController() {
+    public void WelcomeController_StartedGame_ThrowsIllegalStateException() {
         Game game = new Game();
         game.start("Alice", "Bob");
 
