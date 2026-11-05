@@ -83,8 +83,8 @@ public class WelcomeControllerTests {
 
         assertTrue(game.isStarted());
         assertTrue(view.closed);
-        org.junit.jupiter.api.Assertions.assertEquals("Alice", game.playerOne().getName());
-        org.junit.jupiter.api.Assertions.assertEquals("Bob", game.playerTwo().getName());
+        assertEquals("Alice", game.playerOne().getName());
+        assertEquals("Bob", game.playerTwo().getName());
     }
 
     @Test
