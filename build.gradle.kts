@@ -2,6 +2,7 @@ plugins {
     id("java")
     id("application")
     id("checkstyle")
+    id("jacoco")
 }
 
 group = "nu.csse.sqe"
@@ -34,6 +35,47 @@ tasks.compileJava {
 tasks.test {
     useJUnitPlatform()
     systemProperty("java.awt.headless", "true")
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+// The rubric exempts views, Main, and enums from the coverage and mutation targets.
+val untestedClasses = listOf(
+    "ui/*View*",
+    "ui/GameFrame*",
+    "ui/Main*",
+    "domain/piece/PieceColor*",
+    "domain/piece/PieceType*",
+)
+
+val coveredClasses = sourceSets.main.get().output.asFileTree.matching {
+    include("**/*.class")
+    exclude(untestedClasses.map { "$it.class" })
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    classDirectories.setFrom(coveredClasses)
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+tasks.jacocoTestCoverageVerification {
+    dependsOn(tasks.test)
+    classDirectories.setFrom(coveredClasses)
+    violationRules {
+        rule {
+            limit {
+                counter = "BRANCH"
+                minimum = "1.0".toBigDecimal()
+            }
+        }
+    }
+}
+
+tasks.check {
+    dependsOn(tasks.jacocoTestCoverageVerification)
 }
 
 // Google's method-name pattern for production code. Test sources also allow the
