@@ -3,6 +3,7 @@ plugins {
     id("application")
     id("checkstyle")
     id("jacoco")
+    id("info.solidsoft.pitest") version "1.15.0"
 }
 
 group = "nu.csse.sqe"
@@ -74,8 +75,18 @@ tasks.jacocoTestCoverageVerification {
     }
 }
 
+pitest {
+    junit5PluginVersion = "1.2.1"
+    targetClasses = setOf("domain.*", "ui.*")
+    excludedClasses = untestedClasses.map { it.replace("/", ".") }.toSet()
+    jvmArgs = listOf("-Djava.awt.headless=true")
+    mutationThreshold = 100
+    outputFormats = setOf("HTML", "XML")
+    timestampedReports = false
+}
+
 tasks.check {
-    dependsOn(tasks.jacocoTestCoverageVerification)
+    dependsOn(tasks.jacocoTestCoverageVerification, tasks.pitest)
 }
 
 // Google's method-name pattern for production code. Test sources also allow the
