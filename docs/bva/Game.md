@@ -165,7 +165,7 @@ cases below use the game's public behavior to observe its state.
   - **Expected output**: `start` throws `DuplicatePlayerNameException`; the
     game remains unstarted.
 
-- **TC-START-14 — Reject a null Player 1 name** (:x:)
+- **TC-START-14 — Reject a null Player 1 name** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: New game; Player 1's name is `null` and Player
     2's name is `Bob`.

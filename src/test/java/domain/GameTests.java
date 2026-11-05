@@ -157,4 +157,12 @@ public class GameTests {
         assertThrows(DuplicatePlayerNameException.class, () -> game.start(" Alice ", "Alice"));
         assertFalse(game.isStarted());
     }
+
+    @Test
+    public void start_NullPlayerOneName_ThrowsIllegalArgumentException() {
+        Game game = new Game();
+
+        assertThrows(IllegalArgumentException.class, () -> game.start(null, "Bob"));
+        assertFalse(game.isStarted());
+    }
 }
