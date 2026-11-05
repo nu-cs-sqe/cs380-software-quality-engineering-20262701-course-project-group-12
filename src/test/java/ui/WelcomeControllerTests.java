@@ -60,6 +60,18 @@ public class WelcomeControllerTests {
     }
 
     @Test
+    public void StartGame_WithWhitespaceOnlyNames_ShowsRequiredNames() {
+        Game game = new Game();
+        view.showNamesRequired();
+        WelcomeController controller = controllerWithView(game);
+
+        controller.startGame("   ", "\t");
+
+        verify(view);
+        assertFalse(game.isStarted());
+    }
+
+    @Test
     public void WelcomeView_ShowNamesRequired_DisplaysRequiredNamesMessage() {
         WelcomeView welcomeView = new WelcomeView(controllerThatIsNeverCalled());
 
