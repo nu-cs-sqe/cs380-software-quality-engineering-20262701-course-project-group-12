@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -33,7 +34,7 @@ public class WelcomeControllerTests {
         controller.startGame("", "Bob");
 
         assertTrue(view.namesRequiredShown);
-        assertTrue(!game.isStarted());
+        assertFalse(game.isStarted());
     }
 
     @Test
@@ -46,7 +47,7 @@ public class WelcomeControllerTests {
         controller.startGame("Alice", "");
 
         assertTrue(view.namesRequiredShown);
-        assertTrue(!game.isStarted());
+        assertFalse(game.isStarted());
     }
 
     @Test
@@ -112,7 +113,7 @@ public class WelcomeControllerTests {
         view.startButton().doClick();
 
         assertEquals("Both player names are required.", view.errorMessage());
-        assertTrue(!game.isStarted());
+        assertFalse(game.isStarted());
     }
 
     private static WelcomeController controllerThatIsNeverCalled() {
