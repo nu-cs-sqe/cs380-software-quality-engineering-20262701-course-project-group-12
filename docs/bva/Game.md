@@ -163,3 +163,48 @@ cases below use the game's public behavior to observe its state.
   - **State of the system**: `start("Alice", "Bob")` has returned `true`.
   - **Expected output**: The accessors return the two created players, the
     starting board, and Player 1 as the player to move.
+
+### Methods under test: `playerOneName()`, `playerTwoName()`, and `playerToMoveName()`
+
+These let a caller show a player's name without reaching through `Game` into
+`Player`.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the game's state | Cases | unstarted; started with `Alice` and `Bob` |
+| Output: the name | Cases | the stored, trimmed name of that player |
+| Output: signal for an unstarted game | Cases | `IllegalStateException` |
+
+The player to move is always Player 1 right after a start, so `playerToMoveName()`
+returns Player 1's name until a later story changes the turn.
+
+- **TC-NAMES-01 — Read Player 1's name after a start** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `playerOneName()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `Alice`.
+
+- **TC-NAMES-02 — Reject reading Player 1's name before a start** ( :x: )
+  - **Method(s) under test**: `playerOneName()`
+  - **State of the system**: New game before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+- **TC-NAMES-03 — Read Player 2's name after a start** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `playerTwoName()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `Bob`.
+
+- **TC-NAMES-04 — Reject reading Player 2's name before a start** ( :x: )
+  - **Method(s) under test**: `playerTwoName()`
+  - **State of the system**: New game before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+- **TC-NAMES-05 — Read the name of the player to move after a start** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `playerToMoveName()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `Alice`.
+
+- **TC-NAMES-06 — Reject reading the name of the player to move before a
+  start** ( :x: )
+  - **Method(s) under test**: `playerToMoveName()`
+  - **State of the system**: New game before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.
