@@ -124,7 +124,7 @@ public behavior and mocked view/model collaborators to observe the result.
     game window for the started game.
 
 - **TC-STARTGAME-08 — Reject the same name in a different case**
-  (:x:)
+  (implemented)
   - **Method(s) under test**: `startGame(String, String)`, `Game.start`
   - **State of the system**: The controller has an unstarted game and a
     welcome view. Player 1's name is `Alice` and Player 2's name is `ALICE`.

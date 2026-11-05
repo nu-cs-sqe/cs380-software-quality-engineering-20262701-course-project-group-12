@@ -76,6 +76,20 @@ public class WelcomeControllerTests {
     }
 
     @Test
+    public void startGame_SameNameDifferentCase_ShowsDuplicateNames() {
+        Game game = new Game();
+        WelcomeController controller = new WelcomeController(game);
+        RecordingWelcomeView view = new RecordingWelcomeView();
+        controller.setView(view);
+
+        controller.startGame("Alice", "ALICE");
+
+        assertTrue(view.duplicateNamesShown);
+        assertTrue(!view.closed);
+        assertTrue(!view.gameShown);
+    }
+
+    @Test
     public void StartGame_WithValidNames_ClosesWelcomeView() {
         Game game = new Game();
         WelcomeController controller = new WelcomeController(game);
