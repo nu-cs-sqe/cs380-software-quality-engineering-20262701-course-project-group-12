@@ -151,7 +151,7 @@ cases below use the game's public behavior to observe its state.
   - **State of the system**: New game; `start("Alice", "Bob")` completes.
   - **Expected output**: `board()` returns a non-null starting board.
 
-- **TC-START-12 — Reject the same name in a different case** (:x:)
+- **TC-START-12 — Reject the same name in a different case** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: New game; Player 1's name is `Alice` and Player
     2's name is `ALICE`.
