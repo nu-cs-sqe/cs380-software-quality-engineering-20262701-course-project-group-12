@@ -46,6 +46,10 @@ public class Game {
         return board;
     }
 
+    public String playerOneName() {
+        return playerOne().getName();
+    }
+
     private void requireStarted(String request) {
         if (!started) {
             throw new IllegalStateException(

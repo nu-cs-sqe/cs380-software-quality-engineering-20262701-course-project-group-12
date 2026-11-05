@@ -140,4 +140,14 @@ public class GameTests {
         assertEquals("Alex", game.playerOne().getName());
         assertEquals("Alex", game.playerTwo().getName());
     }
+
+    @Test
+    public void PlayerOneName_StartedGame_ReturnsPlayerOneName() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        String name = game.playerOneName();
+
+        assertEquals("Alice", name);
+    }
 }

@@ -178,7 +178,7 @@ These let a caller show a player's name without reaching through `Game` into
 The player to move is always Player 1 right after a start, so `playerToMoveName()`
 returns Player 1's name until a later story changes the turn.
 
-- **TC-NAMES-01 — Read Player 1's name after a start** ( :x: )
+- **TC-NAMES-01 — Read Player 1's name after a start** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `playerOneName()`
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `Alice`.
