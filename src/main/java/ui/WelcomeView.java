@@ -13,6 +13,9 @@ import java.awt.Window;
 import java.util.Optional;
 
 public class WelcomeView extends JPanel {
+    private static final int ANY_NUMBER_OF_ROWS = 0;
+    private static final int LABEL_AND_FIELD_COLUMNS = 2;
+
     private final JTextField playerOneField = new JTextField();
     private final JTextField playerTwoField = new JTextField();
     private final JButton startButton = new JButton(Messages.text("welcome.start"));
@@ -22,7 +25,7 @@ public class WelcomeView extends JPanel {
         if (controller == null) {
             throw new IllegalArgumentException("Cannot create the welcome view without a controller");
         }
-        setLayout(new GridLayout(0, 2));
+        setLayout(new GridLayout(ANY_NUMBER_OF_ROWS, LABEL_AND_FIELD_COLUMNS));
         add(new JLabel(Messages.text("welcome.playerOneName")));
         add(playerOneField);
         add(new JLabel(Messages.text("welcome.playerTwoName")));
