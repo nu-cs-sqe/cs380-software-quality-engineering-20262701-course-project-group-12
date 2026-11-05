@@ -4,6 +4,7 @@ import domain.Game;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MainTests {
     @Test
@@ -18,6 +19,6 @@ public class MainTests {
         view.playerOneField().setText("Alice");
         view.playerTwoField().setText("Bob");
         view.startButton().doClick();
-        org.junit.jupiter.api.Assertions.assertTrue(game.isStarted());
+        assertTrue(game.isStarted());
     }
 }
