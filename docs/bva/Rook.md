@@ -203,7 +203,7 @@ through `8`.
     null. New `Board`.
   - **Expected output**: `IllegalArgumentException`.
 
-- **TC-ROOK-15 — Reject a null board** ( :x: )
+- **TC-ROOK-15 — Reject a null board** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
     a2 `(0, 2)`. `board` is null.

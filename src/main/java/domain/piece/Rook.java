@@ -15,6 +15,9 @@ public class Rook extends Piece {
         if (to == null) {
             throw new IllegalArgumentException("Cannot decide a rook move to a null square");
         }
+        if (board == null) {
+            throw new IllegalArgumentException("Cannot decide a rook move without a board");
+        }
         if (board.isOccupied(to) && board.pieceAt(to).getColor() == getColor()) {
             return false;
         }
