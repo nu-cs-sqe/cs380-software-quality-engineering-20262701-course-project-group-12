@@ -155,7 +155,7 @@ through `8`.
     a2 `(0, 2)`. New `Board`; a2 holds the white a-pawn.
   - **Expected output**: `false`.
 
-- **TC-ROOK-08 — Capture an adjacent opponent** ( :x: )
+- **TC-ROOK-08 — Capture an adjacent opponent** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
     a2 `(0, 2)`. New `Board` after `move` of the a2 pawn to b3 `(1, 3)`
