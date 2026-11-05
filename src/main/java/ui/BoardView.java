@@ -43,7 +43,7 @@ public class BoardView extends JPanel {
     private void paintSquare(Graphics graphics, Location location) {
         boolean isLightSquare = (location.getFile() + location.getRank()) % 2 == 0;
         graphics.setColor(isLightSquare ? LIGHT_SQUARE : DARK_SQUARE);
-        graphics.fillRect(xOf(location), yOf(location), TILE_SIZE, TILE_SIZE);
+        graphics.fillRect(leftEdgeOf(location), topEdgeOf(location), TILE_SIZE, TILE_SIZE);
         if (boardController.isOccupied(location)) {
             drawPiece(graphics, location);
         }
@@ -52,8 +52,8 @@ public class BoardView extends JPanel {
     private void drawPiece(Graphics graphics, Location location) {
         Piece piece = boardController.pieceAt(location);
         String letter = symbol(piece.getType());
-        int textX = xOf(location) + TILE_SIZE / 4;
-        int textY = yOf(location) + TILE_SIZE * 2 / 3;
+        int textX = leftEdgeOf(location) + TILE_SIZE / 4;
+        int textY = topEdgeOf(location) + TILE_SIZE * 2 / 3;
         graphics.setFont(new Font("SansSerif", Font.BOLD, TILE_SIZE / 2));
         graphics.setColor(piece.getColor() == PieceColor.WHITE ? Color.BLACK : Color.WHITE);
         graphics.drawString(letter, textX + 1, textY + 1);
@@ -61,11 +61,11 @@ public class BoardView extends JPanel {
         graphics.drawString(letter, textX, textY);
     }
 
-    private int xOf(Location location) {
+    private int leftEdgeOf(Location location) {
         return location.getFile() * TILE_SIZE;
     }
 
-    private int yOf(Location location) {
+    private int topEdgeOf(Location location) {
         return (LAST_RANK - location.getRank()) * TILE_SIZE;
     }
 
