@@ -50,6 +50,10 @@ public class Game {
         return playerOne().getName();
     }
 
+    public String playerTwoName() {
+        return playerTwo().getName();
+    }
+
     private void requireStarted(String request) {
         if (!started) {
             throw new IllegalStateException(

@@ -188,7 +188,7 @@ returns Player 1's name until a later story changes the turn.
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
 
-- **TC-NAMES-03 — Read Player 2's name after a start** ( :x: )
+- **TC-NAMES-03 — Read Player 2's name after a start** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `playerTwoName()`
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `Bob`.
