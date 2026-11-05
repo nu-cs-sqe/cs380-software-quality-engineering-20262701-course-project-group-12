@@ -11,7 +11,7 @@ public class WelcomeController {
             throw new IllegalArgumentException("Cannot create the welcome controller without a game");
         }
         if (game.isStarted()) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Cannot create the welcome controller for a game that has already started");
         }
         this.game = game;
     }
