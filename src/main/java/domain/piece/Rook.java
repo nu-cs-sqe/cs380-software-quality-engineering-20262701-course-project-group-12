@@ -9,6 +9,14 @@ public class Rook extends Piece {
     }
 
     public boolean canMove(Location from, Location to, Board board) {
+        requireMoveArguments(from, to, board);
+        if (isFriendlyPiece(to, board)) {
+            return false;
+        }
+        return isAlongRookLine(from, to) && pathIsClear(from, to, board);
+    }
+
+    private void requireMoveArguments(Location from, Location to, Board board) {
         if (from == null) {
             throw new IllegalArgumentException("Cannot decide a rook move from a null square");
         }
@@ -18,14 +26,23 @@ public class Rook extends Piece {
         if (board == null) {
             throw new IllegalArgumentException("Cannot decide a rook move without a board");
         }
-        if (board.isOccupied(to) && board.pieceAt(to).getColor() == getColor()) {
-            return false;
-        }
-        if ((from.getFile() == to.getFile() && from.getRank() != to.getRank())
-                || (from.getRank() == to.getRank() && from.getFile() != to.getFile())) {
-            return pathIsClear(from, to, board);
-        }
-        return false;
+    }
+
+    private boolean isFriendlyPiece(Location destination, Board board) {
+        return board.isOccupied(destination)
+                && board.pieceAt(destination).getColor() == getColor();
+    }
+
+    private boolean isAlongRookLine(Location from, Location to) {
+        return isAlongFile(from, to) || isAlongRank(from, to);
+    }
+
+    private boolean isAlongFile(Location from, Location to) {
+        return from.getFile() == to.getFile() && from.getRank() != to.getRank();
+    }
+
+    private boolean isAlongRank(Location from, Location to) {
+        return from.getRank() == to.getRank() && from.getFile() != to.getFile();
     }
 
     private boolean pathIsClear(Location from, Location to, Board board) {
