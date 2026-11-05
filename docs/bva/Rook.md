@@ -149,7 +149,7 @@ through `8`.
     `(0, 1)`. New `Board`.
   - **Expected output**: `false`.
 
-- **TC-ROOK-07 — Reject an adjacent piece of the rook's color** ( :x: )
+- **TC-ROOK-07 — Reject an adjacent piece of the rook's color** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
     a2 `(0, 2)`. New `Board`; a2 holds the white a-pawn.

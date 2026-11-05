@@ -101,4 +101,14 @@ public class RookTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_AdjacentOwnPiece_ReturnsFalse() {
+        Board board = new Board();
+        Rook rook = new Rook(PieceColor.WHITE);
+
+        boolean canMove = rook.canMove(A1, A2, board);
+
+        assertFalse(canMove);
+    }
 }
