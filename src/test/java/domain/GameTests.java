@@ -165,4 +165,12 @@ public class GameTests {
         assertThrows(IllegalArgumentException.class, () -> game.start(null, "Bob"));
         assertFalse(game.isStarted());
     }
+
+    @Test
+    public void start_NullPlayerTwoName_ThrowsIllegalArgumentException() {
+        Game game = new Game();
+
+        assertThrows(IllegalArgumentException.class, () -> game.start("Alice", null));
+        assertFalse(game.isStarted());
+    }
 }

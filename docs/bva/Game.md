@@ -172,7 +172,7 @@ cases below use the game's public behavior to observe its state.
   - **Expected output**: `start` throws `IllegalArgumentException`; the game
     remains unstarted.
 
-- **TC-START-15 — Reject a null Player 2 name** (:x:)
+- **TC-START-15 — Reject a null Player 2 name** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
   - **State of the system**: New game; Player 1's name is `Alice` and Player
     2's name is `null`.
