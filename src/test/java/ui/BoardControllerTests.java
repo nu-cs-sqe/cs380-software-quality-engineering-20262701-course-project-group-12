@@ -62,7 +62,7 @@ public class BoardControllerTests {
     }
 
     @Test
-    public void IsOccupied_BoardReportsAPiece_ReturnsTrue() {
+    public void IsOccupied_BoardReportsPiece_ReturnsTrue() {
         expect(board.isOccupied(A1)).andReturn(true);
         BoardController controller = replayedController();
 

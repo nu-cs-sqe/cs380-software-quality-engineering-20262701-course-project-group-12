@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameTests {
     @Test
-    public void NewGame_IsNotStarted() {
+    public void IsStarted_NewGame_ReturnsFalse() {
         Game game = new Game();
 
         assertFalse(game.isStarted());
@@ -74,7 +74,7 @@ public class GameTests {
     }
 
     @Test
-    public void NewGame_AccessorsRejectAccessBeforeStart() {
+    public void Accessors_UnstartedGame_ThrowIllegalStateException() {
         Game game = new Game();
 
         assertThrows(IllegalStateException.class, game::playerOne);
@@ -84,7 +84,7 @@ public class GameTests {
     }
 
     @Test
-    public void StartedGame_AccessorsReturnSetupState() {
+    public void Accessors_StartedGame_ReturnSetupState() {
         Game game = new Game();
 
         assertTrue(game.start("Alice", "Bob"));

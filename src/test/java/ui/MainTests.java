@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MainTests {
     @Test
-    public void CreateWelcomeView_ReturnsViewConnectedToController() {
+    public void CreateWelcomeView_WithController_ReturnsConnectedView() {
         Game game = new Game();
         WelcomeController controller = new WelcomeController(game);
 
