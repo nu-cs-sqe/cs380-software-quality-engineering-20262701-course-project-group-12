@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 public class GameFrameTests {
 
     @Test
-    void placesStatsAboveBoard() {
+    void Arrange_StatsAndBoard_PlacesStatsAboveBoard() {
         GameStatsView stats = new GameStatsView(
                 "Player 1: Ada (White)",
                 "Player 2: Bo (Black)",
