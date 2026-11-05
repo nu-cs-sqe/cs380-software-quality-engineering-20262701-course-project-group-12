@@ -28,7 +28,10 @@ public class RookTests {
     private static final Location E1 = new Location(4, 1);
     private static final Location F1 = new Location(5, 1);
     private static final Location G1 = new Location(6, 1);
+    private static final Location G6 = new Location(6, 6);
     private static final Location H1 = new Location(7, 1);
+    private static final Location H7 = new Location(7, 7);
+    private static final Location H8 = new Location(7, 8);
 
     @Test
     public void CanMove_OneSquareAlongFileOntoEmptySquare_ReturnsTrue() {
@@ -152,6 +155,17 @@ public class RookTests {
         Rook rook = new Rook(PieceColor.WHITE);
 
         boolean canMove = rook.canMove(A1, A7, board);
+
+        assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_BlackRookOneSquareAlongFileOntoEmptySquare_ReturnsTrue() {
+        Board board = new Board();
+        board.move(H7, G6);
+        Rook rook = new Rook(PieceColor.BLACK);
+
+        boolean canMove = rook.canMove(H8, H7, board);
 
         assertTrue(canMove);
     }

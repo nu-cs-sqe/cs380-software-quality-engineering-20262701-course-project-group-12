@@ -184,7 +184,7 @@ through `8`.
   - **Expected output**: `true`.
 
 - **TC-ROOK-12 — Move a black rook one square along the file onto an empty
-  square** ( :x: )
+  square** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: Black rook. `from` is h8 `(7, 8)`. `to` is
     h7 `(7, 7)`. New `Board` after `move` of the h7 pawn to g6 `(6, 6)`,
