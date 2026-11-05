@@ -162,7 +162,7 @@ through `8`.
     and `move` of the a7 pawn to a2, so a2 holds a black pawn.
   - **Expected output**: `true`.
 
-- **TC-ROOK-09 — Reject a jump over the first square of the path** ( :x: )
+- **TC-ROOK-09 — Reject a jump over the first square of the path** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
     a8 `(0, 8)`. New `Board`; a2 holds the white a-pawn.

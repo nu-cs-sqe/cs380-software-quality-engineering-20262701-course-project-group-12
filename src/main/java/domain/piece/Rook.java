@@ -12,7 +12,25 @@ public class Rook extends Piece {
         if (board.isOccupied(to) && board.pieceAt(to).getColor() == getColor()) {
             return false;
         }
-        return (from.getFile() == to.getFile() && from.getRank() != to.getRank())
-                || (from.getRank() == to.getRank() && from.getFile() != to.getFile());
+        if ((from.getFile() == to.getFile() && from.getRank() != to.getRank())
+                || (from.getRank() == to.getRank() && from.getFile() != to.getFile())) {
+            return pathIsClear(from, to, board);
+        }
+        return false;
+    }
+
+    private boolean pathIsClear(Location from, Location to, Board board) {
+        int fileStep = Integer.signum(to.getFile() - from.getFile());
+        int rankStep = Integer.signum(to.getRank() - from.getRank());
+        int file = from.getFile() + fileStep;
+        int rank = from.getRank() + rankStep;
+        while (file != to.getFile() || rank != to.getRank()) {
+            if (board.isOccupied(new Location(file, rank))) {
+                return false;
+            }
+            file += fileStep;
+            rank += rankStep;
+        }
+        return true;
     }
 }

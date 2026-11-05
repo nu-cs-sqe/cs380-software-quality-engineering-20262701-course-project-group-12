@@ -123,4 +123,14 @@ public class RookTests {
 
         assertTrue(canMove);
     }
+
+    @Test
+    public void CanMove_FirstBetweenSquareOccupied_ReturnsFalse() {
+        Board board = new Board();
+        Rook rook = new Rook(PieceColor.WHITE);
+
+        boolean canMove = rook.canMove(A1, A8, board);
+
+        assertFalse(canMove);
+    }
 }
