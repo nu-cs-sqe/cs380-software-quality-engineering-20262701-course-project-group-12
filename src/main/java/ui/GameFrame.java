@@ -11,7 +11,7 @@ public class GameFrame extends JFrame {
         this(
                 new GameStatsController(game).createView(),
                 new BoardView(new BoardController(game.board())));
-        setTitle("Chess");
+        setTitle(Messages.text("game.window.title"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);

@@ -17,8 +17,8 @@ public class GameStatsController {
 
     public GameStatsView createView() {
         return new GameStatsView(
-                "Player 1: " + game.playerOneName() + " (White)",
-                "Player 2: " + game.playerTwoName() + " (Black)",
-                "Current player: " + game.playerToMoveName());
+                Messages.format("stats.playerOne", game.playerOneName()),
+                Messages.format("stats.playerTwo", game.playerTwoName()),
+                Messages.format("stats.currentPlayer", game.playerToMoveName()));
     }
 }

@@ -12,4 +12,8 @@ final class Messages {
     static String text(String key) {
         return BUNDLE.getString(key);
     }
+
+    static String format(String key, Object... arguments) {
+        return MessageFormat.format(text(key), arguments);
+    }
 }
