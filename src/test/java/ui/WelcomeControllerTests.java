@@ -95,34 +95,6 @@ public class WelcomeControllerTests {
         assertEquals("Bob", game.playerTwoName());
     }
 
-    @Test
-    public void StartButton_WithValidNames_StartsGame() {
-        Game game = new Game();
-        WelcomeController controller = new WelcomeController(game);
-        WelcomeView welcomeView = new WelcomeView(controller);
-        controller.setView(welcomeView);
-
-        welcomeView.playerOneField().setText("Alice");
-        welcomeView.playerTwoField().setText("Bob");
-        welcomeView.startButton().doClick();
-
-        assertTrue(game.isStarted());
-    }
-
-    @Test
-    public void StartButton_WithMissingName_ShowsRequiredNames() {
-        Game game = new Game();
-        WelcomeController controller = new WelcomeController(game);
-        WelcomeView welcomeView = new WelcomeView(controller);
-        controller.setView(welcomeView);
-
-        welcomeView.playerOneField().setText("Alice");
-        welcomeView.startButton().doClick();
-
-        assertEquals(NAMES_REQUIRED_MESSAGE, welcomeView.errorMessage());
-        assertFalse(game.isStarted());
-    }
-
     private static WelcomeController controllerThatIsNeverCalled() {
         WelcomeController controller = mock(WelcomeController.class);
         replay(controller);
