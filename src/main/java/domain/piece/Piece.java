@@ -5,8 +5,11 @@ public class Piece {
     private final PieceColor color;
 
     public Piece(PieceType type, PieceColor color) {
-        if (type == null || color == null) {
-            throw new IllegalArgumentException();
+        if (type == null) {
+            throw new IllegalArgumentException("Cannot create a piece without a type");
+        }
+        if (color == null) {
+            throw new IllegalArgumentException("Cannot create a piece without a color");
         }
         this.type = type;
         this.color = color;
