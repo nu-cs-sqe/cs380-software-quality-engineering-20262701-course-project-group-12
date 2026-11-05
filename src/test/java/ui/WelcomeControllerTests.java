@@ -1,10 +1,12 @@
 package ui;
 
 import domain.Game;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -12,6 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WelcomeControllerTests {
     private static final String NAMES_REQUIRED_MESSAGE = "Both player names are required.";
+
+    private WelcomeView view;
+
+    @BeforeEach
+    public void createViewMock() {
+        view = mock(WelcomeView.class);
+    }
 
     @Test
     public void Constructor_WithStartedGame_RejectsController() {
@@ -29,77 +38,73 @@ public class WelcomeControllerTests {
     @Test
     public void StartGame_WithMissingPlayerName_ShowsRequiredNames() {
         Game game = new Game();
-        WelcomeController controller = new WelcomeController(game);
-        RecordingWelcomeView view = new RecordingWelcomeView();
-        controller.setView(view);
+        view.showNamesRequired();
+        WelcomeController controller = controllerWithView(game);
 
         controller.startGame("", "Bob");
 
-        assertTrue(view.namesRequiredShown);
+        verify(view);
         assertFalse(game.isStarted());
     }
 
     @Test
     public void StartGame_WithMissingPlayerTwoName_ShowsRequiredNames() {
         Game game = new Game();
-        WelcomeController controller = new WelcomeController(game);
-        RecordingWelcomeView view = new RecordingWelcomeView();
-        controller.setView(view);
+        view.showNamesRequired();
+        WelcomeController controller = controllerWithView(game);
 
         controller.startGame("Alice", "");
 
-        assertTrue(view.namesRequiredShown);
+        verify(view);
         assertFalse(game.isStarted());
     }
 
     @Test
     public void WelcomeView_ShowNamesRequired_DisplaysRequiredNamesMessage() {
-        WelcomeView view = new WelcomeView(controllerThatIsNeverCalled());
+        WelcomeView welcomeView = new WelcomeView(controllerThatIsNeverCalled());
 
-        view.showNamesRequired();
+        welcomeView.showNamesRequired();
 
-        assertEquals(NAMES_REQUIRED_MESSAGE, view.errorMessage());
+        assertEquals(NAMES_REQUIRED_MESSAGE, welcomeView.errorMessage());
     }
 
     @Test
     public void StartGame_WithValidNames_ClosesWelcomeView() {
         Game game = new Game();
-        WelcomeController controller = new WelcomeController(game);
-        RecordingWelcomeView view = new RecordingWelcomeView();
-        controller.setView(view);
+        view.close();
+        view.showGame(game);
+        WelcomeController controller = controllerWithView(game);
 
         controller.startGame("Alice", "Bob");
 
-        assertTrue(view.closed);
+        verify(view);
         assertTrue(game.isStarted());
-        assertTrue(view.gameShown);
     }
 
     @Test
     public void StartGame_WithSurroundingWhitespace_PassesNamesToGame() {
         Game game = new Game();
-        WelcomeController controller = new WelcomeController(game);
-        RecordingWelcomeView view = new RecordingWelcomeView();
-        controller.setView(view);
+        view.close();
+        view.showGame(game);
+        WelcomeController controller = controllerWithView(game);
 
         controller.startGame(" Alice ", "\tBob\n");
 
-        assertTrue(game.isStarted());
-        assertTrue(view.closed);
-        assertEquals("Alice", game.playerOne().getName());
-        assertEquals("Bob", game.playerTwo().getName());
+        verify(view);
+        assertEquals("Alice", game.playerOneName());
+        assertEquals("Bob", game.playerTwoName());
     }
 
     @Test
     public void StartButton_WithValidNames_StartsGame() {
         Game game = new Game();
         WelcomeController controller = new WelcomeController(game);
-        WelcomeView view = new WelcomeView(controller);
-        controller.setView(view);
+        WelcomeView welcomeView = new WelcomeView(controller);
+        controller.setView(welcomeView);
 
-        view.playerOneField().setText("Alice");
-        view.playerTwoField().setText("Bob");
-        view.startButton().doClick();
+        welcomeView.playerOneField().setText("Alice");
+        welcomeView.playerTwoField().setText("Bob");
+        welcomeView.startButton().doClick();
 
         assertTrue(game.isStarted());
     }
@@ -108,13 +113,13 @@ public class WelcomeControllerTests {
     public void StartButton_WithMissingName_ShowsRequiredNames() {
         Game game = new Game();
         WelcomeController controller = new WelcomeController(game);
-        WelcomeView view = new WelcomeView(controller);
-        controller.setView(view);
+        WelcomeView welcomeView = new WelcomeView(controller);
+        controller.setView(welcomeView);
 
-        view.playerOneField().setText("Alice");
-        view.startButton().doClick();
+        welcomeView.playerOneField().setText("Alice");
+        welcomeView.startButton().doClick();
 
-        assertEquals(NAMES_REQUIRED_MESSAGE, view.errorMessage());
+        assertEquals(NAMES_REQUIRED_MESSAGE, welcomeView.errorMessage());
         assertFalse(game.isStarted());
     }
 
@@ -124,28 +129,10 @@ public class WelcomeControllerTests {
         return controller;
     }
 
-    private static class RecordingWelcomeView extends WelcomeView {
-        private boolean namesRequiredShown;
-        private boolean closed;
-        private boolean gameShown;
-
-        RecordingWelcomeView() {
-            super(controllerThatIsNeverCalled());
-        }
-
-        @Override
-        public void showNamesRequired() {
-            namesRequiredShown = true;
-        }
-
-        @Override
-        public void close() {
-            closed = true;
-        }
-
-        @Override
-        public void showGame(Game game) {
-            gameShown = true;
-        }
+    private WelcomeController controllerWithView(Game game) {
+        replay(view);
+        WelcomeController controller = new WelcomeController(game);
+        controller.setView(view);
+        return controller;
     }
 }
