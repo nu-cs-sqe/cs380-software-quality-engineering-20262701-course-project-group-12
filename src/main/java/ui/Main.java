@@ -14,7 +14,7 @@ public class Main {
             WelcomeView view = createWelcomeView(controller);
             controller.setView(view);
 
-            JFrame window = new JFrame("Welcome to Chess");
+            JFrame window = new JFrame(Messages.text("welcome.window.title"));
             window.add(view);
             window.pack();
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

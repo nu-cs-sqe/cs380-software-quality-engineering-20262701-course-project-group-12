@@ -13,11 +13,9 @@ import java.awt.Window;
 import java.util.Optional;
 
 public class WelcomeView extends JPanel {
-    private static final String REQUIRED_NAMES_MESSAGE = "Both player names are required.";
-
     private final JTextField playerOneField = new JTextField();
     private final JTextField playerTwoField = new JTextField();
-    private final JButton startButton = new JButton("Start Game");
+    private final JButton startButton = new JButton(Messages.text("welcome.start"));
     private final JLabel errorLabel = new JLabel();
 
     public WelcomeView(WelcomeController controller) {
@@ -25,9 +23,9 @@ public class WelcomeView extends JPanel {
             throw new IllegalArgumentException("Cannot create the welcome view without a controller");
         }
         setLayout(new GridLayout(0, 2));
-        add(new JLabel("Player 1 name"));
+        add(new JLabel(Messages.text("welcome.playerOneName")));
         add(playerOneField);
-        add(new JLabel("Player 2 name"));
+        add(new JLabel(Messages.text("welcome.playerTwoName")));
         add(playerTwoField);
         add(new JLabel());
         add(startButton);
@@ -38,7 +36,7 @@ public class WelcomeView extends JPanel {
     }
 
     public void showNamesRequired() {
-        errorLabel.setText(REQUIRED_NAMES_MESSAGE);
+        errorLabel.setText(Messages.text("welcome.namesRequired"));
     }
 
     public void close() {
