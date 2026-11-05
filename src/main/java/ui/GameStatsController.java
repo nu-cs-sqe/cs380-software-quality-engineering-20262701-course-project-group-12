@@ -10,7 +10,8 @@ public class GameStatsController {
             throw new IllegalArgumentException("Cannot show game stats without a game");
         }
         if (!game.isStarted()) {
-            throw new IllegalArgumentException("Cannot show game stats before the game has started");
+            throw new IllegalArgumentException(
+                    "Cannot show game stats before the game has started");
         }
         this.game = game;
     }

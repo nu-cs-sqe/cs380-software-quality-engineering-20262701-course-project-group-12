@@ -23,7 +23,8 @@ public class WelcomeView extends JPanel {
 
     public WelcomeView(WelcomeController controller) {
         if (controller == null) {
-            throw new IllegalArgumentException("Cannot create the welcome view without a controller");
+            throw new IllegalArgumentException(
+                    "Cannot create the welcome view without a controller");
         }
         setLayout(new GridLayout(ANY_NUMBER_OF_ROWS, LABEL_AND_FIELD_COLUMNS));
         add(new JLabel(Messages.text("welcome.playerOneName")));
