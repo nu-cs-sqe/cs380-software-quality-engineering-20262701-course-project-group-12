@@ -111,7 +111,7 @@ through `8`.
   - **Expected output**: `true`.
 
 - **TC-ROOK-02 — Move one square along the rank onto an empty square**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
     b1 `(1, 1)`. The board is a new `Board` after `move` of the b1 knight
