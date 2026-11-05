@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class GameStatsControllerTests {
 
     @Test
-    void startedGameCreatesController() {
+    void GameStatsController_StartedGame_IsCreated() {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);
         replay(game);
@@ -22,7 +22,7 @@ public class GameStatsControllerTests {
     }
 
     @Test
-    void unstartedGameIsRejected() {
+    void GameStatsController_UnstartedGame_ThrowsIllegalArgumentException() {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(false);
         replay(game);
@@ -31,12 +31,12 @@ public class GameStatsControllerTests {
     }
 
     @Test
-    void nullGameIsRejected() {
+    void GameStatsController_NullGame_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> new GameStatsController(null));
     }
 
     @Test
-    void createViewShowsSetupLines() {
+    void CreateView_PlayerOneToMove_ShowsSetupLines() {
         Game game = startedGame("Ada", "Bo", "Ada");
 
         GameStatsView view = new GameStatsController(game).createView();
@@ -47,7 +47,7 @@ public class GameStatsControllerTests {
     }
 
     @Test
-    void createViewShowsOneCharacterNames() {
+    void CreateView_OneCharacterNames_ShowsSetupLines() {
         Game game = startedGame("A", "B", "A");
 
         GameStatsView view = new GameStatsController(game).createView();
@@ -58,7 +58,7 @@ public class GameStatsControllerTests {
     }
 
     @Test
-    void createViewShowsNamesWithSpaces() {
+    void CreateView_NamesWithSpaces_ShowsSetupLines() {
         Game game = startedGame("Ann Marie", "Li Wei", "Ann Marie");
 
         GameStatsView view = new GameStatsController(game).createView();
@@ -69,7 +69,7 @@ public class GameStatsControllerTests {
     }
 
     @Test
-    void createViewAllowsDuplicateNames() {
+    void CreateView_SameNameTwice_ShowsBothPlayers() {
         Game game = startedGame("Ada", "Ada", "Ada");
 
         GameStatsView view = new GameStatsController(game).createView();
@@ -80,7 +80,7 @@ public class GameStatsControllerTests {
     }
 
     @Test
-    void createViewShowsPlayerTwoToMove() {
+    void CreateView_PlayerTwoToMove_ShowsPlayerTwoAsCurrent() {
         Game game = startedGame("Ada", "Bo", "Bo");
 
         GameStatsView view = new GameStatsController(game).createView();
