@@ -47,7 +47,33 @@ public behavior and mocked view/model collaborators to observe the result.
 - Check both unsuccessful and successful results from `Game.start`.
 - Check duplicate valid names because duplicate names are explicitly allowed.
 
+### Constructor: `WelcomeController(Game game)`
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: `game` | Pointer, and cases | null; an unstarted game; a started game |
+| Output: the controller | Cases | the controller is created |
+| Output: signal for a rejected game | Cases | `IllegalArgumentException` for null; `IllegalStateException` for a started game |
+
 ## Step 4: Test Cases
+
+### Method under test: `WelcomeController(Game game)`
+
+- **TC-CONSTRUCTOR-01 — Accept an unstarted game** (implemented in
+  TC-STARTGAME-07)
+  - **Method(s) under test**: `WelcomeController(Game)`
+  - **State of the system**: `game` is a new, unstarted game.
+  - **Expected output**: The controller is created.
+
+- **TC-CONSTRUCTOR-02 — Reject a started game** ( :white_check_mark: )
+  - **Method(s) under test**: `WelcomeController(Game)`
+  - **State of the system**: `game` has been started with `Alice` and `Bob`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+- **TC-CONSTRUCTOR-03 — Reject a missing game** ( :x: )
+  - **Method(s) under test**: `WelcomeController(Game)`
+  - **State of the system**: `game` is null.
+  - **Expected output**: Throws `IllegalArgumentException`.
 
 ### Method under test: `startGame(String player1Name, String player2Name)`
 
