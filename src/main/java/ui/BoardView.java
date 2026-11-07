@@ -22,10 +22,6 @@ public class BoardView extends JPanel {
     private final BoardController boardController;
 
     public BoardView(BoardController boardController) {
-        if (boardController == null) {
-            throw new IllegalArgumentException(
-                    "Cannot create the board view without a board controller");
-        }
         this.boardController = boardController;
         setPreferredSize(new Dimension(BOARD_SIZE * TILE_SIZE, BOARD_SIZE * TILE_SIZE));
     }
