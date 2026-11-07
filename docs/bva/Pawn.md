@@ -215,7 +215,7 @@ story.
   - **Expected output**: `false`.
 
 - **TC-PAWN-11 — Reject a black pawn moving one square backward**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: Black pawn. `from` is e5 `(4, 5)`. `to` is
     e6 `(4, 6)`. New `Board` after `move` of the e7 pawn to e5, so e6 is
