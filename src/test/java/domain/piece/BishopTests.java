@@ -38,6 +38,7 @@ public class BishopTests {
     private static final Location G5 = new Location(6, 5);
     private static final Location G7 = new Location(6, 7);
     private static final Location H1 = new Location(7, 1);
+    private static final Location H3 = new Location(7, 3);
     private static final Location H6 = new Location(7, 6);
     private static final Location H8 = new Location(7, 8);
     private static final Bishop WHITE_BISHOP = new Bishop(PieceColor.WHITE);
@@ -204,5 +205,17 @@ public class BishopTests {
         boolean canMove = WHITE_BISHOP.canMove(A1, H8, board);
 
         assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_BlackBishopSevenSquaresTowardRankOneOntoEmptySquare_ReturnsTrue() {
+        board.move(C8, A8);
+        board.move(B7, B5);
+        board.move(G2, G4);
+        board.move(H1, H3);
+
+        boolean canMove = BLACK_BISHOP.canMove(A8, H1, board);
+
+        assertTrue(canMove);
     }
 }
