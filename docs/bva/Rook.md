@@ -72,6 +72,9 @@ through `8`.
 - Rook color does not change the geometry, so each color appears once.
 - Two invalid inputs are never paired. A blocked path is not also given a
   same-color destination in the same case.
+- A destination off the rank and file is rejected by the line check
+  alone only when nothing stands between the two squares, so one such
+  case has an empty diagonal between them.
 
 ### Step 3: Boundary choices
 
@@ -83,6 +86,8 @@ through `8`.
 - Seven squares along the rank onto an empty square.
 - A destination off the rank and file: a1 `(0, 1)` to b3 `(1, 3)`, which
   is empty on the starting board.
+- A diagonal destination with an empty square between: a1 to c3
+  `(2, 3)`, with the b2 pawn moved to b4 `(1, 4)`.
 - The same square: a1 to a1.
 - Adjacent own piece: starting a1 rook to a2 `(0, 2)` white pawn. No
   between-squares.
@@ -208,3 +213,11 @@ through `8`.
   - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
     a2 `(0, 2)`. `board` is null.
   - **Expected output**: `IllegalArgumentException`.
+
+- **TC-ROOK-16 — Reject a diagonal destination with an empty square
+  between** ( :x: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
+    c3 `(2, 3)`. New `Board` after `move` of the b2 pawn to b4 `(1, 4)`,
+    so b2 and c3 are empty.
+  - **Expected output**: `false`.
