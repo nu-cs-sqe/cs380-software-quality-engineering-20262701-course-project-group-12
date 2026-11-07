@@ -33,7 +33,11 @@ public class Pawn extends Piece {
         if (isOnSameFile(from, to)) {
             return !board.isOccupied(to);
         }
-        return board.isOccupied(to);
+        return holdsOpponent(to, board);
+    }
+
+    private boolean holdsOpponent(Location square, Board board) {
+        return board.isOccupied(square) && board.pieceAt(square).getColor() != getColor();
     }
 
     private boolean isAllowedAdvance(Location from, Location to, Board board) {

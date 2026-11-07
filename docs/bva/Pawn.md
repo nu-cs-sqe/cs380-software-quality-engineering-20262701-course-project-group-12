@@ -289,7 +289,7 @@ story.
   - **Expected output**: `false`.
 
 - **TC-PAWN-21 — Reject a diagonal move onto a piece of the pawn's
-  color** ( :x: )
+  color** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`. `to` is
     f3 `(5, 3)`. New `Board` after `move` of the g1 knight to f3, so f3
