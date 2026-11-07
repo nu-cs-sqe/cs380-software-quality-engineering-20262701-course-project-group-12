@@ -9,14 +9,12 @@ public class Bishop extends Piece {
     }
 
     public boolean canMove(Location from, Location to, Board board) {
-        return !isOnSameFile(from, to) && !isOnSameRank(from, to);
+        return isAlongDiagonal(from, to);
     }
 
-    private boolean isOnSameFile(Location from, Location to) {
-        return from.getFile() == to.getFile();
-    }
-
-    private boolean isOnSameRank(Location from, Location to) {
-        return from.getRank() == to.getRank();
+    private boolean isAlongDiagonal(Location from, Location to) {
+        int fileDistance = Math.abs(to.getFile() - from.getFile());
+        int rankDistance = Math.abs(to.getRank() - from.getRank());
+        return fileDistance == rankDistance && fileDistance != 0;
     }
 }

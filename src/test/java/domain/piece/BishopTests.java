@@ -27,6 +27,7 @@ public class BishopTests {
     private static final Location D4 = new Location(3, 4);
     private static final Location D5 = new Location(3, 5);
     private static final Location D7 = new Location(3, 7);
+    private static final Location E4 = new Location(4, 4);
     private static final Location E5 = new Location(4, 5);
     private static final Location E7 = new Location(4, 7);
     private static final Location F1 = new Location(5, 1);
@@ -147,6 +148,15 @@ public class BishopTests {
         Bishop bishop = new Bishop(PieceColor.WHITE);
 
         boolean canMove = bishop.canMove(C1, C3, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_OneMoreRankThanFileAway_ReturnsFalse() {
+        Bishop bishop = new Bishop(PieceColor.WHITE);
+
+        boolean canMove = bishop.canMove(C1, E4, board);
 
         assertFalse(canMove);
     }
