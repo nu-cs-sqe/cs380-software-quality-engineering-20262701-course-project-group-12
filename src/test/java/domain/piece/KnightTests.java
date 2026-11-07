@@ -11,7 +11,9 @@ public class KnightTests {
     private static final Location A1 = new Location(0, 1);
     private static final Location B1 = new Location(1, 1);
     private static final Location B3 = new Location(1, 3);
+    private static final Location C2 = new Location(2, 2);
     private static final Location C3 = new Location(2, 3);
+    private static final Location C4 = new Location(2, 4);
     private static final Location C5 = new Location(2, 5);
     private static final Location D2 = new Location(3, 2);
     private static final Location D3 = new Location(3, 3);
@@ -109,6 +111,16 @@ public class KnightTests {
         board.move(B1, A1);
 
         boolean canMove = WHITE_KNIGHT.canMove(A1, B3, board);
+
+        assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_LowestCornerOneUpAndTwoRight_ReturnsTrue() {
+        board.move(B1, A1);
+        board.move(C2, C4);
+
+        boolean canMove = WHITE_KNIGHT.canMove(A1, C2, board);
 
         assertTrue(canMove);
     }
