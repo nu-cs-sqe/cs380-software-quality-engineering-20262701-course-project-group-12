@@ -52,5 +52,5 @@ Type and color are small sets of cases, and every pair is possible, so Step 4 us
 | TC10: black bishop | images from `PieceImages()`; `piece` is a black bishop | the pixels of `black-bishop.png` | :white_check_mark: |
 | TC11: white queen | images from `PieceImages()`; `piece` is a white queen | the pixels of `white-queen.png` | :white_check_mark: |
 | TC12: black queen | images from `PieceImages()`; `piece` is a black queen | the pixels of `black-queen.png` | :white_check_mark: |
-| TC13: white king | images from `PieceImages()`; `piece` is a white king | the pixels of `white-king.png` | :x: |
+| TC13: white king | images from `PieceImages()`; `piece` is a white king | the pixels of `white-king.png` | :white_check_mark: |
 | TC14: black king | images from `PieceImages()`; `piece` is a black king | the pixels of `black-king.png` | :x: |
