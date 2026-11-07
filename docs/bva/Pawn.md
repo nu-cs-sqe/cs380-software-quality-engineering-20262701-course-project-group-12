@@ -194,7 +194,7 @@ story.
     holds a white pawn.
   - **Expected output**: `true`.
 
-- **TC-PAWN-08 — Move one square forward onto the last rank** ( :x: )
+- **TC-PAWN-08 — Move one square forward onto the last rank** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is a7 `(0, 7)`. `to` is
     a8 `(0, 8)`. New `Board` after `move` of the a2 pawn to a7 and the

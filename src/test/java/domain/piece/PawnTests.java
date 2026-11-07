@@ -9,6 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PawnTests {
     private static final Location A2 = new Location(0, 2);
+    private static final Location A5 = new Location(0, 5);
+    private static final Location A7 = new Location(0, 7);
+    private static final Location A8 = new Location(0, 8);
     private static final Location B3 = new Location(1, 3);
     private static final Location B7 = new Location(1, 7);
     private static final Location D7 = new Location(3, 7);
@@ -82,6 +85,16 @@ public class PawnTests {
         board.move(E2, E6);
 
         boolean canMove = BLACK_PAWN.canMove(D7, E6, board);
+
+        assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_OneSquareForwardOntoLastRank_ReturnsTrue() {
+        board.move(A2, A7);
+        board.move(A8, A5);
+
+        boolean canMove = WHITE_PAWN.canMove(A7, A8, board);
 
         assertTrue(canMove);
     }
