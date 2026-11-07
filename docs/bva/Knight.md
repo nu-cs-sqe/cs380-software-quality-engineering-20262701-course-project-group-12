@@ -173,7 +173,7 @@ through `8`.
   - **Expected output**: `true`.
 
 - **TC-KNIGHT-08 — Move two down and one left onto an empty square**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White knight on e4 `(4, 4)` (the central
     square setup). `to` is d2 `(3, 2)`, empty after the d-pawn moved.
