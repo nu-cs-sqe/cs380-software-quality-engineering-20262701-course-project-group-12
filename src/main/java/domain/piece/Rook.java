@@ -10,10 +10,9 @@ public class Rook extends Piece {
 
     public boolean canMove(Location from, Location to, Board board) {
         requireMoveArguments(from, to, board);
-        if (isFriendlyPiece(to, board)) {
-            return false;
-        }
-        return isAlongRookLine(from, to) && pathIsClear(from, to, board);
+        return isAlongRookLine(from, to)
+                && !isFriendlyPiece(to, board)
+                && pathIsClear(from, to, board);
     }
 
     private void requireMoveArguments(Location from, Location to, Board board) {
