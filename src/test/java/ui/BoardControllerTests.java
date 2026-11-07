@@ -40,6 +40,18 @@ public class BoardControllerTests {
         verify(board, piece);
     }
 
+    @Test
+    public void IsSelected_AnotherSquareWhileOneIsSelected_ReturnsFalse() {
+        expect(board.isOccupied(B1)).andReturn(true);
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+
+        boolean isSelected = controller.isSelected(C3);
+
+        assertFalse(isSelected);
+        verify(board, piece);
+    }
+
     private static final Location A1 = new Location(0, 1);
     private static final Location A3 = new Location(0, 3);
     private static final Location B1 = new Location(1, 1);
