@@ -32,6 +32,7 @@ public class KnightTests {
     private static final Location G5 = new Location(6, 5);
     private static final Location G6 = new Location(6, 6);
     private static final Location G8 = new Location(6, 8);
+    private static final Location H5 = new Location(7, 5);
     private static final Location H8 = new Location(7, 8);
     private static final Knight WHITE_KNIGHT = new Knight(PieceColor.WHITE);
     private static final Knight BLACK_KNIGHT = new Knight(PieceColor.BLACK);
@@ -210,6 +211,15 @@ public class KnightTests {
         placeWhiteKnightOnE4WithEmptyDestinations();
 
         boolean canMove = WHITE_KNIGHT.canMove(E4, F7, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_OneFileBeyondL_ReturnsFalse() {
+        placeWhiteKnightOnE4WithEmptyDestinations();
+
+        boolean canMove = WHITE_KNIGHT.canMove(E4, H5, board);
 
         assertFalse(canMove);
     }

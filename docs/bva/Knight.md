@@ -255,7 +255,7 @@ through `8`.
     square setup). `to` is f7 `(5, 7)`, which holds the black f-pawn.
   - **Expected output**: `false`.
 
-- **TC-KNIGHT-20 — Reject a square one file beyond the L** ( :x: )
+- **TC-KNIGHT-20 — Reject a square one file beyond the L** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White knight on e4 `(4, 4)` (the central
     square setup). `to` is h5 `(7, 5)`, empty.
