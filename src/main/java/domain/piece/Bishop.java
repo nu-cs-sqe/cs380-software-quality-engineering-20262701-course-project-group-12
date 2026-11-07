@@ -27,12 +27,14 @@ public class Bishop extends Piece {
     private boolean isPathClear(Location from, Location to, Board board) {
         int fileStep = Integer.signum(to.getFile() - from.getFile());
         int rankStep = Integer.signum(to.getRank() - from.getRank());
-        for (int step = 1; step < fileDistance(from, to); step++) {
-            Location between = new Location(from.getFile() + step * fileStep,
-                    from.getRank() + step * rankStep);
-            if (board.isOccupied(between)) {
+        int file = from.getFile() + fileStep;
+        int rank = from.getRank() + rankStep;
+        while (file != to.getFile()) {
+            if (board.isOccupied(new Location(file, rank))) {
                 return false;
             }
+            file += fileStep;
+            rank += rankStep;
         }
         return true;
     }
