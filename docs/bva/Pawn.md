@@ -153,7 +153,7 @@ story.
   - **Expected output**: `true`.
 
 - **TC-PAWN-02 — Move a white pawn two squares forward from its starting
-  rank** ( :x: )
+  rank** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`. `to` is
     e4 `(4, 4)`. New `Board`; e3 and e4 are empty.
