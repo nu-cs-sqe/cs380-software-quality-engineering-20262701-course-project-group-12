@@ -143,7 +143,7 @@ US-12 will decide when two squares along the rank is a castle.
   - **Expected output**: `true`.
 
 - **TC-KING-04 — Move one square toward the a-file onto an empty
-  square** ( :x: )
+  square** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king on e4 `(4, 4)`. `to` is d4
     `(3, 4)`. The board is a new `Board` after `move` of the king from
