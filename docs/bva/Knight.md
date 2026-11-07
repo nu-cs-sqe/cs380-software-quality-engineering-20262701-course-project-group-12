@@ -261,7 +261,7 @@ through `8`.
     square setup). `to` is h5 `(7, 5)`, empty.
   - **Expected output**: `false`.
 
-- **TC-KNIGHT-21 — Reject a piece of the knight's color** ( :x: )
+- **TC-KNIGHT-21 — Reject a piece of the knight's color** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White knight. `from` is g1 `(6, 1)`. `to`
     is e2 `(4, 2)`. New `Board`; e2 holds the white e-pawn.
