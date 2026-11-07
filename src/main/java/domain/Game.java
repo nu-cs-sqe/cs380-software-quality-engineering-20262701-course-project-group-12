@@ -60,6 +60,10 @@ public class Game {
         return playerToMove().getName();
     }
 
+    public PieceColor colorToMove() {
+        return playerToMove().getColor();
+    }
+
     private void requireStarted(String request) {
         if (!started) {
             throw new IllegalStateException(

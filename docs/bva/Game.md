@@ -267,7 +267,7 @@ after a legal move. Callers never pass arguments, so there is no null case.
 Out of scope: ending the game so further passes are refused (US-09 AC 8).
 Resign, checkmate, and the draw stories will add that state.
 
-- **TC-TURN-01 — Read the color to move after a start** ( :x: )
+- **TC-TURN-01 — Read the color to move after a start** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `colorToMove()`
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `WHITE`.

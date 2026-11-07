@@ -220,4 +220,14 @@ public class GameTests {
 
         assertThrows(IllegalStateException.class, game::playerToMoveName);
     }
+
+    @Test
+    public void ColorToMove_StartedGame_ReturnsWhite() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        PieceColor color = game.colorToMove();
+
+        assertEquals(PieceColor.WHITE, color);
+    }
 }
