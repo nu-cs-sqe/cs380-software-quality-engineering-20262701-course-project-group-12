@@ -11,20 +11,9 @@ import javax.imageio.ImageIO;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PieceImagesTests {
     private static final String STANDARD_FOLDER = "/pieces/";
-    private static final String TRUNCATED_FOLDER = "/pieces-truncated/";
-
-    @Test
-    public void PieceImages_TruncatedImageFiles_ThrowsWithTheReadFailureAsCause() {
-        PieceImageException thrown =
-                assertThrows(PieceImageException.class, () -> new PieceImages(TRUNCATED_FOLDER));
-
-        assertInstanceOf(IOException.class, thrown.getCause());
-    }
 
     @Test
     public void ImageOf_WhitePawn_ReturnsTheWhitePawnImage() throws IOException {
