@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Board {
     private static final int FILES = Location.MAX_FILE - Location.MIN_FILE + 1;
@@ -35,11 +37,11 @@ public class Board {
     }
 
     private static List<List<Optional<Piece>>> emptySquares() {
-        List<List<Optional<Piece>>> ranks = new ArrayList<>();
-        for (int rank = 0; rank < RANKS; rank++) {
-            ranks.add(new ArrayList<>(Collections.nCopies(FILES, Optional.empty())));
-        }
-        return ranks;
+        return Stream.generate(Board::emptyRank).limit(RANKS).collect(Collectors.toList());
+    }
+
+    private static List<Optional<Piece>> emptyRank() {
+        return new ArrayList<>(Collections.nCopies(FILES, Optional.empty()));
     }
 
     private void placeStartingPiecesOnFile(int file) {
