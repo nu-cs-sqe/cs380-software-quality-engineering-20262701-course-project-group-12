@@ -17,6 +17,9 @@ public class PawnTests {
     private static final Location E5 = new Location(4, 5);
     private static final Location E6 = new Location(4, 6);
     private static final Location E7 = new Location(4, 7);
+    private static final Location G3 = new Location(6, 3);
+    private static final Location G7 = new Location(6, 7);
+    private static final Location H2 = new Location(7, 2);
     private static final Pawn WHITE_PAWN = new Pawn(PieceColor.WHITE);
     private static final Pawn BLACK_PAWN = new Pawn(PieceColor.BLACK);
 
@@ -60,6 +63,15 @@ public class PawnTests {
         board.move(B7, B3);
 
         boolean canMove = WHITE_PAWN.canMove(A2, B3, board);
+
+        assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_CaptureTowardLowerFileFromHFile_ReturnsTrue() {
+        board.move(G7, G3);
+
+        boolean canMove = WHITE_PAWN.canMove(H2, G3, board);
 
         assertTrue(canMove);
     }

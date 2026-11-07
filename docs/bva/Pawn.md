@@ -180,7 +180,7 @@ story.
     holds a black pawn.
   - **Expected output**: `true`.
 
-- **TC-PAWN-06 — Capture toward a lower file from the h-file** ( :x: )
+- **TC-PAWN-06 — Capture toward a lower file from the h-file** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is h2 `(7, 2)`. `to` is
     g3 `(6, 3)`. New `Board` after `move` of the g7 pawn to g3, so g3
