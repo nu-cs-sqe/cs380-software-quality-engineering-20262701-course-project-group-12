@@ -12,6 +12,7 @@ public class QueenTests {
     private static final Location A1 = new Location(0, 1);
     private static final Location A3 = new Location(0, 3);
     private static final Location B2 = new Location(1, 2);
+    private static final Location B3 = new Location(1, 3);
     private static final Location B4 = new Location(1, 4);
     private static final Location C3 = new Location(2, 3);
     private static final Location C4 = new Location(2, 4);
@@ -209,6 +210,16 @@ public class QueenTests {
     @Test
     public void CanMove_FirstSquareOfDiagonalOccupied_ReturnsFalse() {
         boolean canMove = WHITE_QUEEN.canMove(D1, H5, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_LastSquareOfRankLeftwardOccupied_ReturnsFalse() {
+        board.move(D1, H3);
+        board.move(B2, B3);
+
+        boolean canMove = WHITE_QUEEN.canMove(H3, A3, board);
 
         assertFalse(canMove);
     }

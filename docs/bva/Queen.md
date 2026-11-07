@@ -275,7 +275,7 @@ through `8`.
   - **Expected output**: `false`.
 
 - **TC-QUEEN-20 — Reject a jump over the last square of a rank toward
-  the a-file** ( :x: )
+  the a-file** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White queen. `from` is h3 `(7, 3)`. `to` is
     a3 `(0, 3)`. New `Board` after `move` of the d1 queen to h3 and the
