@@ -127,7 +127,7 @@ US-12 will decide when two squares along the rank is a castle.
   - **Expected output**: `true`.
 
 - **TC-KING-02 — Move a black king one square down the file onto an
-  empty square** ( :x: )
+  empty square** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: Black king on e8 `(4, 8)`. `to` is e7
     `(4, 7)`. The board is a new `Board` after `move` of the e7 pawn to
