@@ -150,6 +150,13 @@ public class KnightTests {
         assertTrue(canMove);
     }
 
+    @Test
+    public void CanMove_PiecesInBetween_ReturnsTrue() {
+        boolean canMove = WHITE_KNIGHT.canMove(B1, C3, board);
+
+        assertTrue(canMove);
+    }
+
     private void placeWhiteKnightOnE4WithEmptyDestinations() {
         board.move(G1, E4);
         board.move(D2, D3);
