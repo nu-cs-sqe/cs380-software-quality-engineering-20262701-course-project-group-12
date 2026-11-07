@@ -156,7 +156,7 @@ through `8`.
   - **Expected output**: `true`.
 
 - **TC-QUEEN-05 — Move one square up and left onto an empty square**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White queen. `from` is d4 `(3, 4)`. `to` is
     c5 `(2, 5)`. New `Board` after `move` of the d1 queen to d4.
