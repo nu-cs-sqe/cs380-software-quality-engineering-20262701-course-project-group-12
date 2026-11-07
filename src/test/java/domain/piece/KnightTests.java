@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class KnightTests {
+    private static final Location A1 = new Location(0, 1);
+    private static final Location B1 = new Location(1, 1);
+    private static final Location B3 = new Location(1, 3);
     private static final Location C3 = new Location(2, 3);
     private static final Location C5 = new Location(2, 5);
     private static final Location D2 = new Location(3, 2);
@@ -97,6 +100,15 @@ public class KnightTests {
         placeWhiteKnightOnE4WithEmptyDestinations();
 
         boolean canMove = WHITE_KNIGHT.canMove(E4, D2, board);
+
+        assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_LowestCornerTwoUpAndOneRight_ReturnsTrue() {
+        board.move(B1, A1);
+
+        boolean canMove = WHITE_KNIGHT.canMove(A1, B3, board);
 
         assertTrue(canMove);
     }
