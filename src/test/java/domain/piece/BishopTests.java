@@ -213,4 +213,15 @@ public class BishopTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_LastSquareOfPathOccupied_ReturnsFalse() {
+        board.move(C1, A1);
+        board.move(B2, B4);
+        Bishop bishop = new Bishop(PieceColor.WHITE);
+
+        boolean canMove = bishop.canMove(A1, H8, board);
+
+        assertFalse(canMove);
+    }
 }

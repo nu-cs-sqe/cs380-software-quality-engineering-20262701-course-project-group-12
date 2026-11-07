@@ -252,7 +252,7 @@ light when it is even (h1 is light).
   - **Expected output**: `false`.
 
 - **TC-BISHOP-17 — Reject a jump over the last square of the path**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White bishop. `from` is a1 `(0, 1)`. `to`
     is h8 `(7, 8)`. New `Board` after `move` of the c1 bishop to a1 and
