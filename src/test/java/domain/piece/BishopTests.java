@@ -40,6 +40,8 @@ public class BishopTests {
     private static final Location H1 = new Location(7, 1);
     private static final Location H6 = new Location(7, 6);
     private static final Location H8 = new Location(7, 8);
+    private static final Bishop WHITE_BISHOP = new Bishop(PieceColor.WHITE);
+    private static final Bishop BLACK_BISHOP = new Bishop(PieceColor.BLACK);
 
     private Board board;
 
@@ -51,9 +53,8 @@ public class BishopTests {
     @Test
     public void CanMove_OneSquareUpAndRightOntoEmptySquare_ReturnsTrue() {
         board.move(D2, D4);
-        Bishop bishop = new Bishop(PieceColor.WHITE);
 
-        boolean canMove = bishop.canMove(C1, D2, board);
+        boolean canMove = WHITE_BISHOP.canMove(C1, D2, board);
 
         assertTrue(canMove);
     }
@@ -61,9 +62,8 @@ public class BishopTests {
     @Test
     public void CanMove_OneSquareUpAndLeftOntoEmptySquare_ReturnsTrue() {
         board.move(B2, B4);
-        Bishop bishop = new Bishop(PieceColor.WHITE);
 
-        boolean canMove = bishop.canMove(C1, B2, board);
+        boolean canMove = WHITE_BISHOP.canMove(C1, B2, board);
 
         assertTrue(canMove);
     }
@@ -71,9 +71,8 @@ public class BishopTests {
     @Test
     public void CanMove_BlackBishopOneSquareDownAndRightOntoEmptySquare_ReturnsTrue() {
         board.move(D7, D5);
-        Bishop bishop = new Bishop(PieceColor.BLACK);
 
-        boolean canMove = bishop.canMove(C8, D7, board);
+        boolean canMove = BLACK_BISHOP.canMove(C8, D7, board);
 
         assertTrue(canMove);
     }
@@ -81,9 +80,8 @@ public class BishopTests {
     @Test
     public void CanMove_BlackBishopOneSquareDownAndLeftOntoEmptySquare_ReturnsTrue() {
         board.move(E7, E5);
-        Bishop bishop = new Bishop(PieceColor.BLACK);
 
-        boolean canMove = bishop.canMove(F8, E7, board);
+        boolean canMove = BLACK_BISHOP.canMove(F8, E7, board);
 
         assertTrue(canMove);
     }
@@ -94,9 +92,8 @@ public class BishopTests {
         board.move(B2, B4);
         board.move(G7, G5);
         board.move(H8, H6);
-        Bishop bishop = new Bishop(PieceColor.WHITE);
 
-        boolean canMove = bishop.canMove(A1, H8, board);
+        boolean canMove = WHITE_BISHOP.canMove(A1, H8, board);
 
         assertTrue(canMove);
     }
@@ -107,18 +104,15 @@ public class BishopTests {
         board.move(G2, G4);
         board.move(B7, B5);
         board.move(A8, A6);
-        Bishop bishop = new Bishop(PieceColor.WHITE);
 
-        boolean canMove = bishop.canMove(H1, A8, board);
+        boolean canMove = WHITE_BISHOP.canMove(H1, A8, board);
 
         assertTrue(canMove);
     }
 
     @Test
     public void CanMove_SameSquare_ReturnsFalse() {
-        Bishop bishop = new Bishop(PieceColor.WHITE);
-
-        boolean canMove = bishop.canMove(C1, C1, board);
+        boolean canMove = WHITE_BISHOP.canMove(C1, C1, board);
 
         assertFalse(canMove);
     }
@@ -126,9 +120,8 @@ public class BishopTests {
     @Test
     public void CanMove_OneSquareAlongFile_ReturnsFalse() {
         board.move(C2, C4);
-        Bishop bishop = new Bishop(PieceColor.WHITE);
 
-        boolean canMove = bishop.canMove(C1, C2, board);
+        boolean canMove = WHITE_BISHOP.canMove(C1, C2, board);
 
         assertFalse(canMove);
     }
@@ -136,9 +129,8 @@ public class BishopTests {
     @Test
     public void CanMove_OneSquareAlongRank_ReturnsFalse() {
         board.move(D1, D3);
-        Bishop bishop = new Bishop(PieceColor.WHITE);
 
-        boolean canMove = bishop.canMove(C1, D1, board);
+        boolean canMove = WHITE_BISHOP.canMove(C1, D1, board);
 
         assertFalse(canMove);
     }
@@ -146,36 +138,29 @@ public class BishopTests {
     @Test
     public void CanMove_SameColorSquareOffDiagonal_ReturnsFalse() {
         board.move(C2, C4);
-        Bishop bishop = new Bishop(PieceColor.WHITE);
 
-        boolean canMove = bishop.canMove(C1, C3, board);
+        boolean canMove = WHITE_BISHOP.canMove(C1, C3, board);
 
         assertFalse(canMove);
     }
 
     @Test
     public void CanMove_OneMoreRankThanFileAway_ReturnsFalse() {
-        Bishop bishop = new Bishop(PieceColor.WHITE);
-
-        boolean canMove = bishop.canMove(C1, E4, board);
+        boolean canMove = WHITE_BISHOP.canMove(C1, E4, board);
 
         assertFalse(canMove);
     }
 
     @Test
     public void CanMove_OneMoreFileThanRankAway_ReturnsFalse() {
-        Bishop bishop = new Bishop(PieceColor.WHITE);
-
-        boolean canMove = bishop.canMove(C1, F3, board);
+        boolean canMove = WHITE_BISHOP.canMove(C1, F3, board);
 
         assertFalse(canMove);
     }
 
     @Test
     public void CanMove_AdjacentOwnPiece_ReturnsFalse() {
-        Bishop bishop = new Bishop(PieceColor.WHITE);
-
-        boolean canMove = bishop.canMove(C1, D2, board);
+        boolean canMove = WHITE_BISHOP.canMove(C1, D2, board);
 
         assertFalse(canMove);
     }
@@ -184,9 +169,8 @@ public class BishopTests {
     public void CanMove_AdjacentOpponent_ReturnsTrue() {
         board.move(D2, D4);
         board.move(D7, D2);
-        Bishop bishop = new Bishop(PieceColor.WHITE);
 
-        boolean canMove = bishop.canMove(C1, D2, board);
+        boolean canMove = WHITE_BISHOP.canMove(C1, D2, board);
 
         assertTrue(canMove);
     }
@@ -196,9 +180,8 @@ public class BishopTests {
         board.move(C1, A1);
         board.move(B2, B4);
         board.move(G7, G5);
-        Bishop bishop = new Bishop(PieceColor.WHITE);
 
-        boolean canMove = bishop.canMove(A1, H8, board);
+        boolean canMove = WHITE_BISHOP.canMove(A1, H8, board);
 
         assertTrue(canMove);
     }
@@ -207,9 +190,8 @@ public class BishopTests {
     public void CanMove_FirstSquareOfPathOccupied_ReturnsFalse() {
         board.move(C1, A1);
         board.move(G7, G5);
-        Bishop bishop = new Bishop(PieceColor.WHITE);
 
-        boolean canMove = bishop.canMove(A1, H8, board);
+        boolean canMove = WHITE_BISHOP.canMove(A1, H8, board);
 
         assertFalse(canMove);
     }
@@ -218,9 +200,8 @@ public class BishopTests {
     public void CanMove_LastSquareOfPathOccupied_ReturnsFalse() {
         board.move(C1, A1);
         board.move(B2, B4);
-        Bishop bishop = new Bishop(PieceColor.WHITE);
 
-        boolean canMove = bishop.canMove(A1, H8, board);
+        boolean canMove = WHITE_BISHOP.canMove(A1, H8, board);
 
         assertFalse(canMove);
     }
