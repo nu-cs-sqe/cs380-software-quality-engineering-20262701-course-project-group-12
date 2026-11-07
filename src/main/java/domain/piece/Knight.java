@@ -11,6 +11,7 @@ public class Knight extends Piece {
         super(PieceType.KNIGHT, color);
     }
 
+    @Override
     public boolean canMove(Location from, Location to, Board board) {
         return isKnightJump(from, to) && !holdsOwnPiece(to, board);
     }
