@@ -267,7 +267,7 @@ through `8`.
   - **Expected output**: `false`.
 
 - **TC-QUEEN-19 — Reject a jump over the first square of a diagonal**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White queen. `from` is d1 `(3, 1)`. `to` is
     h5 `(7, 5)`. New `Board`; e2 holds the white e-pawn, f3 and g4 are
