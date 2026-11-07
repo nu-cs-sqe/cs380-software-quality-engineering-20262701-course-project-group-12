@@ -42,7 +42,7 @@ Type and color are small sets of cases, and every pair is possible, so Step 4 us
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC3: white pawn | images from `PieceImages()`; `piece` is a white pawn | the pixels of `white-pawn.png` | :x: |
+| TC3: white pawn | images from `PieceImages()`; `piece` is a white pawn | the pixels of `white-pawn.png` | :white_check_mark: |
 | TC4: black pawn | images from `PieceImages()`; `piece` is a black pawn | the pixels of `black-pawn.png` | :x: |
 | TC5: white rook | images from `PieceImages()`; `piece` is a white rook | the pixels of `white-rook.png` | :x: |
 | TC6: black rook | images from `PieceImages()`; `piece` is a black rook | the pixels of `black-rook.png` | :x: |
