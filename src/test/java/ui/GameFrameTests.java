@@ -3,15 +3,15 @@ package ui;
 import domain.Board;
 import org.junit.jupiter.api.Test;
 
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import javax.swing.JPanel;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class GameFrameTests {
 
     @Test
-    void placesStatsAboveBoard() {
+    void Arrange_StatsAndBoard_PlacesStatsAboveBoard() {
         GameStatsView stats = new GameStatsView(
                 "Player 1: Ada (White)",
                 "Player 2: Bo (Black)",

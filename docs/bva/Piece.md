@@ -2,7 +2,7 @@
 
 `Piece` stores one piece's type and color. Both are fixed after construction. This feature has no move behavior on `Piece`.
 
-- `Piece(PieceType type, PieceColor color)`: both arguments are required. Throws `IllegalArgumentException` if either is null.
+- `Piece(PieceType type, PieceColor color)`: stores the type and the color. It does not check them for null; our code never passes null (instructor code review, Week 6).
 - `PieceType getType()`: returns the type given at construction.
 - `PieceColor getColor()`: returns the color given at construction.
 
@@ -12,14 +12,13 @@
 
 ### `Piece(PieceType type, PieceColor color)`
 
-Type and color are small sets of cases, and every pair is possible, so Step 4 uses all-combination for the two valid sets. A null argument is tested alone. Both arguments null at once would hide which check failed.
+Type and color are small sets of cases, and every pair is possible, so Step 4 uses all-combination for the two valid sets. No case passes null. TC13 and TC14 used to pass a null type or color and expect `IllegalArgumentException`; they were removed with the check.
 
 | Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
 | --- | --- | --- |
-| Input: `type` | Cases, and a pointer | `PAWN`, `ROOK`, `KNIGHT`, `BISHOP`, `QUEEN`, `KING`, null |
-| Input: `color` | Cases, and a pointer | `WHITE`, `BLACK`, null |
+| Input: `type` | Cases | `PAWN`, `ROOK`, `KNIGHT`, `BISHOP`, `QUEEN`, `KING` |
+| Input: `color` | Cases | `WHITE`, `BLACK` |
 | Output: the piece | Cases | `getType()` equals `type`; `getColor()` equals `color` |
-| Output: signal for a missing argument | Cases | `IllegalArgumentException` |
 
 ## Step 4: Test cases (all-combination for the valid pairs)
 
@@ -39,8 +38,6 @@ Type and color are small sets of cases, and every pair is possible, so Step 4 us
 | TC10: black queen | `type = QUEEN`, `color = BLACK` | piece is created; `getType()` is `QUEEN`; `getColor()` is `BLACK` | :white_check_mark: |
 | TC11: white king | `type = KING`, `color = WHITE` | piece is created; `getType()` is `KING`; `getColor()` is `WHITE` | :white_check_mark: |
 | TC12: black king | `type = KING`, `color = BLACK` | piece is created; `getType()` is `KING`; `getColor()` is `BLACK` | :white_check_mark: |
-| TC13: missing type | `type = null`, `color = WHITE` | throws `IllegalArgumentException` | :white_check_mark: |
-| TC14: missing color | `type = PAWN`, `color = null` | throws `IllegalArgumentException` | :white_check_mark: |
 
 ### Method under test: `getType()`
 

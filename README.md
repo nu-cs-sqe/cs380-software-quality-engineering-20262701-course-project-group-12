@@ -26,3 +26,6 @@ During our required team meeting, Professor Yiji clarified that commits with fai
 - 7ad44fb — Open game window after successful start
 
 Moving forward, we will run all tests locally and ensure they pass before committing changes.
+
+## Credits
+- Chess piece images by Cburnett, from Wikimedia Commons, used under the BSD license. See `src/main/resources/pieces/LICENSE.txt`.
