@@ -4,8 +4,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LocationTests {
+    @Test
+    public void IsSameSquareAs_AnotherObjectForSameSquare_ReturnsTrue() {
+        boolean isSameSquare = A1.isSameSquareAs(new Location(0, 1));
+
+        assertTrue(isSameSquare);
+    }
+
+    private static final Location A1 = new Location(0, 1);
 
     @Test
     public void Location_File0Rank1_StoresBothLows() {
