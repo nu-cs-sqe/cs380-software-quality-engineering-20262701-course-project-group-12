@@ -69,7 +69,7 @@ public class PawnTests {
     }
 
     @Test
-    public void CanMove_CaptureTowardHigherFileFromAFile_ReturnsTrue() {
+    public void CanMove_CaptureTowardHigherFileFromFileA_ReturnsTrue() {
         board.move(B7, B3);
 
         boolean canMove = WHITE_PAWN.canMove(A2, B3, board);
@@ -78,7 +78,7 @@ public class PawnTests {
     }
 
     @Test
-    public void CanMove_CaptureTowardLowerFileFromHFile_ReturnsTrue() {
+    public void CanMove_CaptureTowardLowerFileFromFileH_ReturnsTrue() {
         board.move(G7, G3);
 
         boolean canMove = WHITE_PAWN.canMove(H2, G3, board);
