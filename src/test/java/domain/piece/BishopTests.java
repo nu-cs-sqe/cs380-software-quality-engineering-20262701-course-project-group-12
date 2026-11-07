@@ -11,8 +11,11 @@ public class BishopTests {
     private static final Location B2 = new Location(1, 2);
     private static final Location B4 = new Location(1, 4);
     private static final Location C1 = new Location(2, 1);
+    private static final Location C8 = new Location(2, 8);
     private static final Location D2 = new Location(3, 2);
     private static final Location D4 = new Location(3, 4);
+    private static final Location D5 = new Location(3, 5);
+    private static final Location D7 = new Location(3, 7);
 
     private Board board;
 
@@ -37,6 +40,16 @@ public class BishopTests {
         Bishop bishop = new Bishop(PieceColor.WHITE);
 
         boolean canMove = bishop.canMove(C1, B2, board);
+
+        assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_BlackBishopOneSquareDownAndRightOntoEmptySquare_ReturnsTrue() {
+        board.move(D7, D5);
+        Bishop bishop = new Bishop(PieceColor.BLACK);
+
+        boolean canMove = bishop.canMove(C8, D7, board);
 
         assertTrue(canMove);
     }

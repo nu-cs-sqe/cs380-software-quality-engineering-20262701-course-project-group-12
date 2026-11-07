@@ -140,7 +140,7 @@ light when it is even (h1 is light).
   - **Expected output**: `true`.
 
 - **TC-BISHOP-03 — Move a black bishop one square down and right onto an
-  empty square** ( :x: )
+  empty square** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: Black bishop on the light square c8
     `(2, 8)`. `to` is d7 `(3, 7)`. The board is a new `Board` after
