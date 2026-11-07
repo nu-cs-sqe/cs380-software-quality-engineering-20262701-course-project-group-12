@@ -38,5 +38,6 @@ public class BoardController {
         if (board.pieceAt(from).canMove(from, to, board)) {
             board.move(from, to);
         }
+        selectedSquare = Optional.empty();
     }
 }
