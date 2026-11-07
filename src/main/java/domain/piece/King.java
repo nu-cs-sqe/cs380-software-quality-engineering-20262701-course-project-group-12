@@ -11,17 +11,7 @@ public class King extends Piece {
     }
 
     public boolean canMove(Location from, Location to, Board board) {
-        if (isOnSameFile(from, to)) {
-            return rankDistance(from, to) == ONE_SQUARE;
-        }
-        if (from.getRank() == to.getRank()) {
-            return fileDistance(from, to) == ONE_SQUARE;
-        }
-        return true;
-    }
-
-    private boolean isOnSameFile(Location from, Location to) {
-        return from.getFile() == to.getFile();
+        return Math.max(fileDistance(from, to), rankDistance(from, to)) == ONE_SQUARE;
     }
 
     private int rankDistance(Location from, Location to) {

@@ -203,7 +203,7 @@ US-12 will decide when two squares along the rank is a castle.
     so g1 is empty.
   - **Expected output**: `false`.
 
-- **TC-KING-12 — Reject two squares along a diagonal** ( :x: )
+- **TC-KING-12 — Reject two squares along a diagonal** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king on e4 `(4, 4)`. `to` is g6
     `(6, 6)`. The board is a new `Board` after `move` of the king from
