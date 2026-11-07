@@ -152,4 +152,11 @@ public class PawnTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_ThreeSquareAdvanceFromStartingRank_ReturnsFalse() {
+        boolean canMove = WHITE_PAWN.canMove(E2, E5, board);
+
+        assertFalse(canMove);
+    }
 }

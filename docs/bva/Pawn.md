@@ -246,7 +246,7 @@ story.
   - **Expected output**: `false`.
 
 - **TC-PAWN-15 — Reject a three-square advance from the starting rank**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`. `to` is
     e5 `(4, 5)`. New `Board`; e3, e4, and e5 are empty.

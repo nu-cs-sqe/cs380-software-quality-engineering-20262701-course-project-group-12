@@ -8,6 +8,7 @@ public class Pawn extends Piece {
     private static final int BLACK_FORWARD = -1;
     private static final int WHITE_STARTING_RANK = 2;
     private static final int BLACK_STARTING_RANK = 7;
+    private static final int ONE_SQUARE_ADVANCE = 1;
     private static final int TWO_SQUARE_ADVANCE = 2;
 
     public Pawn(PieceColor color) {
@@ -19,7 +20,7 @@ public class Pawn extends Piece {
         if (forwardDistance == TWO_SQUARE_ADVANCE) {
             return isOnStartingRank(from);
         }
-        return forwardDistance > 0;
+        return forwardDistance == ONE_SQUARE_ADVANCE;
     }
 
     private boolean isOnStartingRank(Location square) {
