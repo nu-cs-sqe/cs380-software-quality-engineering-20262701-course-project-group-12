@@ -5,11 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameTests {
+    private static final Location A1 = new Location(0, 1);
+
     @Test
     public void IsStarted_NewGame_ReturnsFalse() {
         Game game = new Game();
@@ -94,7 +95,7 @@ public class GameTests {
         assertEquals("Alice", game.playerOne().getName());
         assertEquals("Bob", game.playerTwo().getName());
         assertEquals(game.playerOne(), game.playerToMove());
-        assertNotNull(game.board());
+        assertTrue(game.board().isOccupied(A1));
     }
 
     @Test
@@ -132,7 +133,7 @@ public class GameTests {
 
         game.start("Alice", "Bob");
 
-        assertNotNull(game.board());
+        assertTrue(game.board().isOccupied(A1));
     }
 
     @Test

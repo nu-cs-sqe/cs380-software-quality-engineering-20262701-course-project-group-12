@@ -146,7 +146,7 @@ cases below use the game's public behavior to observe its state.
 - **TC-START-11 — Create a board after a valid start** (implemented)
   - **Method(s) under test**: `start(String, String)`, `board()`
   - **State of the system**: New game; `start("Alice", "Bob")` completes.
-  - **Expected output**: `board()` returns a non-null starting board.
+  - **Expected output**: `board()` returns the starting board; a1 is occupied.
 
 - **TC-START-12 — Reject the same name in a different case** (implemented)
   - **Method(s) under test**: `start(String, String)`, `isStarted()`
