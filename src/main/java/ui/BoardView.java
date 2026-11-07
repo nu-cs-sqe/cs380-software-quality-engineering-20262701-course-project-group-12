@@ -9,8 +9,11 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
@@ -36,6 +39,32 @@ public class BoardView extends JPanel {
         this.boardController = boardController;
         int sideLength = BOARD_LENGTH + LABEL_MARGIN;
         setPreferredSize(new Dimension(sideLength, sideLength));
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent event) {
+                clickAt(event.getPoint());
+            }
+        });
+    }
+
+    private void clickAt(Point point) {
+        if (isOnBoard(point)) {
+            boardController.clickSquare(squareAt(point));
+            repaint();
+        }
+    }
+
+    private boolean isOnBoard(Point point) {
+        boolean isRightOfRankLabels =
+                point.x >= LABEL_MARGIN && point.x < LABEL_MARGIN + BOARD_LENGTH;
+        boolean isAboveFileLabels = point.y >= 0 && point.y < BOARD_LENGTH;
+        return isRightOfRankLabels && isAboveFileLabels;
+    }
+
+    private Location squareAt(Point point) {
+        int file = FIRST_FILE + (point.x - LABEL_MARGIN) / TILE_SIZE;
+        int rank = LAST_RANK - point.y / TILE_SIZE;
+        return new Location(file, rank);
     }
 
     @Override
