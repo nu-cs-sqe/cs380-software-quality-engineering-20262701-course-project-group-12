@@ -9,10 +9,10 @@ public class Bishop extends Piece {
     }
 
     public boolean canMove(Location from, Location to, Board board) {
-        return !isSameSquare(from, to);
+        return !isOnSameFile(from, to);
     }
 
-    private boolean isSameSquare(Location from, Location to) {
-        return from.getFile() == to.getFile() && from.getRank() == to.getRank();
+    private boolean isOnSameFile(Location from, Location to) {
+        return from.getFile() == to.getFile();
     }
 }

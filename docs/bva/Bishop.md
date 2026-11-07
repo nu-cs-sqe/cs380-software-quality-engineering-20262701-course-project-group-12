@@ -182,7 +182,7 @@ light when it is even (h1 is light).
     `(2, 1)`. New `Board`.
   - **Expected output**: `false`.
 
-- **TC-BISHOP-08 — Reject one square along the file** ( :x: )
+- **TC-BISHOP-08 — Reject one square along the file** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White bishop. `from` is c1 `(2, 1)`. `to`
     is c2 `(2, 2)`. The board is a new `Board` after `move` of the c2
