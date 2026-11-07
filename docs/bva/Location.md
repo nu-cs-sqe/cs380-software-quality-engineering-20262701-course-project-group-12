@@ -5,6 +5,7 @@
 - `Location(int file, int rank)`: requires a file in `[0, 7]` and a rank in `[1, 8]`. Throws `IllegalArgumentException` otherwise.
 - `int getFile()`: returns the file given at construction.
 - `int getRank()`: returns the rank given at construction.
+- `boolean isSameSquareAs(Location other)` (issue #34): returns true when `other` has the same file and the same rank, even when it is a different `Location` object. The board view builds a new `Location` for every square it paints, so it uses this to find the selected square.
 
 `getFile()` and `getRank()` only return those stored values, so they are checked inside the constructor cases below and do not have separate cases.
 
@@ -21,6 +22,17 @@ File and rank are a pair of intervals, so the corners are included: both lows to
 | Input: the pair `(file, rank)` | Pair of intervals | both lows `(0, 1)`; both highs `(7, 8)`; low file with high rank `(0, 8)`; high file with low rank `(7, 1)` |
 | Output: the location | Interval endpoints | `getFile()` and `getRank()` equal the arguments |
 | Output: signal for an invalid argument | Cases | `IllegalArgumentException` |
+
+### `isSameSquareAs(Location other)`
+
+The file and the rank are compared separately, so each one gets a case where only it differs, by the smallest step, from a1. The matching case uses a second `Location` object so the answer cannot come from comparing references.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: `other`'s file compared with this file | Cases | same (`0` and `0`); one apart (`0` and `1`) |
+| Input: `other`'s rank compared with this rank | Cases | same (`1` and `1`); one apart (`1` and `2`) |
+| Input: `other` | Pointer | a location (no null: callers never pass one) |
+| Output: the answer | Boolean | true; false |
 
 ## Step 4: Test cases (each-choice strategy)
 
@@ -52,3 +64,11 @@ Every value from Step 3 is used in at least one test case. `-1` and `8` are each
 | --- | --- | --- | --- |
 | TC11: rank of a1 | implemented in TC1 | `1` | implemented in TC1 |
 | TC12: rank of h8 | implemented in TC2 | `8` | implemented in TC2 |
+
+### Method under test: `isSameSquareAs(Location other)`
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC13: another object for the same square | a1 `(0, 1)` compared with a second a1 `(0, 1)` | true | :white_check_mark: |
+| TC14: one rank apart | a1 `(0, 1)` compared with a2 `(0, 2)` | false | :white_check_mark: |
+| TC15: one file apart | a1 `(0, 1)` compared with b1 `(1, 1)` | false | :white_check_mark: |
