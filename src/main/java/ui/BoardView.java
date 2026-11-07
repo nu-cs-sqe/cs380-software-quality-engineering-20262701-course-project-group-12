@@ -27,6 +27,7 @@ public class BoardView extends JPanel {
     private static final int BOARD_LENGTH = BOARD_SIZE * TILE_SIZE;
     private static final Color LIGHT_SQUARE = new Color(240, 217, 181);
     private static final Color DARK_SQUARE = new Color(181, 136, 99);
+    private static final Color SELECTED_SQUARE = new Color(186, 202, 68);
     private static final int LABEL_MARGIN = TILE_SIZE / 2;
     private static final char FIRST_FILE_LETTER = 'a';
     private static final Color LABEL_INK = Color.DARK_GRAY;
@@ -90,13 +91,20 @@ public class BoardView extends JPanel {
     }
 
     private void paintSquare(Graphics graphics, Location location) {
-        boolean isLightSquare = (location.getFile() + location.getRank()) % 2 == 0;
-        graphics.setColor(isLightSquare ? LIGHT_SQUARE : DARK_SQUARE);
+        graphics.setColor(colorOf(location));
         graphics.fillRect(leftEdgeOf(location.getFile()), topEdgeOf(location.getRank()),
                 TILE_SIZE, TILE_SIZE);
         if (boardController.isOccupied(location)) {
             drawPiece(graphics, location);
         }
+    }
+
+    private Color colorOf(Location square) {
+        if (boardController.isSelected(square)) {
+            return SELECTED_SQUARE;
+        }
+        boolean isLightSquare = (square.getFile() + square.getRank()) % 2 == 0;
+        return isLightSquare ? LIGHT_SQUARE : DARK_SQUARE;
     }
 
     private void drawPiece(Graphics graphics, Location location) {
