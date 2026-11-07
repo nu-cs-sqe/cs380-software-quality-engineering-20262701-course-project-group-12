@@ -42,11 +42,17 @@ public class BoardController {
     }
 
     private void moveOrChangeSelection(Location from, Location to) {
-        if (board.pieceAt(from).canMove(from, to, board) && !holdsKing(to)) {
-            board.move(from, to);
-            clearSelection();
+        if (board.pieceAt(from).canMove(from, to, board)) {
+            moveUnlessCapturingKing(from, to);
         } else {
             select(to);
+        }
+    }
+
+    private void moveUnlessCapturingKing(Location from, Location to) {
+        if (!holdsKing(to)) {
+            board.move(from, to);
+            clearSelection();
         }
     }
 

@@ -229,6 +229,20 @@ public class BoardControllerTests {
         verify(board, piece);
     }
 
+    @Test
+    public void ClickSquare_RefusedKingCapture_KeepsSelection() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        givenOnC3(BLACK_KING);
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+
+        controller.clickSquare(C3);
+
+        assertTrue(controller.isSelected(B1));
+        verify(board, piece);
+    }
+
     private void expectPieceOnB1() {
         expect(board.isOccupied(B1)).andReturn(true);
         expect(board.pieceAt(B1)).andReturn(piece);
