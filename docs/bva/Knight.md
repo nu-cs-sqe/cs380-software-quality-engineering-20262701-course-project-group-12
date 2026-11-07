@@ -243,7 +243,7 @@ through `8`.
     square setup). `to` is e6 `(4, 6)`, empty.
   - **Expected output**: `false`.
 
-- **TC-KNIGHT-18 — Reject two squares along the rank** ( :x: )
+- **TC-KNIGHT-18 — Reject two squares along the rank** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White knight on e4 `(4, 4)` (the central
     square setup). `to` is g4 `(6, 4)`, empty.

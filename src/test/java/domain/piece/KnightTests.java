@@ -28,6 +28,7 @@ public class KnightTests {
     private static final Location F7 = new Location(5, 7);
     private static final Location G1 = new Location(6, 1);
     private static final Location G3 = new Location(6, 3);
+    private static final Location G4 = new Location(6, 4);
     private static final Location G5 = new Location(6, 5);
     private static final Location G6 = new Location(6, 6);
     private static final Location G8 = new Location(6, 8);
@@ -191,6 +192,15 @@ public class KnightTests {
         placeWhiteKnightOnE4WithEmptyDestinations();
 
         boolean canMove = WHITE_KNIGHT.canMove(E4, E6, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_TwoSquaresAlongRank_ReturnsFalse() {
+        placeWhiteKnightOnE4WithEmptyDestinations();
+
+        boolean canMove = WHITE_KNIGHT.canMove(E4, G4, board);
 
         assertFalse(canMove);
     }
