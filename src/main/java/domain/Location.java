@@ -39,6 +39,6 @@ public class Location {
     }
 
     public boolean isSameSquareAs(Location other) {
-        return true;
+        return rank == other.rank;
     }
 }

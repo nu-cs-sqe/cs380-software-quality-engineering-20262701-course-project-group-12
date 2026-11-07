@@ -3,6 +3,7 @@ package domain;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -12,6 +13,13 @@ public class LocationTests {
         boolean isSameSquare = A1.isSameSquareAs(new Location(0, 1));
 
         assertTrue(isSameSquare);
+    }
+
+    @Test
+    public void IsSameSquareAs_OneRankApart_ReturnsFalse() {
+        boolean isSameSquare = A1.isSameSquareAs(new Location(0, 2));
+
+        assertFalse(isSameSquare);
     }
 
     private static final Location A1 = new Location(0, 1);

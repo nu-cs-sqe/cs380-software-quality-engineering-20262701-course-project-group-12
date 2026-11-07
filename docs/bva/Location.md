@@ -70,5 +70,5 @@ Every value from Step 3 is used in at least one test case. `-1` and `8` are each
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC13: another object for the same square | a1 `(0, 1)` compared with a second a1 `(0, 1)` | true | :white_check_mark: |
-| TC14: one rank apart | a1 `(0, 1)` compared with a2 `(0, 2)` | false | :x: |
+| TC14: one rank apart | a1 `(0, 1)` compared with a2 `(0, 2)` | false | :white_check_mark: |
 | TC15: one file apart | a1 `(0, 1)` compared with b1 `(1, 1)` | false | :x: |
