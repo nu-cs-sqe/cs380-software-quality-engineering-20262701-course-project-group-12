@@ -9,7 +9,9 @@ public class Bishop extends Piece {
     }
 
     public boolean canMove(Location from, Location to, Board board) {
-        return isAlongDiagonal(from, to) && !holdsOwnPiece(to, board);
+        return isAlongDiagonal(from, to)
+                && !holdsOwnPiece(to, board)
+                && isFirstSquareOfPathEmpty(from, to, board);
     }
 
     private boolean isAlongDiagonal(Location from, Location to) {
@@ -20,5 +22,14 @@ public class Bishop extends Piece {
 
     private boolean holdsOwnPiece(Location square, Board board) {
         return board.isOccupied(square) && board.pieceAt(square).getColor() == getColor();
+    }
+
+    private boolean isFirstSquareOfPathEmpty(Location from, Location to, Board board) {
+        if (Math.abs(to.getFile() - from.getFile()) == 1) {
+            return true;
+        }
+        int fileStep = Integer.signum(to.getFile() - from.getFile());
+        int rankStep = Integer.signum(to.getRank() - from.getRank());
+        return !board.isOccupied(new Location(from.getFile() + fileStep, from.getRank() + rankStep));
     }
 }

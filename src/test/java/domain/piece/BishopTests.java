@@ -202,4 +202,15 @@ public class BishopTests {
 
         assertTrue(canMove);
     }
+
+    @Test
+    public void CanMove_FirstSquareOfPathOccupied_ReturnsFalse() {
+        board.move(C1, A1);
+        board.move(G7, G5);
+        Bishop bishop = new Bishop(PieceColor.WHITE);
+
+        boolean canMove = bishop.canMove(A1, H8, board);
+
+        assertFalse(canMove);
+    }
 }
