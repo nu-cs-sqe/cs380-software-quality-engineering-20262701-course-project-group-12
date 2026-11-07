@@ -69,4 +69,4 @@ A plain `Piece` answers the same for every input, so one case stands for all of 
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC19: a piece without movement rules | a white queen as a plain `Piece`; `from` is d1 `(3, 1)`, `to` is d3 `(3, 3)`; a mocked `Board` that expects no calls | `false` | :x: |
+| TC19: a piece without movement rules | a white queen as a plain `Piece`; `from` is d1 `(3, 1)`, `to` is d3 `(3, 3)`; a mocked `Board` that expects no calls | `false` | :white_check_mark: |
