@@ -3,7 +3,8 @@ package ui;
 import domain.Game;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MainTests {
@@ -12,13 +13,14 @@ public class MainTests {
         Game game = new Game();
         WelcomeController controller = new WelcomeController(game);
 
-        WelcomeView view = Main.createWelcomeView(controller);
+        AtomicBoolean windowClosed = new AtomicBoolean();
+        WelcomeView view = Main.createWelcomeView(controller, () -> windowClosed.set(true));
 
-        assertNotNull(view);
         controller.setView(view);
         view.playerOneField().setText("Alice");
         view.playerTwoField().setText("Bob");
         view.startButton().doClick();
         assertTrue(game.isStarted());
+        assertTrue(windowClosed.get());
     }
 }

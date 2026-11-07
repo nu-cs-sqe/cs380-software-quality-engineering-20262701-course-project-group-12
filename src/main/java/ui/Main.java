@@ -10,10 +10,9 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             Game game = new Game();
             WelcomeController controller = new WelcomeController(game);
-            WelcomeView view = createWelcomeView(controller);
-            controller.setView(view);
-
             JFrame window = new JFrame(Messages.text("welcome.window.title"));
+            WelcomeView view = createWelcomeView(controller, window::dispose);
+            controller.setView(view);
             window.add(view);
             window.pack();
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -22,7 +21,7 @@ public class Main {
         });
     }
 
-    static WelcomeView createWelcomeView(WelcomeController controller) {
-        return new WelcomeView(controller);
+    static WelcomeView createWelcomeView(WelcomeController controller, Runnable closeWindow) {
+        return new WelcomeView(controller, closeWindow);
     }
 }

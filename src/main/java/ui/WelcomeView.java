@@ -4,13 +4,10 @@ import domain.Game;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
-import java.awt.Window;
-import java.util.Optional;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 public class WelcomeView extends JPanel {
     private static final int ANY_NUMBER_OF_ROWS = 0;
@@ -20,8 +17,10 @@ public class WelcomeView extends JPanel {
     private final JTextField playerTwoField = new JTextField();
     private final JButton startButton = new JButton(Messages.text("welcome.start"));
     private final JLabel errorLabel = new JLabel();
+    private final Runnable closeWindow;
 
-    public WelcomeView(WelcomeController controller) {
+    public WelcomeView(WelcomeController controller, Runnable closeWindow) {
+        this.closeWindow = closeWindow;
         setLayout(new GridLayout(ANY_NUMBER_OF_ROWS, LABEL_AND_FIELD_COLUMNS));
         add(new JLabel(Messages.text("welcome.playerOneName")));
         add(playerOneField);
@@ -44,7 +43,7 @@ public class WelcomeView extends JPanel {
     }
 
     public void close() {
-        Optional.ofNullable(SwingUtilities.getWindowAncestor(this)).ifPresent(Window::dispose);
+        closeWindow.run();
     }
 
     public void showGame(Game game) {

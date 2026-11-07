@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StartGameIntegrationTest {
     private static final String NAMES_REQUIRED_MESSAGE = "Both player names are required.";
+    private static final Runnable NO_WINDOW = () -> { };
 
     private Game game;
     private WelcomeView welcomeView;
@@ -18,7 +19,7 @@ public class StartGameIntegrationTest {
     public void openWelcomeScreen() {
         game = new Game();
         WelcomeController controller = new WelcomeController(game);
-        welcomeView = new WelcomeView(controller);
+        welcomeView = new WelcomeView(controller, NO_WINDOW);
         controller.setView(welcomeView);
     }
 
