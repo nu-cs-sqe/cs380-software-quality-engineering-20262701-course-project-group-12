@@ -10,6 +10,7 @@ public class Pawn extends Piece {
     private static final int BLACK_STARTING_RANK = 7;
     private static final int ONE_SQUARE_ADVANCE = 1;
     private static final int TWO_SQUARE_ADVANCE = 2;
+    private static final int CAPTURE_FILE_DISTANCE = 1;
 
     private final int forwardDirection;
     private final int startingRank;
@@ -44,7 +45,9 @@ public class Pawn extends Piece {
     }
 
     private boolean canCapture(Location from, Location to, Board board) {
-        return forwardDistance(from, to) == ONE_SQUARE_ADVANCE && holdsOpponent(to, board);
+        return forwardDistance(from, to) == ONE_SQUARE_ADVANCE
+                && fileDistance(from, to) == CAPTURE_FILE_DISTANCE
+                && holdsOpponent(to, board);
     }
 
     private boolean holdsOpponent(Location square, Board board) {
@@ -65,5 +68,9 @@ public class Pawn extends Piece {
 
     private int forwardDistance(Location from, Location to) {
         return (to.getRank() - from.getRank()) * forwardDirection;
+    }
+
+    private int fileDistance(Location from, Location to) {
+        return Math.abs(to.getFile() - from.getFile());
     }
 }

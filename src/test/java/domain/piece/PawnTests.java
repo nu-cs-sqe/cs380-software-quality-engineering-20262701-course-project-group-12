@@ -234,4 +234,13 @@ public class PawnTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_CaptureOneRankForwardTwoFilesOver_ReturnsFalse() {
+        board.move(G7, G3);
+
+        boolean canMove = WHITE_PAWN.canMove(E2, G3, board);
+
+        assertFalse(canMove);
+    }
 }

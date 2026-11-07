@@ -317,7 +317,7 @@ story.
   - **Expected output**: `false`.
 
 - **TC-PAWN-24 — Reject a capture one rank forward and two files over**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`. `to` is
     g3 `(6, 3)`. New `Board` after `move` of the g7 pawn to g3, so g3
