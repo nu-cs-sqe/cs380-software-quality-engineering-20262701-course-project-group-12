@@ -124,7 +124,7 @@ light when it is even (h1 is light).
 ### Method under test: `canMove(Location from, Location to, Board board)`
 
 - **TC-BISHOP-01 — Move one square up and right onto an empty square**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White bishop on the dark square c1
     `(2, 1)`. `to` is d2 `(3, 2)`. The board is a new `Board` after
