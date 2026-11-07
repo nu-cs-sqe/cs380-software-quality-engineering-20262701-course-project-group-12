@@ -222,7 +222,7 @@ story.
     empty.
   - **Expected output**: `false`.
 
-- **TC-PAWN-12 — Reject a pawn moving one square sideways** ( :x: )
+- **TC-PAWN-12 — Reject a pawn moving one square sideways** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e4 `(4, 4)`. `to` is
     f4 `(5, 4)`. New `Board` after `move` of the e2 pawn to e4; f4 is
