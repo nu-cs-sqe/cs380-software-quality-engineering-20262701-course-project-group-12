@@ -150,4 +150,13 @@ public class QueenTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_KnightMoveOneFileAndTwoRanksAway_ReturnsFalse() {
+        board.move(D1, D4);
+
+        boolean canMove = WHITE_QUEEN.canMove(D4, E6, board);
+
+        assertFalse(canMove);
+    }
 }

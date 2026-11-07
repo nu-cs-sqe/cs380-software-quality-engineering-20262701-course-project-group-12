@@ -219,7 +219,7 @@ through `8`.
   - **Expected output**: `false`.
 
 - **TC-QUEEN-13 — Reject a knight's L one file and two ranks away**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White queen. `from` is d4 `(3, 4)`. `to` is
     e6 `(4, 6)`. New `Board` after `move` of the d1 queen to d4; e6 is
