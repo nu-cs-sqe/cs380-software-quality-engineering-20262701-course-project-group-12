@@ -187,7 +187,7 @@ story.
     holds a black pawn.
   - **Expected output**: `true`.
 
-- **TC-PAWN-07 — Capture with a black pawn** ( :x: )
+- **TC-PAWN-07 — Capture with a black pawn** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: Black pawn. `from` is d7 `(3, 7)`. `to` is
     e6 `(4, 6)`. New `Board` after `move` of the e2 pawn to e6, so e6
