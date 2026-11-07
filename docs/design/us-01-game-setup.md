@@ -13,7 +13,7 @@ Fields are private. Nothing gets a setter unless a later story has a reason for 
 
 ## UI sketch
 
-Startup shows the welcome screen. Start Game stays on this screen when a name is missing, and shows the error under the button.
+Startup shows the welcome screen. Start Game stays on this screen when a name is missing or the two names are the same, and shows the matching error under the button.
 
 ```text
 +--------------------------------------+
@@ -27,6 +27,9 @@ Startup shows the welcome screen. Start Game stays on this screen when a name is
 |   Both player names are required.    |
 +--------------------------------------+
 ```
+
+When the names match after trim and ignoring case, that error line is
+"Players must use different names." instead.
 
 A valid start closes that window and opens the game window. White is at the bottom. The lower-right square, h1, is light. The pieces are in the starting position. Nothing on this window moves a piece yet.
 
@@ -69,15 +72,23 @@ Start Game, with a missing or blank name:
 
 1. `WelcomeView` reads the two text fields and calls `WelcomeController.startGame`.
 2. The controller calls `Game.start`.
-3. `Game.start` trims both names, finds that one is empty, changes nothing, and returns false.
+3. `Game.start` trims both names, finds that one is empty, changes nothing, and throws `MissingPlayerNameException`.
 4. The controller tells `WelcomeView` to show "Both player names are required."
 5. The welcome window stays open.
 
-Start Game, with both names present:
+Start Game, with two names that match after trim and ignoring case:
 
 1. `WelcomeView` calls `WelcomeController.startGame`.
 2. The controller calls `Game.start`.
-3. `Game.start` stores Player 1 as White, Player 2 as Black, builds the starting board, sets the player to move to Player 1, and returns true.
+3. `Game.start` trims both names, finds that they are the same ignoring case, changes nothing, and throws `DuplicatePlayerNameException`.
+4. The controller tells `WelcomeView` to show "Players must use different names."
+5. The welcome window stays open.
+
+Start Game, with two different names:
+
+1. `WelcomeView` calls `WelcomeController.startGame`.
+2. The controller calls `Game.start`.
+3. `Game.start` stores Player 1 as White, Player 2 as Black, builds the starting board, and sets the player to move to Player 1.
 4. The controller closes the welcome window.
 5. The controller creates a `GameStatsController` and a `BoardController` from the started game, asks each for its view, puts those views in a `GameFrame`, and shows it.
 
@@ -131,12 +142,17 @@ classDiagram
 
 Owns the two players, the board, and whose turn it is. It is unstarted until `start` succeeds.
 
-`boolean start(String player1Name, String player2Name)`
+`void start(String player1Name, String player2Name)`
 
+`MissingPlayerNameException` and `DuplicatePlayerNameException` are unchecked
+project exceptions in `domain`.
+
+- If either name is null, throw `IllegalArgumentException`. Do not create players or a board.
 - Trim both names.
-- If either trimmed name is empty, return false. Do not create players or a board.
-- If both trimmed names contain a character, create Player 1 with White and that name, create Player 2 with Black and that name, create the starting `Board`, set the player to move to Player 1, and return true.
-- The same name may be used by both players. US-01 does not reject duplicates.
+- If either trimmed name is empty, throw `MissingPlayerNameException`. Do not create players or a board.
+- If the trimmed names are equal ignoring case, throw `DuplicatePlayerNameException`. Do not create players or a board. `Alice`, ` alice `, and `ALICE` are the same name.
+- Otherwise create Player 1 with White and the trimmed name, create Player 2 with Black and the trimmed name, create the starting `Board`, and set the player to move to Player 1.
+- Store the trimmed names with the case the players typed. Only the duplicate check ignores case.
 - This feature calls `start` once, from the welcome screen.
 
 `boolean isStarted()`
@@ -229,8 +245,9 @@ A square on the board. File 0 is the a-file and file 7 is the h-file. Rank is 1 
 `void startGame(String player1Name, String player2Name)`
 
 - Pass both strings to `Game.start` without trimming them first. Trimming is the model's job.
-- When `start` returns false, call `WelcomeView.showNamesRequired()` and leave the welcome window open.
-- When `start` returns true, close the welcome window, create the stats controller and the board controller from the started game, and show a `GameFrame` containing their views.
+- When `start` throws `MissingPlayerNameException`, call `WelcomeView.showNamesRequired()` and leave the welcome window open.
+- When `start` throws `DuplicatePlayerNameException`, call `WelcomeView.showDuplicateNames()` and leave the welcome window open.
+- When `start` completes, close the welcome window, create the stats controller and the board controller from the started game, and show a `GameFrame` containing their views.
 
 ### `WelcomeView`
 
@@ -239,6 +256,10 @@ Draws the welcome screen. On Start Game, it sends the current contents of the tw
 `void showNamesRequired()`
 
 - Show the text "Both player names are required."
+
+`void showDuplicateNames()`
+
+- Show the text "Players must use different names."
 
 `void close()`
 
