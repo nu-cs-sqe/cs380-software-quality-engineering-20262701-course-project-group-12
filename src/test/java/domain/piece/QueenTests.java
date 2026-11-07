@@ -88,4 +88,13 @@ public class QueenTests {
 
         assertTrue(canMove);
     }
+
+    @Test
+    public void CanMove_BlackQueenOneSquareDownAndLeftOntoEmptySquare_ReturnsTrue() {
+        board.move(D8, D5);
+
+        boolean canMove = BLACK_QUEEN.canMove(D5, C4, board);
+
+        assertTrue(canMove);
+    }
 }
