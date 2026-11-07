@@ -176,7 +176,7 @@ light when it is even (h1 is light).
   - **Expected output**: `true`.
 
 - **TC-BISHOP-07 — Reject the square the bishop already occupies**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White bishop. `from` and `to` are both c1
     `(2, 1)`. New `Board`.

@@ -5,6 +5,7 @@ import domain.Location;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BishopTests {
@@ -104,5 +105,14 @@ public class BishopTests {
         boolean canMove = bishop.canMove(H1, A8, board);
 
         assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_SameSquare_ReturnsFalse() {
+        Bishop bishop = new Bishop(PieceColor.WHITE);
+
+        boolean canMove = bishop.canMove(C1, C1, board);
+
+        assertFalse(canMove);
     }
 }
