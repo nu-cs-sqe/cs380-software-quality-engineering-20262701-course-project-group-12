@@ -1,10 +1,12 @@
 # BVA Analysis for Game
 
 `Game` decides whether a new chess game can start and, after a valid start,
-stores the two players, the starting board, and the player to move. The test
-cases below use the game's public behavior to observe its state.
+stores the two players, the starting board, and the player to move. Issue #41
+adds `passTurn`, which gives the turn to the other player after a legal move.
+The test cases below use the game's public behavior to observe its state.
 
-`start` returns nothing. It throws when a start is rejected.
+`start` returns nothing. It throws when a start is rejected. `passTurn`
+returns nothing. It throws when the game has not started.
 
 ## Boundaries Considered
 
@@ -214,8 +216,10 @@ These let a caller show a player's name without reaching through `Game` into
 | Output: the name | Cases | the stored, trimmed name of that player |
 | Output: signal for an unstarted game | Cases | `IllegalStateException` |
 
-The player to move is always Player 1 right after a start, so `playerToMoveName()`
-returns Player 1's name until a later story changes the turn.
+The player to move is Player 1 right after a start. After `passTurn` it is
+Player 2, then Player 1 again. `playerToMoveName()` and `colorToMove()`
+follow that player. `colorToMove()` is a query so `BoardController` can
+compare a piece's color without reaching through `Player`.
 
 - **TC-NAMES-01 — Read Player 1's name after a start** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `playerOneName()`
@@ -245,5 +249,52 @@ returns Player 1's name until a later story changes the turn.
 - **TC-NAMES-06 — Reject reading the name of the player to move before a
   start** ( :white_check_mark: )
   - **Method(s) under test**: `playerToMoveName()`
+  - **State of the system**: New game before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+### Method under test: `passTurn()`
+
+Issue #41. `Game` owns whose turn it is. `BoardController` calls `passTurn`
+after a legal move. Callers never pass arguments, so there is no null case.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the game's state | Cases | unstarted; started with Player 1 to move; started after one pass (Player 2 to move) |
+| Output: the player to move | Cases | Player 2; Player 1 |
+| Output: the color to move | Cases | Black; White |
+| Output: signal for an unstarted game | Cases | `IllegalStateException` |
+
+Out of scope: ending the game so further passes are refused (US-09 AC 8).
+Resign, checkmate, and the draw stories will add that state.
+
+- **TC-TURN-01 — Read the color to move after a start** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `colorToMove()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `WHITE`.
+
+- **TC-TURN-02 — Pass the turn after a start** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `passTurn()`,
+    `playerToMove()`, `playerToMoveName()`, `colorToMove()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `passTurn()`.
+  - **Expected output**: `playerToMove()` returns the same object as
+    `playerTwo()`; `playerToMoveName()` returns `Bob`; `colorToMove()`
+    returns `BLACK`.
+
+- **TC-TURN-03 — Pass the turn back to Player 1** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `passTurn()`,
+    `playerToMove()`, `colorToMove()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `passTurn()` twice.
+  - **Expected output**: `playerToMove()` returns the same object as
+    `playerOne()`; `colorToMove()` returns `WHITE`.
+
+- **TC-TURN-04 — Reject passing the turn before a start** ( :x: )
+  - **Method(s) under test**: `passTurn()`
+  - **State of the system**: New game before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+- **TC-TURN-05 — Reject reading the color to move before a start** ( :x: )
+  - **Method(s) under test**: `colorToMove()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
