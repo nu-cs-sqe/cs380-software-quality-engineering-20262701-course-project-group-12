@@ -22,6 +22,10 @@ public class BoardController {
         return board.pieceAt(location);
     }
 
+    public boolean isSelected(Location square) {
+        return false;
+    }
+
     public void clickSquare(Location square) {
         selectedSquare.ifPresentOrElse(
                 from -> moveSelectedPiece(from, square),

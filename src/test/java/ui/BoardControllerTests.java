@@ -18,6 +18,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardControllerTests {
+    @Test
+    public void IsSelected_NothingSelected_ReturnsFalse() {
+        BoardController controller = replayedController();
+
+        boolean isSelected = controller.isSelected(B1);
+
+        assertFalse(isSelected);
+        verify(board, piece);
+    }
+
     private static final Location A1 = new Location(0, 1);
     private static final Location A3 = new Location(0, 3);
     private static final Location B1 = new Location(1, 1);
