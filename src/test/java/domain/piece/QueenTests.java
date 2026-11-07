@@ -186,4 +186,13 @@ public class QueenTests {
 
         assertTrue(canMove);
     }
+
+    @Test
+    public void CanMove_FirstSquareOfFileOccupied_ReturnsFalse() {
+        board.move(D7, E6);
+
+        boolean canMove = WHITE_QUEEN.canMove(D1, D8, board);
+
+        assertFalse(canMove);
+    }
 }
