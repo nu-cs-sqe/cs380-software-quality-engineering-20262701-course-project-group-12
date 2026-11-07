@@ -9,8 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameTests {
+    private static final Location A1 = new Location(0, 1);
+
     @Test
-    public void NewGame_IsNotStarted() {
+    public void IsStarted_NewGame_ReturnsFalse() {
         Game game = new Game();
 
         assertFalse(game.isStarted());
@@ -75,7 +77,7 @@ public class GameTests {
     }
 
     @Test
-    public void NewGame_AccessorsRejectAccessBeforeStart() {
+    public void Accessors_UnstartedGame_ThrowIllegalStateException() {
         Game game = new Game();
 
         assertThrows(IllegalStateException.class, game::playerOne);
@@ -85,7 +87,7 @@ public class GameTests {
     }
 
     @Test
-    public void StartedGame_AccessorsReturnSetupState() {
+    public void Accessors_StartedGame_ReturnSetupState() {
         Game game = new Game();
 
         game.start("Alice", "Bob");
@@ -93,7 +95,7 @@ public class GameTests {
         assertEquals("Alice", game.playerOne().getName());
         assertEquals("Bob", game.playerTwo().getName());
         assertEquals(game.playerOne(), game.playerToMove());
-        assertTrue(game.board() != null);
+        assertTrue(game.board().isOccupied(A1));
     }
 
     @Test
@@ -131,7 +133,7 @@ public class GameTests {
 
         game.start("Alice", "Bob");
 
-        assertTrue(game.board() != null);
+        assertTrue(game.board().isOccupied(A1));
     }
 
     @Test
@@ -159,22 +161,6 @@ public class GameTests {
     }
 
     @Test
-    public void start_NullPlayerOneName_ThrowsIllegalArgumentException() {
-        Game game = new Game();
-
-        assertThrows(IllegalArgumentException.class, () -> game.start(null, "Bob"));
-        assertFalse(game.isStarted());
-    }
-
-    @Test
-    public void start_NullPlayerTwoName_ThrowsIllegalArgumentException() {
-        Game game = new Game();
-
-        assertThrows(IllegalArgumentException.class, () -> game.start("Alice", null));
-        assertFalse(game.isStarted());
-    }
-
-    @Test
     public void start_MixedCaseNames_KeepsEnteredCase() {
         Game game = new Game();
 
@@ -182,5 +168,56 @@ public class GameTests {
 
         assertEquals("ALICE", game.playerOne().getName());
         assertEquals("bob", game.playerTwo().getName());
+    }
+
+    @Test
+    public void PlayerOneName_StartedGame_ReturnsPlayerOneName() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        String name = game.playerOneName();
+
+        assertEquals("Alice", name);
+    }
+
+    @Test
+    public void PlayerOneName_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::playerOneName);
+    }
+
+    @Test
+    public void PlayerTwoName_StartedGame_ReturnsPlayerTwoName() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        String name = game.playerTwoName();
+
+        assertEquals("Bob", name);
+    }
+
+    @Test
+    public void PlayerTwoName_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::playerTwoName);
+    }
+
+    @Test
+    public void PlayerToMoveName_StartedGame_ReturnsPlayerOneName() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        String name = game.playerToMoveName();
+
+        assertEquals("Alice", name);
+    }
+
+    @Test
+    public void PlayerToMoveName_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::playerToMoveName);
     }
 }

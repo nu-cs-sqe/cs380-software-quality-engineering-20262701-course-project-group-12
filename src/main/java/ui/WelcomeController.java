@@ -10,7 +10,8 @@ public class WelcomeController {
 
     public WelcomeController(Game game) {
         if (game.isStarted()) {
-            throw new IllegalStateException();
+            throw new IllegalStateException(
+                    "Cannot create the welcome controller for a game that has already started");
         }
         this.game = game;
     }

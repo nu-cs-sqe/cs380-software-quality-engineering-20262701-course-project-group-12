@@ -1,20 +1,18 @@
-
 package ui;
 
 import domain.Game;
 
-import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Game game = new Game();
             WelcomeController controller = new WelcomeController(game);
-            WelcomeView view = createWelcomeView(controller);
+            JFrame window = new JFrame(Messages.text("welcome.window.title"));
+            WelcomeView view = createWelcomeView(controller, window::dispose);
             controller.setView(view);
-
-            JFrame window = new JFrame("Welcome to Chess");
             window.add(view);
             window.pack();
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -23,7 +21,7 @@ public class Main {
         });
     }
 
-    static WelcomeView createWelcomeView(WelcomeController controller) {
-        return new WelcomeView(controller);
+    static WelcomeView createWelcomeView(WelcomeController controller, Runnable closeWindow) {
+        return new WelcomeView(controller, closeWindow);
     }
 }

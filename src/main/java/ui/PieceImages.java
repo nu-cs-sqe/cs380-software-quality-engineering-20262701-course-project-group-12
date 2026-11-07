@@ -4,12 +4,12 @@ import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
+import javax.imageio.ImageIO;
 
 public class PieceImages {
     private static final String IMAGE_FOLDER = "/pieces/";

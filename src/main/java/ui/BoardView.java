@@ -3,7 +3,6 @@ package ui;
 import domain.Location;
 import domain.piece.Piece;
 
-import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -13,11 +12,14 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import javax.swing.JPanel;
 
 public class BoardView extends JPanel {
-    private static final int BOARD_SIZE = 8;
-    private static final int FIRST_RANK = 1;
-    private static final int LAST_RANK = BOARD_SIZE;
+    private static final int BOARD_SIZE = Location.MAX_FILE - Location.MIN_FILE + 1;
+    private static final int FIRST_FILE = Location.MIN_FILE;
+    private static final int LAST_FILE = Location.MAX_FILE;
+    private static final int FIRST_RANK = Location.MIN_RANK;
+    private static final int LAST_RANK = Location.MAX_RANK;
     private static final int TILE_SIZE = 80;
     private static final int BOARD_LENGTH = BOARD_SIZE * TILE_SIZE;
     private static final Color LIGHT_SQUARE = new Color(240, 217, 181);
@@ -31,9 +33,6 @@ public class BoardView extends JPanel {
     private final PieceImages pieceImages = new PieceImages();
 
     public BoardView(BoardController boardController) {
-        if (boardController == null) {
-            throw new IllegalArgumentException("Cannot create the board view without a board controller");
-        }
         this.boardController = boardController;
         int sideLength = BOARD_LENGTH + LABEL_MARGIN;
         setPreferredSize(new Dimension(sideLength, sideLength));
@@ -55,7 +54,7 @@ public class BoardView extends JPanel {
 
     private void paintSquares(Graphics graphics) {
         for (int rank = LAST_RANK; rank >= FIRST_RANK; rank--) {
-            for (int file = 0; file < BOARD_SIZE; file++) {
+            for (int file = FIRST_FILE; file <= LAST_FILE; file++) {
                 paintSquare(graphics, new Location(file, rank));
             }
         }
@@ -64,7 +63,8 @@ public class BoardView extends JPanel {
     private void paintSquare(Graphics graphics, Location location) {
         boolean isLightSquare = (location.getFile() + location.getRank()) % 2 == 0;
         graphics.setColor(isLightSquare ? LIGHT_SQUARE : DARK_SQUARE);
-        graphics.fillRect(xOf(location.getFile()), yOf(location.getRank()), TILE_SIZE, TILE_SIZE);
+        graphics.fillRect(leftEdgeOf(location.getFile()), topEdgeOf(location.getRank()),
+                TILE_SIZE, TILE_SIZE);
         if (boardController.isOccupied(location)) {
             drawPiece(graphics, location);
         }
@@ -73,9 +73,9 @@ public class BoardView extends JPanel {
     private void drawPiece(Graphics graphics, Location location) {
         Piece piece = boardController.pieceAt(location);
         BufferedImage image = pieceImages.imageOf(piece);
-        int x = xOf(location.getFile());
-        int y = yOf(location.getRank());
-        graphics.drawImage(image, x, y, TILE_SIZE, TILE_SIZE, this);
+        int left = leftEdgeOf(location.getFile());
+        int top = topEdgeOf(location.getRank());
+        graphics.drawImage(image, left, top, TILE_SIZE, TILE_SIZE, this);
     }
 
     private void paintLabels(Graphics graphics) {
@@ -86,16 +86,17 @@ public class BoardView extends JPanel {
     }
 
     private void paintFileLabels(Graphics graphics) {
-        for (int file = 0; file < BOARD_SIZE; file++) {
-            String fileLetter = String.valueOf((char) (FIRST_FILE_LETTER + file));
-            Rectangle belowFile = new Rectangle(xOf(file), BOARD_LENGTH, TILE_SIZE, LABEL_MARGIN);
+        for (int file = FIRST_FILE; file <= LAST_FILE; file++) {
+            String fileLetter = String.valueOf((char) (FIRST_FILE_LETTER + file - FIRST_FILE));
+            Rectangle belowFile =
+                    new Rectangle(leftEdgeOf(file), BOARD_LENGTH, TILE_SIZE, LABEL_MARGIN);
             drawCentered(graphics, fileLetter, belowFile);
         }
     }
 
     private void paintRankLabels(Graphics graphics) {
         for (int rank = FIRST_RANK; rank <= LAST_RANK; rank++) {
-            Rectangle besideRank = new Rectangle(0, yOf(rank), LABEL_MARGIN, TILE_SIZE);
+            Rectangle besideRank = new Rectangle(0, topEdgeOf(rank), LABEL_MARGIN, TILE_SIZE);
             drawCentered(graphics, String.valueOf(rank), besideRank);
         }
     }
@@ -107,11 +108,11 @@ public class BoardView extends JPanel {
         graphics.drawString(text, textX, textY);
     }
 
-    private int xOf(int file) {
-        return LABEL_MARGIN + file * TILE_SIZE;
+    private int leftEdgeOf(int file) {
+        return LABEL_MARGIN + (file - FIRST_FILE) * TILE_SIZE;
     }
 
-    private int yOf(int rank) {
+    private int topEdgeOf(int rank) {
         return (LAST_RANK - rank) * TILE_SIZE;
     }
 }
