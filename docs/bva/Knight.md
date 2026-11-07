@@ -180,7 +180,7 @@ through `8`.
   - **Expected output**: `true`.
 
 - **TC-KNIGHT-09 — Move from the lowest corner two up and one right**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White knight. `from` is a1 `(0, 1)`. `to`
     is b3 `(1, 3)`. New `Board` after `move` of the b1 knight to a1, in
