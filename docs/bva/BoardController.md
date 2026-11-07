@@ -6,6 +6,7 @@
 - `boolean isOccupied(Location location)`: returns `board.isOccupied(location)`.
 - `Piece pieceAt(Location location)`: returns `board.pieceAt(location)`. It does not choose a different piece. `Board` throws `IllegalArgumentException` for an empty square, and the controller lets that exception through. No method returns null.
 - `void clickSquare(Location square)` (issue #34): handles a click on a square. With nothing selected, a click on an occupied square selects it, and a click on an empty square does nothing. With a square selected, the click is the destination: when the selected piece `canMove` there, the board moves it. Either way the selection is then cleared. It does not check whose turn it is (US-09) and does not tell the player about a refused move (US-10).
+- `boolean isSelected(Location square)` (issue #34): returns true when `square` is the selected square, compared by file and rank. `BoardView` uses it to color the selected square.
 
 No method checks its arguments for null, and no case passes null: our code never passes null (instructor code review, Week 6). TC2, TC5, and TC8 used to pass a null board or location; they were removed with the board check.
 
@@ -80,3 +81,11 @@ The selection is private, so it is observed through the next click: a selected s
 | TC11: a click on an empty square selects nothing | a controller for the mocked board; the board answers false for a3 `(0, 3)` and for c3; click a3, then c3 | no piece is asked about a move; the board does not move any piece | :white_check_mark: |
 | TC12: a move clears the selection | as TC9, and the board answers false for a3; click b1, then c3, then a3 | the board moves the piece from b1 to c3 once; the click on a3 asks no piece about a move | :white_check_mark: |
 | TC13: a refused move clears the selection | as TC10, and the board answers false for c3; click b1, then b3, then c3 | no piece is asked about c3; the board does not move any piece | :white_check_mark: |
+
+### Method under test: `isSelected(Location square)`
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC14: nothing selected | a controller for the mocked board, no clicks yet; ask about b1 `(1, 1)` | false | :x: |
+| TC15: the selected square | a controller for the mocked board; the board answers true for b1; click b1, then ask about a second b1 object | true | :x: |
+| TC16: another square while one is selected | a controller for the mocked board; the board answers true for b1; click b1, then ask about c3 `(2, 3)` | false | :x: |
