@@ -28,7 +28,7 @@ public class BoardController {
 
     public void clickSquare(Location square) {
         selectedSquare.ifPresentOrElse(
-                from -> moveSelectedPiece(from, square),
+                from -> moveOrChangeSelection(from, square),
                 () -> select(square));
     }
 
@@ -38,10 +38,12 @@ public class BoardController {
         }
     }
 
-    private void moveSelectedPiece(Location from, Location to) {
+    private void moveOrChangeSelection(Location from, Location to) {
         if (board.pieceAt(from).canMove(from, to, board)) {
             board.move(from, to);
             selectedSquare = Optional.empty();
+        } else {
+            select(to);
         }
     }
 }
