@@ -196,7 +196,7 @@ through `8`.
   - **Expected output**: `true`.
 
 - **TC-KNIGHT-11 — Move a black knight from the highest corner two down
-  and one left** ( :x: )
+  and one left** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: Black knight. `from` is h8 `(7, 8)`. `to`
     is g6 `(6, 6)`. New `Board` after `move` of the g8 knight to h8, in
