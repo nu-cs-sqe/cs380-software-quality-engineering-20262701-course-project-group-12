@@ -11,10 +11,14 @@ public class King extends Piece {
     }
 
     public boolean canMove(Location from, Location to, Board board) {
-        if (board.isOccupied(to)) {
+        if (holdsOwnPiece(to, board)) {
             return false;
         }
         return Math.max(fileDistance(from, to), rankDistance(from, to)) == ONE_SQUARE;
+    }
+
+    private boolean holdsOwnPiece(Location square, Board board) {
+        return board.isOccupied(square) && board.pieceAt(square).getColor() == getColor();
     }
 
     private int rankDistance(Location from, Location to) {

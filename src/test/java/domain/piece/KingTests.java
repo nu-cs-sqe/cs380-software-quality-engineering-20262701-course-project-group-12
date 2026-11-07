@@ -167,4 +167,14 @@ public class KingTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_AdjacentOpponent_ReturnsTrue() {
+        board.move(E2, E4);
+        board.move(E7, E2);
+
+        boolean canMove = WHITE_KING.canMove(E1, E2, board);
+
+        assertTrue(canMove);
+    }
 }

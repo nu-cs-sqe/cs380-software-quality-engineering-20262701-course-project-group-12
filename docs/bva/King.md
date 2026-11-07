@@ -231,7 +231,7 @@ US-12 will decide when two squares along the rank is a castle.
     e2 `(4, 2)`. New `Board`; e2 holds the white e-pawn.
   - **Expected output**: `false`.
 
-- **TC-KING-16 — Capture an adjacent opponent** ( :x: )
+- **TC-KING-16 — Capture an adjacent opponent** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king. `from` is e1 `(4, 1)`. `to` is
     e2 `(4, 2)`. The board is a new `Board` after `move` of the e2 pawn
