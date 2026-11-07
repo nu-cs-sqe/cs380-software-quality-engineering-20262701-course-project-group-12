@@ -16,6 +16,7 @@ public class KnightTests {
     private static final Location C3 = new Location(2, 3);
     private static final Location C4 = new Location(2, 4);
     private static final Location C5 = new Location(2, 5);
+    private static final Location C7 = new Location(2, 7);
     private static final Location D2 = new Location(3, 2);
     private static final Location D3 = new Location(3, 3);
     private static final Location D6 = new Location(3, 6);
@@ -230,6 +231,15 @@ public class KnightTests {
         boolean canMove = WHITE_KNIGHT.canMove(G1, E2, board);
 
         assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_Opponent_ReturnsTrue() {
+        board.move(C7, C3);
+
+        boolean canMove = WHITE_KNIGHT.canMove(B1, C3, board);
+
+        assertTrue(canMove);
     }
 
     private void placeWhiteKnightOnE4WithEmptyDestinations() {
