@@ -31,7 +31,7 @@ public class Pawn extends Piece {
         }
         int forwardDistance = forwardDistance(from, to);
         if (forwardDistance == TWO_SQUARE_ADVANCE) {
-            return isOnStartingRank(from);
+            return isOnStartingRank(from) && !board.isOccupied(squareInFrontOf(from));
         }
         return forwardDistance == ONE_SQUARE_ADVANCE;
     }
@@ -42,6 +42,10 @@ public class Pawn extends Piece {
 
     private boolean isOnStartingRank(Location square) {
         return square.getRank() == startingRank;
+    }
+
+    private Location squareInFrontOf(Location square) {
+        return new Location(square.getFile(), square.getRank() + forwardDirection);
     }
 
     private int forwardDistance(Location from, Location to) {
