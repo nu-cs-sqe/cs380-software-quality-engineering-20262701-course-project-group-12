@@ -32,12 +32,6 @@ public class BoardController {
                 () -> select(square));
     }
 
-    private void select(Location square) {
-        if (board.isOccupied(square)) {
-            selectedSquare = Optional.of(square);
-        }
-    }
-
     private void handleClickWithSelection(Location selected, Location square) {
         if (square.isSameSquareAs(selected)) {
             clearSelection();
@@ -52,6 +46,12 @@ public class BoardController {
             clearSelection();
         } else {
             select(to);
+        }
+    }
+
+    private void select(Location square) {
+        if (board.isOccupied(square)) {
+            selectedSquare = Optional.of(square);
         }
     }
 
