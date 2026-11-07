@@ -41,10 +41,12 @@ light when it is even (h1 is light).
   - c8 `(2, 8)`, the black light-square bishop
   - f8 `(5, 8)`, the black dark-square bishop
   - a1 `(0, 1)`, a corner
+  - c8 moved to a8 `(0, 8)`, a black bishop in the opposite corner
 - **Input: `to`**
   - the same square as `from`
   - one square along each of the four diagonal directions
-  - seven squares along a diagonal, corner to corner
+  - seven squares along a diagonal, corner to corner, toward rank 8 and
+    toward rank 1
   - one square along the file
   - one square along the rank
   - two squares along the file, a square of the same color
@@ -89,6 +91,8 @@ light when it is even (h1 is light).
   move has many; the first and last squares stand for that block. An
   interior blocker is not its own case. Distance `2` is inside `[1, 7]`,
   so it is not a separate case.
+- A long move walks its between-squares toward rank 8 or toward rank 1,
+  so a seven-square move appears in both rank directions.
 - The destination occupant is a case: empty, opponent, same color.
 - Bishop color does not change the geometry, so each color appears in at
   least one case.
@@ -105,6 +109,8 @@ light when it is even (h1 is light).
 - Seven squares onto an empty square on each long diagonal:
   - the dark diagonal, a1 `(0, 1)` to h8 `(7, 8)`
   - the light diagonal, h1 `(7, 1)` to a8 `(0, 8)`
+- Seven squares toward rank 1 onto an empty square: black a8 `(0, 8)` to
+  h1 `(7, 1)` on the light diagonal.
 - The same square: c1 to c1.
 - One square along the file: c1 to c2 `(2, 2)`, a light square.
 - One square along the rank: c1 to d1 `(3, 1)`, a light square.
@@ -259,3 +265,13 @@ light when it is even (h1 is light).
     the b2 pawn to b4 `(1, 4)`, so b2 through f6 are empty, g7 still
     holds the black g-pawn, and h8 holds the black rook.
   - **Expected output**: `false`.
+
+- **TC-BISHOP-18 — Move a black bishop seven squares toward rank 1 onto
+  an empty square** ( :x: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: Black bishop on the light square a8
+    `(0, 8)`. `to` is h1 `(7, 1)`. The board is a new `Board` after
+    `move` of the c8 bishop to a8, the b7 pawn to b5 `(1, 5)`, the g2
+    pawn to g4 `(6, 4)`, and the h1 rook to h3 `(7, 3)`. Every square
+    from b7 through h1 is empty.
+  - **Expected output**: `true`.
