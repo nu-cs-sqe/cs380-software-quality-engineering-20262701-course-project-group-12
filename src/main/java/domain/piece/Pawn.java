@@ -29,6 +29,9 @@ public class Pawn extends Piece {
         if (isOnSameFile(from, to) && board.isOccupied(to)) {
             return false;
         }
+        if (!isOnSameFile(from, to) && !board.isOccupied(to)) {
+            return false;
+        }
         int forwardDistance = forwardDistance(from, to);
         if (forwardDistance == TWO_SQUARE_ADVANCE) {
             return isOnStartingRank(from) && !board.isOccupied(squareInFrontOf(from));

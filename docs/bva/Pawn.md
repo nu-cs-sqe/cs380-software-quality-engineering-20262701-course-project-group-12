@@ -282,7 +282,7 @@ story.
     empty and e4 holds a black pawn.
   - **Expected output**: `false`.
 
-- **TC-PAWN-20 — Reject a diagonal move onto an empty square** ( :x: )
+- **TC-PAWN-20 — Reject a diagonal move onto an empty square** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`. `to` is
     f3 `(5, 3)`. New `Board`; f3 is empty.

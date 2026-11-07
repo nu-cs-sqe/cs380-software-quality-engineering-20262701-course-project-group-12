@@ -22,6 +22,7 @@ public class PawnTests {
     private static final Location E5 = new Location(4, 5);
     private static final Location E6 = new Location(4, 6);
     private static final Location E7 = new Location(4, 7);
+    private static final Location F3 = new Location(5, 3);
     private static final Location F4 = new Location(5, 4);
     private static final Location G1 = new Location(6, 1);
     private static final Location G3 = new Location(6, 3);
@@ -193,6 +194,13 @@ public class PawnTests {
         board.move(E7, E4);
 
         boolean canMove = WHITE_PAWN.canMove(E2, E4, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_DiagonalOntoEmptySquare_ReturnsFalse() {
+        boolean canMove = WHITE_PAWN.canMove(E2, F3, board);
 
         assertFalse(canMove);
     }
