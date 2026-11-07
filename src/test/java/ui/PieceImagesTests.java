@@ -81,6 +81,11 @@ public class PieceImagesTests {
         assertImageOf(PieceType.KING, PieceColor.WHITE, "white-king.png");
     }
 
+    @Test
+    public void ImageOf_BlackKing_ReturnsTheBlackKingImage() throws IOException {
+        assertImageOf(PieceType.KING, PieceColor.BLACK, "black-king.png");
+    }
+
     private static void assertImageOf(PieceType type, PieceColor color, String fileName)
             throws IOException {
         BufferedImage expected = readStandardImage(fileName);
