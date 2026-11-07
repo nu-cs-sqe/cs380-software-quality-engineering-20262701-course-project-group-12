@@ -156,7 +156,7 @@ light when it is even (h1 is light).
   - **Expected output**: `true`.
 
 - **TC-BISHOP-05 — Move seven squares along the dark diagonal onto an
-  empty square** ( :x: )
+  empty square** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White bishop. `from` is a1 `(0, 1)`. `to`
     is h8 `(7, 8)`. The board is a new `Board` after `move` of the c1

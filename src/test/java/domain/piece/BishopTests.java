@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BishopTests {
+    private static final Location A1 = new Location(0, 1);
     private static final Location B2 = new Location(1, 2);
     private static final Location B4 = new Location(1, 4);
     private static final Location C1 = new Location(2, 1);
@@ -19,6 +20,10 @@ public class BishopTests {
     private static final Location E5 = new Location(4, 5);
     private static final Location E7 = new Location(4, 7);
     private static final Location F8 = new Location(5, 8);
+    private static final Location G5 = new Location(6, 5);
+    private static final Location G7 = new Location(6, 7);
+    private static final Location H6 = new Location(7, 6);
+    private static final Location H8 = new Location(7, 8);
 
     private Board board;
 
@@ -63,6 +68,19 @@ public class BishopTests {
         Bishop bishop = new Bishop(PieceColor.BLACK);
 
         boolean canMove = bishop.canMove(F8, E7, board);
+
+        assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_SevenSquaresAlongDarkDiagonalOntoEmptySquare_ReturnsTrue() {
+        board.move(C1, A1);
+        board.move(B2, B4);
+        board.move(G7, G5);
+        board.move(H8, H6);
+        Bishop bishop = new Bishop(PieceColor.WHITE);
+
+        boolean canMove = bishop.canMove(A1, H8, board);
 
         assertTrue(canMove);
     }
