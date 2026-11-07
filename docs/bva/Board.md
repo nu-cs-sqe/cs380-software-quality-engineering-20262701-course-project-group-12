@@ -3,13 +3,15 @@
 `Board` owns the 64 squares. The piece array is private.
 
 - `Board()`: places the starting position. Rank 8, a through h: black rook, knight, bishop, queen, king, bishop, knight, rook. Rank 7: eight black pawns. Ranks 6 through 3: empty. Rank 2: eight white pawns. Rank 1, a through h: white rook, knight, bishop, queen, king, bishop, knight, rook.
-- `boolean isOccupied(Location location)`: returns true when a piece stands on that square and false when it is empty. Requires a non-null location and throws `IllegalArgumentException` otherwise. Does not change the board.
-- `Piece pieceAt(Location location)`: returns the piece on that square. Requires a non-null location of an occupied square and throws `IllegalArgumentException` otherwise. Does not change the board.
-- `void move(Location from, Location to)` (issue #19): puts the piece from `from` on `to`, and `from` becomes empty. A piece already on `to` is replaced; this is the board side of a capture. Moving a piece to its own square leaves the board unchanged. Throws `IllegalArgumentException` when `from` is empty or either square is null, and then leaves the board unchanged. It does not check whether the move is legal, does not change whose turn it is, and does not touch the UI.
+- `boolean isOccupied(Location location)`: returns true when a piece stands on that square and false when it is empty. Does not change the board.
+- `Piece pieceAt(Location location)`: returns the piece on that square. Requires an occupied square and throws `IllegalArgumentException` otherwise. Does not change the board.
+- `void move(Location from, Location to)` (issue #19): puts the piece from `from` on `to`, and `from` becomes empty. A piece already on `to` is replaced; this is the board side of a capture. Moving a piece to its own square leaves the board unchanged. Throws `IllegalArgumentException` when `from` is empty, and then leaves the board unchanged. It does not check whether the move is legal, does not change whose turn it is, and does not touch the UI.
 
 No method returns null. The project rules forbid it, so an empty square is reported by `isOccupied` instead of a null from `pieceAt`. Callers ask `isOccupied` before `pieceAt`. TC9 through TC12 used to expect null from `pieceAt` on the empty ranks; they now check those squares with `isOccupied`.
 
 Issue #19 says that after a move `pieceAt(from)` returns null. Under the no-null rule, the emptied square is checked with `isOccupied(from)`, which returns false.
+
+No method checks its arguments for null, and no case passes null. Our own code is the only caller and never passes null, so a null check would guard against nothing (instructor code review, Week 6). TC21, TC30, TC42, and TC43 used to pass a null location and expect `IllegalArgumentException`; they were removed with the checks. TC44 used to reject a move to null; it now rejects a move from an empty square.
 
 File 0 is the a-file and file 7 is the h-file. The squares are private, so the constructor and `move` are checked through `pieceAt` and `isOccupied`.
 
@@ -24,7 +26,7 @@ The ranks fall into five blocks. The test values are the edges of those blocks, 
 | Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
 | --- | --- | --- |
 | Input: the board | Collection of 64 squares, the maximum size | a new `Board` in the starting position |
-| Input: `location` | Pointer | null; a location |
+| Input: `location` | Pointer | a location (no null: callers never pass one) |
 | Input: file of the location | Interval `[0, 7]` | `0`, `7` |
 | Input: rank of the location | Edges of the rank blocks | `1` white back rank; `2` white pawns; `3` first empty rank; `7` black pawns; `8` black back rank |
 | Input: the pair `(file, rank)` | Pair of intervals | both lows, a1 `(0, 1)`; both highs, h8 `(7, 8)`; a8 `(0, 8)`; h1 `(7, 1)` |
@@ -39,7 +41,7 @@ The same rank blocks apply. Ranks 3 and 6 stand for the empty block, at file 0 a
 | Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
 | --- | --- | --- |
 | Input: the board | Collection of 64 squares | a new `Board` in the starting position |
-| Input: `location` | Pointer | null; a location |
+| Input: `location` | Pointer | a location (no null: callers never pass one) |
 | Input: file of the location | Interval `[0, 7]` | `0`, `7` |
 | Input: rank of the location | Edges of the rank blocks | `1` white back rank; `2` white pawns; `3` first empty rank; `6` last empty rank; `7` black pawns; `8` black back rank |
 | Input: the pair `(file, rank)` | Pair of intervals | both lows, a1 `(0, 1)`; both highs, h8 `(7, 8)`; a8 `(0, 8)`; h1 `(7, 1)` |
@@ -52,8 +54,8 @@ The starting position has a rook on every corner, so each corner can be both a `
 | Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
 | --- | --- | --- |
 | Input: the board | Collection of 64 squares | a new `Board` in the starting position |
-| Input: `from` | Pointer | null; a location |
-| Input: `to` | Pointer | null; a location |
+| Input: `from` | Pointer | a location (no null: callers never pass one) |
+| Input: `to` | Pointer | a location (no null: callers never pass one) |
 | Input: the pair `(file, rank)` of `from` | Pair of intervals | both lows, a1 `(0, 1)`; both highs, h8 `(7, 8)`; low file and high rank, a8 `(0, 8)`; high file and low rank, h1 `(7, 1)` |
 | Input: the pair `(file, rank)` of `to` | Pair of intervals | both lows, a1 `(0, 1)`; both highs, h8 `(7, 8)`; low file and high rank, a8 `(0, 8)`; high file and low rank, h1 `(7, 1)` |
 | Input: occupant of `from` | Cases | a piece; empty, a4 `(0, 4)` |
@@ -88,7 +90,6 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC18: d8, black queen | a new `Board`; location `(3, 8)` | black queen | :white_check_mark: |
 | TC19: e8, black king | a new `Board`; location `(4, 8)` | black king | :white_check_mark: |
 | TC20: h8, both highs | a new `Board`; location `(7, 8)` | black rook | :white_check_mark: |
-| TC21: null location | a new `Board`; location is null | throws `IllegalArgumentException` | :white_check_mark: |
 | TC22: the board is unchanged | a new `Board`; call `pieceAt` on `(0, 1)` twice | both calls return a white rook | :white_check_mark: |
 | TC31: a3, an empty square | a new `Board`; location `(0, 3)` | throws `IllegalArgumentException` | :white_check_mark: |
 
@@ -106,7 +107,6 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC27: a7, first file of the black pawns | a new `Board`; location `(0, 7)` | true | :white_check_mark: |
 | TC28: a8, low file and high rank | a new `Board`; location `(0, 8)` | true | :white_check_mark: |
 | TC29: h8, both highs | a new `Board`; location `(7, 8)` | true | :white_check_mark: |
-| TC30: null location | a new `Board`; location is null | throws `IllegalArgumentException` | :white_check_mark: |
 
 ### Method under test: `Board()`
 
@@ -128,6 +128,4 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC39: from high file and low rank, to both highs | a new `Board`; move h1 `(7, 1)` to h8 `(7, 8)` | `pieceAt(h8)` is the white rook that was on h1 | :white_check_mark: |
 | TC40: to the same square | a new `Board`; move a1 `(0, 1)` to a1 `(0, 1)` | `pieceAt(a1)` is still the white rook | :white_check_mark: |
 | TC41: from an empty square | a new `Board`; move a4 `(0, 4)` to a5 `(0, 5)` | throws `IllegalArgumentException` | :white_check_mark: |
-| TC42: null from | a new `Board`; move null to a4 `(0, 4)` | throws `IllegalArgumentException` | :white_check_mark: |
-| TC43: null to | a new `Board`; move a1 `(0, 1)` to null | throws `IllegalArgumentException` | :white_check_mark: |
-| TC44: a rejected move leaves the board unchanged | a new `Board`; move a1 `(0, 1)` to null | `pieceAt(a1)` is still the white rook | :white_check_mark: |
+| TC44: a rejected move leaves the board unchanged | a new `Board`; move a4 `(0, 4)` to a1 `(0, 1)` | `pieceAt(a1)` is still the white rook | :white_check_mark: |

@@ -44,9 +44,6 @@ public class Board {
     }
 
     public Piece pieceAt(Location location) {
-        if (location == null) {
-            throw new IllegalArgumentException("Cannot read a piece from a null square");
-        }
         if (!isOccupied(location)) {
             throw new IllegalArgumentException("Cannot read a piece from the empty square at file "
                     + location.getFile() + ", rank " + location.getRank());
@@ -55,19 +52,10 @@ public class Board {
     }
 
     public boolean isOccupied(Location location) {
-        if (location == null) {
-            throw new IllegalArgumentException("Cannot check whether a null square is occupied");
-        }
         return squares[rowOf(location)][location.getFile()] != null;
     }
 
     public void move(Location from, Location to) {
-        if (from == null) {
-            throw new IllegalArgumentException("Cannot move a piece from a null square");
-        }
-        if (to == null) {
-            throw new IllegalArgumentException("Cannot move a piece to a null square");
-        }
         Piece movingPiece = pieceAt(from);
         clear(from);
         place(movingPiece, to);

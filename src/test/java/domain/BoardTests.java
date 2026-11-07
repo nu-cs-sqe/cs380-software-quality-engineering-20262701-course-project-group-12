@@ -122,13 +122,6 @@ public class BoardTests {
     }
 
     @Test
-    public void PieceAt_NullLocation_ThrowsIllegalArgumentException() {
-        Board board = new Board();
-
-        assertThrows(IllegalArgumentException.class, () -> board.pieceAt(null));
-    }
-
-    @Test
     public void PieceAt_EmptyA3_ThrowsIllegalArgumentException() {
         Board board = new Board();
 
@@ -176,13 +169,6 @@ public class BoardTests {
     @Test
     public void IsOccupied_H8_ReturnsTrue() {
         assertIsOccupied(7, 8);
-    }
-
-    @Test
-    public void IsOccupied_NullLocation_ThrowsIllegalArgumentException() {
-        Board board = new Board();
-
-        assertThrows(IllegalArgumentException.class, () -> board.isOccupied(null));
     }
 
     @Test
@@ -281,25 +267,11 @@ public class BoardTests {
     }
 
     @Test
-    public void Move_NullFrom_ThrowsIllegalArgumentException() {
-        Board board = new Board();
-
-        assertThrows(IllegalArgumentException.class, () -> board.move(null, A4));
-    }
-
-    @Test
-    public void Move_NullTo_ThrowsIllegalArgumentException() {
-        Board board = new Board();
-
-        assertThrows(IllegalArgumentException.class, () -> board.move(A1, null));
-    }
-
-    @Test
-    public void Move_A1ToNull_LeavesTheRookOnA1() {
+    public void Move_EmptyA4ToA1_LeavesTheRookOnA1() {
         Board board = new Board();
         Piece whiteRook = board.pieceAt(A1);
 
-        assertThrows(IllegalArgumentException.class, () -> board.move(A1, null));
+        assertThrows(IllegalArgumentException.class, () -> board.move(A4, A1));
 
         assertSame(whiteRook, board.pieceAt(A1));
     }
