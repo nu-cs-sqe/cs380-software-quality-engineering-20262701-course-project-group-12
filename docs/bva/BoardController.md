@@ -84,7 +84,7 @@ The selection is private, so it is observed through the next click: a selected s
 | TC12: a move clears the selection | as TC9, and the board answers false for a3; click b1, then c3, then a3 | the board moves the piece from b1 to c3 once; the click on a3 asks no piece about a move | :white_check_mark: |
 | TC13: a refused move onto an empty square keeps the selection | as TC10; click b1, then b3, then ask `isSelected` about b1 | true | :white_check_mark: |
 | TC17: a click on a piece the selected one cannot reach selects that piece | a controller for the mocked board; the board answers true for b1 and for d2 `(3, 2)` and returns a mocked piece that cannot move from b1 to d2; click b1, then d2, then ask `isSelected` about d2 | true; the board does not move any piece | :white_check_mark: |
-| TC18: a click on the selected square clears the selection | a controller for the mocked board; the board answers true for b1; click b1, then click a second b1 object, then ask `isSelected` about b1 | false; no piece is asked about a move | :x: |
+| TC18: a click on the selected square clears the selection | a controller for the mocked board; the board answers true for b1; click b1, then click a second b1 object, then ask `isSelected` about b1 | false; no piece is asked about a move | :white_check_mark: |
 
 TC13 used to expect a refused move to clear the selection. The player asked for the selected square to stay highlighted until a move or another piece is chosen, which is also US-10 AC 5, so TC13 now expects the selection to stay.
 
