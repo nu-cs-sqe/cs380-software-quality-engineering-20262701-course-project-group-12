@@ -188,7 +188,7 @@ US-12 will decide when two squares along the rank is a castle.
     `(4, 1)`. New `Board`.
   - **Expected output**: `false`.
 
-- **TC-KING-10 — Reject two squares along the file** ( :x: )
+- **TC-KING-10 — Reject two squares along the file** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king on e4 `(4, 4)`. `to` is e6
     `(4, 6)`. The board is a new `Board` after `move` of the king from

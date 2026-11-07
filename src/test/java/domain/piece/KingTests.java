@@ -15,6 +15,7 @@ public class KingTests {
     private static final Location E1 = new Location(4, 1);
     private static final Location E4 = new Location(4, 4);
     private static final Location E5 = new Location(4, 5);
+    private static final Location E6 = new Location(4, 6);
     private static final Location F3 = new Location(5, 3);
     private static final Location F4 = new Location(5, 4);
     private static final Location F5 = new Location(5, 5);
@@ -105,6 +106,15 @@ public class KingTests {
     @Test
     public void CanMove_SameSquare_ReturnsFalse() {
         boolean canMove = WHITE_KING.canMove(E1, E1, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_TwoSquaresAlongTheFile_ReturnsFalse() {
+        board.move(E1, E4);
+
+        boolean canMove = WHITE_KING.canMove(E4, E6, board);
 
         assertFalse(canMove);
     }
