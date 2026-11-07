@@ -237,7 +237,7 @@ through `8`.
     square setup). `to` is g6 `(6, 6)`, empty.
   - **Expected output**: `false`.
 
-- **TC-KNIGHT-17 — Reject two squares along the file** ( :x: )
+- **TC-KNIGHT-17 — Reject two squares along the file** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White knight on e4 `(4, 4)` (the central
     square setup). `to` is e6 `(4, 6)`, empty.
