@@ -12,7 +12,7 @@ public class Knight extends Piece {
     }
 
     public boolean canMove(Location from, Location to, Board board) {
-        return isKnightJump(from, to);
+        return isKnightJump(from, to) && !holdsOwnPiece(to, board);
     }
 
     private boolean isKnightJump(Location from, Location to) {
@@ -20,5 +20,9 @@ public class Knight extends Piece {
         int rankDistance = Math.abs(to.getRank() - from.getRank());
         return fileDistance == SHORT_LEG && rankDistance == LONG_LEG
                 || fileDistance == LONG_LEG && rankDistance == SHORT_LEG;
+    }
+
+    private boolean holdsOwnPiece(Location square, Board board) {
+        return board.isOccupied(square) && board.pieceAt(square).getColor() == getColor();
     }
 }
