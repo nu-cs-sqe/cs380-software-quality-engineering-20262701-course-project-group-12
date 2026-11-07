@@ -13,6 +13,7 @@ public class QueenTests {
     private static final Location D4 = new Location(3, 4);
     private static final Location D5 = new Location(3, 5);
     private static final Location E4 = new Location(4, 4);
+    private static final Location E5 = new Location(4, 5);
     private static final Queen WHITE_QUEEN = new Queen(PieceColor.WHITE);
 
     private Board board;
@@ -45,6 +46,15 @@ public class QueenTests {
         board.move(D1, D4);
 
         boolean canMove = WHITE_QUEEN.canMove(D4, C4, board);
+
+        assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_OneSquareUpAndRightOntoEmptySquare_ReturnsTrue() {
+        board.move(D1, D4);
+
+        boolean canMove = WHITE_QUEEN.canMove(D4, E5, board);
 
         assertTrue(canMove);
     }
