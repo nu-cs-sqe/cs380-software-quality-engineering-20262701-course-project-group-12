@@ -33,11 +33,6 @@ public class WelcomeControllerTests {
     }
 
     @Test
-    public void WelcomeController_NullGame_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> new WelcomeController(null));
-    }
-
-    @Test
     public void StartGame_WithMissingPlayerName_ShowsRequiredNames() {
         Game game = new Game();
         view.showNamesRequired();

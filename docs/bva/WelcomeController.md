@@ -61,9 +61,9 @@ public behavior and mocked view/model collaborators to observe the result.
 
 | Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
 | --- | --- | --- |
-| Input: `game` | Pointer, and cases | null; an unstarted game; a started game |
+| Input: `game` | Pointer, and cases | an unstarted game; a started game (no null: callers never pass one) |
 | Output: the controller | Cases | the controller is created |
-| Output: signal for a rejected game | Cases | `IllegalArgumentException` for null; `IllegalStateException` for a started game |
+| Output: signal for a rejected game | Cases | `IllegalStateException` for a started game |
 
 ## Step 4: Test Cases
 
@@ -80,10 +80,9 @@ public behavior and mocked view/model collaborators to observe the result.
   - **State of the system**: `game` has been started with `Alice` and `Bob`.
   - **Expected output**: Throws `IllegalStateException`.
 
-- **TC-CONSTRUCTOR-03 — Reject a missing game** ( :white_check_mark: )
-  - **Method(s) under test**: `WelcomeController(Game)`
-  - **State of the system**: `game` is null.
-  - **Expected output**: Throws `IllegalArgumentException`.
+- **TC-CONSTRUCTOR-03** was removed. It passed a null game and expected
+  `IllegalArgumentException`; the constructor no longer checks for null because our
+  code never passes one (instructor code review, Week 6).
 
 ### Method under test: `startGame(String player1Name, String player2Name)`
 
