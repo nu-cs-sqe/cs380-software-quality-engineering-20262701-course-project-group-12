@@ -22,6 +22,13 @@ public class LocationTests {
         assertFalse(isSameSquare);
     }
 
+    @Test
+    public void IsSameSquareAs_OneFileApart_ReturnsFalse() {
+        boolean isSameSquare = A1.isSameSquareAs(new Location(1, 1));
+
+        assertFalse(isSameSquare);
+    }
+
     private static final Location A1 = new Location(0, 1);
 
     @Test
