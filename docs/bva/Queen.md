@@ -203,7 +203,7 @@ through `8`.
   - **Expected output**: `true`.
 
 - **TC-QUEEN-11 — Capture an opponent seven squares along a clear file**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White queen. `from` is d1 `(3, 1)`. `to` is
     d8 `(3, 8)`. New `Board` after `move` of the d2 pawn to c3 `(2, 3)`

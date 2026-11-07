@@ -12,14 +12,18 @@ public class QueenTests {
     private static final Location A3 = new Location(0, 3);
     private static final Location B2 = new Location(1, 2);
     private static final Location B4 = new Location(1, 4);
+    private static final Location C3 = new Location(2, 3);
     private static final Location C4 = new Location(2, 4);
     private static final Location C5 = new Location(2, 5);
     private static final Location D1 = new Location(3, 1);
+    private static final Location D2 = new Location(3, 2);
     private static final Location D4 = new Location(3, 4);
     private static final Location D5 = new Location(3, 5);
+    private static final Location D7 = new Location(3, 7);
     private static final Location D8 = new Location(3, 8);
     private static final Location E4 = new Location(4, 4);
     private static final Location E5 = new Location(4, 5);
+    private static final Location E6 = new Location(4, 6);
     private static final Location G5 = new Location(6, 5);
     private static final Location G7 = new Location(6, 7);
     private static final Location H3 = new Location(7, 3);
@@ -125,6 +129,16 @@ public class QueenTests {
         board.move(A1, A3);
 
         boolean canMove = BLACK_QUEEN.canMove(H8, A1, board);
+
+        assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_OpponentSevenSquaresAlongClearFile_ReturnsTrue() {
+        board.move(D2, C3);
+        board.move(D7, E6);
+
+        boolean canMove = WHITE_QUEEN.canMove(D1, D8, board);
 
         assertTrue(canMove);
     }
