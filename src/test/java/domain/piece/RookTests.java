@@ -5,7 +5,6 @@ import domain.Location;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RookTests {
@@ -170,29 +169,6 @@ public class RookTests {
         boolean canMove = rook.canMove(H8, H7, board);
 
         assertTrue(canMove);
-    }
-
-    @Test
-    public void CanMove_NullFromSquare_ThrowsIllegalArgumentException() {
-        Board board = new Board();
-        Rook rook = new Rook(PieceColor.WHITE);
-
-        assertThrows(IllegalArgumentException.class, () -> rook.canMove(null, A2, board));
-    }
-
-    @Test
-    public void CanMove_NullToSquare_ThrowsIllegalArgumentException() {
-        Board board = new Board();
-        Rook rook = new Rook(PieceColor.WHITE);
-
-        assertThrows(IllegalArgumentException.class, () -> rook.canMove(A1, null, board));
-    }
-
-    @Test
-    public void CanMove_NullBoard_ThrowsIllegalArgumentException() {
-        Rook rook = new Rook(PieceColor.WHITE);
-
-        assertThrows(IllegalArgumentException.class, () -> rook.canMove(A1, A2, null));
     }
 
     @Test

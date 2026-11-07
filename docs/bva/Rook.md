@@ -14,8 +14,9 @@ when a path has to be empty.
 `canMove(Location from, Location to, Board board)` returns `true` when the
 destination is on the same rank or file, `from` and `to` are different
 squares, every square between them is empty, and `to` is empty or holds an
-opponent's piece. It returns `false` for any other destination. It throws
-`IllegalArgumentException` when `from`, `to`, or `board` is null.
+opponent's piece. It returns `false` for any other destination. Callers
+do not pass null `from`, `to`, or `board`, so those arguments are not
+null-checked here.
 
 Squares use file `0` = a-file through file `7` = h-file, and rank `1`
 through `8`.
@@ -25,11 +26,9 @@ through `8`.
 ### Step 1: Inputs and outputs
 
 - **Input: `from`**
-  - null
   - a1 `(0, 1)`
   - h8 `(7, 8)`
 - **Input: `to`**
-  - null
   - the same square as `from`
   - one square along the file
   - one square along the rank
@@ -37,7 +36,6 @@ through `8`.
   - the far end of the rank
   - off the rank and file (a diagonal square)
 - **Input: `board`**
-  - null
   - a board whose occupancy matches the case
 - **Input: squares between `from` and `to`**
   - none (adjacent squares)
@@ -54,12 +52,11 @@ through `8`.
   - `true`
 - **Output: rejected destination**
   - `false`
-- **Output: signal for a missing argument**
-  - `IllegalArgumentException`
 
 ### Step 2: Categories
 
-- `from`, `to`, and `board` are pointers. One null is tested at a time.
+- `from`, `to`, and `board` are required objects. Null is not a case;
+  callers never pass it.
 - A rook move is a case: along a file, along a rank, or neither.
 - Distance on a clear line is an interval `[1, 7]`. `0` is the same square
   and is not a move. Location already forbids squares off the board, so
@@ -101,7 +98,6 @@ through `8`.
   destination the black pawn on a7.
 - Black rook: h8 `(7, 8)` one square along the file onto empty h7
   `(7, 7)`.
-- One null argument at a time.
 
 ## Step 4: Test Cases
 
@@ -195,24 +191,6 @@ through `8`.
     h7 `(7, 7)`. New `Board` after `move` of the h7 pawn to g6 `(6, 6)`,
     so h7 is empty.
   - **Expected output**: `true`.
-
-- **TC-ROOK-13 — Reject a null from square** ( :white_check_mark: )
-  - **Method(s) under test**: `canMove(Location, Location, Board)`
-  - **State of the system**: White rook. `from` is null. `to` is a2
-    `(0, 2)`. New `Board`.
-  - **Expected output**: `IllegalArgumentException`.
-
-- **TC-ROOK-14 — Reject a null to square** ( :white_check_mark: )
-  - **Method(s) under test**: `canMove(Location, Location, Board)`
-  - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
-    null. New `Board`.
-  - **Expected output**: `IllegalArgumentException`.
-
-- **TC-ROOK-15 — Reject a null board** ( :white_check_mark: )
-  - **Method(s) under test**: `canMove(Location, Location, Board)`
-  - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
-    a2 `(0, 2)`. `board` is null.
-  - **Expected output**: `IllegalArgumentException`.
 
 - **TC-ROOK-16 — Reject a diagonal destination with an empty square
   between** ( :white_check_mark: )

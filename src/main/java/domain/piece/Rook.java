@@ -9,22 +9,9 @@ public class Rook extends Piece {
     }
 
     public boolean canMove(Location from, Location to, Board board) {
-        requireMoveArguments(from, to, board);
         return isAlongRookLine(from, to)
                 && !isFriendlyPiece(to, board)
                 && pathIsClear(from, to, board);
-    }
-
-    private void requireMoveArguments(Location from, Location to, Board board) {
-        if (from == null) {
-            throw new IllegalArgumentException("Cannot decide a rook move from a null square");
-        }
-        if (to == null) {
-            throw new IllegalArgumentException("Cannot decide a rook move to a null square");
-        }
-        if (board == null) {
-            throw new IllegalArgumentException("Cannot decide a rook move without a board");
-        }
     }
 
     private boolean isFriendlyPiece(Location destination, Board board) {
