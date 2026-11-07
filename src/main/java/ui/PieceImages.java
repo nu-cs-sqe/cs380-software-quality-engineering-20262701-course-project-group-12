@@ -7,7 +7,6 @@ import domain.piece.PieceType;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
 import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
@@ -26,9 +25,6 @@ public class PieceImages {
     }
 
     public BufferedImage imageOf(Piece piece) {
-        if (piece == null) {
-            throw new IllegalArgumentException("Cannot find the image of a null piece");
-        }
         return images.get(piece.getColor()).get(piece.getType());
     }
 
@@ -49,30 +45,15 @@ public class PieceImages {
     }
 
     private static BufferedImage load(String path) {
-        URL resource = PieceImages.class.getResource(path);
-        if (resource == null) {
-            throw new PieceImageException(failureMessage(path, "the file is missing"));
-        }
-        return read(path, resource);
-    }
-
-    private static BufferedImage read(String path, URL resource) {
         try {
-            return decode(path, resource);
+            return read(path);
         } catch (IOException e) {
-            throw new PieceImageException(failureMessage(path, "the file cannot be read"), e);
+            String message = "Cannot load the piece image '" + path + "': the file cannot be read";
+            throw new PieceImageException(message, e);
         }
     }
 
-    private static BufferedImage decode(String path, URL resource) throws IOException {
-        BufferedImage image = ImageIO.read(resource);
-        if (image == null) {
-            throw new PieceImageException(failureMessage(path, "the file is not an image"));
-        }
-        return image;
-    }
-
-    private static String failureMessage(String path, String reason) {
-        return "Cannot load the piece image '" + path + "': " + reason;
+    private static BufferedImage read(String path) throws IOException {
+        return ImageIO.read(PieceImages.class.getResource(path));
     }
 }
