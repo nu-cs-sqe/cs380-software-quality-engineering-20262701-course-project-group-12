@@ -225,7 +225,7 @@ through `8`.
     square setup). `to` is e4.
   - **Expected output**: `false`.
 
-- **TC-KNIGHT-15 — Reject one square along a diagonal** ( :x: )
+- **TC-KNIGHT-15 — Reject one square along a diagonal** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White knight on e4 `(4, 4)` (the central
     square setup). `to` is f5 `(5, 5)`, empty.
