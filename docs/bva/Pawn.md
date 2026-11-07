@@ -65,6 +65,7 @@ story.
     lower file
   - one square diagonally backward
   - two squares diagonally forward
+  - one rank forward and two files over
 - **Input: `board`**
   - a board whose occupancy matches the case
 - **Input: occupant of `to`**
@@ -100,6 +101,8 @@ story.
   toward a higher file, and a pawn on the h-file only toward a lower
   file, so those two captures cover both diagonal directions and both
   file edges.
+- The file distance of a capture is an interval `[1, 1]`. The values are
+  `1`, a diagonal square, and `2`, just above it on the next rank.
 - The occupant of `to` is a case: empty, opponent, same color. A straight
   move needs empty, and a diagonal move needs an opponent.
 - The square passed over in a two-square advance is a collection of one
@@ -140,6 +143,8 @@ story.
   `(3, 3)` holding a black pawn.
 - Two squares diagonally forward onto an opponent: white e2 to g4
   `(6, 4)` holding a black pawn.
+- One rank forward and two files over onto an opponent: white e2 to g3
+  `(6, 3)` holding a black pawn.
 
 ## Step 4: Test Cases
 
@@ -309,4 +314,12 @@ story.
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`. `to` is
     g4 `(6, 4)`. New `Board` after `move` of the g7 pawn to g4, so g4
     holds a black pawn and f3 is empty.
+  - **Expected output**: `false`.
+
+- **TC-PAWN-24 — Reject a capture one rank forward and two files over**
+  ( :x: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is e2 `(4, 2)`. `to` is
+    g3 `(6, 3)`. New `Board` after `move` of the g7 pawn to g3, so g3
+    holds a black pawn.
   - **Expected output**: `false`.
