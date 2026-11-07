@@ -213,7 +213,7 @@ light when it is even (h1 is light).
   - **Expected output**: `false`.
 
 - **TC-BISHOP-12 — Reject a destination one more file than rank away**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White bishop. `from` is c1 `(2, 1)`. `to`
     is f3 `(5, 3)`. New `Board`; f3 is empty.
