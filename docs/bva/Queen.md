@@ -185,7 +185,7 @@ through `8`.
   - **Expected output**: `true`.
 
 - **TC-QUEEN-09 — Move seven squares along a rank onto an empty square**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White queen. `from` is a3 `(0, 3)`. `to` is
     h3 `(7, 3)`. New `Board` after `move` of the d1 queen to a3. Every
