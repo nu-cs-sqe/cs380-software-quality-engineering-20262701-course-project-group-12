@@ -211,7 +211,7 @@ through `8`.
     place of the rook, and of the f7 pawn to f5 `(5, 5)`. f7 is empty.
   - **Expected output**: `true`.
 
-- **TC-KNIGHT-13 — Jump over the pieces in between** ( :x: )
+- **TC-KNIGHT-13 — Jump over the pieces in between** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White knight. `from` is b1 `(1, 1)`. `to`
     is c3 `(2, 3)`, empty. New `Board`; the white pawns on b2 `(1, 2)`
