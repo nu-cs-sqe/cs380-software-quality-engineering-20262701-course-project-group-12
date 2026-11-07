@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,15 +19,15 @@ public class Board {
     private static final int WHITE_PAWN_RANK = 2;
     private static final int BLACK_PAWN_RANK = 7;
     private static final int BLACK_BACK_RANK = Location.MAX_RANK;
-    private static final List<PieceType> BACK_RANK_ORDER = List.of(
-            PieceType.ROOK,
-            PieceType.KNIGHT,
-            PieceType.BISHOP,
-            PieceType.QUEEN,
-            PieceType.KING,
-            PieceType.BISHOP,
-            PieceType.KNIGHT,
-            PieceType.ROOK);
+    private static final List<Function<PieceColor, Piece>> BACK_RANK_PIECE_MAKERS = List.of(
+            color -> new Piece(PieceType.ROOK, color),
+            color -> new Piece(PieceType.KNIGHT, color),
+            color -> new Piece(PieceType.BISHOP, color),
+            color -> new Piece(PieceType.QUEEN, color),
+            color -> new Piece(PieceType.KING, color),
+            color -> new Piece(PieceType.BISHOP, color),
+            color -> new Piece(PieceType.KNIGHT, color),
+            color -> new Piece(PieceType.ROOK, color));
 
     private final List<List<Optional<Piece>>> squares = emptySquares();
 
@@ -45,11 +46,11 @@ public class Board {
     }
 
     private void placeStartingPiecesOnFile(int file) {
-        PieceType backRankType = BACK_RANK_ORDER.get(file);
-        place(new Piece(backRankType, PieceColor.WHITE), new Location(file, WHITE_BACK_RANK));
+        Function<PieceColor, Piece> backRankPiece = BACK_RANK_PIECE_MAKERS.get(file);
+        place(backRankPiece.apply(PieceColor.WHITE), new Location(file, WHITE_BACK_RANK));
         place(new Piece(PieceType.PAWN, PieceColor.WHITE), new Location(file, WHITE_PAWN_RANK));
         place(new Piece(PieceType.PAWN, PieceColor.BLACK), new Location(file, BLACK_PAWN_RANK));
-        place(new Piece(backRankType, PieceColor.BLACK), new Location(file, BLACK_BACK_RANK));
+        place(backRankPiece.apply(PieceColor.BLACK), new Location(file, BLACK_BACK_RANK));
     }
 
     private void place(Piece piece, Location location) {
