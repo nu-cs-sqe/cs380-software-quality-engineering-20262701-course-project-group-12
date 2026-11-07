@@ -19,8 +19,12 @@ public class PieceImages {
             new EnumMap<>(PieceColor.class);
 
     public PieceImages() {
+        this(IMAGE_FOLDER);
+    }
+
+    public PieceImages(String imageFolder) {
         for (PieceColor color : PieceColor.values()) {
-            images.put(color, loadColor(color));
+            images.put(color, loadColor(imageFolder, color));
         }
     }
 
@@ -28,10 +32,10 @@ public class PieceImages {
         return images.get(piece.getColor()).get(piece.getType());
     }
 
-    private static Map<PieceType, BufferedImage> loadColor(PieceColor color) {
+    private static Map<PieceType, BufferedImage> loadColor(String imageFolder, PieceColor color) {
         Map<PieceType, BufferedImage> imagesOfColor = new EnumMap<>(PieceType.class);
         for (PieceType type : PieceType.values()) {
-            imagesOfColor.put(type, load(IMAGE_FOLDER + fileName(color, type)));
+            imagesOfColor.put(type, load(imageFolder + fileName(color, type)));
         }
         return imagesOfColor;
     }

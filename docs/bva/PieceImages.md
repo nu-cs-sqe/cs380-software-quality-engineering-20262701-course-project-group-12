@@ -35,7 +35,7 @@ Type and color are small sets of cases, and every pair is possible, so Step 4 us
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC1: unreadable images | `imageFolder = "/pieces-truncated/"`, whose files are truncated PNGs | throws `PieceImageException` whose cause is an `IOException` | :x: |
+| TC1: unreadable images | `imageFolder = "/pieces-truncated/"`, whose files are truncated PNGs | throws `PieceImageException` whose cause is an `IOException` | :white_check_mark: |
 | TC2: readable images | `PieceImages()` loads `/pieces/` | the images are loaded | implemented in TC3 |
 
 ### Method under test: `imageOf(Piece piece)`
