@@ -31,11 +31,6 @@ public class GameStatsControllerTests {
     }
 
     @Test
-    void GameStatsController_NullGame_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> new GameStatsController(null));
-    }
-
-    @Test
     void CreateView_PlayerOneToMove_ShowsSetupLines() {
         Game game = startedGame("Ada", "Bo", "Ada");
 

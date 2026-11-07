@@ -11,7 +11,7 @@ Step 1:
 - output: a controller, or an exception
 
 Step 2/3:
-- game -> Cases: started, not started, null
+- game -> Cases: started, not started (no null: our code never passes one, so the constructor does not check for it)
 - output -> Cases: controller created, exception
 
 The design says the constructor requires a started game.
@@ -24,9 +24,7 @@ The design says the constructor requires a started game.
     - **State of the system**: `game.isStarted()` is false
     - **Expected output**: `IllegalArgumentException`
 
-- **TC3: game is null** ( :white_check_mark: )
-    - **State of the system**: `game` is null
-    - **Expected output**: `IllegalArgumentException`
+- **TC3: removed.** It passed a null game and expected `IllegalArgumentException`. The null check was dropped after the instructor's Week 6 code review: our code never passes null.
 
 ### Method under test: `createView()`
 

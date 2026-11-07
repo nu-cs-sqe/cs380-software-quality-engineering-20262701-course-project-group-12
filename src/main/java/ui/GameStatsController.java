@@ -6,9 +6,6 @@ public class GameStatsController {
     private final Game game;
 
     public GameStatsController(Game game) {
-        if (game == null) {
-            throw new IllegalArgumentException("Cannot show game stats without a game");
-        }
         if (!game.isStarted()) {
             throw new IllegalArgumentException(
                     "Cannot show game stats before the game has started");
