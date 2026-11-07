@@ -182,7 +182,7 @@ US-12 will decide when two squares along the rank is a castle.
     e1 to e4, so d3 is empty.
   - **Expected output**: `true`.
 
-- **TC-KING-09 — Reject the square the king already occupies** ( :x: )
+- **TC-KING-09 — Reject the square the king already occupies** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king. `from` and `to` are both e1
     `(4, 1)`. New `Board`.
