@@ -157,16 +157,15 @@ public class BoardControllerTests {
     }
 
     @Test
-    public void ClickSquare_AfterRefusedMove_SelectsNothing() {
+    public void ClickSquare_RefusedMoveOntoEmptySquare_KeepsSelection() {
         expectPieceOnB1();
         expect(piece.canMove(B1, B3, board)).andReturn(false);
-        expect(board.isOccupied(C3)).andReturn(false);
         BoardController controller = replayedController();
-
         controller.clickSquare(B1);
-        controller.clickSquare(B3);
-        controller.clickSquare(C3);
 
+        controller.clickSquare(B3);
+
+        assertTrue(controller.isSelected(B1));
         verify(board, piece);
     }
 

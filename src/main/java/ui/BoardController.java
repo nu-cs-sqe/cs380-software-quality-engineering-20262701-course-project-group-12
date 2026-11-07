@@ -41,7 +41,7 @@ public class BoardController {
     private void moveSelectedPiece(Location from, Location to) {
         if (board.pieceAt(from).canMove(from, to, board)) {
             board.move(from, to);
+            selectedSquare = Optional.empty();
         }
-        selectedSquare = Optional.empty();
     }
 }
