@@ -169,4 +169,11 @@ public class QueenTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_AdjacentOwnPiece_ReturnsFalse() {
+        boolean canMove = WHITE_QUEEN.canMove(D1, D2, board);
+
+        assertFalse(canMove);
+    }
 }

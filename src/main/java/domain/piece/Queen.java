@@ -9,7 +9,9 @@ public class Queen extends Piece {
     }
 
     public boolean canMove(Location from, Location to, Board board) {
-        return isAlongLine(from, to) && !isSameSquare(from, to);
+        return isAlongLine(from, to)
+                && !isSameSquare(from, to)
+                && !holdsOwnPiece(to, board);
     }
 
     private boolean isAlongLine(Location from, Location to) {
@@ -20,5 +22,9 @@ public class Queen extends Piece {
 
     private boolean isSameSquare(Location from, Location to) {
         return from.getFile() == to.getFile() && from.getRank() == to.getRank();
+    }
+
+    private boolean holdsOwnPiece(Location square, Board board) {
+        return board.isOccupied(square) && board.pieceAt(square).getColor() == getColor();
     }
 }

@@ -235,7 +235,7 @@ through `8`.
   - **Expected output**: `false`.
 
 - **TC-QUEEN-15 — Reject an adjacent piece of the queen's color**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White queen. `from` is d1 `(3, 1)`. `to` is
     d2 `(3, 2)`. New `Board`; d2 holds the white d-pawn.
