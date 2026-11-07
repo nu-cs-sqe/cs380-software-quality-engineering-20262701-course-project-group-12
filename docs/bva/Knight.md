@@ -249,7 +249,7 @@ through `8`.
     square setup). `to` is g4 `(6, 4)`, empty.
   - **Expected output**: `false`.
 
-- **TC-KNIGHT-19 — Reject an opponent one rank beyond the L** ( :x: )
+- **TC-KNIGHT-19 — Reject an opponent one rank beyond the L** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White knight on e4 `(4, 4)` (the central
     square setup). `to` is f7 `(5, 7)`, which holds the black f-pawn.
