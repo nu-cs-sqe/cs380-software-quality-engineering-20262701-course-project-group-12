@@ -26,12 +26,17 @@ public class Pawn extends Piece {
     }
 
     public boolean canMove(Location from, Location to, Board board) {
-        if (isOnSameFile(from, to) && board.isOccupied(to)) {
-            return false;
+        return hasExpectedOccupant(from, to, board) && isAllowedAdvance(from, to, board);
+    }
+
+    private boolean hasExpectedOccupant(Location from, Location to, Board board) {
+        if (isOnSameFile(from, to)) {
+            return !board.isOccupied(to);
         }
-        if (!isOnSameFile(from, to) && !board.isOccupied(to)) {
-            return false;
-        }
+        return board.isOccupied(to);
+    }
+
+    private boolean isAllowedAdvance(Location from, Location to, Board board) {
         int forwardDistance = forwardDistance(from, to);
         if (forwardDistance == TWO_SQUARE_ADVANCE) {
             return isOnStartingRank(from) && !board.isOccupied(squareInFrontOf(from));
