@@ -25,6 +25,7 @@ public class QueenTests {
     private static final Location E4 = new Location(4, 4);
     private static final Location E5 = new Location(4, 5);
     private static final Location E6 = new Location(4, 6);
+    private static final Location F5 = new Location(5, 5);
     private static final Location G5 = new Location(6, 5);
     private static final Location G7 = new Location(6, 7);
     private static final Location H3 = new Location(7, 3);
@@ -156,6 +157,15 @@ public class QueenTests {
         board.move(D1, D4);
 
         boolean canMove = WHITE_QUEEN.canMove(D4, E6, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_KnightMoveTwoFilesAndOneRankAway_ReturnsFalse() {
+        board.move(D1, D4);
+
+        boolean canMove = WHITE_QUEEN.canMove(D4, F5, board);
 
         assertFalse(canMove);
     }
