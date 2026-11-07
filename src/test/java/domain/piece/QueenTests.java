@@ -176,4 +176,14 @@ public class QueenTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_AdjacentOpponent_ReturnsTrue() {
+        board.move(D1, D4);
+        board.move(D7, D5);
+
+        boolean canMove = WHITE_QUEEN.canMove(D4, D5, board);
+
+        assertTrue(canMove);
+    }
 }

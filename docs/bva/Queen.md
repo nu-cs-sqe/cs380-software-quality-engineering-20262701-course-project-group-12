@@ -241,7 +241,7 @@ through `8`.
     d2 `(3, 2)`. New `Board`; d2 holds the white d-pawn.
   - **Expected output**: `false`.
 
-- **TC-QUEEN-16 — Capture an adjacent opponent** ( :x: )
+- **TC-QUEEN-16 — Capture an adjacent opponent** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White queen. `from` is d4 `(3, 4)`. `to` is
     d5 `(3, 5)`. New `Board` after `move` of the d1 queen to d4 and the
