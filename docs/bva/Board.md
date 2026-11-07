@@ -2,7 +2,7 @@
 
 `Board` owns the 64 squares. The squares are private; an empty square holds no piece rather than null.
 
-- `Board()`: places the starting position. Rank 8, a through h: black rook, knight, bishop, queen, king, bishop, knight, rook. Rank 7: eight black pawns. Ranks 6 through 3: empty. Rank 2: eight white pawns. Rank 1, a through h: white rook, knight, bishop, queen, king, bishop, knight, rook.
+- `Board()`: places the starting position. Rank 8, a through h: black rook, knight, bishop, queen, king, bishop, knight, rook. Rank 7: eight black pawns. Ranks 6 through 3: empty. Rank 2: eight white pawns. Rank 1, a through h: white rook, knight, bishop, queen, king, bishop, knight, rook. The four knights are `Knight` pieces (issue #12), so each one moves by the knight's rule; every other piece is a plain `Piece` until its own rules exist.
 - `boolean isOccupied(Location location)`: returns true when a piece stands on that square and false when it is empty. Does not change the board.
 - `Piece pieceAt(Location location)`: returns the piece on that square. Requires an occupied square and throws `IllegalArgumentException` otherwise. Does not change the board.
 - `void move(Location from, Location to)` (issue #19): puts the piece from `from` on `to`, and `from` becomes empty. A piece already on `to` is replaced; this is the board side of a capture. Moving a piece to its own square leaves the board unchanged. Throws `IllegalArgumentException` when `from` is empty, and then leaves the board unchanged. It does not check whether the move is legal, does not change whose turn it is, and does not touch the UI.
@@ -113,6 +113,10 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC23: starting position at the corners and the rank edges | implemented in TC1 through TC20 | the occupants listed in those cases | implemented in TC1 through TC20 |
+| TC45: the white knight moves as a knight | a new `Board`; ask the piece on b1 `(1, 1)` whether it can move to c3 `(2, 3)` on this board | true | :x: |
+| TC46: the black knight moves as a knight | a new `Board`; ask the piece on g8 `(6, 8)` whether it can move to f6 `(5, 6)` on this board | true | :x: |
+
+TC45 and TC46 check the knights through their behavior, not their class. A plain `Piece` answers false (see `Piece.md`), so true means the board placed a `Knight`. One knight of each color stands for the four, since the back rank uses the same piece kind for both colors.
 
 ### Method under test: `move(Location from, Location to)`
 
