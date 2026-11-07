@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WelcomeControllerTests {
     private static final String NAMES_REQUIRED_MESSAGE = "Both player names are required.";
+    private static final String DUPLICATE_NAMES_MESSAGE = "Players must use different names.";
 
     private WelcomeView view;
 
@@ -78,6 +79,39 @@ public class WelcomeControllerTests {
         welcomeView.showNamesRequired();
 
         assertEquals(NAMES_REQUIRED_MESSAGE, welcomeView.errorMessage());
+    }
+
+    @Test
+    public void WelcomeView_ShowDuplicateNames_DisplaysDifferentNamesMessage() {
+        WelcomeView welcomeView = new WelcomeView(controllerThatIsNeverCalled());
+
+        welcomeView.showDuplicateNames();
+
+        assertEquals(DUPLICATE_NAMES_MESSAGE, welcomeView.errorMessage());
+    }
+
+    @Test
+    public void StartGame_WithDuplicateNames_ShowsDuplicateNames() {
+        Game game = new Game();
+        view.showDuplicateNames();
+        WelcomeController controller = controllerWithView(game);
+
+        controller.startGame("Alex", "Alex");
+
+        verify(view);
+        assertFalse(game.isStarted());
+    }
+
+    @Test
+    public void StartGame_WithSameNameInDifferentCase_ShowsDuplicateNames() {
+        Game game = new Game();
+        view.showDuplicateNames();
+        WelcomeController controller = controllerWithView(game);
+
+        controller.startGame("Alice", "ALICE");
+
+        verify(view);
+        assertFalse(game.isStarted());
     }
 
     @Test

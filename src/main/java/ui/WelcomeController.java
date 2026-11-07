@@ -1,6 +1,8 @@
 package ui;
 
+import domain.DuplicatePlayerNameException;
 import domain.Game;
+import domain.MissingPlayerNameException;
 
 public class WelcomeController {
     private final Game game;
@@ -23,10 +25,17 @@ public class WelcomeController {
     }
 
     public void startGame(String player1Name, String player2Name) {
-        if (!game.start(player1Name, player2Name)) {
+        try {
+            openStartedGame(player1Name, player2Name);
+        } catch (MissingPlayerNameException e) {
             view.showNamesRequired();
-            return;
+        } catch (DuplicatePlayerNameException e) {
+            view.showDuplicateNames();
         }
+    }
+
+    private void openStartedGame(String player1Name, String player2Name) {
+        game.start(player1Name, player2Name);
         view.close();
         view.showGame(game);
     }

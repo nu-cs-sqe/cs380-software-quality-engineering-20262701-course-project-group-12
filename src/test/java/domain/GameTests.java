@@ -18,42 +18,42 @@ public class GameTests {
     }
 
     @Test
-    public void Start_WithEmptyPlayerOneName_RejectsStart() {
+    public void start_EmptyPlayerOneName_ThrowsMissingPlayerNameException() {
         Game game = new Game();
 
-        assertFalse(game.start("", "Bob"));
+        assertThrows(MissingPlayerNameException.class, () -> game.start("", "Bob"));
         assertFalse(game.isStarted());
     }
 
     @Test
-    public void Start_WithBothNamesEmpty_RejectsStart() {
+    public void start_BothNamesEmpty_ThrowsMissingPlayerNameException() {
         Game game = new Game();
 
-        assertFalse(game.start("", ""));
+        assertThrows(MissingPlayerNameException.class, () -> game.start("", ""));
         assertFalse(game.isStarted());
     }
 
     @Test
-    public void Start_WithEmptyPlayerTwoName_RejectsStart() {
+    public void start_EmptyPlayerTwoName_ThrowsMissingPlayerNameException() {
         Game game = new Game();
 
-        assertFalse(game.start("Alice", ""));
+        assertThrows(MissingPlayerNameException.class, () -> game.start("Alice", ""));
         assertFalse(game.isStarted());
     }
 
     @Test
-    public void Start_WithWhitespaceOnlyPlayerOneName_RejectsStart() {
+    public void start_WhitespaceOnlyPlayerOneName_ThrowsMissingPlayerNameException() {
         Game game = new Game();
 
-        assertFalse(game.start("   ", "Bob"));
+        assertThrows(MissingPlayerNameException.class, () -> game.start("   ", "Bob"));
         assertFalse(game.isStarted());
     }
 
     @Test
-    public void Start_WithWhitespaceOnlyPlayerTwoName_RejectsStart() {
+    public void start_WhitespaceOnlyPlayerTwoName_ThrowsMissingPlayerNameException() {
         Game game = new Game();
 
-        assertFalse(game.start("Alice", "   "));
+        assertThrows(MissingPlayerNameException.class, () -> game.start("Alice", "   "));
         assertFalse(game.isStarted());
     }
 
@@ -61,7 +61,8 @@ public class GameTests {
     public void Start_WithTwoValidNames_StartsGame() {
         Game game = new Game();
 
-        assertTrue(game.start("Alice", "Bob"));
+        game.start("Alice", "Bob");
+
         assertTrue(game.isStarted());
     }
 
@@ -69,7 +70,8 @@ public class GameTests {
     public void Start_WithOneCharacterNames_StartsGame() {
         Game game = new Game();
 
-        assertTrue(game.start("A", "B"));
+        game.start("A", "B");
+
         assertTrue(game.isStarted());
     }
 
@@ -87,7 +89,7 @@ public class GameTests {
     public void Accessors_StartedGame_ReturnSetupState() {
         Game game = new Game();
 
-        assertTrue(game.start("Alice", "Bob"));
+        game.start("Alice", "Bob");
 
         assertEquals("Alice", game.playerOne().getName());
         assertEquals("Bob", game.playerTwo().getName());
@@ -134,12 +136,53 @@ public class GameTests {
     }
 
     @Test
-    public void Start_WithDuplicateNames_AllowsStart() {
+    public void start_DuplicateNames_ThrowsDuplicatePlayerNameException() {
         Game game = new Game();
 
-        assertTrue(game.start("Alex", "Alex"));
-        assertEquals("Alex", game.playerOne().getName());
-        assertEquals("Alex", game.playerTwo().getName());
+        assertThrows(DuplicatePlayerNameException.class, () -> game.start("Alex", "Alex"));
+        assertFalse(game.isStarted());
+    }
+
+    @Test
+    public void start_SameNameDifferentCase_ThrowsDuplicatePlayerNameException() {
+        Game game = new Game();
+
+        assertThrows(DuplicatePlayerNameException.class, () -> game.start("Alice", "ALICE"));
+        assertFalse(game.isStarted());
+    }
+
+    @Test
+    public void start_SameNameAfterTrim_ThrowsDuplicatePlayerNameException() {
+        Game game = new Game();
+
+        assertThrows(DuplicatePlayerNameException.class, () -> game.start(" Alice ", "Alice"));
+        assertFalse(game.isStarted());
+    }
+
+    @Test
+    public void start_NullPlayerOneName_ThrowsIllegalArgumentException() {
+        Game game = new Game();
+
+        assertThrows(IllegalArgumentException.class, () -> game.start(null, "Bob"));
+        assertFalse(game.isStarted());
+    }
+
+    @Test
+    public void start_NullPlayerTwoName_ThrowsIllegalArgumentException() {
+        Game game = new Game();
+
+        assertThrows(IllegalArgumentException.class, () -> game.start("Alice", null));
+        assertFalse(game.isStarted());
+    }
+
+    @Test
+    public void start_MixedCaseNames_KeepsEnteredCase() {
+        Game game = new Game();
+
+        game.start("ALICE", "bob");
+
+        assertEquals("ALICE", game.playerOne().getName());
+        assertEquals("bob", game.playerTwo().getName());
     }
 
     @Test

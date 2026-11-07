@@ -43,6 +43,10 @@ public class WelcomeView extends JPanel {
         errorLabel.setText(Messages.text("welcome.namesRequired"));
     }
 
+    public void showDuplicateNames() {
+        errorLabel.setText(Messages.text("welcome.duplicateNames"));
+    }
+
     public void close() {
         Optional.ofNullable(SwingUtilities.getWindowAncestor(this)).ifPresent(Window::dispose);
     }

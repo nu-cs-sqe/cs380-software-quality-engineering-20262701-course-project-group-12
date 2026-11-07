@@ -9,9 +9,16 @@ public class Game {
     private Player playerToMove;
     private Board board;
 
-    public boolean start(String player1Name, String player2Name) {
+    public void start(String player1Name, String player2Name) {
+        if (player1Name == null || player2Name == null) {
+            throw new IllegalArgumentException(
+                    "Failed to start the game because a player name is null.");
+        }
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
-            return false;
+            throw new MissingPlayerNameException();
+        }
+        if (player1Name.trim().equalsIgnoreCase(player2Name.trim())) {
+            throw new DuplicatePlayerNameException();
         }
 
         playerOne = new Player(player1Name, PieceColor.WHITE);
@@ -19,7 +26,6 @@ public class Game {
         playerToMove = playerOne;
         board = new Board();
         started = true;
-        return true;
     }
 
     public boolean isStarted() {

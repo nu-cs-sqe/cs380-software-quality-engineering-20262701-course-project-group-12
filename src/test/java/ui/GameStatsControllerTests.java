@@ -69,14 +69,14 @@ public class GameStatsControllerTests {
     }
 
     @Test
-    void CreateView_SameNameTwice_ShowsBothPlayers() {
-        Game game = startedGame("Ada", "Ada", "Ada");
+    void CreateView_SimilarButDifferentNames_ShowsBothPlayers() {
+        Game game = startedGame("Alex", "Alexa", "Alex");
 
         GameStatsView view = new GameStatsController(game).createView();
 
-        assertEquals("Player 1: Ada (White)", view.playerOneLine());
-        assertEquals("Player 2: Ada (Black)", view.playerTwoLine());
-        assertEquals("Current player: Ada", view.currentPlayerLine());
+        assertEquals("Player 1: Alex (White)", view.playerOneLine());
+        assertEquals("Player 2: Alexa (Black)", view.playerTwoLine());
+        assertEquals("Current player: Alex", view.currentPlayerLine());
     }
 
     @Test
