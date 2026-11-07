@@ -190,4 +190,16 @@ public class BishopTests {
 
         assertTrue(canMove);
     }
+
+    @Test
+    public void CanMove_OpponentAtFarEndOfClearDiagonal_ReturnsTrue() {
+        board.move(C1, A1);
+        board.move(B2, B4);
+        board.move(G7, G5);
+        Bishop bishop = new Bishop(PieceColor.WHITE);
+
+        boolean canMove = bishop.canMove(A1, H8, board);
+
+        assertTrue(canMove);
+    }
 }
