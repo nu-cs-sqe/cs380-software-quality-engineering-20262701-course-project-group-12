@@ -1,10 +1,11 @@
 # BVA Analysis for Piece
 
-`Piece` stores one piece's type and color. Both are fixed after construction. This feature has no move behavior on `Piece`.
+`Piece` stores one piece's type and color. Both are fixed after construction. A piece whose type has no movement rules yet cannot move; each piece story adds a subclass that overrides `canMove` (issue #34).
 
 - `Piece(PieceType type, PieceColor color)`: stores the type and the color. It does not check them for null; our code never passes null (instructor code review, Week 6).
 - `PieceType getType()`: returns the type given at construction.
 - `PieceColor getColor()`: returns the color given at construction.
+- `boolean canMove(Location from, Location to, Board board)`: returns `false`, because a plain `Piece` has no movement rules. It does not look at the board.
 
 `getType()` and `getColor()` only return those stored values, so they are checked inside the constructor cases below.
 
@@ -19,6 +20,17 @@ Type and color are small sets of cases, and every pair is possible, so Step 4 us
 | Input: `type` | Cases | `PAWN`, `ROOK`, `KNIGHT`, `BISHOP`, `QUEEN`, `KING` |
 | Input: `color` | Cases | `WHITE`, `BLACK` |
 | Output: the piece | Cases | `getType()` equals `type`; `getColor()` equals `color` |
+
+### `canMove(Location from, Location to, Board board)`
+
+A plain `Piece` answers the same for every input, so one case stands for all of them. `Board` is mocked with EasyMock and expects no calls, which shows the answer does not depend on the board.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the piece | Cases | a plain `Piece` (a type without its own subclass), such as a white queen |
+| Input: `from`, `to` | Pointer | two locations (no null: callers never pass one) |
+| Input: `board` | Pointer | a board (no null: callers never pass one) |
+| Output: the answer | Boolean | `false` |
 
 ## Step 4: Test cases (all-combination for the valid pairs)
 
@@ -52,3 +64,9 @@ Type and color are small sets of cases, and every pair is possible, so Step 4 us
 | --- | --- | --- | --- |
 | TC17: color of a white pawn | implemented in TC1 | `WHITE` | implemented in TC1 |
 | TC18: color of a black king | implemented in TC12 | `BLACK` | implemented in TC12 |
+
+### Method under test: `canMove(Location from, Location to, Board board)`
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC19: a piece without movement rules | a white queen as a plain `Piece`; `from` is d1 `(3, 1)`, `to` is d3 `(3, 3)`; a mocked `Board` that expects no calls | `false` | :x: |
