@@ -189,7 +189,7 @@ light when it is even (h1 is light).
     pawn to c4 `(2, 4)`, so c2 is empty.
   - **Expected output**: `false`.
 
-- **TC-BISHOP-09 — Reject one square along the rank** ( :x: )
+- **TC-BISHOP-09 — Reject one square along the rank** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White bishop. `from` is c1 `(2, 1)`. `to`
     is d1 `(3, 1)`. The board is a new `Board` after `move` of the d1
