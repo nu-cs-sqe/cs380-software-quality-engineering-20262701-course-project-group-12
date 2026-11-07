@@ -275,7 +275,7 @@ story.
     holds a white knight and e4 is empty.
   - **Expected output**: `false`.
 
-- **TC-PAWN-19 — Reject a two-square advance that captures** ( :x: )
+- **TC-PAWN-19 — Reject a two-square advance that captures** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`. `to` is
     e4 `(4, 4)`. New `Board` after `move` of the e7 pawn to e4, so e3 is
