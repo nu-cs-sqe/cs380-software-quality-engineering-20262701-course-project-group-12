@@ -23,7 +23,7 @@ public class BoardController {
     }
 
     public boolean isSelected(Location square) {
-        return false;
+        return selectedSquare.filter(square::isSameSquareAs).isPresent();
     }
 
     public void clickSquare(Location square) {

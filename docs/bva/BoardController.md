@@ -87,5 +87,5 @@ The selection is private, so it is observed through the next click: a selected s
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC14: nothing selected | a controller for the mocked board, no clicks yet; ask about b1 `(1, 1)` | false | :white_check_mark: |
-| TC15: the selected square | a controller for the mocked board; the board answers true for b1; click b1, then ask about a second b1 object | true | :x: |
+| TC15: the selected square | a controller for the mocked board; the board answers true for b1; click b1, then ask about a second b1 object | true | :white_check_mark: |
 | TC16: another square while one is selected | a controller for the mocked board; the board answers true for b1; click b1, then ask about c3 `(2, 3)` | false | :x: |
