@@ -15,7 +15,7 @@ public class Bishop extends Piece {
     }
 
     private boolean isAlongDiagonal(Location from, Location to) {
-        int fileDistance = Math.abs(to.getFile() - from.getFile());
+        int fileDistance = fileDistance(from, to);
         int rankDistance = Math.abs(to.getRank() - from.getRank());
         return fileDistance == rankDistance && fileDistance != 0;
     }
@@ -27,8 +27,7 @@ public class Bishop extends Piece {
     private boolean isPathClear(Location from, Location to, Board board) {
         int fileStep = Integer.signum(to.getFile() - from.getFile());
         int rankStep = Integer.signum(to.getRank() - from.getRank());
-        int distance = Math.abs(to.getFile() - from.getFile());
-        for (int step = 1; step < distance; step++) {
+        for (int step = 1; step < fileDistance(from, to); step++) {
             Location between = new Location(from.getFile() + step * fileStep,
                     from.getRank() + step * rankStep);
             if (board.isOccupied(between)) {
@@ -36,5 +35,9 @@ public class Bishop extends Piece {
             }
         }
         return true;
+    }
+
+    private int fileDistance(Location from, Location to) {
+        return Math.abs(to.getFile() - from.getFile());
     }
 }
