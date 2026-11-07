@@ -220,7 +220,7 @@ light when it is even (h1 is light).
   - **Expected output**: `false`.
 
 - **TC-BISHOP-13 — Reject an adjacent piece of the bishop's color**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White bishop. `from` is c1 `(2, 1)`. `to`
     is d2 `(3, 2)`. New `Board`; d2 holds the white d-pawn.

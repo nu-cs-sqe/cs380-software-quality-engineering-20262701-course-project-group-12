@@ -170,4 +170,13 @@ public class BishopTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_AdjacentOwnPiece_ReturnsFalse() {
+        Bishop bishop = new Bishop(PieceColor.WHITE);
+
+        boolean canMove = bishop.canMove(C1, D2, board);
+
+        assertFalse(canMove);
+    }
 }
