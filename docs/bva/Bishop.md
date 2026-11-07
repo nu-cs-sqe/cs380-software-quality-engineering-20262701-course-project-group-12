@@ -132,7 +132,7 @@ light when it is even (h1 is light).
   - **Expected output**: `true`.
 
 - **TC-BISHOP-02 — Move one square up and left onto an empty square**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White bishop on c1 `(2, 1)`. `to` is b2
     `(1, 2)`. The board is a new `Board` after `move` of the b2 pawn to
