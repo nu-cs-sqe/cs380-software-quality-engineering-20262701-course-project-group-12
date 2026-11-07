@@ -11,14 +11,12 @@ cases below use the game's public behavior to observe its state.
 ### Step 1: Inputs and outputs
 
 - **Input: Player 1 name**
-  - null
   - empty
   - only whitespace
   - one non-whitespace character
   - leading or trailing whitespace
   - mixed case
 - **Input: Player 2 name**
-  - null
   - empty
   - only whitespace
   - one non-whitespace character
@@ -30,7 +28,6 @@ cases below use the game's public behavior to observe its state.
   - the same name with surrounding whitespace
   - different valid names
 - **Output: unsuccessful start**
-  - `IllegalArgumentException` when a name is null
   - `MissingPlayerNameException` when a trimmed name is empty
   - `DuplicatePlayerNameException` when the trimmed names match ignoring case
   - no players or board are created
@@ -45,8 +42,7 @@ cases below use the game's public behavior to observe its state.
 
 ### Step 2: Categories
 
-- A null name is rejected before trim.
-- `start(String, String)` then trims both names before the remaining checks.
+- `start(String, String)` trims both names before the remaining checks.
 - A name is missing when it is empty after trimming.
 - The missing-name check runs before the duplicate-name check.
 - Two names are duplicates when they are equal after trimming and ignoring
@@ -63,7 +59,8 @@ cases below use the game's public behavior to observe its state.
 - Check both names empty and each name empty independently.
 - Check names containing only whitespace, including two whitespace-only
   names that would also match as duplicates if the empty check were skipped.
-- Check one null name at a time.
+- No null names: the welcome view passes the text fields' contents, which are never
+  null, so `start` does not check for null (instructor code review, Week 6).
 - Check the smallest valid input: one non-whitespace character.
 - Check names with leading or trailing whitespace.
 - Check exact duplicates, case-only duplicates, and the same name with
@@ -165,19 +162,8 @@ cases below use the game's public behavior to observe its state.
   - **Expected output**: `start` throws `DuplicatePlayerNameException`; the
     game remains unstarted.
 
-- **TC-START-14 — Reject a null Player 1 name** (implemented)
-  - **Method(s) under test**: `start(String, String)`, `isStarted()`
-  - **State of the system**: New game; Player 1's name is `null` and Player
-    2's name is `Bob`.
-  - **Expected output**: `start` throws `IllegalArgumentException`; the game
-    remains unstarted.
-
-- **TC-START-15 — Reject a null Player 2 name** (implemented)
-  - **Method(s) under test**: `start(String, String)`, `isStarted()`
-  - **State of the system**: New game; Player 1's name is `Alice` and Player
-    2's name is `null`.
-  - **Expected output**: `start` throws `IllegalArgumentException`; the game
-    remains unstarted.
+- **TC-START-14 and TC-START-15** were removed. They passed a null name and
+  expected `IllegalArgumentException`; `start` no longer checks for null.
 
 - **TC-START-16 — Keep the entered case after trim** (implemented)
   - **Method(s) under test**: `start(String, String)`, `playerOne()`,

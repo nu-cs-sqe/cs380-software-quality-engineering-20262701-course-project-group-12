@@ -160,22 +160,6 @@ public class GameTests {
     }
 
     @Test
-    public void start_NullPlayerOneName_ThrowsIllegalArgumentException() {
-        Game game = new Game();
-
-        assertThrows(IllegalArgumentException.class, () -> game.start(null, "Bob"));
-        assertFalse(game.isStarted());
-    }
-
-    @Test
-    public void start_NullPlayerTwoName_ThrowsIllegalArgumentException() {
-        Game game = new Game();
-
-        assertThrows(IllegalArgumentException.class, () -> game.start("Alice", null));
-        assertFalse(game.isStarted());
-    }
-
-    @Test
     public void start_MixedCaseNames_KeepsEnteredCase() {
         Game game = new Game();
 

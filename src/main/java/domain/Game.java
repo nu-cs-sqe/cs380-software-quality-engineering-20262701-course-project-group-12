@@ -10,10 +10,6 @@ public class Game {
     private Board board;
 
     public void start(String player1Name, String player2Name) {
-        if (player1Name == null || player2Name == null) {
-            throw new IllegalArgumentException(
-                    "Failed to start the game because a player name is null.");
-        }
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
             throw new MissingPlayerNameException();
         }
