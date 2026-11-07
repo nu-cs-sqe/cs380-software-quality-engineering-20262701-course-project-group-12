@@ -106,4 +106,13 @@ public class PawnTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_WhitePawnOneSquareBackward_ReturnsFalse() {
+        board.move(E2, E4);
+
+        boolean canMove = WHITE_PAWN.canMove(E4, E3, board);
+
+        assertFalse(canMove);
+    }
 }

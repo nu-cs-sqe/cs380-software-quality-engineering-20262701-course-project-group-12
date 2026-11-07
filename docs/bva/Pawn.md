@@ -207,7 +207,7 @@ story.
     `(4, 2)`. New `Board`.
   - **Expected output**: `false`.
 
-- **TC-PAWN-10 — Reject a white pawn moving one square backward** ( :x: )
+- **TC-PAWN-10 — Reject a white pawn moving one square backward** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e4 `(4, 4)`. `to` is
     e3 `(4, 3)`. New `Board` after `move` of the e2 pawn to e4, so e3 is
