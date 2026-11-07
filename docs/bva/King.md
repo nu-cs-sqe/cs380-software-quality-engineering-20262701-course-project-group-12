@@ -218,7 +218,7 @@ US-12 will decide when two squares along the rank is a castle.
     e1 to e4, so f6 is empty.
   - **Expected output**: `false`.
 
-- **TC-KING-14 — Reject a far square along the rank** ( :x: )
+- **TC-KING-14 — Reject a far square along the rank** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king on e4 `(4, 4)`. `to` is a4
     `(0, 4)`. The board is a new `Board` after `move` of the king from

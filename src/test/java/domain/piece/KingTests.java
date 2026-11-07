@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class KingTests {
+    private static final Location A4 = new Location(0, 4);
     private static final Location D3 = new Location(3, 3);
     private static final Location D4 = new Location(3, 4);
     private static final Location D5 = new Location(3, 5);
@@ -146,6 +147,15 @@ public class KingTests {
         board.move(E1, E4);
 
         boolean canMove = WHITE_KING.canMove(E4, F6, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_FarSquareAlongTheRank_ReturnsFalse() {
+        board.move(E1, E4);
+
+        boolean canMove = WHITE_KING.canMove(E4, A4, board);
 
         assertFalse(canMove);
     }
