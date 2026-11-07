@@ -19,6 +19,8 @@ public class BoardTests {
     private static final Location A8 = new Location(0, 8);
     private static final Location B1 = new Location(1, 1);
     private static final Location C3 = new Location(2, 3);
+    private static final Location F6 = new Location(5, 6);
+    private static final Location G8 = new Location(6, 8);
     private static final Location H1 = new Location(7, 1);
     private static final Location H5 = new Location(7, 5);
     private static final Location H8 = new Location(7, 8);
@@ -283,6 +285,15 @@ public class BoardTests {
         Board board = new Board();
 
         boolean canMove = board.pieceAt(B1).canMove(B1, C3, board);
+
+        assertTrue(canMove);
+    }
+
+    @Test
+    public void Board_BlackKnightOnG8_MovesAsKnight() {
+        Board board = new Board();
+
+        boolean canMove = board.pieceAt(G8).canMove(G8, F6, board);
 
         assertTrue(canMove);
     }

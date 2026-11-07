@@ -114,7 +114,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | --- | --- | --- | --- |
 | TC23: starting position at the corners and the rank edges | implemented in TC1 through TC20 | the occupants listed in those cases | implemented in TC1 through TC20 |
 | TC45: the white knight moves as a knight | a new `Board`; ask the piece on b1 `(1, 1)` whether it can move to c3 `(2, 3)` on this board | true | :white_check_mark: |
-| TC46: the black knight moves as a knight | a new `Board`; ask the piece on g8 `(6, 8)` whether it can move to f6 `(5, 6)` on this board | true | :x: |
+| TC46: the black knight moves as a knight | a new `Board`; ask the piece on g8 `(6, 8)` whether it can move to f6 `(5, 6)` on this board | true | :white_check_mark: |
 
 TC45 and TC46 check the knights through their behavior, not their class. A plain `Piece` answers false (see `Piece.md`), so true means the board placed a `Knight`. One knight of each color stands for the four, since the back rank uses the same piece kind for both colors.
 
