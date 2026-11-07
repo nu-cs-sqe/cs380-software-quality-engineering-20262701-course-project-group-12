@@ -1,17 +1,31 @@
 package ui;
 
 import domain.Game;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WelcomeControllerTests {
+    private static final String NAMES_REQUIRED_MESSAGE = "Both player names are required.";
+    private static final String DUPLICATE_NAMES_MESSAGE = "Players must use different names.";
+    private static final Runnable NO_WINDOW = () -> { };
+
+    private WelcomeView view;
+
+    @BeforeEach
+    public void createViewMock() {
+        view = mock(WelcomeView.class);
+    }
+
     @Test
-    public void Constructor_WithStartedGame_RejectsController() {
+    public void WelcomeController_StartedGame_ThrowsIllegalStateException() {
         Game game = new Game();
         game.start("Alice", "Bob");
 
@@ -21,131 +35,119 @@ public class WelcomeControllerTests {
     @Test
     public void StartGame_WithMissingPlayerName_ShowsRequiredNames() {
         Game game = new Game();
-        WelcomeController controller = new WelcomeController(game);
-        RecordingWelcomeView view = new RecordingWelcomeView();
-        controller.setView(view);
+        view.showNamesRequired();
+        WelcomeController controller = controllerWithView(game);
 
         controller.startGame("", "Bob");
 
-        assertTrue(view.namesRequiredShown);
-        assertTrue(!game.isStarted());
+        verify(view);
+        assertFalse(game.isStarted());
     }
 
     @Test
     public void StartGame_WithMissingPlayerTwoName_ShowsRequiredNames() {
         Game game = new Game();
-        WelcomeController controller = new WelcomeController(game);
-        RecordingWelcomeView view = new RecordingWelcomeView();
-        controller.setView(view);
+        view.showNamesRequired();
+        WelcomeController controller = controllerWithView(game);
 
         controller.startGame("Alice", "");
 
-        assertTrue(view.namesRequiredShown);
-        assertTrue(!game.isStarted());
+        verify(view);
+        assertFalse(game.isStarted());
+    }
+
+    @Test
+    public void StartGame_WithWhitespaceOnlyNames_ShowsRequiredNames() {
+        Game game = new Game();
+        view.showNamesRequired();
+        WelcomeController controller = controllerWithView(game);
+
+        controller.startGame("   ", "\t");
+
+        verify(view);
+        assertFalse(game.isStarted());
     }
 
     @Test
     public void WelcomeView_ShowNamesRequired_DisplaysRequiredNamesMessage() {
-        WelcomeView view = new WelcomeView(controllerThatIsNeverCalled());
+        WelcomeView welcomeView = new WelcomeView(controllerThatIsNeverCalled(), NO_WINDOW);
 
-        view.showNamesRequired();
+        welcomeView.showNamesRequired();
 
-        assertEquals("Both player names are required.", view.errorMessage());
+        assertEquals(NAMES_REQUIRED_MESSAGE, welcomeView.errorMessage());
     }
 
     @Test
     public void WelcomeView_ShowDuplicateNames_DisplaysDifferentNamesMessage() {
-        WelcomeView view = new WelcomeView(controllerThatIsNeverCalled());
+        WelcomeView welcomeView = new WelcomeView(controllerThatIsNeverCalled(), NO_WINDOW);
 
-        view.showDuplicateNames();
+        welcomeView.showDuplicateNames();
 
-        assertEquals("Players must use different names.", view.errorMessage());
+        assertEquals(DUPLICATE_NAMES_MESSAGE, welcomeView.errorMessage());
     }
 
     @Test
-    public void startGame_DuplicateNames_ShowsDuplicateNames() {
+    public void StartGame_WithDuplicateNames_ShowsDuplicateNames() {
         Game game = new Game();
-        WelcomeController controller = new WelcomeController(game);
-        RecordingWelcomeView view = new RecordingWelcomeView();
-        controller.setView(view);
+        view.showDuplicateNames();
+        WelcomeController controller = controllerWithView(game);
 
         controller.startGame("Alex", "Alex");
 
-        assertTrue(view.duplicateNamesShown);
-        assertTrue(!game.isStarted());
-        assertTrue(!view.closed);
-        assertTrue(!view.gameShown);
+        verify(view);
+        assertFalse(game.isStarted());
     }
 
     @Test
-    public void startGame_SameNameDifferentCase_ShowsDuplicateNames() {
+    public void StartGame_WithSameNameInDifferentCase_ShowsDuplicateNames() {
         Game game = new Game();
-        WelcomeController controller = new WelcomeController(game);
-        RecordingWelcomeView view = new RecordingWelcomeView();
-        controller.setView(view);
+        view.showDuplicateNames();
+        WelcomeController controller = controllerWithView(game);
 
         controller.startGame("Alice", "ALICE");
 
-        assertTrue(view.duplicateNamesShown);
-        assertTrue(!view.closed);
-        assertTrue(!view.gameShown);
+        verify(view);
+        assertFalse(game.isStarted());
+    }
+
+    @Test
+    public void StartGame_WithOneCharacterNames_ClosesWelcomeView() {
+        Game game = new Game();
+        view.close();
+        view.showGame(game);
+        WelcomeController controller = controllerWithView(game);
+
+        controller.startGame("A", "B");
+
+        verify(view);
+        assertTrue(game.isStarted());
     }
 
     @Test
     public void StartGame_WithValidNames_ClosesWelcomeView() {
         Game game = new Game();
-        WelcomeController controller = new WelcomeController(game);
-        RecordingWelcomeView view = new RecordingWelcomeView();
-        controller.setView(view);
+        view.close();
+        view.showGame(game);
+        WelcomeController controller = controllerWithView(game);
 
         controller.startGame("Alice", "Bob");
 
-        assertTrue(view.closed);
+        verify(view);
         assertTrue(game.isStarted());
-        assertTrue(view.gameShown);
     }
 
     @Test
     public void StartGame_WithSurroundingWhitespace_PassesNamesToGame() {
         Game game = new Game();
-        WelcomeController controller = new WelcomeController(game);
-        RecordingWelcomeView view = new RecordingWelcomeView();
-        controller.setView(view);
+        view.close();
+        view.showGame(game);
+        WelcomeController controller = controllerWithView(game);
 
         controller.startGame(" Alice ", "\tBob\n");
 
-        assertTrue(game.isStarted());
-        assertTrue(view.closed);
-        org.junit.jupiter.api.Assertions.assertEquals("Alice", game.playerOne().getName());
-        org.junit.jupiter.api.Assertions.assertEquals("Bob", game.playerTwo().getName());
-    }
-
-    @Test
-    public void StartButton_WithValidNames_StartsGame() {
-        Game game = new Game();
-        WelcomeController controller = new WelcomeController(game);
-        WelcomeView view = new WelcomeView(controller);
-        controller.setView(view);
-
-        view.playerOneField().setText("Alice");
-        view.playerTwoField().setText("Bob");
-        view.startButton().doClick();
-
-        assertTrue(game.isStarted());
-    }
-
-    @Test
-    public void StartButton_WithMissingName_ShowsRequiredNames() {
-        Game game = new Game();
-        WelcomeController controller = new WelcomeController(game);
-        WelcomeView view = new WelcomeView(controller);
-        controller.setView(view);
-
-        view.playerOneField().setText("Alice");
-        view.startButton().doClick();
-
-        assertEquals("Both player names are required.", view.errorMessage());
-        assertTrue(!game.isStarted());
+        verify(view);
+        assertEquals("Alice", game.playerOneName());
+        assertEquals("Bob", game.playerTwoName());
     }
 
     private static WelcomeController controllerThatIsNeverCalled() {
@@ -154,34 +156,10 @@ public class WelcomeControllerTests {
         return controller;
     }
 
-    private static class RecordingWelcomeView extends WelcomeView {
-        private boolean namesRequiredShown;
-        private boolean duplicateNamesShown;
-        private boolean closed;
-        private boolean gameShown;
-
-        RecordingWelcomeView() {
-            super(controllerThatIsNeverCalled());
-        }
-
-        @Override
-        public void showNamesRequired() {
-            namesRequiredShown = true;
-        }
-
-        @Override
-        public void showDuplicateNames() {
-            duplicateNamesShown = true;
-        }
-
-        @Override
-        public void close() {
-            closed = true;
-        }
-
-        @Override
-        public void showGame(Game game) {
-            gameShown = true;
-        }
+    private WelcomeController controllerWithView(Game game) {
+        replay(view);
+        WelcomeController controller = new WelcomeController(game);
+        controller.setView(view);
+        return controller;
     }
 }

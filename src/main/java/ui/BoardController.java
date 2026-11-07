@@ -8,9 +8,6 @@ public class BoardController {
     private final Board board;
 
     public BoardController(Board board) {
-        if (board == null) {
-            throw new IllegalArgumentException("Cannot create a board controller without a board");
-        }
         this.board = board;
     }
 
