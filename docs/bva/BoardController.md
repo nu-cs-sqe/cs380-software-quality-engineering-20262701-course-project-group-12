@@ -5,7 +5,7 @@
 - `BoardController(Board board)`: takes the starting board.
 - `boolean isOccupied(Location location)`: returns `board.isOccupied(location)`.
 - `Piece pieceAt(Location location)`: returns `board.pieceAt(location)`. It does not choose a different piece. `Board` throws `IllegalArgumentException` for an empty square, and the controller lets that exception through. No method returns null.
-- `void clickSquare(Location square)` (issue #34): handles a click on a square. With nothing selected, a click on an occupied square selects it, and a click on an empty square does nothing. With a square selected, the click is the destination: when the selected piece `canMove` there, the board moves it and the selection is cleared. When it cannot, a click on another piece selects that piece instead, and a click on an empty square keeps the current selection, so the selected square stays highlighted until the player moves or picks another piece. It does not check whose turn it is (US-09) and does not tell the player about a refused move (US-10).
+- `void clickSquare(Location square)` (issue #34): handles a click on a square. With nothing selected, a click on an occupied square selects it, and a click on an empty square does nothing. With a square selected, a click on the selected square itself clears the selection (US-09 AC 4). A click on any other square is the destination: when the selected piece `canMove` there, the board moves it and the selection is cleared. When it cannot, a click on another piece selects that piece instead, and a click on an empty square keeps the current selection, so the selected square stays highlighted until the player moves or picks another piece. It does not check whose turn it is (US-09) and does not tell the player about a refused move (US-10).
 - `boolean isSelected(Location square)` (issue #34): returns true when `square` is the selected square, compared by file and rank. `BoardView` uses it to color the selected square.
 
 No method checks its arguments for null, and no case passes null: our code never passes null (instructor code review, Week 6). TC2, TC5, and TC8 used to pass a null board or location; they were removed with the board check.
@@ -49,6 +49,7 @@ The selection is private, so it is observed through the next click: a selected s
 | Input: what the selected piece answers for the clicked square | Boolean | can move (c3 `(2, 3)`); cannot move (b3 `(1, 3)`) |
 | Input: `square` | Pointer | a location (no null: callers never pass one) |
 | Output: the board | Cases | the piece moves from the selected square to the clicked square; unchanged |
+| Input: the clicked square compared with the selection | Cases | the selected square (a second b1 object); another square |
 | Input: occupancy of a clicked square the selected piece cannot reach | Boolean | occupied (d2 `(3, 2)`); empty (b3) |
 | Output: the selection after the click | Cases | the clicked square; unchanged; none |
 
@@ -83,6 +84,7 @@ The selection is private, so it is observed through the next click: a selected s
 | TC12: a move clears the selection | as TC9, and the board answers false for a3; click b1, then c3, then a3 | the board moves the piece from b1 to c3 once; the click on a3 asks no piece about a move | :white_check_mark: |
 | TC13: a refused move onto an empty square keeps the selection | as TC10; click b1, then b3, then ask `isSelected` about b1 | true | :white_check_mark: |
 | TC17: a click on a piece the selected one cannot reach selects that piece | a controller for the mocked board; the board answers true for b1 and for d2 `(3, 2)` and returns a mocked piece that cannot move from b1 to d2; click b1, then d2, then ask `isSelected` about d2 | true; the board does not move any piece | :white_check_mark: |
+| TC18: a click on the selected square clears the selection | a controller for the mocked board; the board answers true for b1; click b1, then click a second b1 object, then ask `isSelected` about b1 | false; no piece is asked about a move | :x: |
 
 TC13 used to expect a refused move to clear the selection. The player asked for the selected square to stay highlighted until a move or another piece is chosen, which is also US-10 AC 5, so TC13 now expects the selection to stay.
 
