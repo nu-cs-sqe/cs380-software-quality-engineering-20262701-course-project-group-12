@@ -44,7 +44,7 @@ Type and color are small sets of cases, and every pair is possible, so Step 4 us
 | --- | --- | --- | --- |
 | TC3: white pawn | images from `PieceImages()`; `piece` is a white pawn | the pixels of `white-pawn.png` | :white_check_mark: |
 | TC4: black pawn | images from `PieceImages()`; `piece` is a black pawn | the pixels of `black-pawn.png` | :white_check_mark: |
-| TC5: white rook | images from `PieceImages()`; `piece` is a white rook | the pixels of `white-rook.png` | :x: |
+| TC5: white rook | images from `PieceImages()`; `piece` is a white rook | the pixels of `white-rook.png` | :white_check_mark: |
 | TC6: black rook | images from `PieceImages()`; `piece` is a black rook | the pixels of `black-rook.png` | :x: |
 | TC7: white knight | images from `PieceImages()`; `piece` is a white knight | the pixels of `white-knight.png` | :x: |
 | TC8: black knight | images from `PieceImages()`; `piece` is a black knight | the pixels of `black-knight.png` | :x: |
