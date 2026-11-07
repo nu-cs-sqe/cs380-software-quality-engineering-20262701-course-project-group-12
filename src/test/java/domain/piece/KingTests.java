@@ -19,6 +19,8 @@ public class KingTests {
     private static final Location F3 = new Location(5, 3);
     private static final Location F4 = new Location(5, 4);
     private static final Location F5 = new Location(5, 5);
+    private static final Location G1 = new Location(6, 1);
+    private static final Location G3 = new Location(6, 3);
     private static final Location E7 = new Location(4, 7);
     private static final Location E8 = new Location(4, 8);
     private static final King WHITE_KING = new King(PieceColor.WHITE);
@@ -115,6 +117,15 @@ public class KingTests {
         board.move(E1, E4);
 
         boolean canMove = WHITE_KING.canMove(E4, E6, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_TwoSquaresAlongTheRank_ReturnsFalse() {
+        board.move(G1, G3);
+
+        boolean canMove = WHITE_KING.canMove(E1, G1, board);
 
         assertFalse(canMove);
     }

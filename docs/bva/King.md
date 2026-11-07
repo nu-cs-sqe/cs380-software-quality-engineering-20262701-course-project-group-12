@@ -195,7 +195,7 @@ US-12 will decide when two squares along the rank is a castle.
     e1 to e4, so e6 is empty.
   - **Expected output**: `false`.
 
-- **TC-KING-11 — Reject two squares along the rank** ( :x: )
+- **TC-KING-11 — Reject two squares along the rank** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king on e1 `(4, 1)`. `to` is g1
     `(6, 1)`, two squares toward the h-file (castling distance). The

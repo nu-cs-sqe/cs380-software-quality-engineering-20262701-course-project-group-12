@@ -14,6 +14,9 @@ public class King extends Piece {
         if (isOnSameFile(from, to)) {
             return rankDistance(from, to) == ONE_SQUARE;
         }
+        if (from.getRank() == to.getRank()) {
+            return fileDistance(from, to) == ONE_SQUARE;
+        }
         return true;
     }
 
@@ -23,5 +26,9 @@ public class King extends Piece {
 
     private int rankDistance(Location from, Location to) {
         return Math.abs(to.getRank() - from.getRank());
+    }
+
+    private int fileDistance(Location from, Location to) {
+        return Math.abs(to.getFile() - from.getFile());
     }
 }
