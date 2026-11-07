@@ -23,6 +23,7 @@ public class PawnTests {
     private static final Location E6 = new Location(4, 6);
     private static final Location E7 = new Location(4, 7);
     private static final Location F4 = new Location(5, 4);
+    private static final Location G1 = new Location(6, 1);
     private static final Location G3 = new Location(6, 3);
     private static final Location G7 = new Location(6, 7);
     private static final Location H2 = new Location(7, 2);
@@ -163,6 +164,15 @@ public class PawnTests {
     @Test
     public void CanMove_StraightCaptureOneSquareForward_ReturnsFalse() {
         board.move(E7, E3);
+
+        boolean canMove = WHITE_PAWN.canMove(E2, E3, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_OneSquareForwardOntoOwnPiece_ReturnsFalse() {
+        board.move(G1, E3);
 
         boolean canMove = WHITE_PAWN.canMove(E2, E3, board);
 

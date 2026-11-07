@@ -260,7 +260,7 @@ story.
   - **Expected output**: `false`.
 
 - **TC-PAWN-17 — Reject one square forward onto a piece of the pawn's
-  color** ( :x: )
+  color** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`. `to` is
     e3 `(4, 3)`. New `Board` after `move` of the g1 knight to e3, so e3
