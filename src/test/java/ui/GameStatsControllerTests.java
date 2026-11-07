@@ -97,7 +97,7 @@ public class GameStatsControllerTests {
     }
 
     @Test
-    void createViewAllowsDuplicateNames() {
+    void createViewShowsSimilarButDifferentNames() {
         Player playerOne = createMock(Player.class);
         Player playerTwo = createMock(Player.class);
         Game game = createMock(Game.class);
@@ -105,15 +105,15 @@ public class GameStatsControllerTests {
         expect(game.playerOne()).andStubReturn(playerOne);
         expect(game.playerTwo()).andStubReturn(playerTwo);
         expect(game.playerToMove()).andStubReturn(playerOne);
-        expect(playerOne.getName()).andStubReturn("Ada");
-        expect(playerTwo.getName()).andStubReturn("Ada");
+        expect(playerOne.getName()).andStubReturn("Alex");
+        expect(playerTwo.getName()).andStubReturn("Alexa");
         replay(game, playerOne, playerTwo);
 
         GameStatsView view = new GameStatsController(game).createView();
 
-        assertEquals("Player 1: Ada (White)", view.playerOneLine());
-        assertEquals("Player 2: Ada (Black)", view.playerTwoLine());
-        assertEquals("Current player: Ada", view.currentPlayerLine());
+        assertEquals("Player 1: Alex (White)", view.playerOneLine());
+        assertEquals("Player 2: Alexa (Black)", view.playerTwoLine());
+        assertEquals("Current player: Alex", view.currentPlayerLine());
     }
 
     @Test

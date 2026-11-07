@@ -3,6 +3,8 @@ package ui;
 import domain.Game;
 import org.junit.jupiter.api.Test;
 
+import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -44,11 +46,49 @@ public class WelcomeControllerTests {
 
     @Test
     public void WelcomeView_ShowNamesRequired_DisplaysRequiredNamesMessage() {
-        WelcomeView view = new WelcomeView();
+        WelcomeView view = new WelcomeView(controllerThatIsNeverCalled());
 
         view.showNamesRequired();
 
         assertEquals("Both player names are required.", view.errorMessage());
+    }
+
+    @Test
+    public void WelcomeView_ShowDuplicateNames_DisplaysDifferentNamesMessage() {
+        WelcomeView view = new WelcomeView(controllerThatIsNeverCalled());
+
+        view.showDuplicateNames();
+
+        assertEquals("Players must use different names.", view.errorMessage());
+    }
+
+    @Test
+    public void startGame_DuplicateNames_ShowsDuplicateNames() {
+        Game game = new Game();
+        WelcomeController controller = new WelcomeController(game);
+        RecordingWelcomeView view = new RecordingWelcomeView();
+        controller.setView(view);
+
+        controller.startGame("Alex", "Alex");
+
+        assertTrue(view.duplicateNamesShown);
+        assertTrue(!game.isStarted());
+        assertTrue(!view.closed);
+        assertTrue(!view.gameShown);
+    }
+
+    @Test
+    public void startGame_SameNameDifferentCase_ShowsDuplicateNames() {
+        Game game = new Game();
+        WelcomeController controller = new WelcomeController(game);
+        RecordingWelcomeView view = new RecordingWelcomeView();
+        controller.setView(view);
+
+        controller.startGame("Alice", "ALICE");
+
+        assertTrue(view.duplicateNamesShown);
+        assertTrue(!view.closed);
+        assertTrue(!view.gameShown);
     }
 
     @Test
@@ -108,14 +148,30 @@ public class WelcomeControllerTests {
         assertTrue(!game.isStarted());
     }
 
+    private static WelcomeController controllerThatIsNeverCalled() {
+        WelcomeController controller = mock(WelcomeController.class);
+        replay(controller);
+        return controller;
+    }
+
     private static class RecordingWelcomeView extends WelcomeView {
         private boolean namesRequiredShown;
+        private boolean duplicateNamesShown;
         private boolean closed;
         private boolean gameShown;
+
+        RecordingWelcomeView() {
+            super(controllerThatIsNeverCalled());
+        }
 
         @Override
         public void showNamesRequired() {
             namesRequiredShown = true;
+        }
+
+        @Override
+        public void showDuplicateNames() {
+            duplicateNamesShown = true;
         }
 
         @Override
