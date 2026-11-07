@@ -193,7 +193,7 @@ through `8`.
   - **Expected output**: `true`.
 
 - **TC-QUEEN-10 — Move a black queen seven squares along a diagonal
-  toward rank 1 onto an empty square** ( :x: )
+  toward rank 1 onto an empty square** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: Black queen. `from` is h8 `(7, 8)`. `to` is
     a1 `(0, 1)`. New `Board` after `move` of the h8 rook to h6 `(7, 6)`,
