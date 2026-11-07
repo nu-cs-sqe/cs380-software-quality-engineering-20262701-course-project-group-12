@@ -2,38 +2,59 @@ package ui;
 
 import domain.Location;
 import domain.piece.Piece;
-import domain.piece.PieceColor;
-import domain.piece.PieceType;
 
-import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import javax.swing.JPanel;
 
 public class BoardView extends JPanel {
-    private static final int BOARD_SIZE = 8;
-    private static final int FIRST_RANK = 1;
-    private static final int LAST_RANK = BOARD_SIZE;
+    private static final int BOARD_SIZE = Location.MAX_FILE - Location.MIN_FILE + 1;
+    private static final int FIRST_FILE = Location.MIN_FILE;
+    private static final int LAST_FILE = Location.MAX_FILE;
+    private static final int FIRST_RANK = Location.MIN_RANK;
+    private static final int LAST_RANK = Location.MAX_RANK;
     private static final int TILE_SIZE = 80;
+    private static final int BOARD_LENGTH = BOARD_SIZE * TILE_SIZE;
     private static final Color LIGHT_SQUARE = new Color(240, 217, 181);
     private static final Color DARK_SQUARE = new Color(181, 136, 99);
+    private static final int LABEL_MARGIN = TILE_SIZE / 2;
+    private static final char FIRST_FILE_LETTER = 'a';
+    private static final Color LABEL_INK = Color.DARK_GRAY;
+    private static final Font LABEL_FONT = new Font(Font.SANS_SERIF, Font.BOLD, TILE_SIZE / 5);
 
     private final BoardController boardController;
+    private final PieceImages pieceImages = new PieceImages();
 
     public BoardView(BoardController boardController) {
-        if (boardController == null) {
-            throw new IllegalArgumentException("Cannot create the board view without a board controller");
-        }
         this.boardController = boardController;
-        setPreferredSize(new Dimension(BOARD_SIZE * TILE_SIZE, BOARD_SIZE * TILE_SIZE));
+        int sideLength = BOARD_LENGTH + LABEL_MARGIN;
+        setPreferredSize(new Dimension(sideLength, sideLength));
     }
 
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
+        smoothScaledImages(graphics);
+        paintSquares(graphics);
+        paintLabels(graphics);
+    }
+
+    private void smoothScaledImages(Graphics graphics) {
+        Graphics2D graphics2D = (Graphics2D) graphics;
+        graphics2D.setRenderingHint(
+                RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+    }
+
+    private void paintSquares(Graphics graphics) {
         for (int rank = LAST_RANK; rank >= FIRST_RANK; rank--) {
-            for (int file = 0; file < BOARD_SIZE; file++) {
+            for (int file = FIRST_FILE; file <= LAST_FILE; file++) {
                 paintSquare(graphics, new Location(file, rank));
             }
         }
@@ -42,7 +63,8 @@ public class BoardView extends JPanel {
     private void paintSquare(Graphics graphics, Location location) {
         boolean isLightSquare = (location.getFile() + location.getRank()) % 2 == 0;
         graphics.setColor(isLightSquare ? LIGHT_SQUARE : DARK_SQUARE);
-        graphics.fillRect(xOf(location), yOf(location), TILE_SIZE, TILE_SIZE);
+        graphics.fillRect(leftEdgeOf(location.getFile()), topEdgeOf(location.getRank()),
+                TILE_SIZE, TILE_SIZE);
         if (boardController.isOccupied(location)) {
             drawPiece(graphics, location);
         }
@@ -50,38 +72,47 @@ public class BoardView extends JPanel {
 
     private void drawPiece(Graphics graphics, Location location) {
         Piece piece = boardController.pieceAt(location);
-        String letter = symbol(piece.getType());
-        int textX = xOf(location) + TILE_SIZE / 4;
-        int textY = yOf(location) + TILE_SIZE * 2 / 3;
-        graphics.setFont(new Font("SansSerif", Font.BOLD, TILE_SIZE / 2));
-        graphics.setColor(piece.getColor() == PieceColor.WHITE ? Color.BLACK : Color.WHITE);
-        graphics.drawString(letter, textX + 1, textY + 1);
-        graphics.setColor(piece.getColor() == PieceColor.WHITE ? Color.WHITE : Color.BLACK);
-        graphics.drawString(letter, textX, textY);
+        BufferedImage image = pieceImages.imageOf(piece);
+        int left = leftEdgeOf(location.getFile());
+        int top = topEdgeOf(location.getRank());
+        graphics.drawImage(image, left, top, TILE_SIZE, TILE_SIZE, this);
     }
 
-    private int xOf(Location location) {
-        return location.getFile() * TILE_SIZE;
+    private void paintLabels(Graphics graphics) {
+        graphics.setFont(LABEL_FONT);
+        graphics.setColor(LABEL_INK);
+        paintFileLabels(graphics);
+        paintRankLabels(graphics);
     }
 
-    private int yOf(Location location) {
-        return (LAST_RANK - location.getRank()) * TILE_SIZE;
-    }
-
-    private String symbol(PieceType type) {
-        switch (type) {
-            case KING:
-                return "K";
-            case QUEEN:
-                return "Q";
-            case ROOK:
-                return "R";
-            case BISHOP:
-                return "B";
-            case KNIGHT:
-                return "N";
-            default:
-                return "P";
+    private void paintFileLabels(Graphics graphics) {
+        for (int file = FIRST_FILE; file <= LAST_FILE; file++) {
+            String fileLetter = String.valueOf((char) (FIRST_FILE_LETTER + file - FIRST_FILE));
+            Rectangle belowFile =
+                    new Rectangle(leftEdgeOf(file), BOARD_LENGTH, TILE_SIZE, LABEL_MARGIN);
+            drawCentered(graphics, fileLetter, belowFile);
         }
+    }
+
+    private void paintRankLabels(Graphics graphics) {
+        for (int rank = FIRST_RANK; rank <= LAST_RANK; rank++) {
+            Rectangle besideRank = new Rectangle(0, topEdgeOf(rank), LABEL_MARGIN, TILE_SIZE);
+            drawCentered(graphics, String.valueOf(rank), besideRank);
+        }
+    }
+
+    private void drawCentered(Graphics graphics, String text, Rectangle area) {
+        FontMetrics metrics = graphics.getFontMetrics();
+        int textX = area.x + (area.width - metrics.stringWidth(text)) / 2;
+        int textY = area.y + (area.height - metrics.getHeight()) / 2 + metrics.getAscent();
+        graphics.drawString(text, textX, textY);
+    }
+
+    private int leftEdgeOf(int file) {
+        return LABEL_MARGIN + (file - FIRST_FILE) * TILE_SIZE;
+    }
+
+    private int topEdgeOf(int rank) {
+        return (LAST_RANK - rank) * TILE_SIZE;
     }
 }

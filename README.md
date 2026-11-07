@@ -19,3 +19,6 @@ N/A
 N/A
 ### Others
 N/A
+
+## Credits
+- Chess piece images by Cburnett, from Wikimedia Commons, used under the BSD license. See `src/main/resources/pieces/LICENSE.txt`.
