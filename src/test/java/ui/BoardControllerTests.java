@@ -20,12 +20,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class BoardControllerTests {
     private static final Location A1 = new Location(0, 1);
     private static final Location A3 = new Location(0, 3);
+    private static final Location B1 = new Location(1, 1);
+    private static final Location C3 = new Location(2, 3);
 
     private Board board;
+    private Piece piece;
 
     @BeforeEach
-    public void createBoardMock() {
+    public void createMocks() {
         board = mock(Board.class);
+        piece = mock(Piece.class);
     }
 
     @Test
@@ -65,8 +69,26 @@ public class BoardControllerTests {
         verify(board);
     }
 
+    @Test
+    public void ClickSquare_PieceThenSquareItCanReach_MovesPiece() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        board.move(B1, C3);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece);
+    }
+
+    private void expectPieceOnB1() {
+        expect(board.isOccupied(B1)).andReturn(true);
+        expect(board.pieceAt(B1)).andReturn(piece);
+    }
+
     private BoardController replayedController() {
-        replay(board);
+        replay(board, piece);
         return new BoardController(board);
     }
 }

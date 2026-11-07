@@ -75,7 +75,7 @@ The selection is private, so it is observed through the next click: a selected s
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC9: select a piece, then a square it can reach | a controller for the mocked board; the board answers true for b1 `(1, 1)` and returns a mocked piece that can move from b1 to c3 `(2, 3)`; click b1, then c3 | the board moves the piece from b1 to c3 | :x: |
+| TC9: select a piece, then a square it can reach | a controller for the mocked board; the board answers true for b1 `(1, 1)` and returns a mocked piece that can move from b1 to c3 `(2, 3)`; click b1, then c3 | the board moves the piece from b1 to c3 | :white_check_mark: |
 | TC10: select a piece, then a square it cannot reach | a controller for the mocked board; the board answers true for b1 and returns a mocked piece that cannot move from b1 to b3 `(1, 3)`; click b1, then b3 | the board does not move any piece | :x: |
 | TC11: a click on an empty square selects nothing | a controller for the mocked board; the board answers false for a3 `(0, 3)` and for c3; click a3, then c3 | no piece is asked about a move; the board does not move any piece | :x: |
 | TC12: a move clears the selection | as TC9, and the board answers false for a3; click b1, then c3, then a3 | the board moves the piece from b1 to c3 once; the click on a3 asks no piece about a move | :x: |
