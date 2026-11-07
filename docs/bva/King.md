@@ -225,7 +225,7 @@ US-12 will decide when two squares along the rank is a castle.
     e1 to e4, so a4 is empty.
   - **Expected output**: `false`.
 
-- **TC-KING-15 — Reject an adjacent piece of the king's color** ( :x: )
+- **TC-KING-15 — Reject an adjacent piece of the king's color** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king. `from` is e1 `(4, 1)`. `to` is
     e2 `(4, 2)`. New `Board`; e2 holds the white e-pawn.

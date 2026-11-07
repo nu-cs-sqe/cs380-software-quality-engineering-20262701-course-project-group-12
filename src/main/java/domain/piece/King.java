@@ -11,6 +11,9 @@ public class King extends Piece {
     }
 
     public boolean canMove(Location from, Location to, Board board) {
+        if (board.isOccupied(to)) {
+            return false;
+        }
         return Math.max(fileDistance(from, to), rankDistance(from, to)) == ONE_SQUARE;
     }
 

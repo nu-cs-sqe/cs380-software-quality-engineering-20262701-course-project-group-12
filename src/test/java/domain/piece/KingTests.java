@@ -14,6 +14,7 @@ public class KingTests {
     private static final Location D4 = new Location(3, 4);
     private static final Location D5 = new Location(3, 5);
     private static final Location E1 = new Location(4, 1);
+    private static final Location E2 = new Location(4, 2);
     private static final Location E4 = new Location(4, 4);
     private static final Location E5 = new Location(4, 5);
     private static final Location E6 = new Location(4, 6);
@@ -156,6 +157,13 @@ public class KingTests {
         board.move(E1, E4);
 
         boolean canMove = WHITE_KING.canMove(E4, A4, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_AdjacentPieceOfKingsColor_ReturnsFalse() {
+        boolean canMove = WHITE_KING.canMove(E1, E2, board);
 
         assertFalse(canMove);
     }
