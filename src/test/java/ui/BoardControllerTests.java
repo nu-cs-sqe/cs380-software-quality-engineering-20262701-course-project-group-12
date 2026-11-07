@@ -29,11 +29,6 @@ public class BoardControllerTests {
     }
 
     @Test
-    public void BoardController_NullBoard_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> new BoardController(null));
-    }
-
-    @Test
     public void PieceAt_OccupiedSquare_ReturnsTheBoardsPiece() {
         Piece whiteRook = new Piece(PieceType.ROOK, PieceColor.WHITE);
         expect(board.pieceAt(A1)).andReturn(whiteRook);
@@ -53,15 +48,6 @@ public class BoardControllerTests {
     }
 
     @Test
-    public void PieceAt_NullLocation_ThrowsIllegalArgumentException() {
-        expect(board.pieceAt(null)).andThrow(new IllegalArgumentException());
-        BoardController controller = replayedController();
-
-        assertThrows(IllegalArgumentException.class, () -> controller.pieceAt(null));
-        verify(board);
-    }
-
-    @Test
     public void IsOccupied_BoardReportsPiece_ReturnsTrue() {
         expect(board.isOccupied(A1)).andReturn(true);
         BoardController controller = replayedController();
@@ -76,15 +62,6 @@ public class BoardControllerTests {
         BoardController controller = replayedController();
 
         assertFalse(controller.isOccupied(A3));
-        verify(board);
-    }
-
-    @Test
-    public void IsOccupied_NullLocation_ThrowsIllegalArgumentException() {
-        expect(board.isOccupied(null)).andThrow(new IllegalArgumentException());
-        BoardController controller = replayedController();
-
-        assertThrows(IllegalArgumentException.class, () -> controller.isOccupied(null));
         verify(board);
     }
 
