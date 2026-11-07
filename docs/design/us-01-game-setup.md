@@ -145,9 +145,9 @@ Owns the two players, the board, and whose turn it is. It is unstarted until `st
 `void start(String player1Name, String player2Name)`
 
 `MissingPlayerNameException` and `DuplicatePlayerNameException` are unchecked
-project exceptions in `domain`.
+project exceptions in `domain`. No method checks its arguments for null: our code never
+passes null.
 
-- If either name is null, throw `IllegalArgumentException`. Do not create players or a board.
 - Trim both names.
 - If either trimmed name is empty, throw `MissingPlayerNameException`. Do not create players or a board.
 - If the trimmed names are equal ignoring case, throw `DuplicatePlayerNameException`. Do not create players or a board. `Alice`, ` alice `, and `ALICE` are the same name.
@@ -177,8 +177,7 @@ Owns the 64 squares. The piece array is private. There is no method that returns
 
 `Piece pieceAt(Location location)`
 
-- Require a non-null location.
-- Return the piece on that square, or null when the square is empty.
+- Require an occupied square. Throw `IllegalArgumentException` for an empty one; `boolean isOccupied(Location location)` tells the caller which squares are empty.
 - Do not change the board.
 
 Starting position, file a through file h:
