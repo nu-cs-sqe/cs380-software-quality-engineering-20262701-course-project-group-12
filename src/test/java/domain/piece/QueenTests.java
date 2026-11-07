@@ -195,4 +195,13 @@ public class QueenTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_LastSquareOfFileOccupied_ReturnsFalse() {
+        board.move(D2, C3);
+
+        boolean canMove = WHITE_QUEEN.canMove(D1, D8, board);
+
+        assertFalse(canMove);
+    }
 }
