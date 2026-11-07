@@ -146,7 +146,7 @@ story.
 ### Method under test: `canMove(Location from, Location to, Board board)`
 
 - **TC-PAWN-01 — Move a white pawn one square forward onto an empty
-  square** ( :x: )
+  square** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`. `to` is
     e3 `(4, 3)`. New `Board`; e3 is empty.
