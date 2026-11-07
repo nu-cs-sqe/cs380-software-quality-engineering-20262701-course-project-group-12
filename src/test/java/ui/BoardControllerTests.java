@@ -70,6 +70,7 @@ public class BoardControllerTests {
     private static final Location B3 = new Location(1, 3);
     private static final Location C3 = new Location(2, 3);
     private static final Location D2 = new Location(3, 2);
+    private static final Piece BLACK_PAWN = new Piece(PieceType.PAWN, PieceColor.BLACK);
 
     private Board board;
     private Piece piece;
@@ -198,9 +199,28 @@ public class BoardControllerTests {
         verify(board, piece);
     }
 
+    @Test
+    public void ClickSquare_OpponentPieceTheSelectedOneCanReach_CapturesIt() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        givenOnC3(BLACK_PAWN);
+        board.move(B1, C3);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece);
+    }
+
     private void expectPieceOnB1() {
         expect(board.isOccupied(B1)).andReturn(true);
         expect(board.pieceAt(B1)).andReturn(piece);
+    }
+
+    private void givenOnC3(Piece occupant) {
+        expect(board.isOccupied(C3)).andStubReturn(true);
+        expect(board.pieceAt(C3)).andStubReturn(occupant);
     }
 
     private BoardController replayedController() {
