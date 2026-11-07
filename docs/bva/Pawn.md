@@ -167,7 +167,7 @@ story.
   - **Expected output**: `true`.
 
 - **TC-PAWN-04 — Move a black pawn two squares forward from its starting
-  rank** ( :x: )
+  rank** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: Black pawn. `from` is e7 `(4, 7)`. `to` is
     e5 `(4, 5)`. New `Board`; e6 and e5 are empty.
