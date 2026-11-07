@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PawnTests {
+    private static final Location A2 = new Location(0, 2);
+    private static final Location B3 = new Location(1, 3);
+    private static final Location B7 = new Location(1, 7);
     private static final Location E2 = new Location(4, 2);
     private static final Location E3 = new Location(4, 3);
     private static final Location E4 = new Location(4, 4);
@@ -48,6 +51,15 @@ public class PawnTests {
     @Test
     public void CanMove_BlackPawnTwoSquaresForwardFromStartingRank_ReturnsTrue() {
         boolean canMove = BLACK_PAWN.canMove(E7, E5, board);
+
+        assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_CaptureTowardHigherFileFromAFile_ReturnsTrue() {
+        board.move(B7, B3);
+
+        boolean canMove = WHITE_PAWN.canMove(A2, B3, board);
 
         assertTrue(canMove);
     }

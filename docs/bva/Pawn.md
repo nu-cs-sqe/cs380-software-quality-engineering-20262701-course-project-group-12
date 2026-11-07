@@ -173,7 +173,7 @@ story.
     e5 `(4, 5)`. New `Board`; e6 and e5 are empty.
   - **Expected output**: `true`.
 
-- **TC-PAWN-05 — Capture toward a higher file from the a-file** ( :x: )
+- **TC-PAWN-05 — Capture toward a higher file from the a-file** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is a2 `(0, 2)`. `to` is
     b3 `(1, 3)`. New `Board` after `move` of the b7 pawn to b3, so b3
