@@ -21,6 +21,7 @@ public class BoardControllerTests {
     private static final Location A1 = new Location(0, 1);
     private static final Location A3 = new Location(0, 3);
     private static final Location B1 = new Location(1, 1);
+    private static final Location B3 = new Location(1, 3);
     private static final Location C3 = new Location(2, 3);
 
     private Board board;
@@ -78,6 +79,18 @@ public class BoardControllerTests {
 
         controller.clickSquare(B1);
         controller.clickSquare(C3);
+
+        verify(board, piece);
+    }
+
+    @Test
+    public void ClickSquare_PieceThenSquareItCannotReach_LeavesBoardUnchanged() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, B3, board)).andReturn(false);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(B3);
 
         verify(board, piece);
     }
