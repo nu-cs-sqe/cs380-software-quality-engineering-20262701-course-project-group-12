@@ -167,6 +167,15 @@ public class KnightTests {
         assertFalse(canMove);
     }
 
+    @Test
+    public void CanMove_OneSquareAlongDiagonal_ReturnsFalse() {
+        placeWhiteKnightOnE4WithEmptyDestinations();
+
+        boolean canMove = WHITE_KNIGHT.canMove(E4, F5, board);
+
+        assertFalse(canMove);
+    }
+
     private void placeWhiteKnightOnE4WithEmptyDestinations() {
         board.move(G1, E4);
         board.move(D2, D3);
