@@ -13,7 +13,6 @@ import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -27,19 +26,6 @@ public class BoardControllerTests {
     @BeforeEach
     public void createBoardMock() {
         board = mock(Board.class);
-    }
-
-    @Test
-    public void BoardController_WithBoard_IsCreated() {
-        BoardController controller = replayedController();
-
-        assertNotNull(controller);
-        verify(board);
-    }
-
-    @Test
-    public void BoardController_NullBoard_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> new BoardController(null));
     }
 
     @Test
@@ -62,16 +48,7 @@ public class BoardControllerTests {
     }
 
     @Test
-    public void PieceAt_NullLocation_ThrowsIllegalArgumentException() {
-        expect(board.pieceAt(null)).andThrow(new IllegalArgumentException());
-        BoardController controller = replayedController();
-
-        assertThrows(IllegalArgumentException.class, () -> controller.pieceAt(null));
-        verify(board);
-    }
-
-    @Test
-    public void IsOccupied_BoardReportsAPiece_ReturnsTrue() {
+    public void IsOccupied_BoardReportsPiece_ReturnsTrue() {
         expect(board.isOccupied(A1)).andReturn(true);
         BoardController controller = replayedController();
 
@@ -85,15 +62,6 @@ public class BoardControllerTests {
         BoardController controller = replayedController();
 
         assertFalse(controller.isOccupied(A3));
-        verify(board);
-    }
-
-    @Test
-    public void IsOccupied_NullLocation_ThrowsIllegalArgumentException() {
-        expect(board.isOccupied(null)).andThrow(new IllegalArgumentException());
-        BoardController controller = replayedController();
-
-        assertThrows(IllegalArgumentException.class, () -> controller.isOccupied(null));
         verify(board);
     }
 

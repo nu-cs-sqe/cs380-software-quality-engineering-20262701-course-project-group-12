@@ -10,10 +10,6 @@ public class Game {
     private Board board;
 
     public void start(String player1Name, String player2Name) {
-        if (player1Name == null || player2Name == null) {
-            throw new IllegalArgumentException(
-                    "Failed to start the game because a player name is null.");
-        }
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
             throw new MissingPlayerNameException();
         }
@@ -33,30 +29,41 @@ public class Game {
     }
 
     public Player playerOne() {
-        if (!started) {
-            throw new IllegalStateException();
-        }
+        requireStarted("player one");
         return playerOne;
     }
 
     public Player playerTwo() {
-        if (!started) {
-            throw new IllegalStateException();
-        }
+        requireStarted("player two");
         return playerTwo;
     }
 
     public Player playerToMove() {
-        if (!started) {
-            throw new IllegalStateException();
-        }
+        requireStarted("the player to move");
         return playerToMove;
     }
 
     public Board board() {
-        if (!started) {
-            throw new IllegalStateException();
-        }
+        requireStarted("the board");
         return board;
+    }
+
+    public String playerOneName() {
+        return playerOne().getName();
+    }
+
+    public String playerTwoName() {
+        return playerTwo().getName();
+    }
+
+    public String playerToMoveName() {
+        return playerToMove().getName();
+    }
+
+    private void requireStarted(String request) {
+        if (!started) {
+            throw new IllegalStateException(
+                    "Cannot read " + request + " before the game has started");
+        }
     }
 }
