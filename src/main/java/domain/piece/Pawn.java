@@ -26,26 +26,29 @@ public class Pawn extends Piece {
     }
 
     public boolean canMove(Location from, Location to, Board board) {
-        return hasExpectedOccupant(from, to, board) && isAllowedAdvance(from, to, board);
-    }
-
-    private boolean hasExpectedOccupant(Location from, Location to, Board board) {
         if (isOnSameFile(from, to)) {
-            return !board.isOccupied(to);
+            return canAdvance(from, to, board);
         }
-        return holdsOpponent(to, board);
+        return canCapture(from, to, board);
     }
 
-    private boolean holdsOpponent(Location square, Board board) {
-        return board.isOccupied(square) && board.pieceAt(square).getColor() != getColor();
-    }
-
-    private boolean isAllowedAdvance(Location from, Location to, Board board) {
+    private boolean canAdvance(Location from, Location to, Board board) {
+        if (board.isOccupied(to)) {
+            return false;
+        }
         int forwardDistance = forwardDistance(from, to);
         if (forwardDistance == TWO_SQUARE_ADVANCE) {
             return isOnStartingRank(from) && !board.isOccupied(squareInFrontOf(from));
         }
         return forwardDistance == ONE_SQUARE_ADVANCE;
+    }
+
+    private boolean canCapture(Location from, Location to, Board board) {
+        return forwardDistance(from, to) == ONE_SQUARE_ADVANCE && holdsOpponent(to, board);
+    }
+
+    private boolean holdsOpponent(Location square, Board board) {
+        return board.isOccupied(square) && board.pieceAt(square).getColor() != getColor();
     }
 
     private boolean isOnSameFile(Location from, Location to) {

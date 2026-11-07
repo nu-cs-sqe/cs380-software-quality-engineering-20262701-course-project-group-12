@@ -304,7 +304,7 @@ story.
   - **Expected output**: `false`.
 
 - **TC-PAWN-23 — Reject a capture two squares diagonally forward**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`. `to` is
     g4 `(6, 4)`. New `Board` after `move` of the g7 pawn to g4, so g4
