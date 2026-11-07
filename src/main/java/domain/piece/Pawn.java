@@ -11,8 +11,18 @@ public class Pawn extends Piece {
     private static final int ONE_SQUARE_ADVANCE = 1;
     private static final int TWO_SQUARE_ADVANCE = 2;
 
+    private final int forwardDirection;
+    private final int startingRank;
+
     public Pawn(PieceColor color) {
         super(PieceType.PAWN, color);
+        if (color == PieceColor.WHITE) {
+            forwardDirection = WHITE_FORWARD;
+            startingRank = WHITE_STARTING_RANK;
+        } else {
+            forwardDirection = BLACK_FORWARD;
+            startingRank = BLACK_STARTING_RANK;
+        }
     }
 
     public boolean canMove(Location from, Location to, Board board) {
@@ -24,20 +34,10 @@ public class Pawn extends Piece {
     }
 
     private boolean isOnStartingRank(Location square) {
-        if (getColor() == PieceColor.WHITE) {
-            return square.getRank() == WHITE_STARTING_RANK;
-        }
-        return square.getRank() == BLACK_STARTING_RANK;
+        return square.getRank() == startingRank;
     }
 
     private int forwardDistance(Location from, Location to) {
-        return (to.getRank() - from.getRank()) * forwardDirection();
-    }
-
-    private int forwardDirection() {
-        if (getColor() == PieceColor.WHITE) {
-            return WHITE_FORWARD;
-        }
-        return BLACK_FORWARD;
+        return (to.getRank() - from.getRank()) * forwardDirection;
     }
 }
