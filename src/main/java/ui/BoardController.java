@@ -3,6 +3,7 @@ package ui;
 import domain.Board;
 import domain.Location;
 import domain.piece.Piece;
+import domain.piece.PieceType;
 
 import java.util.Optional;
 
@@ -41,12 +42,16 @@ public class BoardController {
     }
 
     private void moveOrChangeSelection(Location from, Location to) {
-        if (board.pieceAt(from).canMove(from, to, board)) {
+        if (board.pieceAt(from).canMove(from, to, board) && !holdsKing(to)) {
             board.move(from, to);
             clearSelection();
         } else {
             select(to);
         }
+    }
+
+    private boolean holdsKing(Location square) {
+        return board.isOccupied(square) && board.pieceAt(square).getType() == PieceType.KING;
     }
 
     private void select(Location square) {

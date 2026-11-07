@@ -116,5 +116,5 @@ TC9 through TC18 belong to issue #34. These cases continue its numbering.
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC19: capture an opponent's piece the selected piece can reach | a controller for the mocked board; the board answers true for b1 `(1, 1)` and returns a mocked piece that can move from b1 to c3 `(2, 3)`, and c3 holds a black pawn; click b1, then c3 | the board moves the piece from b1 to c3 | :white_check_mark: |
-| TC20: refuse to capture the king | a controller for the mocked board; the board answers true for b1 and returns a mocked piece that can move from b1 to c3, and c3 holds the black king; click b1, then c3 | the board does not move any piece | :x: |
+| TC20: refuse to capture the king | a controller for the mocked board; the board answers true for b1 and returns a mocked piece that can move from b1 to c3, and c3 holds the black king; click b1, then c3 | the board does not move any piece | :white_check_mark: |
 | TC21: a refused king capture keeps the selection | as TC20; click b1, then c3, then ask `isSelected` about b1 | true | :x: |

@@ -71,6 +71,7 @@ public class BoardControllerTests {
     private static final Location C3 = new Location(2, 3);
     private static final Location D2 = new Location(3, 2);
     private static final Piece BLACK_PAWN = new Piece(PieceType.PAWN, PieceColor.BLACK);
+    private static final Piece BLACK_KING = new Piece(PieceType.KING, PieceColor.BLACK);
 
     private Board board;
     private Piece piece;
@@ -122,6 +123,7 @@ public class BoardControllerTests {
     public void ClickSquare_PieceThenSquareItCanReach_MovesPiece() {
         expectPieceOnB1();
         expect(piece.canMove(B1, C3, board)).andReturn(true);
+        expect(board.isOccupied(C3)).andReturn(false);
         board.move(B1, C3);
         BoardController controller = replayedController();
 
@@ -160,6 +162,7 @@ public class BoardControllerTests {
     public void ClickSquare_AfterMove_SelectsNothing() {
         expectPieceOnB1();
         expect(piece.canMove(B1, C3, board)).andReturn(true);
+        expect(board.isOccupied(C3)).andReturn(false);
         board.move(B1, C3);
         expect(board.isOccupied(A3)).andReturn(false);
         BoardController controller = replayedController();
@@ -205,6 +208,19 @@ public class BoardControllerTests {
         expect(piece.canMove(B1, C3, board)).andReturn(true);
         givenOnC3(BLACK_PAWN);
         board.move(B1, C3);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece);
+    }
+
+    @Test
+    public void ClickSquare_KingTheSelectedPieceCanReach_LeavesBoardUnchanged() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        givenOnC3(BLACK_KING);
         BoardController controller = replayedController();
 
         controller.clickSquare(B1);
