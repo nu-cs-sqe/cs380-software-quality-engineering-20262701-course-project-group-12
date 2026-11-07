@@ -5,6 +5,7 @@ import domain.Location;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PawnTests {
@@ -97,5 +98,12 @@ public class PawnTests {
         boolean canMove = WHITE_PAWN.canMove(A7, A8, board);
 
         assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_SameSquare_ReturnsFalse() {
+        boolean canMove = WHITE_PAWN.canMove(E2, E2, board);
+
+        assertFalse(canMove);
     }
 }

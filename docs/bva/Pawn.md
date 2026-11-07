@@ -201,7 +201,7 @@ story.
     a8 rook to a5 `(0, 5)`, so a7 holds a white pawn and a8 is empty.
   - **Expected output**: `true`.
 
-- **TC-PAWN-09 — Reject the square the pawn already occupies** ( :x: )
+- **TC-PAWN-09 — Reject the square the pawn already occupies** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` and `to` are both e2
     `(4, 2)`. New `Board`.
