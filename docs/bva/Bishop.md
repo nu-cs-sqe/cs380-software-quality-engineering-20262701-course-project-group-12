@@ -197,7 +197,7 @@ light when it is even (h1 is light).
   - **Expected output**: `false`.
 
 - **TC-BISHOP-10 — Reject a square of the same color off the diagonal**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White bishop on the dark square c1
     `(2, 1)`. `to` is the dark square c3 `(2, 3)`. The board is a new
