@@ -127,7 +127,7 @@ through `8`.
 ### Method under test: `canMove(Location from, Location to, Board board)`
 
 - **TC-QUEEN-01 — Move one square up the file onto an empty square**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White queen. `from` is d4 `(3, 4)`. `to` is
     d5 `(3, 5)`. The board is a new `Board` after `move` of the d1 queen
