@@ -5,6 +5,7 @@ import domain.Location;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class KnightTests {
@@ -155,6 +156,15 @@ public class KnightTests {
         boolean canMove = WHITE_KNIGHT.canMove(B1, C3, board);
 
         assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_SameSquare_ReturnsFalse() {
+        placeWhiteKnightOnE4WithEmptyDestinations();
+
+        boolean canMove = WHITE_KNIGHT.canMove(E4, E4, board);
+
+        assertFalse(canMove);
     }
 
     private void placeWhiteKnightOnE4WithEmptyDestinations() {

@@ -219,7 +219,7 @@ through `8`.
   - **Expected output**: `true`.
 
 - **TC-KNIGHT-14 — Reject the square the knight already occupies**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White knight on e4 `(4, 4)` (the central
     square setup). `to` is e4.
