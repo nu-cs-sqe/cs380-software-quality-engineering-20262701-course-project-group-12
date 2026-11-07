@@ -18,6 +18,7 @@ public class RookTests {
     private static final Location A7 = new Location(0, 7);
     private static final Location A8 = new Location(0, 8);
     private static final Location B1 = new Location(1, 1);
+    private static final Location B2 = new Location(1, 2);
     private static final Location B3 = new Location(1, 3);
     private static final Location B4 = new Location(1, 4);
     private static final Location B5 = new Location(1, 5);
@@ -192,5 +193,16 @@ public class RookTests {
         Rook rook = new Rook(PieceColor.WHITE);
 
         assertThrows(IllegalArgumentException.class, () -> rook.canMove(A1, A2, null));
+    }
+
+    @Test
+    public void CanMove_DiagonalDestinationWithEmptySquareBetween_ReturnsFalse() {
+        Board board = new Board();
+        board.move(B2, B4);
+        Rook rook = new Rook(PieceColor.WHITE);
+
+        boolean canMove = rook.canMove(A1, C3, board);
+
+        assertFalse(canMove);
     }
 }

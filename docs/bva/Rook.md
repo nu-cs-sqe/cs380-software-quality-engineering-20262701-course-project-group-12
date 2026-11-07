@@ -215,7 +215,7 @@ through `8`.
   - **Expected output**: `IllegalArgumentException`.
 
 - **TC-ROOK-16 — Reject a diagonal destination with an empty square
-  between** ( :x: )
+  between** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White rook. `from` is a1 `(0, 1)`. `to` is
     c3 `(2, 3)`. New `Board` after `move` of the b2 pawn to b4 `(1, 4)`,
