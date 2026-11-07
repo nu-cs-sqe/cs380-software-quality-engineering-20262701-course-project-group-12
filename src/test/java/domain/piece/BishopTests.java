@@ -9,8 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BishopTests {
     private static final Location A1 = new Location(0, 1);
+    private static final Location A6 = new Location(0, 6);
+    private static final Location A8 = new Location(0, 8);
     private static final Location B2 = new Location(1, 2);
     private static final Location B4 = new Location(1, 4);
+    private static final Location B5 = new Location(1, 5);
+    private static final Location B7 = new Location(1, 7);
     private static final Location C1 = new Location(2, 1);
     private static final Location C8 = new Location(2, 8);
     private static final Location D2 = new Location(3, 2);
@@ -19,9 +23,13 @@ public class BishopTests {
     private static final Location D7 = new Location(3, 7);
     private static final Location E5 = new Location(4, 5);
     private static final Location E7 = new Location(4, 7);
+    private static final Location F1 = new Location(5, 1);
     private static final Location F8 = new Location(5, 8);
+    private static final Location G2 = new Location(6, 2);
+    private static final Location G4 = new Location(6, 4);
     private static final Location G5 = new Location(6, 5);
     private static final Location G7 = new Location(6, 7);
+    private static final Location H1 = new Location(7, 1);
     private static final Location H6 = new Location(7, 6);
     private static final Location H8 = new Location(7, 8);
 
@@ -81,6 +89,19 @@ public class BishopTests {
         Bishop bishop = new Bishop(PieceColor.WHITE);
 
         boolean canMove = bishop.canMove(A1, H8, board);
+
+        assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_SevenSquaresAlongLightDiagonalOntoEmptySquare_ReturnsTrue() {
+        board.move(F1, H1);
+        board.move(G2, G4);
+        board.move(B7, B5);
+        board.move(A8, A6);
+        Bishop bishop = new Bishop(PieceColor.WHITE);
+
+        boolean canMove = bishop.canMove(H1, A8, board);
 
         assertTrue(canMove);
     }
