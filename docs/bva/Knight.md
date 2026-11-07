@@ -131,7 +131,7 @@ through `8`.
   - **Expected output**: `true`.
 
 - **TC-KNIGHT-02 — Move two up and one left onto an empty square**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White knight on e4 `(4, 4)` (the central
     square setup). `to` is d6 `(3, 6)`, empty.
