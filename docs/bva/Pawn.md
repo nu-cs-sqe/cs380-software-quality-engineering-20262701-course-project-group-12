@@ -252,7 +252,7 @@ story.
     e5 `(4, 5)`. New `Board`; e3, e4, and e5 are empty.
   - **Expected output**: `false`.
 
-- **TC-PAWN-16 — Reject a straight capture one square forward** ( :x: )
+- **TC-PAWN-16 — Reject a straight capture one square forward** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`. `to` is
     e3 `(4, 3)`. New `Board` after `move` of the e7 pawn to e3, so e3
