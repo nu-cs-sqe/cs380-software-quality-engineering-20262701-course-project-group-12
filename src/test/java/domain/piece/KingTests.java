@@ -13,6 +13,7 @@ public class KingTests {
     private static final Location E1 = new Location(4, 1);
     private static final Location E4 = new Location(4, 4);
     private static final Location E5 = new Location(4, 5);
+    private static final Location F3 = new Location(5, 3);
     private static final Location F4 = new Location(5, 4);
     private static final Location F5 = new Location(5, 5);
     private static final Location E7 = new Location(4, 7);
@@ -77,6 +78,15 @@ public class KingTests {
         board.move(E1, E4);
 
         boolean canMove = WHITE_KING.canMove(E4, D5, board);
+
+        assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_OneSquareDownAndRightOntoEmptySquare_ReturnsTrue() {
+        board.move(E1, E4);
+
+        boolean canMove = WHITE_KING.canMove(E4, F3, board);
 
         assertTrue(canMove);
     }
