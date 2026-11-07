@@ -212,7 +212,7 @@ through `8`.
   - **Expected output**: `true`.
 
 - **TC-QUEEN-12 — Reject the square the queen already occupies**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White queen. `from` and `to` are both d1
     `(3, 1)`. New `Board`.
