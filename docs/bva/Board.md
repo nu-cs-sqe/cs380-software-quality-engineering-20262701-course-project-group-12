@@ -1,6 +1,6 @@
 # BVA Analysis for Board
 
-`Board` owns the 64 squares. The piece array is private.
+`Board` owns the 64 squares. The squares are private; an empty square holds no piece rather than null.
 
 - `Board()`: places the starting position. Rank 8, a through h: black rook, knight, bishop, queen, king, bishop, knight, rook. Rank 7: eight black pawns. Ranks 6 through 3: empty. Rank 2: eight white pawns. Rank 1, a through h: white rook, knight, bishop, queen, king, bishop, knight, rook.
 - `boolean isOccupied(Location location)`: returns true when a piece stands on that square and false when it is empty. Does not change the board.
