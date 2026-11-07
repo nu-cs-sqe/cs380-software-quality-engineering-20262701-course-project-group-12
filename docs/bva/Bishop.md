@@ -226,7 +226,7 @@ light when it is even (h1 is light).
     is d2 `(3, 2)`. New `Board`; d2 holds the white d-pawn.
   - **Expected output**: `false`.
 
-- **TC-BISHOP-14 — Capture an adjacent opponent** ( :x: )
+- **TC-BISHOP-14 — Capture an adjacent opponent** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White bishop. `from` is c1 `(2, 1)`. `to`
     is d2 `(3, 2)`. New `Board` after `move` of the d2 pawn to d4
