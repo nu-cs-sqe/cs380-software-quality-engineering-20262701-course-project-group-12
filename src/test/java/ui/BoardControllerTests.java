@@ -300,6 +300,25 @@ public class BoardControllerTests {
         verify(board, piece, game, newPlayerPiece);
     }
 
+    @Test
+    public void ClickSquare_UnreachableOpponent_KeepsSelection() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, B8, board)).andReturn(false);
+        Piece opponent = mock(Piece.class);
+        expect(board.isOccupied(B8)).andReturn(true);
+        expect(board.pieceAt(B8)).andReturn(opponent);
+        expect(opponent.getColor()).andReturn(PieceColor.BLACK);
+        replay(board, piece, game, opponent);
+        BoardController controller = new BoardController(board, game);
+        controller.clickSquare(B1);
+
+        controller.clickSquare(B8);
+
+        assertTrue(controller.isSelected(B1));
+        assertFalse(controller.isSelected(B8));
+        verify(board, piece, game, opponent);
+    }
+
     private void expectPieceOnB1() {
         expectSelectableWhitePiece(B1);
         expect(board.pieceAt(B1)).andReturn(piece);
