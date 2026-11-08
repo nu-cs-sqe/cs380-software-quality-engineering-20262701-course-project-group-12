@@ -1,6 +1,7 @@
 package ui;
 
 import domain.Board;
+import domain.Game;
 import domain.Location;
 import domain.piece.Piece;
 
@@ -8,10 +9,12 @@ import java.util.Optional;
 
 public class BoardController {
     private final Board board;
+    private final Game game;
     private Optional<Location> selectedSquare = Optional.empty();
 
-    public BoardController(Board board) {
+    public BoardController(Board board, Game game) {
         this.board = board;
+        this.game = game;
     }
 
     public boolean isOccupied(Location location) {
@@ -43,6 +46,7 @@ public class BoardController {
     private void moveOrChangeSelection(Location from, Location to) {
         if (board.pieceAt(from).canMove(from, to, board)) {
             board.move(from, to);
+            game.passTurn();
             clearSelection();
         } else {
             select(to);

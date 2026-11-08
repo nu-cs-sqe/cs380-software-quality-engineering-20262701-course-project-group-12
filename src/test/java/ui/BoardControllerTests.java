@@ -1,6 +1,7 @@
 package ui;
 
 import domain.Board;
+import domain.Game;
 import domain.Location;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
@@ -72,11 +73,13 @@ public class BoardControllerTests {
     private static final Location D2 = new Location(3, 2);
 
     private Board board;
+    private Game game;
     private Piece piece;
 
     @BeforeEach
     public void createMocks() {
         board = mock(Board.class);
+        game = mock(Game.class);
         piece = mock(Piece.class);
     }
 
@@ -122,12 +125,27 @@ public class BoardControllerTests {
         expectPieceOnB1();
         expect(piece.canMove(B1, C3, board)).andReturn(true);
         board.move(B1, C3);
+        game.passTurn();
         BoardController controller = replayedController();
 
         controller.clickSquare(B1);
         controller.clickSquare(C3);
 
-        verify(board, piece);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_LegalMove_PassesTheTurn() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        board.move(B1, C3);
+        game.passTurn();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
     }
 
     @Test
@@ -160,6 +178,7 @@ public class BoardControllerTests {
         expectPieceOnB1();
         expect(piece.canMove(B1, C3, board)).andReturn(true);
         board.move(B1, C3);
+        game.passTurn();
         expect(board.isOccupied(A3)).andReturn(false);
         BoardController controller = replayedController();
 
@@ -167,7 +186,7 @@ public class BoardControllerTests {
         controller.clickSquare(C3);
         controller.clickSquare(A3);
 
-        verify(board, piece);
+        verify(board, piece, game);
     }
 
     @Test
@@ -204,7 +223,7 @@ public class BoardControllerTests {
     }
 
     private BoardController replayedController() {
-        replay(board, piece);
-        return new BoardController(board);
+        replay(board, piece, game);
+        return new BoardController(board, game);
     }
 }

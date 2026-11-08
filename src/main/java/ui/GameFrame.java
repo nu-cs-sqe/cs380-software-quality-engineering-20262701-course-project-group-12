@@ -10,7 +10,7 @@ public class GameFrame extends JFrame {
     public GameFrame(Game game) {
         this(
                 new GameStatsController(game).createView(),
-                new BoardView(new BoardController(game.board())));
+                new BoardView(new BoardController(game.board(), game)));
         setTitle(Messages.text("game.window.title"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
