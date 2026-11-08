@@ -243,4 +243,16 @@ public class GameTests {
         assertEquals("Bob", game.playerToMoveName());
         assertEquals(PieceColor.BLACK, game.colorToMove());
     }
+
+    @Test
+    public void PassTurn_Twice_MakesPlayerOneToMove() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.passTurn();
+        game.passTurn();
+
+        assertSame(game.playerOne(), game.playerToMove());
+        assertEquals(PieceColor.WHITE, game.colorToMove());
+    }
 }

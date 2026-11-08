@@ -25,7 +25,11 @@ public class Game {
     }
 
     public void passTurn() {
-        playerToMove = playerTwo;
+        if (playerToMove == playerOne) {
+            playerToMove = playerTwo;
+        } else {
+            playerToMove = playerOne;
+        }
     }
 
     public boolean isStarted() {

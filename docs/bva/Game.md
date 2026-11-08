@@ -281,7 +281,7 @@ Resign, checkmate, and the draw stories will add that state.
     `playerTwo()`; `playerToMoveName()` returns `Bob`; `colorToMove()`
     returns `BLACK`.
 
-- **TC-TURN-03 — Pass the turn back to Player 1** ( :x: )
+- **TC-TURN-03 — Pass the turn back to Player 1** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `passTurn()`,
     `playerToMove()`, `colorToMove()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then
