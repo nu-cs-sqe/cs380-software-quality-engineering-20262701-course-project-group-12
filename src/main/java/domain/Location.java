@@ -37,4 +37,8 @@ public class Location {
     public int getRank() {
         return rank;
     }
+
+    public boolean isSameSquareAs(Location other) {
+        return file == other.file && rank == other.rank;
+    }
 }

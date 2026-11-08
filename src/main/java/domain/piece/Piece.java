@@ -1,5 +1,8 @@
 package domain.piece;
 
+import domain.Board;
+import domain.Location;
+
 public class Piece {
     private final PieceType type;
     private final PieceColor color;
@@ -15,5 +18,9 @@ public class Piece {
 
     public PieceColor getColor() {
         return color;
+    }
+
+    public boolean canMove(Location from, Location to, Board board) {
+        return false;
     }
 }
