@@ -31,7 +31,7 @@ public class BoardControllerTests {
 
     @Test
     public void IsSelected_SelectedSquare_ReturnsTrue() {
-        expect(board.isOccupied(B1)).andReturn(true);
+        expectSelectableWhitePiece(B1);
         BoardController controller = replayedController();
         controller.clickSquare(B1);
 
@@ -43,7 +43,7 @@ public class BoardControllerTests {
 
     @Test
     public void IsSelected_AnotherSquareWhileOneIsSelected_ReturnsFalse() {
-        expect(board.isOccupied(B1)).andReturn(true);
+        expectSelectableWhitePiece(B1);
         BoardController controller = replayedController();
         controller.clickSquare(B1);
 
@@ -55,7 +55,7 @@ public class BoardControllerTests {
 
     @Test
     public void ClickSquare_SelectedSquareAgain_ClearsSelection() {
-        expect(board.isOccupied(B1)).andReturn(true);
+        expectSelectableWhitePiece(B1);
         BoardController controller = replayedController();
         controller.clickSquare(B1);
 
@@ -71,6 +71,7 @@ public class BoardControllerTests {
     private static final Location B3 = new Location(1, 3);
     private static final Location C3 = new Location(2, 3);
     private static final Location D2 = new Location(3, 2);
+    private static final Location B8 = new Location(1, Location.MAX_RANK);
 
     private Board board;
     private Game game;
@@ -220,7 +221,7 @@ public class BoardControllerTests {
     public void ClickSquare_PieceTheSelectedOneCannotReach_SelectsThatPiece() {
         expectPieceOnB1();
         expect(piece.canMove(B1, D2, board)).andReturn(false);
-        expect(board.isOccupied(D2)).andReturn(true);
+        expectSelectableWhitePiece(D2);
         BoardController controller = replayedController();
         controller.clickSquare(B1);
 
@@ -230,9 +231,32 @@ public class BoardControllerTests {
         verify(board, piece);
     }
 
+    @Test
+    public void ClickSquare_OpponentsPieceWithNothingSelected_SelectsNothing() {
+        Piece opponent = mock(Piece.class);
+        expect(board.isOccupied(B8)).andReturn(true);
+        expect(board.pieceAt(B8)).andReturn(opponent);
+        expect(opponent.getColor()).andReturn(PieceColor.BLACK);
+        expect(game.colorToMove()).andReturn(PieceColor.WHITE);
+        replay(board, piece, game, opponent);
+        BoardController controller = new BoardController(board, game);
+
+        controller.clickSquare(B8);
+
+        assertFalse(controller.isSelected(B8));
+        verify(board, piece, game, opponent);
+    }
+
     private void expectPieceOnB1() {
-        expect(board.isOccupied(B1)).andReturn(true);
+        expectSelectableWhitePiece(B1);
         expect(board.pieceAt(B1)).andReturn(piece);
+    }
+
+    private void expectSelectableWhitePiece(Location square) {
+        expect(board.isOccupied(square)).andReturn(true);
+        expect(board.pieceAt(square)).andReturn(piece);
+        expect(piece.getColor()).andStubReturn(PieceColor.WHITE);
+        expect(game.colorToMove()).andStubReturn(PieceColor.WHITE);
     }
 
     private BoardController replayedController() {

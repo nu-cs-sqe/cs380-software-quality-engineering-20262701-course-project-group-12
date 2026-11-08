@@ -54,9 +54,17 @@ public class BoardController {
     }
 
     private void select(Location square) {
-        if (board.isOccupied(square)) {
+        if (holdsPieceToMove(square)) {
             selectedSquare = Optional.of(square);
         }
+    }
+
+    private boolean holdsPieceToMove(Location square) {
+        if (!board.isOccupied(square)) {
+            return false;
+        }
+        Piece occupant = board.pieceAt(square);
+        return occupant.getColor() == game.colorToMove();
     }
 
     private void clearSelection() {
