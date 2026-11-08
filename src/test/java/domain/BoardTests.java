@@ -20,6 +20,7 @@ public class BoardTests {
     private static final Location H1 = new Location(7, 1);
     private static final Location H5 = new Location(7, 5);
     private static final Location H8 = new Location(7, 8);
+    private static final int STARTING_PIECE_COUNT = 32;
 
     @Test
     public void PieceAt_A1_ReturnsWhiteRook() {
@@ -274,6 +275,27 @@ public class BoardTests {
         assertThrows(IllegalArgumentException.class, () -> board.move(A4, A1));
 
         assertSame(whiteRook, board.pieceAt(A1));
+    }
+
+    @Test
+    public void Move_A1ToOccupiedA8_TakesTheCapturedRookOffTheBoard() {
+        Board board = new Board();
+
+        board.move(A1, A8);
+
+        assertEquals(STARTING_PIECE_COUNT - 1, countPieces(board));
+    }
+
+    private int countPieces(Board board) {
+        int pieces = 0;
+        for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
+            for (int rank = Location.MIN_RANK; rank <= Location.MAX_RANK; rank++) {
+                if (board.isOccupied(new Location(file, rank))) {
+                    pieces++;
+                }
+            }
+        }
+        return pieces;
     }
 
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
