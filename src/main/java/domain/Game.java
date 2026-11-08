@@ -25,6 +25,10 @@ public class Game {
     }
 
     public void passTurn() {
+        if (!started) {
+            throw new IllegalStateException(
+                    "Cannot pass the turn before the game has started");
+        }
         if (playerToMove == playerOne) {
             playerToMove = playerTwo;
         } else {

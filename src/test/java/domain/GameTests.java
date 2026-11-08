@@ -255,4 +255,11 @@ public class GameTests {
         assertSame(game.playerOne(), game.playerToMove());
         assertEquals(PieceColor.WHITE, game.colorToMove());
     }
+
+    @Test
+    public void PassTurn_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::passTurn);
+    }
 }

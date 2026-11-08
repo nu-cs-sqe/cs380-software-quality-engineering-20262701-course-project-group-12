@@ -289,7 +289,7 @@ Resign, checkmate, and the draw stories will add that state.
   - **Expected output**: `playerToMove()` returns the same object as
     `playerOne()`; `colorToMove()` returns `WHITE`.
 
-- **TC-TURN-04 — Reject passing the turn before a start** ( :x: )
+- **TC-TURN-04 — Reject passing the turn before a start** ( :white_check_mark: )
   - **Method(s) under test**: `passTurn()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
