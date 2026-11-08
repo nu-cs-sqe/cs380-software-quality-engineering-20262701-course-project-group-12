@@ -204,6 +204,19 @@ public class BoardControllerTests {
     }
 
     @Test
+    public void ClickSquare_RefusedMoveOntoEmptySquare_DoesNotPassTheTurn() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, B3, board)).andReturn(false);
+        expect(board.isOccupied(B3)).andReturn(false);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(B3);
+
+        verify(board, piece, game);
+    }
+
+    @Test
     public void ClickSquare_PieceTheSelectedOneCannotReach_SelectsThatPiece() {
         expectPieceOnB1();
         expect(piece.canMove(B1, D2, board)).andReturn(false);
