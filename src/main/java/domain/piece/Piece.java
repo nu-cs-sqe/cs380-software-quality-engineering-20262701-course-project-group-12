@@ -1,13 +1,13 @@
 package domain.piece;
 
+import domain.Board;
+import domain.Location;
+
 public class Piece {
     private final PieceType type;
     private final PieceColor color;
 
     public Piece(PieceType type, PieceColor color) {
-        if (type == null || color == null) {
-            throw new IllegalArgumentException();
-        }
         this.type = type;
         this.color = color;
     }
@@ -18,5 +18,9 @@ public class Piece {
 
     public PieceColor getColor() {
         return color;
+    }
+
+    public boolean canMove(Location from, Location to, Board board) {
+        return false;
     }
 }
