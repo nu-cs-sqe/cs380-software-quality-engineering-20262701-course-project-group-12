@@ -294,7 +294,7 @@ Resign, checkmate, and the draw stories will add that state.
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
 
-- **TC-TURN-05 — Reject reading the color to move before a start** ( :x: )
+- **TC-TURN-05 — Reject reading the color to move before a start** ( :white_check_mark: )
   - **Method(s) under test**: `colorToMove()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.

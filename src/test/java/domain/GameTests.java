@@ -262,4 +262,11 @@ public class GameTests {
 
         assertThrows(IllegalStateException.class, game::passTurn);
     }
+
+    @Test
+    public void ColorToMove_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::colorToMove);
+    }
 }
