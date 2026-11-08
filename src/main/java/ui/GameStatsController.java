@@ -4,6 +4,7 @@ import domain.Game;
 
 public class GameStatsController {
     private final Game game;
+    private GameStatsView view;
 
     public GameStatsController(Game game) {
         if (!game.isStarted()) {
@@ -14,9 +15,18 @@ public class GameStatsController {
     }
 
     public GameStatsView createView() {
-        return new GameStatsView(
+        view = new GameStatsView(
                 Messages.format("stats.playerOne", game.playerOneName()),
                 Messages.format("stats.playerTwo", game.playerTwoName()),
-                Messages.format("stats.currentPlayer", game.playerToMoveName()));
+                currentPlayerLine());
+        return view;
+    }
+
+    public void refreshCurrentPlayer() {
+        view.showCurrentPlayer(currentPlayerLine());
+    }
+
+    private String currentPlayerLine() {
+        return Messages.format("stats.currentPlayer", game.playerToMoveName());
     }
 }

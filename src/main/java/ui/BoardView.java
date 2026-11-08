@@ -34,10 +34,17 @@ public class BoardView extends JPanel {
     private static final Font LABEL_FONT = new Font(Font.SANS_SERIF, Font.BOLD, TILE_SIZE / 5);
 
     private final BoardController boardController;
+    private final Runnable afterClick;
     private final PieceImages pieceImages = new PieceImages();
 
     public BoardView(BoardController boardController) {
+        this(boardController, () -> {
+        });
+    }
+
+    public BoardView(BoardController boardController, Runnable afterClick) {
         this.boardController = boardController;
+        this.afterClick = afterClick;
         int sideLength = BOARD_LENGTH + LABEL_MARGIN;
         setPreferredSize(new Dimension(sideLength, sideLength));
         addMouseListener(new MouseAdapter() {
@@ -51,6 +58,7 @@ public class BoardView extends JPanel {
     private void clickAt(Point point) {
         if (isOnBoard(point)) {
             boardController.clickSquare(squareAt(point));
+            afterClick.run();
             repaint();
         }
     }

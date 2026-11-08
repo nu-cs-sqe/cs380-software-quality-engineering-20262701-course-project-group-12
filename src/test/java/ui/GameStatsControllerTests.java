@@ -85,6 +85,22 @@ public class GameStatsControllerTests {
         assertEquals("Current player: Bo", view.currentPlayerLine());
     }
 
+    @Test
+    void RefreshCurrentPlayer_AfterTurn_ShowsPlayerTwo() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andReturn("Ada").andReturn("Bo");
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshCurrentPlayer();
+
+        assertEquals("Current player: Bo", view.currentPlayerLine());
+    }
+
     private static Game startedGame(
             String playerOneName, String playerTwoName, String playerToMoveName) {
         Game game = createMock(Game.class);
