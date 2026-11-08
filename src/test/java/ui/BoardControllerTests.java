@@ -274,6 +274,32 @@ public class BoardControllerTests {
         verify(board, piece, game, previousPlayerPiece);
     }
 
+    @Test
+    public void ClickSquare_AfterTurnPasses_SelectsNewPlayersPiece() {
+        expect(board.isOccupied(B1)).andReturn(true);
+        expect(board.pieceAt(B1)).andReturn(piece);
+        expect(piece.getColor()).andReturn(PieceColor.WHITE);
+        expect(game.colorToMove()).andReturn(PieceColor.WHITE);
+        expect(board.pieceAt(B1)).andReturn(piece);
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        board.move(B1, C3);
+        game.passTurn();
+        Piece newPlayerPiece = mock(Piece.class);
+        expect(board.isOccupied(B8)).andReturn(true);
+        expect(board.pieceAt(B8)).andReturn(newPlayerPiece);
+        expect(newPlayerPiece.getColor()).andReturn(PieceColor.BLACK);
+        expect(game.colorToMove()).andReturn(PieceColor.BLACK);
+        replay(board, piece, game, newPlayerPiece);
+        BoardController controller = new BoardController(board, game);
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+        controller.clickSquare(B8);
+
+        assertTrue(controller.isSelected(B8));
+        verify(board, piece, game, newPlayerPiece);
+    }
+
     private void expectPieceOnB1() {
         expectSelectableWhitePiece(B1);
         expect(board.pieceAt(B1)).andReturn(piece);
