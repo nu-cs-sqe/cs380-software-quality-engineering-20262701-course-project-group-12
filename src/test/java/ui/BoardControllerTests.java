@@ -72,6 +72,7 @@ public class BoardControllerTests {
     private static final Location C3 = new Location(2, 3);
     private static final Location D2 = new Location(3, 2);
     private static final Location B8 = new Location(1, Location.MAX_RANK);
+    private static final Location A2 = new Location(0, 2);
 
     private Board board;
     private Game game;
@@ -245,6 +246,32 @@ public class BoardControllerTests {
 
         assertFalse(controller.isSelected(B8));
         verify(board, piece, game, opponent);
+    }
+
+    @Test
+    public void ClickSquare_AfterTurnPasses_DoesNotSelectPreviousPlayersPiece() {
+        expect(board.isOccupied(B1)).andReturn(true);
+        expect(board.pieceAt(B1)).andReturn(piece);
+        expect(piece.getColor()).andReturn(PieceColor.WHITE);
+        expect(game.colorToMove()).andReturn(PieceColor.WHITE);
+        expect(board.pieceAt(B1)).andReturn(piece);
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        board.move(B1, C3);
+        game.passTurn();
+        Piece previousPlayerPiece = mock(Piece.class);
+        expect(board.isOccupied(A2)).andReturn(true);
+        expect(board.pieceAt(A2)).andReturn(previousPlayerPiece);
+        expect(previousPlayerPiece.getColor()).andReturn(PieceColor.WHITE);
+        expect(game.colorToMove()).andReturn(PieceColor.BLACK);
+        replay(board, piece, game, previousPlayerPiece);
+        BoardController controller = new BoardController(board, game);
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+        controller.clickSquare(A2);
+
+        assertFalse(controller.isSelected(A2));
+        verify(board, piece, game, previousPlayerPiece);
     }
 
     private void expectPieceOnB1() {
