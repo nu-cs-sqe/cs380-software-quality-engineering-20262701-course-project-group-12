@@ -272,7 +272,7 @@ Resign, checkmate, and the draw stories will add that state.
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `WHITE`.
 
-- **TC-TURN-02 — Pass the turn after a start** ( :x: )
+- **TC-TURN-02 — Pass the turn after a start** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `passTurn()`,
     `playerToMove()`, `playerToMoveName()`, `colorToMove()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then

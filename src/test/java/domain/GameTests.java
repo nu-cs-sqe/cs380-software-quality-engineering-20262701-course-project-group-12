@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -229,5 +230,17 @@ public class GameTests {
         PieceColor color = game.colorToMove();
 
         assertEquals(PieceColor.WHITE, color);
+    }
+
+    @Test
+    public void PassTurn_AfterStart_MakesPlayerTwoToMove() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.passTurn();
+
+        assertSame(game.playerTwo(), game.playerToMove());
+        assertEquals("Bob", game.playerToMoveName());
+        assertEquals(PieceColor.BLACK, game.colorToMove());
     }
 }

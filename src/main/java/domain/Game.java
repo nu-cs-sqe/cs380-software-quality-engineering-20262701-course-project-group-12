@@ -24,6 +24,10 @@ public class Game {
         started = true;
     }
 
+    public void passTurn() {
+        playerToMove = playerTwo;
+    }
+
     public boolean isStarted() {
         return started;
     }
