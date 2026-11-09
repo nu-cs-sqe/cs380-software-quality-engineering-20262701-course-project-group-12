@@ -11,6 +11,7 @@ public class Pawn extends Piece {
     private static final int WHITE_STARTING_RANK = 2;
     private static final int BLACK_STARTING_RANK = 7;
     private static final int CAPTURE_FILE_DISTANCE = 1;
+    private static final int WHITE_LAST_RANK = Location.MAX_RANK;
 
     private final int oneSquareForward;
     private final int twoSquaresForward;
@@ -38,7 +39,7 @@ public class Pawn extends Piece {
 
     @Override
     public boolean promotesOn(Location square) {
-        return true;
+        return square.getRank() == WHITE_LAST_RANK;
     }
 
     private boolean canAdvance(Location from, Location to, Board board) {

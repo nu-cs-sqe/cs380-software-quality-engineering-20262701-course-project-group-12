@@ -250,4 +250,11 @@ public class PawnTests {
 
         assertTrue(promotes);
     }
+
+    @Test
+    public void PromotesOn_WhitePawnOnRankSeven_ReturnsFalse() {
+        boolean promotes = whitePawn.promotesOn(A7);
+
+        assertFalse(promotes);
+    }
 }

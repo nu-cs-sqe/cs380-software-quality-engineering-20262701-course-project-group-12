@@ -366,7 +366,7 @@ rejected, because en passant is a later story.
   - **State of the system**: White pawn. `square` is a8 `(0, 8)`.
   - **Expected output**: `true`.
 
-- **TC-PAWN-26 — Do not promote a white pawn on rank 7** ( :x: )
+- **TC-PAWN-26 — Do not promote a white pawn on rank 7** ( :white_check_mark: )
   - **Method(s) under test**: `promotesOn(Location)`
   - **State of the system**: White pawn. `square` is a7 `(0, 7)`.
   - **Expected output**: `false`.
