@@ -505,6 +505,23 @@ public class BoardControllerTests {
                 () -> controller.choosePromotion(PieceType.KING));
     }
 
+    @Test
+    public void ChoosePromotion_RejectedChoice_KeepsPromotionPending() {
+        expectPawnMoveFromA7ToA8();
+        board.promote(A8, PieceType.KING);
+        expectLastCall().andThrow(new IllegalArgumentException());
+        BoardController controller = replayedController();
+        controller.clickSquare(A7);
+        controller.clickSquare(A8);
+        assertThrows(IllegalArgumentException.class,
+                () -> controller.choosePromotion(PieceType.KING));
+
+        boolean pending = controller.isPromotionPending();
+
+        assertTrue(pending);
+        verify(board, piece, game);
+    }
+
     private void expectPawnMoveFromA7ToA8() {
         expectSelectableWhitePiece(A7);
         expect(board.pieceAt(A7)).andReturn(piece);

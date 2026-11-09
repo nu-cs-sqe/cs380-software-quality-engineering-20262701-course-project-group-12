@@ -173,6 +173,6 @@ White is to move. The board answers true for a7 `(0, 7)` and returns a mocked Wh
 | TC34: nothing is pending after the choice | as TC32; ask `isPromotionPending` | false | :white_check_mark: |
 | TC35: a click while a promotion is pending does nothing | as TC28; then click b1 `(1, 1)`, then ask `isSelected` about b1 | false; the board is not asked about b1 | :white_check_mark: |
 | TC36: a king is not a choice | as TC28; the board throws `IllegalArgumentException` when asked to promote a8 to `KING`; choose `KING` | throws that `IllegalArgumentException` | :white_check_mark: |
-| TC37: a rejected choice keeps the promotion pending | as TC36; ask `isPromotionPending` | true; the game does not pass the turn | :x: |
+| TC37: a rejected choice keeps the promotion pending | as TC36; ask `isPromotionPending` | true; the game does not pass the turn | :white_check_mark: |
 
 After a move, the controller now asks the moving piece whether it `promotesOn` the arrival square. The mocked pieces in TC9, TC12, TC19, TC22, TC25, and TC26 answer false, so those cases still check what they did before.
