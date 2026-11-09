@@ -393,7 +393,7 @@ Fifty-move counting (AC 8) is US-18; a castle is a king move and
 
 ### Method under test: `move(Location from, Location to, Board board)` (issue #45)
 
-- **TC-KING-35 — Move the rook with a white kingside castle** ( :x: )
+- **TC-KING-35 — Move the rook with a white kingside castle** ( :white_check_mark: )
   - **Method(s) under test**: `move(Location, Location, Board)`
   - **State of the system**: White king, e1 to g1. Kingside cleared.
   - **Expected output**: the rook that was on h1 is on f1 `(5, 1)`.

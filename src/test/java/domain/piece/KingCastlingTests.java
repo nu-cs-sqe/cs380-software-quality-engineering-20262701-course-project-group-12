@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class KingCastlingTests {
@@ -216,6 +217,16 @@ public class KingCastlingTests {
         boolean attacks = WHITE_KING.attacks(E1, G1, board);
 
         assertFalse(attacks);
+    }
+
+    @Test
+    public void Move_WhiteKingside_PutsTheRookOnF1() {
+        clearWhiteKingside();
+        Piece kingsideRook = board.pieceAt(H1);
+
+        WHITE_KING.move(E1, G1, board);
+
+        assertSame(kingsideRook, board.pieceAt(F1));
     }
 
     private void clearWhiteKingside() {

@@ -52,6 +52,12 @@ public class King extends Piece {
         return isOneSquare(from, target);
     }
 
+    @Override
+    public void move(Location from, Location to, Board board) {
+        super.move(from, to, board);
+        board.move(rookSquareFor(from, to), crossedSquare(from, to));
+    }
+
     private boolean isOneSquare(Location from, Location to) {
         return Math.max(from.fileDistanceTo(to), from.rankDistanceTo(to)) == ONE_SQUARE;
     }
