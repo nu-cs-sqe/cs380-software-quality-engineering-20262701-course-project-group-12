@@ -26,7 +26,8 @@ public class King extends Piece {
         Location rookSquare = rookSquareFor(from, to);
         return board.holdsUnmovedPiece(from)
                 && board.holdsUnmovedPiece(rookSquare)
-                && isPathClear(from, rookSquare, board);
+                && isPathClear(from, rookSquare, board)
+                && !board.isAttackedByOpponentOf(getColor(), from);
     }
 
     private Location rookSquareFor(Location from, Location to) {
