@@ -385,7 +385,7 @@ Fifty-move counting (AC 8) is US-18; a castle is a king move and
   - **State of the system**: White king. `from` is e4 `(4, 4)`, `target` is e5 `(4, 5)`. New `Board` after `move` of the king from e1 to e4.
   - **Expected output**: `true`.
 
-- **TC-KING-34 — Do not attack the castle square** ( :x: )
+- **TC-KING-34 — Do not attack the castle square** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White king. `from` is e1, `target` is g1. Kingside cleared, so the king could castle there.
   - **Expected output**: `false`.

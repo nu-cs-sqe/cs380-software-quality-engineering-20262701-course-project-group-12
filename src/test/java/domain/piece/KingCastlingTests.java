@@ -209,6 +209,15 @@ public class KingCastlingTests {
         assertFalse(canMove);
     }
 
+    @Test
+    public void Attacks_CastleSquare_ReturnsFalse() {
+        clearWhiteKingside();
+
+        boolean attacks = WHITE_KING.attacks(E1, G1, board);
+
+        assertFalse(attacks);
+    }
+
     private void clearWhiteKingside() {
         board.move(F1, F4);
         board.move(G1, G4);

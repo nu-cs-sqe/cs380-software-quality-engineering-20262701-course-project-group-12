@@ -47,6 +47,11 @@ public class King extends Piece {
         return new Location(rookFile, from.getRank());
     }
 
+    @Override
+    public boolean attacks(Location from, Location target, Board board) {
+        return isOneSquare(from, target);
+    }
+
     private boolean isOneSquare(Location from, Location to) {
         return Math.max(from.fileDistanceTo(to), from.rankDistanceTo(to)) == ONE_SQUARE;
     }
