@@ -11,10 +11,15 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class MovePieceIntegrationTest {
+    private static final Location E1 = new Location(4, 1);
     private static final Location E2 = new Location(4, 2);
     private static final Location E4 = new Location(4, 4);
+    private static final Location F1 = new Location(5, 1);
     private static final Location F3 = new Location(5, 3);
+    private static final Location F4 = new Location(5, 4);
     private static final Location G1 = new Location(6, 1);
+    private static final Location G4 = new Location(6, 4);
+    private static final Location H1 = new Location(7, 1);
 
     private Board board;
     private BoardController boardController;
@@ -59,6 +64,17 @@ public class MovePieceIntegrationTest {
         clickFromTo(G1, F3);
 
         assertSame(whiteKnight, boardController.pieceAt(F3));
+    }
+
+    @Test
+    public void ClickSquare_WhiteKingE1ThenG1_CastlesTheRookToF1() {
+        board.move(F1, F4);
+        board.move(G1, G4);
+        Piece kingsideRook = boardController.pieceAt(H1);
+
+        clickFromTo(E1, G1);
+
+        assertSame(kingsideRook, boardController.pieceAt(F1));
     }
 
     private void clickFromTo(Location from, Location to) {
