@@ -55,7 +55,9 @@ public class King extends Piece {
     @Override
     public void move(Location from, Location to, Board board) {
         super.move(from, to, board);
-        board.move(rookSquareFor(from, to), crossedSquare(from, to));
+        if (isCastlingStep(from, to)) {
+            board.move(rookSquareFor(from, to), crossedSquare(from, to));
+        }
     }
 
     private boolean isOneSquare(Location from, Location to) {

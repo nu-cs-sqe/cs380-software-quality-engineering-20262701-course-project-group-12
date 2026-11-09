@@ -261,6 +261,16 @@ public class KingCastlingTests {
         assertSame(queensideRook, board.pieceAt(D8));
     }
 
+    @Test
+    public void Move_OneSquare_LeavesTheRookInPlace() {
+        clearWhiteKingside();
+        Piece kingsideRook = board.pieceAt(H1);
+
+        WHITE_KING.move(E1, F1, board);
+
+        assertSame(kingsideRook, board.pieceAt(H1));
+    }
+
     private void clearWhiteKingside() {
         board.move(F1, F4);
         board.move(G1, G4);
