@@ -2,7 +2,7 @@
 
 `Board` owns the 64 squares. The squares are private; an empty square holds no piece rather than null.
 
-- `Board()`: places the starting position. Rank 8, a through h: black rook, knight, bishop, queen, king, bishop, knight, rook. Rank 7: eight black pawns. Ranks 6 through 3: empty. Rank 2: eight white pawns. Rank 1, a through h: white rook, knight, bishop, queen, king, bishop, knight, rook.
+- `Board()`: places the starting position. Rank 8, a through h: black rook, knight, bishop, queen, king, bishop, knight, rook. Rank 7: eight black pawns. Ranks 6 through 3: empty. Rank 2: eight white pawns. Rank 1, a through h: white rook, knight, bishop, queen, king, bishop, knight, rook. Each piece is an instance of its own class (`Rook`, `Knight`, `Bishop`, `Queen`, `King`, `Pawn`), so it moves by that class's `canMove` (issue #53). A plain `Piece` cannot move.
 - `boolean isOccupied(Location location)`: returns true when a piece stands on that square and false when it is empty. Does not change the board.
 - `Piece pieceAt(Location location)`: returns the piece on that square. Requires an occupied square and throws `IllegalArgumentException` otherwise. Does not change the board.
 - `void move(Location from, Location to)` (issue #19): puts the piece from `from` on `to`, and `from` becomes empty. A piece already on `to` is replaced; this is the board side of a capture. Moving a piece to its own square leaves the board unchanged. Throws `IllegalArgumentException` when `from` is empty, and then leaves the board unchanged. It does not check whether the move is legal, does not change whose turn it is, and does not touch the UI.
@@ -46,6 +46,16 @@ The same rank blocks apply. Ranks 3 and 6 stand for the empty block, at file 0 a
 | Input: rank of the location | Edges of the rank blocks | `1` white back rank; `2` white pawns; `3` first empty rank; `6` last empty rank; `7` black pawns; `8` black back rank |
 | Input: the pair `(file, rank)` | Pair of intervals | both lows, a1 `(0, 1)`; both highs, h8 `(7, 8)`; a8 `(0, 8)`; h1 `(7, 1)` |
 | Output: the answer | Boolean | true; false |
+
+### `Board()`: the class of each starting piece (issue #53)
+
+Type and color are small sets of cases, and every pair is on the starting board, so Step 4 uses all-combination: one case for each of the 6 types in each of the 2 colors. The white pieces are checked on the a-side of rank 1 and on a2. The black pieces are checked on the h-side of rank 8 and on h7. Together the two sides use every entry of the back rank: a1 through e1 for the first five files, f8 through h8 for the last three. d8 and e8 are the only black queen and king.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the board | Collection of 64 squares | a new `Board` in the starting position |
+| Input: the square read with `pieceAt` | Cases, one per type and color | white: rook a1, knight b1, bishop c1, queen d1, king e1, pawn a2; black: rook h8, knight g8, bishop f8, queen d8, king e8, pawn h7 |
+| Output: the class of the piece on that square | Cases | `Rook`, `Knight`, `Bishop`, `Queen`, `King`, `Pawn` |
 
 ### `move(Location from, Location to)`
 
@@ -114,6 +124,18 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC23: starting position at the corners and the rank edges | implemented in TC1 through TC20 | the occupants listed in those cases | implemented in TC1 through TC20 |
+| TC46: white rook class | a new `Board`; read a1 `(0, 1)` | the piece is a `Rook` | :white_check_mark: |
+| TC47: black rook class | a new `Board`; read h8 `(7, 8)` | the piece is a `Rook` | :white_check_mark: |
+| TC48: white knight class | a new `Board`; read b1 `(1, 1)` | the piece is a `Knight` | :white_check_mark: |
+| TC49: black knight class | a new `Board`; read g8 `(6, 8)` | the piece is a `Knight` | :white_check_mark: |
+| TC50: white bishop class | a new `Board`; read c1 `(2, 1)` | the piece is a `Bishop` | :white_check_mark: |
+| TC51: black bishop class | a new `Board`; read f8 `(5, 8)` | the piece is a `Bishop` | :white_check_mark: |
+| TC52: white queen class | a new `Board`; read d1 `(3, 1)` | the piece is a `Queen` | :white_check_mark: |
+| TC53: black queen class | a new `Board`; read d8 `(3, 8)` | the piece is a `Queen` | :white_check_mark: |
+| TC54: white king class | a new `Board`; read e1 `(4, 1)` | the piece is a `King` | :white_check_mark: |
+| TC55: black king class | a new `Board`; read e8 `(4, 8)` | the piece is a `King` | :white_check_mark: |
+| TC56: white pawn class | a new `Board`; read a2 `(0, 2)` | the piece is a `Pawn` | :white_check_mark: |
+| TC57: black pawn class | a new `Board`; read h7 `(7, 7)` | the piece is a `Pawn` | :white_check_mark: |
 
 ### Method under test: `move(Location from, Location to)`
 

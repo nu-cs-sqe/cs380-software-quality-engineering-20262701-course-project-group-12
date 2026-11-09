@@ -29,7 +29,12 @@ public class LocationTests {
         assertFalse(isSameSquare);
     }
 
+    private static final int NO_DISTANCE = 0;
+    private static final int FARTHEST_DISTANCE = 7;
     private static final Location A1 = new Location(0, 1);
+    private static final Location A8 = new Location(0, 8);
+    private static final Location H1 = new Location(7, 1);
+    private static final Location H8 = new Location(7, 8);
 
     @Test
     public void Location_File0Rank1_StoresBothLows() {
@@ -81,5 +86,47 @@ public class LocationTests {
     @Test
     public void Location_RankJustAboveInterval_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> new Location(0, 9));
+    }
+
+    @Test
+    public void FileDistanceTo_SameFileDifferentRank_ReturnsZero() {
+        int distance = H1.fileDistanceTo(H8);
+
+        assertEquals(NO_DISTANCE, distance);
+    }
+
+    @Test
+    public void FileDistanceTo_FarthestFileToTheRight_ReturnsSeven() {
+        int distance = A1.fileDistanceTo(H1);
+
+        assertEquals(FARTHEST_DISTANCE, distance);
+    }
+
+    @Test
+    public void FileDistanceTo_FarthestFileToTheLeft_ReturnsSeven() {
+        int distance = H1.fileDistanceTo(A1);
+
+        assertEquals(FARTHEST_DISTANCE, distance);
+    }
+
+    @Test
+    public void RankDistanceTo_SameRankDifferentFile_ReturnsZero() {
+        int distance = A8.rankDistanceTo(H8);
+
+        assertEquals(NO_DISTANCE, distance);
+    }
+
+    @Test
+    public void RankDistanceTo_FarthestRankUpward_ReturnsSeven() {
+        int distance = A1.rankDistanceTo(A8);
+
+        assertEquals(FARTHEST_DISTANCE, distance);
+    }
+
+    @Test
+    public void RankDistanceTo_FarthestRankDownward_ReturnsSeven() {
+        int distance = A8.rankDistanceTo(A1);
+
+        assertEquals(FARTHEST_DISTANCE, distance);
     }
 }
