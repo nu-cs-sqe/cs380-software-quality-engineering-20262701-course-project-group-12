@@ -478,6 +478,19 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void ClickSquare_WhilePromotionIsPending_DoesNothing() {
+        expectPawnMoveFromA7ToA8();
+        BoardController controller = replayedController();
+        controller.clickSquare(A7);
+        controller.clickSquare(A8);
+
+        controller.clickSquare(B1);
+
+        assertFalse(controller.isSelected(B1));
+        verify(board, piece, game);
+    }
+
     private void expectPawnMoveFromA7ToA8() {
         expectSelectableWhitePiece(A7);
         expect(board.pieceAt(A7)).andReturn(piece);

@@ -46,6 +46,9 @@ public class BoardController {
     }
 
     public void clickSquare(Location square) {
+        if (isPromotionPending()) {
+            return;
+        }
         selectedSquare.ifPresentOrElse(
                 selected -> handleClickWithSelection(selected, square),
                 () -> select(square));
