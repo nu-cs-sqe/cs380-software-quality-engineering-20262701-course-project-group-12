@@ -30,6 +30,8 @@ public class BoardTests {
     private static final Location D1 = new Location(3, 1);
     private static final Location D8 = new Location(3, 8);
     private static final Location E1 = new Location(4, 1);
+    private static final Location E3 = new Location(4, 3);
+    private static final Location E4 = new Location(4, 4);
     private static final Location E8 = new Location(4, 8);
     private static final Location F3 = new Location(5, 3);
     private static final Location F8 = new Location(5, 8);
@@ -387,6 +389,13 @@ public class BoardTests {
         board.move(F3, G1);
 
         assertFalse(board.holdsUnmovedPiece(G1));
+    }
+
+    @Test
+    public void IsAttackedByOpponentOf_NoOpponentPieceAttacks_ReturnsFalse() {
+        Board board = new Board();
+
+        assertFalse(board.isAttackedByOpponentOf(PieceColor.WHITE, E4));
     }
 
     private int countPieces(Board board) {

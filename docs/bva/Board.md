@@ -192,7 +192,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC61: no opponent piece attacks the square | a new `Board`; ask whether Black attacks e4 `(4, 4)`, with `color = WHITE` | false | :x: |
+| TC61: no opponent piece attacks the square | a new `Board`; ask whether Black attacks e4 `(4, 4)`, with `color = WHITE` | false | :white_check_mark: |
 | TC62: opponent pawns attack an empty square diagonally | a new `Board`; `color = BLACK`, square e3 `(4, 3)`; the white pawns on d2 and f2 attack it | true | :x: |
 | TC63: only pieces of the same color attack the square | a new `Board`; `color = WHITE`, square e3 `(4, 3)` | false | :x: |
 | TC64: an opponent rook on the last square, h8 | a new `Board`; move the h7 pawn `(7, 7)` to a6 `(0, 6)`; `color = WHITE`, square h3 `(7, 3)`; the h-file from h7 to h4 is empty | true | :x: |

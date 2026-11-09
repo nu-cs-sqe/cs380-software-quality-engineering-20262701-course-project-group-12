@@ -90,6 +90,10 @@ public class Board {
         return isOccupied(square) && !movedPieces.contains(pieceAt(square));
     }
 
+    public boolean isAttackedByOpponentOf(PieceColor color, Location square) {
+        return false;
+    }
+
     private Optional<Piece> occupantOf(Location location) {
         return rankOf(location).get(location.getFile());
     }
