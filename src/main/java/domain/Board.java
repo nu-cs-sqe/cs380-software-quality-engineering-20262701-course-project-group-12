@@ -4,10 +4,12 @@ import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import domain.piece.Queen;
+import domain.piece.Rook;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -29,6 +31,10 @@ public class Board {
             color -> new Piece(PieceType.BISHOP, color),
             color -> new Piece(PieceType.KNIGHT, color),
             color -> new Piece(PieceType.ROOK, color));
+    private static final Map<PieceType, Function<PieceColor, Piece>> PROMOTION_PIECE_MAKERS =
+            Map.of(
+                    PieceType.QUEEN, Queen::new,
+                    PieceType.ROOK, Rook::new);
 
     private final List<List<Optional<Piece>>> squares = emptySquares();
 
@@ -75,7 +81,7 @@ public class Board {
     }
 
     public void promote(Location square, PieceType type) {
-        place(new Queen(PieceColor.WHITE), square);
+        place(PROMOTION_PIECE_MAKERS.get(type).apply(PieceColor.WHITE), square);
     }
 
     private void clear(Location location) {

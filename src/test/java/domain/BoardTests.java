@@ -4,6 +4,7 @@ import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import domain.piece.Queen;
+import domain.piece.Rook;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -294,6 +295,14 @@ public class BoardTests {
         Piece promoted = promoteWhitePawnOnA8(PieceType.QUEEN);
 
         assertInstanceOf(Queen.class, promoted);
+        assertEquals(PieceColor.WHITE, promoted.getColor());
+    }
+
+    @Test
+    public void Promote_WhitePawnToRook_PlacesWhiteRook() {
+        Piece promoted = promoteWhitePawnOnA8(PieceType.ROOK);
+
+        assertInstanceOf(Rook.class, promoted);
         assertEquals(PieceColor.WHITE, promoted.getColor());
     }
 
