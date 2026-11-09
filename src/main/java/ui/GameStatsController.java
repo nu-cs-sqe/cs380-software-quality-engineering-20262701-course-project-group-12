@@ -23,7 +23,14 @@ public class GameStatsController {
     }
 
     public void refreshStatus() {
-        view.showCurrentPlayer(currentPlayerLine());
+        view.showCurrentPlayer(statusLine());
+    }
+
+    private String statusLine() {
+        if (game.isOver()) {
+            return Messages.format("stats.checkmate.black", game.winnerName());
+        }
+        return currentPlayerLine();
     }
 
     private String currentPlayerLine() {

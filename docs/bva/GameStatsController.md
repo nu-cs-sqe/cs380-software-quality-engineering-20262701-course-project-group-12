@@ -100,7 +100,7 @@ Step 2/3:
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while `playerToMoveName()` was Ada. Then `playerToMoveName()` is Bo, the game is not over, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Current player: Bo`
 
-- **TC10: refresh after Player 2 checkmates Player 1** ( :x: )
+- **TC10: refresh after Player 2 checkmates Player 1** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `winnerName()` is Bo, `winnerColor()` is `BLACK`, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Checkmate: Bo (Black) wins`
 
