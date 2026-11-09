@@ -60,7 +60,8 @@ public class Game {
     }
 
     public PieceColor winnerColor() {
-        return winner.orElseThrow().getColor();
+        return winner.orElseThrow(() -> new IllegalStateException(
+                "Cannot read the winner before the game is over")).getColor();
     }
 
     public Player playerOne() {

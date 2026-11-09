@@ -361,7 +361,7 @@ comes with those stories.
   - **Expected output**: Throws `IllegalStateException`.
 
 - **TC-END-06 — Reject reading the winner's color before the game is over**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `winnerColor()`
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Throws `IllegalStateException`.

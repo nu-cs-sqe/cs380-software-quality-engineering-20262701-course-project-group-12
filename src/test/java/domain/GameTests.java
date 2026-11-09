@@ -320,4 +320,12 @@ public class GameTests {
 
         assertThrows(IllegalStateException.class, game::winnerName);
     }
+
+    @Test
+    public void WinnerColor_GameNotOver_ThrowsIllegalStateException() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        assertThrows(IllegalStateException.class, game::winnerColor);
+    }
 }
