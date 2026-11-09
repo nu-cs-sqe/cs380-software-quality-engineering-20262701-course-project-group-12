@@ -40,6 +40,10 @@ public class Game {
         return started;
     }
 
+    public boolean isOver() {
+        return false;
+    }
+
     public Player playerOne() {
         requireStarted("player one");
         return playerOne;

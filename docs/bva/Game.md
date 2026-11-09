@@ -326,7 +326,7 @@ stories are not built yet, and they will check `isOver()`. Checkmate is checked
 before any draw, so its priority over repetition and the seventy-five-move rule
 comes with those stories.
 
-- **TC-END-01 — A started game is not over** ( :x: )
+- **TC-END-01 — A started game is not over** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `isOver()`
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.

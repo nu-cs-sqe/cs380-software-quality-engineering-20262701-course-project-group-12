@@ -269,4 +269,14 @@ public class GameTests {
 
         assertThrows(IllegalStateException.class, game::colorToMove);
     }
+
+    @Test
+    public void IsOver_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean over = game.isOver();
+
+        assertFalse(over);
+    }
 }
