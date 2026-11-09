@@ -12,7 +12,7 @@ public class BoardController {
     private final Board board;
     private final Game game;
     private Optional<Location> selectedSquare = Optional.empty();
-    private boolean promotionPending;
+    private Optional<Location> promotionSquare = Optional.empty();
 
     public BoardController(Board board, Game game) {
         this.board = board;
@@ -32,7 +32,11 @@ public class BoardController {
     }
 
     public boolean isPromotionPending() {
-        return promotionPending;
+        return promotionSquare.isPresent();
+    }
+
+    public void choosePromotion(PieceType type) {
+        promotionSquare.ifPresent(square -> board.promote(square, type));
     }
 
     public void clickSquare(Location square) {
@@ -68,7 +72,7 @@ public class BoardController {
 
     private void passTurnUnlessPromoting(Piece movingPiece, Location arrival) {
         if (movingPiece.promotesOn(arrival)) {
-            promotionPending = true;
+            promotionSquare = Optional.of(arrival);
         } else {
             game.passTurn();
         }
