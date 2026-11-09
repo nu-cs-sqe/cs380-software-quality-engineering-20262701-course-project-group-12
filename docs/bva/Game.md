@@ -355,7 +355,7 @@ comes with those stories.
     returns `WHITE`.
 
 - **TC-END-05 — Reject reading the winner's name before the game is over**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `winnerName()`
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Throws `IllegalStateException`.

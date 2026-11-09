@@ -312,4 +312,12 @@ public class GameTests {
         assertEquals("Alice", game.winnerName());
         assertEquals(PieceColor.WHITE, game.winnerColor());
     }
+
+    @Test
+    public void WinnerName_GameNotOver_ThrowsIllegalStateException() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        assertThrows(IllegalStateException.class, game::winnerName);
+    }
 }
