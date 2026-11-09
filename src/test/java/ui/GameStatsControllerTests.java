@@ -86,7 +86,7 @@ public class GameStatsControllerTests {
     }
 
     @Test
-    void RefreshCurrentPlayer_AfterTurn_ShowsPlayerTwo() {
+    void RefreshStatus_AfterTurn_ShowsPlayerTwo() {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);
         expect(game.playerOneName()).andStubReturn("Ada");
@@ -96,7 +96,7 @@ public class GameStatsControllerTests {
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
 
-        controller.refreshCurrentPlayer();
+        controller.refreshStatus();
 
         assertEquals("Current player: Bo", view.currentPlayerLine());
     }

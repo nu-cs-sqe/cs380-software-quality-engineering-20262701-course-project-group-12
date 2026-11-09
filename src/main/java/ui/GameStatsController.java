@@ -22,7 +22,7 @@ public class GameStatsController {
         return view;
     }
 
-    public void refreshCurrentPlayer() {
+    public void refreshStatus() {
         view.showCurrentPlayer(currentPlayerLine());
     }
 
