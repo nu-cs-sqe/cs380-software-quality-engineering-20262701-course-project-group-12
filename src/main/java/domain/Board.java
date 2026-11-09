@@ -81,7 +81,8 @@ public class Board {
     }
 
     private boolean isPawnAdvancingTwoRanks(Piece piece, Location from, Location to) {
-        return piece.getType() == PieceType.PAWN && to.getRank() - from.getRank() == TWO_RANKS;
+        return piece.getType() == PieceType.PAWN
+                && Math.abs(to.getRank() - from.getRank()) == TWO_RANKS;
     }
 
     private void clear(Location location) {
