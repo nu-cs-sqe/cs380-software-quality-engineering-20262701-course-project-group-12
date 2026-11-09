@@ -366,7 +366,7 @@ comes with those stories.
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Throws `IllegalStateException`.
 
-- **TC-END-07 — Reject ending the game before a start** ( :x: )
+- **TC-END-07 — Reject ending the game before a start** ( :white_check_mark: )
   - **Method(s) under test**: `endByCheckmate()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.

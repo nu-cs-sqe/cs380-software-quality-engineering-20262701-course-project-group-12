@@ -328,4 +328,11 @@ public class GameTests {
 
         assertThrows(IllegalStateException.class, game::winnerColor);
     }
+
+    @Test
+    public void EndByCheckmate_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::endByCheckmate);
+    }
 }

@@ -40,6 +40,10 @@ public class Game {
     }
 
     public void endByCheckmate() {
+        if (!started) {
+            throw new IllegalStateException(
+                    "Cannot end the game before the game has started");
+        }
         winner = Optional.of(playerWaiting());
     }
 
