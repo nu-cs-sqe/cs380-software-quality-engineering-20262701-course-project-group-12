@@ -18,14 +18,68 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardControllerTests {
+    @Test
+    public void IsSelected_NothingSelected_ReturnsFalse() {
+        BoardController controller = replayedController();
+
+        boolean isSelected = controller.isSelected(B1);
+
+        assertFalse(isSelected);
+        verify(board, piece);
+    }
+
+    @Test
+    public void IsSelected_SelectedSquare_ReturnsTrue() {
+        expect(board.isOccupied(B1)).andReturn(true);
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+
+        boolean isSelected = controller.isSelected(new Location(1, 1));
+
+        assertTrue(isSelected);
+        verify(board, piece);
+    }
+
+    @Test
+    public void IsSelected_AnotherSquareWhileOneIsSelected_ReturnsFalse() {
+        expect(board.isOccupied(B1)).andReturn(true);
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+
+        boolean isSelected = controller.isSelected(C3);
+
+        assertFalse(isSelected);
+        verify(board, piece);
+    }
+
+    @Test
+    public void ClickSquare_SelectedSquareAgain_ClearsSelection() {
+        expect(board.isOccupied(B1)).andReturn(true);
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+
+        controller.clickSquare(new Location(1, 1));
+
+        assertFalse(controller.isSelected(B1));
+        verify(board, piece);
+    }
+
     private static final Location A1 = new Location(0, 1);
     private static final Location A3 = new Location(0, 3);
+    private static final Location B1 = new Location(1, 1);
+    private static final Location B3 = new Location(1, 3);
+    private static final Location C3 = new Location(2, 3);
+    private static final Location D2 = new Location(3, 2);
+    private static final Piece BLACK_PAWN = new Piece(PieceType.PAWN, PieceColor.BLACK);
+    private static final Piece BLACK_KING = new Piece(PieceType.KING, PieceColor.BLACK);
 
     private Board board;
+    private Piece piece;
 
     @BeforeEach
-    public void createBoardMock() {
+    public void createMocks() {
         board = mock(Board.class);
+        piece = mock(Piece.class);
     }
 
     @Test
@@ -65,8 +119,142 @@ public class BoardControllerTests {
         verify(board);
     }
 
+    @Test
+    public void ClickSquare_PieceThenSquareItCanReach_MovesPiece() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        expect(board.isOccupied(C3)).andReturn(false);
+        board.move(B1, C3);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece);
+    }
+
+    @Test
+    public void ClickSquare_PieceThenSquareItCannotReach_LeavesBoardUnchanged() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, B3, board)).andReturn(false);
+        expect(board.isOccupied(B3)).andReturn(false);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(B3);
+
+        verify(board, piece);
+    }
+
+    @Test
+    public void ClickSquare_EmptySquareFirst_SelectsNothing() {
+        expect(board.isOccupied(A3)).andReturn(false);
+        expect(board.isOccupied(C3)).andReturn(false);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(A3);
+        controller.clickSquare(C3);
+
+        verify(board, piece);
+    }
+
+    @Test
+    public void ClickSquare_AfterMove_SelectsNothing() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        expect(board.isOccupied(C3)).andReturn(false);
+        board.move(B1, C3);
+        expect(board.isOccupied(A3)).andReturn(false);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+        controller.clickSquare(A3);
+
+        verify(board, piece);
+    }
+
+    @Test
+    public void ClickSquare_RefusedMoveOntoEmptySquare_KeepsSelection() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, B3, board)).andReturn(false);
+        expect(board.isOccupied(B3)).andReturn(false);
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+
+        controller.clickSquare(B3);
+
+        assertTrue(controller.isSelected(B1));
+        verify(board, piece);
+    }
+
+    @Test
+    public void ClickSquare_PieceTheSelectedOneCannotReach_SelectsThatPiece() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, D2, board)).andReturn(false);
+        expect(board.isOccupied(D2)).andReturn(true);
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+
+        controller.clickSquare(D2);
+
+        assertTrue(controller.isSelected(D2));
+        verify(board, piece);
+    }
+
+    @Test
+    public void ClickSquare_OpponentPieceTheSelectedOneCanReach_CapturesIt() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        givenOnC3(BLACK_PAWN);
+        board.move(B1, C3);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece);
+    }
+
+    @Test
+    public void ClickSquare_KingTheSelectedPieceCanReach_LeavesBoardUnchanged() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        givenOnC3(BLACK_KING);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece);
+    }
+
+    @Test
+    public void ClickSquare_RefusedKingCapture_KeepsSelection() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        givenOnC3(BLACK_KING);
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+
+        controller.clickSquare(C3);
+
+        assertTrue(controller.isSelected(B1));
+        verify(board, piece);
+    }
+
+    private void expectPieceOnB1() {
+        expect(board.isOccupied(B1)).andReturn(true);
+        expect(board.pieceAt(B1)).andReturn(piece);
+    }
+
+    private void givenOnC3(Piece occupant) {
+        expect(board.isOccupied(C3)).andStubReturn(true);
+        expect(board.pieceAt(C3)).andStubReturn(occupant);
+    }
+
     private BoardController replayedController() {
-        replay(board);
+        replay(board, piece);
         return new BoardController(board);
     }
 }
