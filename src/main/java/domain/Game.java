@@ -55,13 +55,16 @@ public class Game {
     }
 
     public String winnerName() {
-        return winner.orElseThrow(() -> new IllegalStateException(
-                "Cannot read the winner before the game is over")).getName();
+        return winner().getName();
     }
 
     public PieceColor winnerColor() {
+        return winner().getColor();
+    }
+
+    private Player winner() {
         return winner.orElseThrow(() -> new IllegalStateException(
-                "Cannot read the winner before the game is over")).getColor();
+                "Cannot read the winner before the game is over"));
     }
 
     public Player playerOne() {
