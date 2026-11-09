@@ -2,9 +2,9 @@
 
 `Pawn` is the piece that advances straight toward the opponent and
 captures only one square diagonally forward (issue #16 / GitHub US-06,
-docs US-04). It extends `Piece`. This analysis covers `canMove`. The
-constructor only stores `PieceType.PAWN` and the color through `Piece`,
-so it has no cases of its own.
+docs US-04). It extends `Piece`. This analysis covers `canMove` and
+`promotesOn`. The constructor only stores `PieceType.PAWN` and the color
+through `Piece`, so it has no cases of its own.
 
 `canMove` is a query. It does not move the pawn. `Board.move` still
 places the piece. Occupancy comes from a real `Board` (this team owns
@@ -26,19 +26,24 @@ pawn. The starting rank is rank 2 for White and rank 7 for Black.
 Squares use file `0` = a-file through file `7` = h-file, and rank `1`
 through `8`.
 
-Out of scope: promotion on the last rank (US-13) and en passant (US-12).
-A move onto the last rank is an ordinary forward move here. A diagonal
-move onto an empty square is rejected, because en passant is a later
-story.
+`promotesOn(Location square)` (issue #46 / GitHub US-13, docs US-13)
+returns `true` when `square` is on the pawn's last rank, the rank where it
+is promoted: rank 8 for White and rank 1 for Black. It returns `false`
+for any other square. `canMove` still treats a move onto the last rank as
+an ordinary forward move; the promotion that follows the move is handled
+by `BoardController` and `Board`.
+
+Out of scope: en passant (US-12). A diagonal move onto an empty square is
+rejected, because en passant is a later story.
 
 ## Week 6 instructor review
 
 - **No null checks.** This is a standalone Java application, so the code
   makes sure `null` is never passed around instead of checking for it.
   `canMove` has no null cases and does not throw for a null argument.
-- **No magic numbers.** The starting ranks, the forward direction of each
-  color, and the one- and two-square distances become named constants in
-  `Pawn` and in the tests.
+- **No magic numbers.** The starting ranks, the last ranks, the forward
+  direction of each color, and the one- and two-square distances become
+  named constants in `Pawn` and in the tests.
 
 ## Boundaries Considered
 
@@ -322,4 +327,56 @@ story.
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`. `to` is
     g3 `(6, 3)`. New `Board` after `move` of the g7 pawn to g3, so g3
     holds a black pawn.
+  - **Expected output**: `false`.
+
+## Boundaries Considered for `promotesOn(Location square)`
+
+### Step 1: Inputs and outputs
+
+- **Input: pawn color**
+  - white
+  - black
+- **Input: rank of `square`**
+  - the pawn's last rank: 8 for White, 1 for Black
+  - one rank before the last rank: 7 for White, 2 for Black
+- **Output: promoted**
+  - `true`
+  - `false`
+
+### Step 2: Categories
+
+- The rank of `square` is a boundary at the pawn's last rank. The last
+  rank is the edge, and the rank before it is just inside.
+- The last rank depends on the color, so each color is checked at its own
+  last rank.
+- The file does not matter, so every case uses the a-file.
+- The board is not an input; a pawn answers from the square alone.
+
+### Step 3: Boundary choices
+
+- White pawn: a8 `(0, 8)`, a7 `(0, 7)`.
+- Black pawn: a1 `(0, 1)`, a2 `(0, 2)`.
+
+## Step 4: Test Cases for `promotesOn(Location square)`
+
+### Method under test: `promotesOn(Location square)`
+
+- **TC-PAWN-25 — Promote a white pawn on rank 8** ( :x: )
+  - **Method(s) under test**: `promotesOn(Location)`
+  - **State of the system**: White pawn. `square` is a8 `(0, 8)`.
+  - **Expected output**: `true`.
+
+- **TC-PAWN-26 — Do not promote a white pawn on rank 7** ( :x: )
+  - **Method(s) under test**: `promotesOn(Location)`
+  - **State of the system**: White pawn. `square` is a7 `(0, 7)`.
+  - **Expected output**: `false`.
+
+- **TC-PAWN-27 — Promote a black pawn on rank 1** ( :x: )
+  - **Method(s) under test**: `promotesOn(Location)`
+  - **State of the system**: Black pawn. `square` is a1 `(0, 1)`.
+  - **Expected output**: `true`.
+
+- **TC-PAWN-28 — Do not promote a black pawn on rank 2** ( :x: )
+  - **Method(s) under test**: `promotesOn(Location)`
+  - **State of the system**: Black pawn. `square` is a2 `(0, 2)`.
   - **Expected output**: `false`.

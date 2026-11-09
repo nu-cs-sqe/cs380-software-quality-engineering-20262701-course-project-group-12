@@ -6,6 +6,7 @@
 - `PieceType getType()`: returns the type given at construction.
 - `PieceColor getColor()`: returns the color given at construction.
 - `boolean canMove(Location from, Location to, Board board)`: returns `false`, because a plain `Piece` has no movement rules. It does not look at the board.
+- `boolean promotesOn(Location square)` (issue #46): returns `false`, because only a pawn is promoted. `Pawn` overrides it.
 
 `getType()` and `getColor()` only return those stored values, so they are checked inside the constructor cases below.
 
@@ -30,6 +31,16 @@ A plain `Piece` answers the same for every input, so one case stands for all of 
 | Input: the piece | Cases | a plain `Piece` (a type without its own subclass), such as a white queen |
 | Input: `from`, `to` | Pointer | two locations (no null: callers never pass one) |
 | Input: `board` | Pointer | a board (no null: callers never pass one) |
+| Output: the answer | Boolean | `false` |
+
+### `promotesOn(Location square)`
+
+A plain `Piece` answers the same for every square, so one case on a last rank stands for all of them.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the piece | Cases | a plain `Piece`, such as a white queen |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
 | Output: the answer | Boolean | `false` |
 
 ## Step 4: Test cases (all-combination for the valid pairs)
@@ -70,3 +81,9 @@ A plain `Piece` answers the same for every input, so one case stands for all of 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC19: a piece without movement rules | a white queen as a plain `Piece`; `from` is d1 `(3, 1)`, `to` is d3 `(3, 3)`; a mocked `Board` that expects no calls | `false` | :white_check_mark: |
+
+### Method under test: `promotesOn(Location square)`
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC20: a piece that is not a pawn is never promoted | a white queen as a plain `Piece`; `square` is a8 `(0, 8)` | `false` | :x: |
