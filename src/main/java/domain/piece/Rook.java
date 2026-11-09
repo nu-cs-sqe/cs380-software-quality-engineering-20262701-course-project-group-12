@@ -12,7 +12,7 @@ public class Rook extends Piece {
     public boolean canMove(Location from, Location to, Board board) {
         return isAlongRookLine(from, to)
                 && !holdsOwnPiece(to, board)
-                && pathIsClear(from, to, board);
+                && isPathClear(from, to, board);
     }
 
     private boolean isAlongRookLine(Location from, Location to) {
@@ -25,20 +25,5 @@ public class Rook extends Piece {
 
     private boolean isAlongRank(Location from, Location to) {
         return from.getRank() == to.getRank() && from.getFile() != to.getFile();
-    }
-
-    private boolean pathIsClear(Location from, Location to, Board board) {
-        int fileStep = Integer.signum(to.getFile() - from.getFile());
-        int rankStep = Integer.signum(to.getRank() - from.getRank());
-        int file = from.getFile() + fileStep;
-        int rank = from.getRank() + rankStep;
-        while (file != to.getFile() || rank != to.getRank()) {
-            if (board.isOccupied(new Location(file, rank))) {
-                return false;
-            }
-            file += fileStep;
-            rank += rankStep;
-        }
-        return true;
     }
 }

@@ -12,6 +12,7 @@
 `Piece` also holds the move rules that several piece classes share (issue #53). They are `protected`, not public, so they have no cases here. The cases of the piece classes that call them cover them:
 
 - `boolean holdsOwnPiece(Location square, Board board)`: true when a piece of this piece's color stands on `square`. The rook, knight, bishop, queen, and king use it to refuse a square their own side holds (`Rook.md`, `Knight.md`, `Bishop.md`, `Queen.md`, `King.md`).
+- `boolean isPathClear(Location from, Location to, Board board)`: true when every square strictly between `from` and `to` is empty. It walks one square at a time along a file, a rank, or a diagonal, so callers first check that the move is on one of those lines. The rook, bishop, and queen use it (`Rook.md`, `Bishop.md`, `Queen.md`).
 
 ## Steps 1-3: Characteristics and partitions
 

@@ -20,19 +20,4 @@ public class Bishop extends Piece {
         int rankDistance = from.rankDistanceTo(to);
         return fileDistance == rankDistance && fileDistance != 0;
     }
-
-    private boolean isPathClear(Location from, Location to, Board board) {
-        int fileStep = Integer.signum(to.getFile() - from.getFile());
-        int rankStep = Integer.signum(to.getRank() - from.getRank());
-        int file = from.getFile() + fileStep;
-        int rank = from.getRank() + rankStep;
-        while (file != to.getFile()) {
-            if (board.isOccupied(new Location(file, rank))) {
-                return false;
-            }
-            file += fileStep;
-            rank += rankStep;
-        }
-        return true;
-    }
 }
