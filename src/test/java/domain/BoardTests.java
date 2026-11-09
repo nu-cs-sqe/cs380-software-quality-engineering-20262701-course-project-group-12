@@ -363,6 +363,13 @@ public class BoardTests {
         assertPieceClass(H7, Pawn.class);
     }
 
+    @Test
+    public void HoldsUnmovedPiece_StartingPieceThatNeverMoved_ReturnsTrue() {
+        Board board = new Board();
+
+        assertTrue(board.holdsUnmovedPiece(E1));
+    }
+
     private int countPieces(Board board) {
         int pieces = 0;
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {

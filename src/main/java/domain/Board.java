@@ -78,6 +78,10 @@ public class Board {
         place(movingPiece, to);
     }
 
+    public boolean holdsUnmovedPiece(Location square) {
+        return true;
+    }
+
     private void clear(Location location) {
         rankOf(location).set(location.getFile(), Optional.empty());
     }

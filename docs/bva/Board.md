@@ -184,7 +184,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC58: the starting piece that has never moved | a new `Board`; ask about e1 `(4, 1)` | true | :x: |
+| TC58: the starting piece that has never moved | a new `Board`; ask about e1 `(4, 1)` | true | :white_check_mark: |
 | TC59: a square the piece moved away from | a new `Board`; move g1 `(6, 1)` to f3 `(5, 3)`; ask about g1 | false | :x: |
 | TC60: a piece that moved and came back | a new `Board`; move g1 `(6, 1)` to f3 `(5, 3)`, then f3 back to g1; ask about g1 | false | :x: |
 
