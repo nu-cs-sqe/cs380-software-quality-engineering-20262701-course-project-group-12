@@ -365,7 +365,7 @@ that a capture needs.
     `target` is d3 `(3, 3)`. New `Board`, so d3 is empty.
   - **Expected output**: `true`.
 
-- **TC-PAWN-27 — Attack with a black pawn** ( :x: )
+- **TC-PAWN-27 — Attack with a black pawn** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: Black pawn. `from` is e7 `(4, 7)`.
     `target` is d6 `(3, 6)`. New `Board`, so d6 is empty.

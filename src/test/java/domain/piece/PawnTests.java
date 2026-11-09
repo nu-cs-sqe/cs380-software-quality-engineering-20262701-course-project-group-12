@@ -16,6 +16,7 @@ public class PawnTests {
     private static final Location B3 = new Location(1, 3);
     private static final Location B7 = new Location(1, 7);
     private static final Location D3 = new Location(3, 3);
+    private static final Location D6 = new Location(3, 6);
     private static final Location D7 = new Location(3, 7);
     private static final Location E2 = new Location(4, 2);
     private static final Location E3 = new Location(4, 3);
@@ -254,6 +255,13 @@ public class PawnTests {
     @Test
     public void Attacks_EmptySquareDiagonallyForwardTowardLowerFile_ReturnsTrue() {
         boolean attacks = whitePawn.attacks(E2, D3, board);
+
+        assertTrue(attacks);
+    }
+
+    @Test
+    public void Attacks_BlackPawnDiagonallyForward_ReturnsTrue() {
+        boolean attacks = blackPawn.attacks(E7, D6, board);
 
         assertTrue(attacks);
     }
