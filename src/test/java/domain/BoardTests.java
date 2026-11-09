@@ -3,6 +3,7 @@ package domain;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
+import domain.piece.Pawn;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardTests {
     private static final Location A1 = new Location(0, 1);
+    private static final Location A2 = new Location(0, 2);
     private static final Location A3 = new Location(0, 3);
     private static final Location A4 = new Location(0, 4);
     private static final Location A5 = new Location(0, 5);
@@ -348,6 +350,11 @@ public class BoardTests {
     @Test
     public void Board_E8_PlacesKing() {
         assertPieceClass(E8, King.class);
+    }
+
+    @Test
+    public void Board_A2_PlacesPawn() {
+        assertPieceClass(A2, Pawn.class);
     }
 
     private int countPieces(Board board) {

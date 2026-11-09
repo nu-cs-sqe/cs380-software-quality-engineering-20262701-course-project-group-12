@@ -3,6 +3,7 @@ package domain;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
+import domain.piece.Pawn;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
@@ -53,7 +54,7 @@ public class Board {
     private void placeStartingPiecesOnFile(int file) {
         Function<PieceColor, Piece> backRankPiece = BACK_RANK_PIECE_MAKERS.get(file);
         place(backRankPiece.apply(PieceColor.WHITE), new Location(file, WHITE_BACK_RANK));
-        place(new Piece(PieceType.PAWN, PieceColor.WHITE), new Location(file, WHITE_PAWN_RANK));
+        place(new Pawn(PieceColor.WHITE), new Location(file, WHITE_PAWN_RANK));
         place(new Piece(PieceType.PAWN, PieceColor.BLACK), new Location(file, BLACK_PAWN_RANK));
         place(backRankPiece.apply(PieceColor.BLACK), new Location(file, BLACK_BACK_RANK));
     }
