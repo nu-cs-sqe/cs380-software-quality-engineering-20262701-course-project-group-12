@@ -19,7 +19,11 @@ public class King extends Piece {
         if (isOneSquare(from, to)) {
             return true;
         }
-        return isCastlingStep(from, to) && isPathClear(from, to, board);
+        return isCastlingStep(from, to) && canCastle(from, to, board);
+    }
+
+    private boolean canCastle(Location from, Location to, Board board) {
+        return board.holdsUnmovedPiece(from) && isPathClear(from, to, board);
     }
 
     private boolean isOneSquare(Location from, Location to) {

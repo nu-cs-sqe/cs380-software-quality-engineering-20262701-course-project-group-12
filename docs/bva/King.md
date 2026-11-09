@@ -317,7 +317,7 @@ Fifty-move counting (AC 8) is US-18; a castle is a king move and
   - **State of the system**: Black king. `from` is e8, `to` is c8 `(2, 8)`. New `Board` after `move` of b8 to b5, c8 to c5, and d8 to d5.
   - **Expected output**: `true`.
 
-- **TC-KING-21 — Reject a castle by a king that moved and came back** ( :x: )
+- **TC-KING-21 — Reject a castle by a king that moved and came back** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king, e1 to g1. Kingside cleared as in TC-KING-17, then `move` of the king e1 to f1 and f1 back to e1.
   - **Expected output**: `false`.

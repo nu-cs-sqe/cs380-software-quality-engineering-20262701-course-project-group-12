@@ -5,6 +5,7 @@ import domain.Location;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class KingCastlingTests {
@@ -74,6 +75,17 @@ public class KingCastlingTests {
         boolean canMove = BLACK_KING.canMove(E8, C8, board);
 
         assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_KingMovedAndCameBack_ReturnsFalse() {
+        clearWhiteKingside();
+        board.move(E1, F1);
+        board.move(F1, E1);
+
+        boolean canMove = WHITE_KING.canMove(E1, G1, board);
+
+        assertFalse(canMove);
     }
 
     private void clearWhiteKingside() {
