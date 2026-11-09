@@ -243,4 +243,11 @@ public class PawnTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void PromotesOn_WhitePawnOnRankEight_ReturnsTrue() {
+        boolean promotes = whitePawn.promotesOn(A8);
+
+        assertTrue(promotes);
+    }
 }

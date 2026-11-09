@@ -361,7 +361,7 @@ rejected, because en passant is a later story.
 
 ### Method under test: `promotesOn(Location square)`
 
-- **TC-PAWN-25 — Promote a white pawn on rank 8** ( :x: )
+- **TC-PAWN-25 — Promote a white pawn on rank 8** ( :white_check_mark: )
   - **Method(s) under test**: `promotesOn(Location)`
   - **State of the system**: White pawn. `square` is a8 `(0, 8)`.
   - **Expected output**: `true`.

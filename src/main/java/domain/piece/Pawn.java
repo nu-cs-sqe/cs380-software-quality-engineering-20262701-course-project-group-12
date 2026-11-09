@@ -36,6 +36,11 @@ public class Pawn extends Piece {
         return canCapture(from, to, board);
     }
 
+    @Override
+    public boolean promotesOn(Location square) {
+        return true;
+    }
+
     private boolean canAdvance(Location from, Location to, Board board) {
         if (board.isOccupied(to)) {
             return false;
