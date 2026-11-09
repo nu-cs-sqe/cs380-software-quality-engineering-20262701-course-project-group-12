@@ -10,7 +10,6 @@ public class Game {
     private Player playerTwo;
     private Player playerToMove;
     private Board board;
-    private boolean over;
     private Optional<Player> winner = Optional.empty();
 
     public void start(String player1Name, String player2Name) {
@@ -45,12 +44,11 @@ public class Game {
     }
 
     public void endByCheckmate() {
-        over = true;
         winner = Optional.of(playerTwo);
     }
 
     public boolean isOver() {
-        return over;
+        return winner.isPresent();
     }
 
     public String winnerName() {
