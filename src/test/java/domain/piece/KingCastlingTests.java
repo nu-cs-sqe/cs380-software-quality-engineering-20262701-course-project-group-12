@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class KingCastlingTests {
+    private static final Location A1 = new Location(0, 1);
+    private static final Location A3 = new Location(0, 3);
     private static final Location B1 = new Location(1, 1);
     private static final Location B4 = new Location(1, 4);
     private static final Location B5 = new Location(1, 5);
@@ -98,6 +100,17 @@ public class KingCastlingTests {
         boolean canMove = WHITE_KING.canMove(E1, G1, board);
 
         assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_KingsideAfterQueensideRookMoved_ReturnsTrue() {
+        clearWhiteKingside();
+        board.move(A1, A3);
+        board.move(A3, A1);
+
+        boolean canMove = WHITE_KING.canMove(E1, G1, board);
+
+        assertTrue(canMove);
     }
 
     private void clearWhiteKingside() {
