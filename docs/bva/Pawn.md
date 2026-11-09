@@ -371,7 +371,7 @@ that a capture needs.
     `target` is d6 `(3, 6)`. New `Board`, so d6 is empty.
   - **Expected output**: `true`.
 
-- **TC-PAWN-28 — Attack a square that holds an opponent** ( :x: )
+- **TC-PAWN-28 — Attack a square that holds an opponent** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
     `target` is d3 `(3, 3)`. New `Board` after `move` of the d7 pawn to

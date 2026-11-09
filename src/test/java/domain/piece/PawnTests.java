@@ -265,4 +265,13 @@ public class PawnTests {
 
         assertTrue(attacks);
     }
+
+    @Test
+    public void Attacks_SquareHoldingOpponent_ReturnsTrue() {
+        board.move(D7, D3);
+
+        boolean attacks = whitePawn.attacks(E2, D3, board);
+
+        assertTrue(attacks);
+    }
 }
