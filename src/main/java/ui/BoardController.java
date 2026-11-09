@@ -12,6 +12,7 @@ public class BoardController {
     private final Board board;
     private final Game game;
     private Optional<Location> selectedSquare = Optional.empty();
+    private boolean promotionPending;
 
     public BoardController(Board board, Game game) {
         this.board = board;
@@ -31,7 +32,7 @@ public class BoardController {
     }
 
     public boolean isPromotionPending() {
-        return false;
+        return promotionPending;
     }
 
     public void clickSquare(Location square) {
@@ -49,18 +50,27 @@ public class BoardController {
     }
 
     private void moveOrChangeSelection(Location from, Location to) {
-        if (board.pieceAt(from).canMove(from, to, board)) {
-            moveUnlessCapturingKing(from, to);
+        Piece movingPiece = board.pieceAt(from);
+        if (movingPiece.canMove(from, to, board)) {
+            moveUnlessCapturingKing(movingPiece, from, to);
         } else {
             select(to);
         }
     }
 
-    private void moveUnlessCapturingKing(Location from, Location to) {
+    private void moveUnlessCapturingKing(Piece movingPiece, Location from, Location to) {
         if (!holdsKing(to)) {
             board.move(from, to);
-            game.passTurn();
+            passTurnUnlessPromoting(movingPiece, to);
             clearSelection();
+        }
+    }
+
+    private void passTurnUnlessPromoting(Piece movingPiece, Location arrival) {
+        if (movingPiece.promotesOn(arrival)) {
+            promotionPending = true;
+        } else {
+            game.passTurn();
         }
     }
 
