@@ -21,10 +21,6 @@ public class Bishop extends Piece {
         return fileDistance == rankDistance && fileDistance != 0;
     }
 
-    private boolean holdsOwnPiece(Location square, Board board) {
-        return board.isOccupied(square) && board.pieceAt(square).getColor() == getColor();
-    }
-
     private boolean isPathClear(Location from, Location to, Board board) {
         int fileStep = Integer.signum(to.getFile() - from.getFile());
         int rankStep = Integer.signum(to.getRank() - from.getRank());

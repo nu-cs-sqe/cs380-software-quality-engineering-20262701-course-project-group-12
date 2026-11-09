@@ -30,10 +30,6 @@ public class Queen extends Piece {
         return from.getFile() == to.getFile() && from.getRank() == to.getRank();
     }
 
-    private boolean holdsOwnPiece(Location square, Board board) {
-        return board.isOccupied(square) && board.pieceAt(square).getColor() == getColor();
-    }
-
     private boolean isPathClear(Location from, Location to, Board board) {
         int fileStep = Integer.signum(to.getFile() - from.getFile());
         int rankStep = Integer.signum(to.getRank() - from.getRank());

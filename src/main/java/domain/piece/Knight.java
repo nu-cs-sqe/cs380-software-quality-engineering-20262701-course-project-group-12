@@ -22,8 +22,4 @@ public class Knight extends Piece {
         return fileDistance == SHORT_LEG && rankDistance == LONG_LEG
                 || fileDistance == LONG_LEG && rankDistance == SHORT_LEG;
     }
-
-    private boolean holdsOwnPiece(Location square, Board board) {
-        return board.isOccupied(square) && board.pieceAt(square).getColor() == getColor();
-    }
 }

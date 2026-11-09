@@ -11,13 +11,8 @@ public class Rook extends Piece {
     @Override
     public boolean canMove(Location from, Location to, Board board) {
         return isAlongRookLine(from, to)
-                && !isFriendlyPiece(to, board)
+                && !holdsOwnPiece(to, board)
                 && pathIsClear(from, to, board);
-    }
-
-    private boolean isFriendlyPiece(Location destination, Board board) {
-        return board.isOccupied(destination)
-                && board.pieceAt(destination).getColor() == getColor();
     }
 
     private boolean isAlongRookLine(Location from, Location to) {

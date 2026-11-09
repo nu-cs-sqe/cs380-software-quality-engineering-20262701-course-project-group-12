@@ -23,4 +23,8 @@ public class Piece {
     public boolean canMove(Location from, Location to, Board board) {
         return false;
     }
+
+    protected boolean holdsOwnPiece(Location square, Board board) {
+        return board.isOccupied(square) && board.pieceAt(square).getColor() == color;
+    }
 }

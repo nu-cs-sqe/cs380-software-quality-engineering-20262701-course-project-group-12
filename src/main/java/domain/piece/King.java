@@ -17,8 +17,4 @@ public class King extends Piece {
         }
         return Math.max(from.fileDistanceTo(to), from.rankDistanceTo(to)) == ONE_SQUARE;
     }
-
-    private boolean holdsOwnPiece(Location square, Board board) {
-        return board.isOccupied(square) && board.pieceAt(square).getColor() == getColor();
-    }
 }
