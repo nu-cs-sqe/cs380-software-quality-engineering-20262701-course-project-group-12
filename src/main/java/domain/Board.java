@@ -85,6 +85,10 @@ public class Board {
     }
 
     public void promote(Location square, PieceType type) {
+        if (!PROMOTION_PIECE_MAKERS.containsKey(type)) {
+            throw new IllegalArgumentException("Cannot promote a pawn to a " + type
+                    + "; the choices are a queen, rook, bishop, or knight");
+        }
         PieceColor pawnColor = pieceAt(square).getColor();
         place(PROMOTION_PIECE_MAKERS.get(type).apply(pawnColor), square);
     }

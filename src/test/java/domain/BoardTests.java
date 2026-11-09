@@ -337,11 +337,24 @@ public class BoardTests {
         assertEquals(PieceColor.BLACK, promoted.getColor());
     }
 
+    @Test
+    public void Promote_ToKing_ThrowsIllegalArgumentException() {
+        Board board = boardWithWhitePawnOnA8();
+
+        assertThrows(IllegalArgumentException.class, () -> board.promote(A8, PieceType.KING));
+    }
+
     private Piece promoteWhitePawnOnA8(PieceType type) {
         Board board = new Board();
         board.move(A2, A8);
         board.promote(A8, type);
         return board.pieceAt(A8);
+    }
+
+    private Board boardWithWhitePawnOnA8() {
+        Board board = new Board();
+        board.move(A2, A8);
+        return board;
     }
 
     private int countPieces(Board board) {
