@@ -77,6 +77,7 @@ public class BoardControllerTests {
     private static final Location A8 = new Location(0, Location.MAX_RANK);
     private static final Piece BLACK_PAWN = new Piece(PieceType.PAWN, PieceColor.BLACK);
     private static final Piece BLACK_KING = new Piece(PieceType.KING, PieceColor.BLACK);
+    private static final Piece BLACK_KNIGHT = new Piece(PieceType.KNIGHT, PieceColor.BLACK);
 
     private Board board;
     private Game game;
@@ -413,6 +414,24 @@ public class BoardControllerTests {
         controller.clickSquare(A7);
         controller.clickSquare(A8);
 
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_CaptureOntoLastRank_LeavesPromotionPending() {
+        expectSelectableWhitePiece(A7);
+        expect(board.pieceAt(A7)).andReturn(piece);
+        expect(piece.canMove(A7, B8, board)).andReturn(true);
+        expect(board.isOccupied(B8)).andReturn(true);
+        expect(board.pieceAt(B8)).andReturn(BLACK_KNIGHT);
+        board.move(A7, B8);
+        expect(piece.promotesOn(B8)).andReturn(true);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(A7);
+        controller.clickSquare(B8);
+
+        assertTrue(controller.isPromotionPending());
         verify(board, piece, game);
     }
 
