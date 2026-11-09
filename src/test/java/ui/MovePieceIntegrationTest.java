@@ -13,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 public class MovePieceIntegrationTest {
     private static final Location E2 = new Location(4, 2);
     private static final Location E4 = new Location(4, 4);
+    private static final Location F3 = new Location(5, 3);
+    private static final Location G1 = new Location(6, 1);
 
     private Board board;
     private BoardController boardController;
@@ -48,6 +50,15 @@ public class MovePieceIntegrationTest {
         clickFromTo(E2, E4);
 
         assertSame(whitePawn, boardController.pieceAt(E4));
+    }
+
+    @Test
+    public void ClickSquare_WhiteKnightG1ThenF3_MovesTheKnightToF3() {
+        Piece whiteKnight = boardController.pieceAt(G1);
+
+        clickFromTo(G1, F3);
+
+        assertSame(whiteKnight, boardController.pieceAt(F3));
     }
 
     private void clickFromTo(Location from, Location to) {
