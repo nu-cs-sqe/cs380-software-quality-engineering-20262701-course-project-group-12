@@ -81,7 +81,7 @@ The capture cases start from the state issue #34 leaves: b1 `(1, 1)` is selected
 
 | Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
 | --- | --- | --- |
-| Input: what the selected piece answers for the clicked square | Boolean | can move (c3 `(2, 3)`) |
+| Input: what the selected piece answers for the clicked square | Boolean | can move (a castle, e1 `(4, 1)` to g1 `(6, 1)`) |
 | Input: `square` | Pointer | a location (no null: callers never pass one) |
 | Output: who makes the move | Cases | the selected piece's `move` with the controller's board; never `board.move` directly |
 
@@ -149,4 +149,4 @@ TC9 through TC18 belong to issue #34. These cases continue its numbering, and th
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC28: the selected piece makes its own move | a controller for the mocked board and game; White is to move; the board answers true for b1 `(1, 1)` and returns a mocked White piece that can move from b1 to c3 `(2, 3)`; c3 is empty; click b1, then c3 | the piece is asked once to `move` from b1 to c3 on the controller's board; the board is not asked to `move`; the game passes the turn | :x: |
+| TC28: a castle is made by the selected king | a controller for the mocked board and game; White is to move; the board answers true for e1 `(4, 1)` and returns a mocked White king that can move from e1 to g1 `(6, 1)`; g1 is empty; click e1, then g1 | the king is asked once to `move` from e1 to g1 on the controller's board, so it can move its rook too; the board is not asked to `move` directly; the game passes the turn | :white_check_mark: |

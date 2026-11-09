@@ -71,6 +71,8 @@ public class BoardControllerTests {
     private static final Location B3 = new Location(1, 3);
     private static final Location C3 = new Location(2, 3);
     private static final Location D2 = new Location(3, 2);
+    private static final Location E1 = new Location(4, 1);
+    private static final Location G1 = new Location(6, 1);
     private static final Location B8 = new Location(1, Location.MAX_RANK);
     private static final Location A2 = new Location(0, 2);
     private static final Piece BLACK_PAWN = new Piece(PieceType.PAWN, PieceColor.BLACK);
@@ -129,7 +131,7 @@ public class BoardControllerTests {
         expectPieceOnB1();
         expect(piece.canMove(B1, C3, board)).andReturn(true);
         expect(board.isOccupied(C3)).andReturn(false);
-        board.move(B1, C3);
+        piece.move(B1, C3, board);
         game.passTurn();
         BoardController controller = replayedController();
 
@@ -144,7 +146,7 @@ public class BoardControllerTests {
         expectPieceOnB1();
         expect(piece.canMove(B1, C3, board)).andReturn(true);
         expect(board.isOccupied(C3)).andReturn(false);
-        board.move(B1, C3);
+        piece.move(B1, C3, board);
         game.passTurn();
         BoardController controller = replayedController();
 
@@ -184,7 +186,7 @@ public class BoardControllerTests {
         expectPieceOnB1();
         expect(piece.canMove(B1, C3, board)).andReturn(true);
         expect(board.isOccupied(C3)).andReturn(false);
-        board.move(B1, C3);
+        piece.move(B1, C3, board);
         game.passTurn();
         expect(board.isOccupied(A3)).andReturn(false);
         BoardController controller = replayedController();
@@ -242,7 +244,7 @@ public class BoardControllerTests {
         expectPieceOnB1();
         expect(piece.canMove(B1, C3, board)).andReturn(true);
         givenOnC3(BLACK_PAWN);
-        board.move(B1, C3);
+        piece.move(B1, C3, board);
         game.passTurn();
         BoardController controller = replayedController();
 
@@ -304,7 +306,7 @@ public class BoardControllerTests {
         expect(board.pieceAt(B1)).andReturn(piece);
         expect(piece.canMove(B1, C3, board)).andReturn(true);
         expect(board.isOccupied(C3)).andReturn(false);
-        board.move(B1, C3);
+        piece.move(B1, C3, board);
         game.passTurn();
         Piece previousPlayerPiece = mock(Piece.class);
         expect(board.isOccupied(A2)).andReturn(true);
@@ -331,7 +333,7 @@ public class BoardControllerTests {
         expect(board.pieceAt(B1)).andReturn(piece);
         expect(piece.canMove(B1, C3, board)).andReturn(true);
         expect(board.isOccupied(C3)).andReturn(false);
-        board.move(B1, C3);
+        piece.move(B1, C3, board);
         game.passTurn();
         Piece newPlayerPiece = mock(Piece.class);
         expect(board.isOccupied(B8)).andReturn(true);
@@ -366,6 +368,22 @@ public class BoardControllerTests {
         assertTrue(controller.isSelected(B1));
         assertFalse(controller.isSelected(B8));
         verify(board, piece, game, opponent);
+    }
+
+    @Test
+    public void ClickSquare_KingThenCastleSquare_KingMakesTheMove() {
+        expectSelectableWhitePiece(E1);
+        expect(board.pieceAt(E1)).andReturn(piece);
+        expect(piece.canMove(E1, G1, board)).andReturn(true);
+        expect(board.isOccupied(G1)).andReturn(false);
+        piece.move(E1, G1, board);
+        game.passTurn();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(E1);
+        controller.clickSquare(G1);
+
+        verify(board, piece, game);
     }
 
     private void expectPieceOnB1() {

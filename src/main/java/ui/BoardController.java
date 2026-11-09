@@ -45,16 +45,17 @@ public class BoardController {
     }
 
     private void moveOrChangeSelection(Location from, Location to) {
-        if (board.pieceAt(from).canMove(from, to, board)) {
-            moveUnlessCapturingKing(from, to);
+        Piece selectedPiece = board.pieceAt(from);
+        if (selectedPiece.canMove(from, to, board)) {
+            moveUnlessCapturingKing(selectedPiece, from, to);
         } else {
             select(to);
         }
     }
 
-    private void moveUnlessCapturingKing(Location from, Location to) {
+    private void moveUnlessCapturingKing(Piece selectedPiece, Location from, Location to) {
         if (!holdsKing(to)) {
-            board.move(from, to);
+            selectedPiece.move(from, to, board);
             game.passTurn();
             clearSelection();
         }
