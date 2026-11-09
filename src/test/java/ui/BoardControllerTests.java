@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -489,6 +490,19 @@ public class BoardControllerTests {
 
         assertFalse(controller.isSelected(B1));
         verify(board, piece, game);
+    }
+
+    @Test
+    public void ChoosePromotion_King_ThrowsIllegalArgumentException() {
+        expectPawnMoveFromA7ToA8();
+        board.promote(A8, PieceType.KING);
+        expectLastCall().andThrow(new IllegalArgumentException());
+        BoardController controller = replayedController();
+        controller.clickSquare(A7);
+        controller.clickSquare(A8);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> controller.choosePromotion(PieceType.KING));
     }
 
     private void expectPawnMoveFromA7ToA8() {
