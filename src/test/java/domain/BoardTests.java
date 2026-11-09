@@ -351,6 +351,16 @@ public class BoardTests {
         assertThrows(IllegalArgumentException.class, () -> board.promote(A8, PieceType.PAWN));
     }
 
+    @Test
+    public void Promote_RejectedChoice_LeavesThePawn() {
+        Board board = boardWithWhitePawnOnA8();
+        Piece whitePawn = board.pieceAt(A8);
+
+        assertThrows(IllegalArgumentException.class, () -> board.promote(A8, PieceType.KING));
+
+        assertSame(whitePawn, board.pieceAt(A8));
+    }
+
     private Piece promoteWhitePawnOnA8(PieceType type) {
         Board board = new Board();
         board.move(A2, A8);
