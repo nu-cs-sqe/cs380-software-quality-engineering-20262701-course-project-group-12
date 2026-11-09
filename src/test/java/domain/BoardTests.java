@@ -23,6 +23,7 @@ public class BoardTests {
     private static final Location A8 = new Location(0, 8);
     private static final Location B1 = new Location(1, 1);
     private static final Location C1 = new Location(2, 1);
+    private static final Location F8 = new Location(5, 8);
     private static final Location G8 = new Location(6, 8);
     private static final Location H1 = new Location(7, 1);
     private static final Location H5 = new Location(7, 5);
@@ -316,6 +317,11 @@ public class BoardTests {
     @Test
     public void Board_C1_PlacesBishop() {
         assertPieceClass(C1, Bishop.class);
+    }
+
+    @Test
+    public void Board_F8_PlacesBishop() {
+        assertPieceClass(F8, Bishop.class);
     }
 
     private int countPieces(Board board) {

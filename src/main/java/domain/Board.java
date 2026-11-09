@@ -28,7 +28,7 @@ public class Board {
             Bishop::new,
             color -> new Piece(PieceType.QUEEN, color),
             color -> new Piece(PieceType.KING, color),
-            color -> new Piece(PieceType.BISHOP, color),
+            Bishop::new,
             Knight::new,
             Rook::new);
 
