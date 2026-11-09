@@ -369,6 +369,19 @@ public class BoardTests {
         assertFalse(board.isOccupied(D5));
     }
 
+    @Test
+    public void Move_PawnCapturingEnPassant_LandsOnTheSquarePassedOver() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(E4, E5);
+        board.move(D7, D5);
+        Piece capturingPawn = board.pieceAt(E5);
+
+        board.move(E5, D6);
+
+        assertSame(capturingPawn, board.pieceAt(D6));
+    }
+
     private int countPieces(Board board) {
         int pieces = 0;
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
