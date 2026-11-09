@@ -297,7 +297,7 @@ Fifty-move counting (AC 8) is US-18; a castle is a king move and
 
 ### Method under test: `canMove(Location from, Location to, Board board)`, castling (issue #45)
 
-- **TC-KING-17 — Castle white kingside** ( :x: )
+- **TC-KING-17 — Castle white kingside** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king. `from` is e1 `(4, 1)`, `to` is g1 `(6, 1)`. New `Board` after `move` of f1 to f4 and g1 to g4, so f1 and g1 are empty.
   - **Expected output**: `true`.
