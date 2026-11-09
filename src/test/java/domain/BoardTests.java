@@ -422,6 +422,14 @@ public class BoardTests {
         assertTrue(board.isAttackedByOpponentOf(PieceColor.WHITE, H3));
     }
 
+    @Test
+    public void IsAttackedByOpponentOf_OpponentRookOnFirstSquare_ReturnsTrue() {
+        Board board = new Board();
+        board.move(A2, H3);
+
+        assertTrue(board.isAttackedByOpponentOf(PieceColor.BLACK, A6));
+    }
+
     private int countPieces(Board board) {
         int pieces = 0;
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
