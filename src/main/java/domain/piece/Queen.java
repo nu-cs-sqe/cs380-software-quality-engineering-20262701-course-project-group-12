@@ -21,8 +21,8 @@ public class Queen extends Piece {
     }
 
     private boolean isAlongLine(Location from, Location to) {
-        int fileDistance = fileDistance(from, to);
-        int rankDistance = rankDistance(from, to);
+        int fileDistance = from.fileDistanceTo(to);
+        int rankDistance = from.rankDistanceTo(to);
         return fileDistance == 0 || rankDistance == 0 || fileDistance == rankDistance;
     }
 
@@ -37,18 +37,10 @@ public class Queen extends Piece {
     private boolean isPathClear(Location from, Location to, Board board) {
         int fileStep = Integer.signum(to.getFile() - from.getFile());
         int rankStep = Integer.signum(to.getRank() - from.getRank());
-        int distance = Math.max(fileDistance(from, to), rankDistance(from, to));
+        int distance = Math.max(from.fileDistanceTo(to), from.rankDistanceTo(to));
         return IntStream.range(FIRST_STEP_AFTER_START, distance)
                 .mapToObj(step -> new Location(
                         from.getFile() + step * fileStep, from.getRank() + step * rankStep))
                 .noneMatch(board::isOccupied);
-    }
-
-    private int fileDistance(Location from, Location to) {
-        return Math.abs(to.getFile() - from.getFile());
-    }
-
-    private int rankDistance(Location from, Location to) {
-        return Math.abs(to.getRank() - from.getRank());
     }
 }

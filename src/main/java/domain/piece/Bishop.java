@@ -16,8 +16,8 @@ public class Bishop extends Piece {
     }
 
     private boolean isAlongDiagonal(Location from, Location to) {
-        int fileDistance = fileDistance(from, to);
-        int rankDistance = Math.abs(to.getRank() - from.getRank());
+        int fileDistance = from.fileDistanceTo(to);
+        int rankDistance = from.rankDistanceTo(to);
         return fileDistance == rankDistance && fileDistance != 0;
     }
 
@@ -38,9 +38,5 @@ public class Bishop extends Piece {
             rank += rankStep;
         }
         return true;
-    }
-
-    private int fileDistance(Location from, Location to) {
-        return Math.abs(to.getFile() - from.getFile());
     }
 }
