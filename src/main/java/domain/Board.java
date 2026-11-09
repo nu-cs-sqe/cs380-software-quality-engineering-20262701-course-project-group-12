@@ -3,6 +3,7 @@ package domain;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import domain.piece.Queen;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,6 +72,10 @@ public class Board {
         Piece movingPiece = pieceAt(from);
         clear(from);
         place(movingPiece, to);
+    }
+
+    public void promote(Location square, PieceType type) {
+        place(new Queen(PieceColor.WHITE), square);
     }
 
     private void clear(Location location) {

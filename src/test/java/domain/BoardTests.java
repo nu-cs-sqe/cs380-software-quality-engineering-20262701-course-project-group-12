@@ -3,16 +3,19 @@ package domain;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import domain.piece.Queen;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardTests {
     private static final Location A1 = new Location(0, 1);
+    private static final Location A2 = new Location(0, 2);
     private static final Location A3 = new Location(0, 3);
     private static final Location A4 = new Location(0, 4);
     private static final Location A5 = new Location(0, 5);
@@ -284,6 +287,21 @@ public class BoardTests {
         board.move(A1, A8);
 
         assertEquals(STARTING_PIECE_COUNT - 1, countPieces(board));
+    }
+
+    @Test
+    public void Promote_WhitePawnToQueen_PlacesWhiteQueen() {
+        Piece promoted = promoteWhitePawnOnA8(PieceType.QUEEN);
+
+        assertInstanceOf(Queen.class, promoted);
+        assertEquals(PieceColor.WHITE, promoted.getColor());
+    }
+
+    private Piece promoteWhitePawnOnA8(PieceType type) {
+        Board board = new Board();
+        board.move(A2, A8);
+        board.promote(A8, type);
+        return board.pieceAt(A8);
     }
 
     private int countPieces(Board board) {
