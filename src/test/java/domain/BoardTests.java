@@ -31,7 +31,9 @@ public class BoardTests {
     private static final Location D8 = new Location(3, 8);
     private static final Location E1 = new Location(4, 1);
     private static final Location E8 = new Location(4, 8);
+    private static final Location F3 = new Location(5, 3);
     private static final Location F8 = new Location(5, 8);
+    private static final Location G1 = new Location(6, 1);
     private static final Location G8 = new Location(6, 8);
     private static final Location H1 = new Location(7, 1);
     private static final Location H5 = new Location(7, 5);
@@ -368,6 +370,14 @@ public class BoardTests {
         Board board = new Board();
 
         assertTrue(board.holdsUnmovedPiece(E1));
+    }
+
+    @Test
+    public void HoldsUnmovedPiece_SquareThePieceMovedAwayFrom_ReturnsFalse() {
+        Board board = new Board();
+        board.move(G1, F3);
+
+        assertFalse(board.holdsUnmovedPiece(G1));
     }
 
     private int countPieces(Board board) {
