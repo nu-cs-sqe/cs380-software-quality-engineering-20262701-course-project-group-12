@@ -165,7 +165,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC56: a piece that is not a pawn moving two ranks | a new `Board`; move a1 `(0, 1)` to a3 `(0, 3)`; ask about a3 | false | :white_check_mark: |
 | TC57: another move ends the chance | a new `Board`; move e2 to e4, then b8 `(1, 8)` to c6 `(2, 6)`; ask about e4 | false | :white_check_mark: |
 | TC58: a black pawn that just moved two ranks | a new `Board`; move d7 `(3, 7)` to d5 `(3, 5)`; ask about d5 | true | :white_check_mark: |
-| TC59: another square than the pawn that moved | a new `Board`; move e2 to e4; ask about d4 `(3, 4)` | false | :x: |
+| TC59: another square than the pawn that moved | a new `Board`; move e2 to e4; ask about d4 `(3, 4)` | false | :white_check_mark: |
 
 ### Method under test: `move(Location from, Location to)`, en passant
 

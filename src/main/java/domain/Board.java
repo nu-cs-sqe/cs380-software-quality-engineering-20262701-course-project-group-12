@@ -31,7 +31,7 @@ public class Board {
             color -> new Piece(PieceType.ROOK, color));
 
     private final List<List<Optional<Piece>>> squares = emptySquares();
-    private boolean pawnJustAdvancedTwoRanks;
+    private Optional<Location> pawnThatJustAdvancedTwoRanks = Optional.empty();
 
     public Board() {
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
@@ -73,11 +73,13 @@ public class Board {
         Piece movingPiece = pieceAt(from);
         clear(from);
         place(movingPiece, to);
-        pawnJustAdvancedTwoRanks = isPawnAdvancingTwoRanks(movingPiece, from, to);
+        pawnThatJustAdvancedTwoRanks = isPawnAdvancingTwoRanks(movingPiece, from, to)
+                ? Optional.of(to)
+                : Optional.empty();
     }
 
     public boolean canBeCapturedEnPassant(Location square) {
-        return pawnJustAdvancedTwoRanks;
+        return pawnThatJustAdvancedTwoRanks.filter(square::isSameSquareAs).isPresent();
     }
 
     private boolean isPawnAdvancingTwoRanks(Piece piece, Location from, Location to) {

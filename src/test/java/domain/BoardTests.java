@@ -19,6 +19,7 @@ public class BoardTests {
     private static final Location A8 = new Location(0, 8);
     private static final Location B8 = new Location(1, 8);
     private static final Location C6 = new Location(2, 6);
+    private static final Location D4 = new Location(3, 4);
     private static final Location D5 = new Location(3, 5);
     private static final Location D7 = new Location(3, 7);
     private static final Location E2 = new Location(4, 2);
@@ -342,6 +343,16 @@ public class BoardTests {
         boolean capturable = board.canBeCapturedEnPassant(D5);
 
         assertTrue(capturable);
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_SquareOtherThanThePawnThatMoved_ReturnsFalse() {
+        Board board = new Board();
+        board.move(E2, E4);
+
+        boolean capturable = board.canBeCapturedEnPassant(D4);
+
+        assertFalse(capturable);
     }
 
     private int countPieces(Board board) {
