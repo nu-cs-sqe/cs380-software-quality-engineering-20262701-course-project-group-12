@@ -93,9 +93,13 @@ public class Board {
 
     public boolean isAttackedByOpponentOf(PieceColor color, Location square) {
         return allSquares()
-                .filter(this::isOccupied)
+                .filter(attackerSquare -> holdsOpponentOf(color, attackerSquare))
                 .anyMatch(attackerSquare ->
                         pieceAt(attackerSquare).attacks(attackerSquare, square, this));
+    }
+
+    private boolean holdsOpponentOf(PieceColor color, Location square) {
+        return isOccupied(square) && pieceAt(square).getColor() != color;
     }
 
     private static Stream<Location> allSquares() {

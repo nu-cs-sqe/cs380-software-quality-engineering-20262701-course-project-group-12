@@ -405,6 +405,13 @@ public class BoardTests {
         assertTrue(board.isAttackedByOpponentOf(PieceColor.BLACK, E3));
     }
 
+    @Test
+    public void IsAttackedByOpponentOf_OnlyPiecesOfSameColorAttack_ReturnsFalse() {
+        Board board = new Board();
+
+        assertFalse(board.isAttackedByOpponentOf(PieceColor.WHITE, E3));
+    }
+
     private int countPieces(Board board) {
         int pieces = 0;
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
