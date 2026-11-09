@@ -32,6 +32,7 @@ public class LocationTests {
     private static final int NO_DISTANCE = 0;
     private static final int FARTHEST_DISTANCE = 7;
     private static final Location A1 = new Location(0, 1);
+    private static final Location A8 = new Location(0, 8);
     private static final Location H1 = new Location(7, 1);
     private static final Location H8 = new Location(7, 8);
 
@@ -106,5 +107,12 @@ public class LocationTests {
         int distance = H1.fileDistanceTo(A1);
 
         assertEquals(FARTHEST_DISTANCE, distance);
+    }
+
+    @Test
+    public void RankDistanceTo_SameRankDifferentFile_ReturnsZero() {
+        int distance = A8.rankDistanceTo(H8);
+
+        assertEquals(NO_DISTANCE, distance);
     }
 }
