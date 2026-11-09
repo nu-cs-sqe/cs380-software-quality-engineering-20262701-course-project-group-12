@@ -5,6 +5,7 @@ import domain.piece.Knight;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import domain.piece.Queen;
 import domain.piece.Rook;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Board {
             Rook::new,
             Knight::new,
             Bishop::new,
-            color -> new Piece(PieceType.QUEEN, color),
+            Queen::new,
             color -> new Piece(PieceType.KING, color),
             Bishop::new,
             Knight::new,

@@ -5,6 +5,7 @@ import domain.piece.Knight;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import domain.piece.Queen;
 import domain.piece.Rook;
 import org.junit.jupiter.api.Test;
 
@@ -23,6 +24,7 @@ public class BoardTests {
     private static final Location A8 = new Location(0, 8);
     private static final Location B1 = new Location(1, 1);
     private static final Location C1 = new Location(2, 1);
+    private static final Location D1 = new Location(3, 1);
     private static final Location F8 = new Location(5, 8);
     private static final Location G8 = new Location(6, 8);
     private static final Location H1 = new Location(7, 1);
@@ -322,6 +324,11 @@ public class BoardTests {
     @Test
     public void Board_F8_PlacesBishop() {
         assertPieceClass(F8, Bishop.class);
+    }
+
+    @Test
+    public void Board_D1_PlacesQueen() {
+        assertPieceClass(D1, Queen.class);
     }
 
     private int countPieces(Board board) {
