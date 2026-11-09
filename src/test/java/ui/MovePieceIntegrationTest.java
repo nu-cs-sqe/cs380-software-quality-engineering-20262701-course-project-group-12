@@ -40,4 +40,18 @@ public class MovePieceIntegrationTest {
 
         assertFalse(boardController.isOccupied(E2));
     }
+
+    @Test
+    public void ClickSquare_WhitePawnE2ThenE4_MovesThePawnToE4() {
+        Piece whitePawn = boardController.pieceAt(E2);
+
+        clickFromTo(E2, E4);
+
+        assertSame(whitePawn, boardController.pieceAt(E4));
+    }
+
+    private void clickFromTo(Location from, Location to) {
+        boardController.clickSquare(from);
+        boardController.clickSquare(to);
+    }
 }
