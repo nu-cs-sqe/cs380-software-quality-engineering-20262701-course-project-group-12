@@ -86,4 +86,4 @@ A plain `Piece` answers the same for every square, so one case on a last rank st
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC20: a piece that is not a pawn is never promoted | a white queen as a plain `Piece`; `square` is a8 `(0, 8)` | `false` | :x: |
+| TC20: a piece that is not a pawn is never promoted | a white queen as a plain `Piece`; `square` is a8 `(0, 8)` | `false` | :white_check_mark: |

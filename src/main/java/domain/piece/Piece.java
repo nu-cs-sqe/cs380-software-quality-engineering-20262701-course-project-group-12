@@ -23,4 +23,8 @@ public class Piece {
     public boolean canMove(Location from, Location to, Board board) {
         return false;
     }
+
+    public boolean promotesOn(Location square) {
+        return false;
+    }
 }
