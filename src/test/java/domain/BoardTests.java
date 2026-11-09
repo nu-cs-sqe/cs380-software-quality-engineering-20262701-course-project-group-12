@@ -382,6 +382,19 @@ public class BoardTests {
         assertSame(capturingPawn, board.pieceAt(D6));
     }
 
+    @Test
+    public void Move_BesidePawnThatMovedOneRankTwice_LeavesThatPawnOnTheBoard() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(E4, E5);
+        board.move(D7, D6);
+        board.move(D6, D5);
+
+        board.move(E5, D6);
+
+        assertTrue(board.isOccupied(D5));
+    }
+
     private int countPieces(Board board) {
         int pieces = 0;
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
