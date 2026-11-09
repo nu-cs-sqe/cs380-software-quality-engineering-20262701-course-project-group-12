@@ -372,7 +372,7 @@ Fifty-move counting (AC 8) is US-18; a castle is a king move and
   - **State of the system**: White king, e1 to g3 `(6, 3)`. Kingside cleared, so g3 is empty.
   - **Expected output**: `false`.
 
-- **TC-KING-32 — Reject three files toward the queenside rook** ( :x: )
+- **TC-KING-32 — Reject three files toward the queenside rook** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king, e1 to b1 `(1, 1)`. Queenside cleared, so b1 is empty.
   - **Expected output**: `false`.
