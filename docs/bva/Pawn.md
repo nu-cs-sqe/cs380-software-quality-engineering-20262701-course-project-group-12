@@ -352,7 +352,7 @@ that a capture needs.
 ### Method under test: `attacks(Location from, Location target, Board board)` (issue #45)
 
 - **TC-PAWN-25 — Attack an empty square diagonally forward toward a
-  higher file** ( :x: )
+  higher file** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
     `target` is f3 `(5, 3)`. New `Board`, so f3 is empty.
