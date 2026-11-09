@@ -30,6 +30,10 @@ public class BoardController {
         return selectedSquare.filter(square::isSameSquareAs).isPresent();
     }
 
+    public boolean isPromotionPending() {
+        return false;
+    }
+
     public void clickSquare(Location square) {
         selectedSquare.ifPresentOrElse(
                 selected -> handleClickWithSelection(selected, square),

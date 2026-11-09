@@ -368,6 +368,22 @@ public class BoardControllerTests {
         verify(board, piece, game, opponent);
     }
 
+    @Test
+    public void ClickSquare_MoveThatIsNotPromotion_LeavesNothingPending() {
+        expectPieceOnB1();
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        expect(board.isOccupied(C3)).andReturn(false);
+        board.move(B1, C3);
+        game.passTurn();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        assertFalse(controller.isPromotionPending());
+        verify(board, piece, game);
+    }
+
     private void expectPieceOnB1() {
         expectSelectableWhitePiece(B1);
         expect(board.pieceAt(B1)).andReturn(piece);
