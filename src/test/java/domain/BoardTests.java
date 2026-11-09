@@ -24,6 +24,7 @@ public class BoardTests {
     private static final Location A3 = new Location(0, 3);
     private static final Location A4 = new Location(0, 4);
     private static final Location A5 = new Location(0, 5);
+    private static final Location A6 = new Location(0, 6);
     private static final Location A8 = new Location(0, 8);
     private static final Location B1 = new Location(1, 1);
     private static final Location C1 = new Location(2, 1);
@@ -38,6 +39,7 @@ public class BoardTests {
     private static final Location G1 = new Location(6, 1);
     private static final Location G8 = new Location(6, 8);
     private static final Location H1 = new Location(7, 1);
+    private static final Location H3 = new Location(7, 3);
     private static final Location H5 = new Location(7, 5);
     private static final Location H7 = new Location(7, 7);
     private static final Location H8 = new Location(7, 8);
@@ -410,6 +412,14 @@ public class BoardTests {
         Board board = new Board();
 
         assertFalse(board.isAttackedByOpponentOf(PieceColor.WHITE, E3));
+    }
+
+    @Test
+    public void IsAttackedByOpponentOf_OpponentRookOnLastSquare_ReturnsTrue() {
+        Board board = new Board();
+        board.move(H7, A6);
+
+        assertTrue(board.isAttackedByOpponentOf(PieceColor.WHITE, H3));
     }
 
     private int countPieces(Board board) {

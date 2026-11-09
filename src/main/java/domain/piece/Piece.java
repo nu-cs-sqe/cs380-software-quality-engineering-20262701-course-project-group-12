@@ -29,7 +29,7 @@ public class Piece {
     }
 
     public boolean attacks(Location from, Location target, Board board) {
-        return false;
+        return canMove(from, target, board);
     }
 
     public void move(Location from, Location to, Board board) {
