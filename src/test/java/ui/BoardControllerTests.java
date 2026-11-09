@@ -439,11 +439,8 @@ public class BoardControllerTests {
     @Test
     public void ChoosePromotion_Queen_PromotesThePawnOnTheArrivalSquare() {
         expectPawnMoveFromA7ToA8();
-        board.promote(A8, PieceType.QUEEN);
-        game.passTurn();
-        BoardController controller = replayedController();
-        controller.clickSquare(A7);
-        controller.clickSquare(A8);
+        expectQueenPromotionOnA8();
+        BoardController controller = controllerWithPromotionPendingOnA8();
 
         controller.choosePromotion(PieceType.QUEEN);
 
@@ -453,11 +450,8 @@ public class BoardControllerTests {
     @Test
     public void ChoosePromotion_Queen_PassesTheTurn() {
         expectPawnMoveFromA7ToA8();
-        board.promote(A8, PieceType.QUEEN);
-        game.passTurn();
-        BoardController controller = replayedController();
-        controller.clickSquare(A7);
-        controller.clickSquare(A8);
+        expectQueenPromotionOnA8();
+        BoardController controller = controllerWithPromotionPendingOnA8();
 
         controller.choosePromotion(PieceType.QUEEN);
 
@@ -467,11 +461,8 @@ public class BoardControllerTests {
     @Test
     public void ChoosePromotion_Queen_LeavesNothingPending() {
         expectPawnMoveFromA7ToA8();
-        board.promote(A8, PieceType.QUEEN);
-        game.passTurn();
-        BoardController controller = replayedController();
-        controller.clickSquare(A7);
-        controller.clickSquare(A8);
+        expectQueenPromotionOnA8();
+        BoardController controller = controllerWithPromotionPendingOnA8();
 
         controller.choosePromotion(PieceType.QUEEN);
 
@@ -482,9 +473,7 @@ public class BoardControllerTests {
     @Test
     public void ClickSquare_WhilePromotionIsPending_DoesNothing() {
         expectPawnMoveFromA7ToA8();
-        BoardController controller = replayedController();
-        controller.clickSquare(A7);
-        controller.clickSquare(A8);
+        BoardController controller = controllerWithPromotionPendingOnA8();
 
         controller.clickSquare(B1);
 
@@ -495,24 +484,20 @@ public class BoardControllerTests {
     @Test
     public void ChoosePromotion_King_ThrowsIllegalArgumentException() {
         expectPawnMoveFromA7ToA8();
-        board.promote(A8, PieceType.KING);
-        expectLastCall().andThrow(new IllegalArgumentException());
-        BoardController controller = replayedController();
-        controller.clickSquare(A7);
-        controller.clickSquare(A8);
+        expectRejectedKingPromotionOnA8();
+        BoardController controller = controllerWithPromotionPendingOnA8();
 
         assertThrows(IllegalArgumentException.class,
                 () -> controller.choosePromotion(PieceType.KING));
+
+        verify(board, piece, game);
     }
 
     @Test
     public void ChoosePromotion_RejectedChoice_KeepsPromotionPending() {
         expectPawnMoveFromA7ToA8();
-        board.promote(A8, PieceType.KING);
-        expectLastCall().andThrow(new IllegalArgumentException());
-        BoardController controller = replayedController();
-        controller.clickSquare(A7);
-        controller.clickSquare(A8);
+        expectRejectedKingPromotionOnA8();
+        BoardController controller = controllerWithPromotionPendingOnA8();
         assertThrows(IllegalArgumentException.class,
                 () -> controller.choosePromotion(PieceType.KING));
 
@@ -520,6 +505,23 @@ public class BoardControllerTests {
 
         assertTrue(pending);
         verify(board, piece, game);
+    }
+
+    private BoardController controllerWithPromotionPendingOnA8() {
+        BoardController controller = replayedController();
+        controller.clickSquare(A7);
+        controller.clickSquare(A8);
+        return controller;
+    }
+
+    private void expectQueenPromotionOnA8() {
+        board.promote(A8, PieceType.QUEEN);
+        game.passTurn();
+    }
+
+    private void expectRejectedKingPromotionOnA8() {
+        board.promote(A8, PieceType.KING);
+        expectLastCall().andThrow(new IllegalArgumentException());
     }
 
     private void expectPawnMoveFromA7ToA8() {
