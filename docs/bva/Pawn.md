@@ -384,7 +384,7 @@ that a capture needs.
     `target` is e3 `(4, 3)`. New `Board`, so e3 is empty.
   - **Expected output**: `false`.
 
-- **TC-PAWN-30 — Do not attack diagonally backward** ( :x: )
+- **TC-PAWN-30 — Do not attack diagonally backward** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e4 `(4, 4)`.
     `target` is f3 `(5, 3)`. New `Board` after `move` of the e2 pawn to

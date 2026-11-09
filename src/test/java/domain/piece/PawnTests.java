@@ -281,4 +281,13 @@ public class PawnTests {
 
         assertFalse(attacks);
     }
+
+    @Test
+    public void Attacks_DiagonallyBackward_ReturnsFalse() {
+        board.move(E2, E4);
+
+        boolean attacks = whitePawn.attacks(E4, F3, board);
+
+        assertFalse(attacks);
+    }
 }
