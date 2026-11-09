@@ -1,6 +1,6 @@
 package ui;
 
-import domain.Board;
+import domain.Game;
 import org.junit.jupiter.api.Test;
 
 import java.awt.BorderLayout;
@@ -16,7 +16,8 @@ public class GameFrameTests {
                 "Player 1: Ada (White)",
                 "Player 2: Bo (Black)",
                 "Current player: Ada");
-        BoardView board = new BoardView(new BoardController(new Board()));
+        Game game = startedGame();
+        BoardView board = new BoardView(new BoardController(game.board(), game));
         JPanel content = new JPanel();
 
         GameFrame.arrange(content, stats, board);
@@ -24,5 +25,11 @@ public class GameFrameTests {
         BorderLayout layout = (BorderLayout) content.getLayout();
         assertSame(stats, layout.getLayoutComponent(BorderLayout.NORTH));
         assertSame(board, layout.getLayoutComponent(BorderLayout.CENTER));
+    }
+
+    private static Game startedGame() {
+        Game game = new Game();
+        game.start("Ada", "Bo");
+        return game;
     }
 }

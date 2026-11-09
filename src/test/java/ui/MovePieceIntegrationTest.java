@@ -22,7 +22,7 @@ public class MovePieceIntegrationTest {
         Game game = new Game();
         game.start("Alice", "Bob");
         board = game.board();
-        boardController = new BoardController(board);
+        boardController = new BoardController(board, game);
     }
 
     @Test

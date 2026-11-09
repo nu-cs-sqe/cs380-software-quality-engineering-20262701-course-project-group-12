@@ -74,3 +74,12 @@ Step 2/3:
         - `Player 1: Ada (White)`
         - `Player 2: Bo (Black)`
         - `Current player: Bo`
+
+### Method under test: `refreshCurrentPlayer()`
+
+Issue #41. After a legal move the turn has passed, so the current-player line
+must be read from `Game` again. `BoardView` calls this after a click.
+
+- **TC9: refresh after the turn passes** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while `playerToMoveName()` was Ada. Then `playerToMoveName()` is Bo and `refreshCurrentPlayer()` runs.
+    - **Expected output**: the view shows `Current player: Bo`

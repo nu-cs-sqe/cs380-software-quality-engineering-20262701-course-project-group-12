@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -219,5 +220,53 @@ public class GameTests {
         Game game = new Game();
 
         assertThrows(IllegalStateException.class, game::playerToMoveName);
+    }
+
+    @Test
+    public void ColorToMove_StartedGame_ReturnsWhite() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        PieceColor color = game.colorToMove();
+
+        assertEquals(PieceColor.WHITE, color);
+    }
+
+    @Test
+    public void PassTurn_AfterStart_MakesPlayerTwoToMove() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.passTurn();
+
+        assertSame(game.playerTwo(), game.playerToMove());
+        assertEquals("Bob", game.playerToMoveName());
+        assertEquals(PieceColor.BLACK, game.colorToMove());
+    }
+
+    @Test
+    public void PassTurn_Twice_MakesPlayerOneToMove() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.passTurn();
+        game.passTurn();
+
+        assertSame(game.playerOne(), game.playerToMove());
+        assertEquals(PieceColor.WHITE, game.colorToMove());
+    }
+
+    @Test
+    public void PassTurn_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::passTurn);
+    }
+
+    @Test
+    public void ColorToMove_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::colorToMove);
     }
 }
