@@ -154,5 +154,5 @@ The case numbers start at TC38, after the promotion cases (TC28 to TC37, issue #
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC38: a move that checkmates ends the game | as TC22; after the move, Black is to move, and the board answers true for `isCheckmated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn, then ends by checkmate | :white_check_mark: |
-| TC39: a move that does not checkmate does not end the game | as TC22; after the move, Black is to move, and the board answers false for `isCheckmated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn and does not end | :x: |
+| TC39: a move that does not checkmate does not end the game | as TC22; after the move, Black is to move, and the board answers false for `isCheckmated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn and does not end | :white_check_mark: |
 | TC40: a click after the game is over selects nothing | a controller for the mocked board and game; the game is over; White is to move, and b1 holds a White piece; click b1, then ask `isSelected` about b1 | false; the board is not asked about b1 | :x: |

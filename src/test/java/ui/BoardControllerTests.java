@@ -394,6 +394,27 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void ClickSquare_MoveThatDoesNotCheckmate_DoesNotEndTheGame() {
+        expect(board.isOccupied(B1)).andReturn(true);
+        expect(board.pieceAt(B1)).andReturn(piece);
+        expect(piece.getColor()).andReturn(PieceColor.WHITE);
+        expect(game.colorToMove()).andReturn(PieceColor.WHITE);
+        expect(board.pieceAt(B1)).andReturn(piece);
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        expect(board.isOccupied(C3)).andReturn(false);
+        board.move(B1, C3);
+        game.passTurn();
+        expect(game.colorToMove()).andReturn(PieceColor.BLACK);
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(false);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
+    }
+
     private void expectPieceOnB1() {
         expectSelectableWhitePiece(B1);
         expect(board.pieceAt(B1)).andReturn(piece);
