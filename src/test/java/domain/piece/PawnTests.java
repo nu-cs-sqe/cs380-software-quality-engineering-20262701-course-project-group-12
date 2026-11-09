@@ -280,4 +280,16 @@ public class PawnTests {
 
         assertFalse(canMove);
     }
+
+    @Test
+    public void CanMove_EnPassantBesidePawnThatMovedOneRankTwice_ReturnsFalse() {
+        board.move(E2, E4);
+        board.move(E4, E5);
+        board.move(D7, D6);
+        board.move(D6, D5);
+
+        boolean canMove = whitePawn.canMove(E5, D6, board);
+
+        assertFalse(canMove);
+    }
 }
