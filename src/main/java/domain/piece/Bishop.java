@@ -8,6 +8,7 @@ public class Bishop extends Piece {
         super(PieceType.BISHOP, color);
     }
 
+    @Override
     public boolean canMove(Location from, Location to, Board board) {
         return isAlongDiagonal(from, to)
                 && !holdsOwnPiece(to, board)

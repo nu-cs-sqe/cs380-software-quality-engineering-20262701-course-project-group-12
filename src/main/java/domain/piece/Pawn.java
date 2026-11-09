@@ -29,6 +29,7 @@ public class Pawn extends Piece {
         }
     }
 
+    @Override
     public boolean canMove(Location from, Location to, Board board) {
         if (isOnSameFile(from, to)) {
             return canAdvance(from, to, board);

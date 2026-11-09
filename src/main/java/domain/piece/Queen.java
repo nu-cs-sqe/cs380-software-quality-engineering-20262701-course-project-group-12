@@ -12,6 +12,7 @@ public class Queen extends Piece {
         super(PieceType.QUEEN, color);
     }
 
+    @Override
     public boolean canMove(Location from, Location to, Board board) {
         return isAlongLine(from, to)
                 && !isSameSquare(from, to)

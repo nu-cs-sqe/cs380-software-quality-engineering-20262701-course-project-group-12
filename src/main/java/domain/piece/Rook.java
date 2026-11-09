@@ -8,6 +8,7 @@ public class Rook extends Piece {
         super(PieceType.ROOK, color);
     }
 
+    @Override
     public boolean canMove(Location from, Location to, Board board) {
         return isAlongRookLine(from, to)
                 && !isFriendlyPiece(to, board)

@@ -10,6 +10,7 @@ public class King extends Piece {
         super(PieceType.KING, color);
     }
 
+    @Override
     public boolean canMove(Location from, Location to, Board board) {
         if (holdsOwnPiece(to, board)) {
             return false;
