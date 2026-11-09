@@ -17,6 +17,8 @@ public class BoardTests {
     private static final Location A4 = new Location(0, 4);
     private static final Location A5 = new Location(0, 5);
     private static final Location A8 = new Location(0, 8);
+    private static final Location B8 = new Location(1, 8);
+    private static final Location C6 = new Location(2, 6);
     private static final Location E2 = new Location(4, 2);
     private static final Location E3 = new Location(4, 3);
     private static final Location E4 = new Location(4, 4);
@@ -315,6 +317,17 @@ public class BoardTests {
         board.move(A1, A3);
 
         boolean capturable = board.canBeCapturedEnPassant(A3);
+
+        assertFalse(capturable);
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_PawnThatMovedTwoRanksBeforeAnotherMove_ReturnsFalse() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(B8, C6);
+
+        boolean capturable = board.canBeCapturedEnPassant(E4);
 
         assertFalse(capturable);
     }
