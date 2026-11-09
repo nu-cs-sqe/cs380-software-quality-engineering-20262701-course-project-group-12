@@ -11,8 +11,10 @@ import domain.piece.Rook;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,6 +37,7 @@ public class Board {
             Rook::new);
 
     private final List<List<Optional<Piece>>> squares = emptySquares();
+    private final Set<Piece> movedPieces = Collections.newSetFromMap(new IdentityHashMap<>());
 
     public Board() {
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
@@ -76,6 +79,7 @@ public class Board {
         Piece movingPiece = pieceAt(from);
         clear(from);
         place(movingPiece, to);
+        movedPieces.add(movingPiece);
     }
 
     private void clear(Location location) {
@@ -83,7 +87,7 @@ public class Board {
     }
 
     public boolean holdsUnmovedPiece(Location square) {
-        return isOccupied(square);
+        return isOccupied(square) && !movedPieces.contains(pieceAt(square));
     }
 
     private Optional<Piece> occupantOf(Location location) {

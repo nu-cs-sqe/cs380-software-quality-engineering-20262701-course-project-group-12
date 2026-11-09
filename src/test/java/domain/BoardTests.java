@@ -380,6 +380,15 @@ public class BoardTests {
         assertFalse(board.holdsUnmovedPiece(G1));
     }
 
+    @Test
+    public void HoldsUnmovedPiece_PieceThatMovedAndCameBack_ReturnsFalse() {
+        Board board = new Board();
+        board.move(G1, F3);
+        board.move(F3, G1);
+
+        assertFalse(board.holdsUnmovedPiece(G1));
+    }
+
     private int countPieces(Board board) {
         int pieces = 0;
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
