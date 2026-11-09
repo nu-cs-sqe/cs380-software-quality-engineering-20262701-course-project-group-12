@@ -1,6 +1,7 @@
 package domain;
 
 import domain.piece.Bishop;
+import domain.piece.Knight;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
@@ -312,6 +313,14 @@ public class BoardTests {
         Piece promoted = promoteWhitePawnOnA8(PieceType.BISHOP);
 
         assertInstanceOf(Bishop.class, promoted);
+        assertEquals(PieceColor.WHITE, promoted.getColor());
+    }
+
+    @Test
+    public void Promote_WhitePawnToKnight_PlacesWhiteKnight() {
+        Piece promoted = promoteWhitePawnOnA8(PieceType.KNIGHT);
+
+        assertInstanceOf(Knight.class, promoted);
         assertEquals(PieceColor.WHITE, promoted.getColor());
     }
 

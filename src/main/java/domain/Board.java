@@ -1,6 +1,7 @@
 package domain;
 
 import domain.piece.Bishop;
+import domain.piece.Knight;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
@@ -36,7 +37,8 @@ public class Board {
             Map.of(
                     PieceType.QUEEN, Queen::new,
                     PieceType.ROOK, Rook::new,
-                    PieceType.BISHOP, Bishop::new);
+                    PieceType.BISHOP, Bishop::new,
+                    PieceType.KNIGHT, Knight::new);
 
     private final List<List<Optional<Piece>>> squares = emptySquares();
 
