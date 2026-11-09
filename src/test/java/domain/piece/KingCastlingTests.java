@@ -33,6 +33,7 @@ public class KingCastlingTests {
     private static final Location F5 = new Location(5, 5);
     private static final Location F8 = new Location(5, 8);
     private static final Location G1 = new Location(6, 1);
+    private static final Location G3 = new Location(6, 3);
     private static final Location G4 = new Location(6, 4);
     private static final Location G5 = new Location(6, 5);
     private static final Location G8 = new Location(6, 8);
@@ -188,6 +189,15 @@ public class KingCastlingTests {
         boolean canMove = WHITE_KING.canMove(E1, G1, board);
 
         assertTrue(canMove);
+    }
+
+    @Test
+    public void CanMove_TwoFilesOffTheRank_ReturnsFalse() {
+        clearWhiteKingside();
+
+        boolean canMove = WHITE_KING.canMove(E1, G3, board);
+
+        assertFalse(canMove);
     }
 
     private void clearWhiteKingside() {
