@@ -47,6 +47,6 @@ public class Location {
     }
 
     public int rankDistanceTo(Location other) {
-        return other.rank - rank;
+        return Math.abs(other.rank - rank);
     }
 }

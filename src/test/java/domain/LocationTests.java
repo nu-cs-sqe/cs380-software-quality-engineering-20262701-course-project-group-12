@@ -122,4 +122,11 @@ public class LocationTests {
 
         assertEquals(FARTHEST_DISTANCE, distance);
     }
+
+    @Test
+    public void RankDistanceTo_FarthestRankDownward_ReturnsSeven() {
+        int distance = A8.rankDistanceTo(A1);
+
+        assertEquals(FARTHEST_DISTANCE, distance);
+    }
 }

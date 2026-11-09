@@ -103,4 +103,4 @@ Every value from Step 3 is used in at least one test case. `-1` and `8` are each
 | --- | --- | --- | --- |
 | TC19: same rank, different file | a8 `(0, 8)` to h8 `(7, 8)` | `0` | :white_check_mark: |
 | TC20: farthest rank upward | a1 `(0, 1)` to a8 `(0, 8)` | `7` | :white_check_mark: |
-| TC21: farthest rank downward | a8 `(0, 8)` to a1 `(0, 1)` | `7` | :x: |
+| TC21: farthest rank downward | a8 `(0, 8)` to a1 `(0, 1)` | `7` | :white_check_mark: |
