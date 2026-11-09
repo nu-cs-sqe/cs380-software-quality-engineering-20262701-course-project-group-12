@@ -19,6 +19,7 @@ public class Board {
     private static final int WHITE_PAWN_RANK = 2;
     private static final int BLACK_PAWN_RANK = 7;
     private static final int BLACK_BACK_RANK = Location.MAX_RANK;
+    private static final int TWO_RANKS = 2;
     private static final List<Function<PieceColor, Piece>> BACK_RANK_PIECE_MAKERS = List.of(
             color -> new Piece(PieceType.ROOK, color),
             color -> new Piece(PieceType.KNIGHT, color),
@@ -30,6 +31,7 @@ public class Board {
             color -> new Piece(PieceType.ROOK, color));
 
     private final List<List<Optional<Piece>>> squares = emptySquares();
+    private boolean lastMoveCoveredTwoRanks;
 
     public Board() {
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
@@ -71,10 +73,11 @@ public class Board {
         Piece movingPiece = pieceAt(from);
         clear(from);
         place(movingPiece, to);
+        lastMoveCoveredTwoRanks = to.getRank() - from.getRank() == TWO_RANKS;
     }
 
     public boolean canBeCapturedEnPassant(Location square) {
-        return true;
+        return lastMoveCoveredTwoRanks;
     }
 
     private void clear(Location location) {
