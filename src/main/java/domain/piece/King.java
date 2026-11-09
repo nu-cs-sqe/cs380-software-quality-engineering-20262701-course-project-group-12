@@ -3,6 +3,8 @@ package domain.piece;
 import domain.Board;
 import domain.Location;
 
+import java.util.stream.Stream;
+
 public class King extends Piece {
     private static final int ONE_SQUARE = 1;
     private static final int CASTLING_DISTANCE = 2;
@@ -27,7 +29,17 @@ public class King extends Piece {
         return board.holdsUnmovedPiece(from)
                 && board.holdsUnmovedPiece(rookSquare)
                 && isPathClear(from, rookSquare, board)
-                && !board.isAttackedByOpponentOf(getColor(), from);
+                && isKingPathSafe(from, to, board);
+    }
+
+    private boolean isKingPathSafe(Location from, Location to, Board board) {
+        return Stream.of(from, crossedSquare(from, to))
+                .noneMatch(square -> board.isAttackedByOpponentOf(getColor(), square));
+    }
+
+    private Location crossedSquare(Location from, Location to) {
+        int towardRook = Integer.signum(to.getFile() - from.getFile());
+        return new Location(from.getFile() + towardRook, from.getRank());
     }
 
     private Location rookSquareFor(Location from, Location to) {

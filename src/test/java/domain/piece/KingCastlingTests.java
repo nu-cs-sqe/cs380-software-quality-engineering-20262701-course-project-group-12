@@ -25,6 +25,7 @@ public class KingCastlingTests {
     private static final Location D5 = new Location(3, 5);
     private static final Location D8 = new Location(3, 8);
     private static final Location E1 = new Location(4, 1);
+    private static final Location E3 = new Location(4, 3);
     private static final Location E8 = new Location(4, 8);
     private static final Location F1 = new Location(5, 1);
     private static final Location F4 = new Location(5, 4);
@@ -139,6 +140,16 @@ public class KingCastlingTests {
     public void CanMove_KingInCheck_ReturnsFalse() {
         clearWhiteKingside();
         board.move(B8, D3);
+
+        boolean canMove = WHITE_KING.canMove(E1, G1, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_CrossedSquareAttacked_ReturnsFalse() {
+        clearWhiteKingside();
+        board.move(B8, E3);
 
         boolean canMove = WHITE_KING.canMove(E1, G1, board);
 
