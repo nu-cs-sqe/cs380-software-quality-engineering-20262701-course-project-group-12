@@ -33,7 +33,7 @@ public class King extends Piece {
     }
 
     private boolean isKingPathSafe(Location from, Location to, Board board) {
-        return Stream.of(from, crossedSquare(from, to))
+        return Stream.of(from, crossedSquare(from, to), to)
                 .noneMatch(square -> board.isAttackedByOpponentOf(getColor(), square));
     }
 
