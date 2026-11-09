@@ -362,8 +362,7 @@ public class BoardTests {
     }
 
     private Piece promoteWhitePawnOnA8(PieceType type) {
-        Board board = new Board();
-        board.move(A2, A8);
+        Board board = boardWithWhitePawnOnA8();
         board.promote(A8, type);
         return board.pieceAt(A8);
     }
