@@ -86,6 +86,7 @@ public class BoardControllerTests {
         board = mock(Board.class);
         game = mock(Game.class);
         piece = mock(Piece.class);
+        expect(game.isOver()).andStubReturn(false);
         expect(board.isCheckmated(anyObject(PieceColor.class))).andStubReturn(false);
     }
 
@@ -376,6 +377,17 @@ public class BoardControllerTests {
         controller.clickSquare(B1);
         controller.clickSquare(C3);
 
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_GameOver_SelectsNothing() {
+        expect(game.isOver()).andReturn(true);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+
+        assertFalse(controller.isSelected(B1));
         verify(board, piece, game);
     }
 
