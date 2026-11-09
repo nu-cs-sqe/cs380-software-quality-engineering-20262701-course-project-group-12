@@ -268,4 +268,16 @@ public class PawnTests {
 
         assertTrue(canMove);
     }
+
+    @Test
+    public void CanMove_EnPassantOneMoveTooLate_ReturnsFalse() {
+        board.move(E2, E4);
+        board.move(E4, E5);
+        board.move(D7, D5);
+        board.move(G1, F3);
+
+        boolean canMove = whitePawn.canMove(E5, D6, board);
+
+        assertFalse(canMove);
+    }
 }

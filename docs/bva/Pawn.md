@@ -379,7 +379,7 @@ The en passant cases start at TC-PAWN-29, after the promotion cases
     pawn that just moved two ranks.
   - **Expected output**: `true`.
 
-- **TC-PAWN-31 — Reject en passant one move too late** ( :x: )
+- **TC-PAWN-31 — Reject en passant one move too late** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e5 `(4, 5)`. `to` is
     d6 `(3, 6)`. The board of TC-PAWN-29, then `move` of the g1 knight
