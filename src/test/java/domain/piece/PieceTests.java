@@ -98,6 +98,18 @@ public class PieceTests {
         verify(board);
     }
 
+    @Test
+    public void Move_PlainPiece_AsksTheBoardToMoveIt() {
+        Piece whiteQueen = new Piece(PieceType.QUEEN, PieceColor.WHITE);
+        Board board = mock(Board.class);
+        board.move(D1, D3);
+        replay(board);
+
+        whiteQueen.move(D1, D3, board);
+
+        verify(board);
+    }
+
     private void assertPiece(PieceType type, PieceColor color) {
         Piece piece = new Piece(type, color);
 

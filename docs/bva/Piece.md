@@ -110,4 +110,4 @@ As with `canMove`, a plain `Piece` answers the same for every input, so one case
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC21: the board moves the piece | a white queen as a plain `Piece`; `from` is d1 `(3, 1)`, `to` is d3 `(3, 3)`; a mocked `Board` that expects `move(d1, d3)` | the board is asked once to move the piece from d1 to d3 | :x: |
+| TC21: the board moves the piece | a white queen as a plain `Piece`; `from` is d1 `(3, 1)`, `to` is d3 `(3, 3)`; a mocked `Board` that expects `move(d1, d3)` | the board is asked once to move the piece from d1 to d3 | :white_check_mark: |

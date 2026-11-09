@@ -32,6 +32,10 @@ public class Piece {
         return false;
     }
 
+    public void move(Location from, Location to, Board board) {
+        board.move(from, to);
+    }
+
     protected boolean holdsOwnPiece(Location square, Board board) {
         return board.isOccupied(square) && board.pieceAt(square).getColor() == color;
     }
