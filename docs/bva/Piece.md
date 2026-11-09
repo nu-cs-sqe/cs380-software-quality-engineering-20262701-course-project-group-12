@@ -6,6 +6,8 @@
 - `PieceType getType()`: returns the type given at construction.
 - `PieceColor getColor()`: returns the color given at construction.
 - `boolean canMove(Location from, Location to, Board board)`: returns `false`, because a plain `Piece` has no movement rules. It does not look at the board.
+- `boolean attacks(Location from, Location target, Board board)` (issue #45 / US-12): true when this piece, standing on `from`, attacks `target`. By default a piece attacks the squares it `canMove` to, so a plain `Piece` attacks nothing and the rook, knight, bishop, and queen attack along their moves. `Pawn` and `King` override it (`Pawn.md`, `King.md`). Callers ask about a square that is empty or holds a piece of the other color.
+- `void move(Location from, Location to, Board board)` (issue #45 / US-12): makes this piece's move on the board. By default it calls `board.move(from, to)`. `King` overrides it to move the rook as well when it castles. `BoardController` calls it after `canMove` allows the move.
 
 `getType()` and `getColor()` only return those stored values, so they are checked inside the constructor cases below.
 
@@ -36,6 +38,28 @@ A plain `Piece` answers the same for every input, so one case stands for all of 
 | Input: `from`, `to` | Pointer | two locations (no null: callers never pass one) |
 | Input: `board` | Pointer | a board (no null: callers never pass one) |
 | Output: the answer | Boolean | `false` |
+
+### `attacks(Location from, Location target, Board board)` (issue #45)
+
+As with `canMove`, a plain `Piece` answers the same for every input, so one case stands for all of them, with a mocked `Board` that expects no calls. That the default follows `canMove` is shown by a rook attacking along an open file in `Board.md` TC64 and TC65.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the piece | Cases | a plain `Piece`, such as a white queen |
+| Input: `from`, `target` | Pointer | two locations (no null: callers never pass one) |
+| Input: `board` | Pointer | a board (no null: callers never pass one) |
+| Output: the answer | Boolean | `false` |
+
+### `move(Location from, Location to, Board board)` (issue #45)
+
+`Piece` does not own how the board relocates a piece, so `Board` is mocked with EasyMock and the case checks the one call.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the piece | Cases | a plain `Piece`, such as a white queen |
+| Input: `from`, `to` | Pointer | two locations (no null: callers never pass one) |
+| Input: `board` | Pointer | a mocked board (no null: callers never pass one) |
+| Output: calls on the board | Collection | one call, `board.move(from, to)` |
 
 ## Step 4: Test cases (all-combination for the valid pairs)
 
@@ -75,3 +99,15 @@ A plain `Piece` answers the same for every input, so one case stands for all of 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC19: a piece without movement rules | a white queen as a plain `Piece`; `from` is d1 `(3, 1)`, `to` is d3 `(3, 3)`; a mocked `Board` that expects no calls | `false` | :white_check_mark: |
+
+### Method under test: `attacks(Location from, Location target, Board board)` (issue #45)
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC20: a piece without movement rules attacks nothing | a white queen as a plain `Piece`; `from` is d1 `(3, 1)`, `target` is d3 `(3, 3)`; a mocked `Board` that expects no calls | `false` | :x: |
+
+### Method under test: `move(Location from, Location to, Board board)` (issue #45)
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC21: the board moves the piece | a white queen as a plain `Piece`; `from` is d1 `(3, 1)`, `to` is d3 `(3, 3)`; a mocked `Board` that expects `move(d1, d3)` | the board is asked once to move the piece from d1 to d3 | :x: |

@@ -10,6 +10,7 @@
 - `void clickSquare(Location square)` (issues #34 and #41): handles a click on a square. With nothing selected, a click on a piece of the player to move selects it; a click on an empty square or on an opponent's piece does nothing. With a square selected, a click on the selected square itself clears the selection (US-09 AC 4). A click on any other square is the destination: when the selected piece `canMove` there, the board moves it, the game passes the turn, and the selection is cleared. When it cannot, a click on another piece of the player to move selects that piece instead; a click on an empty square or on an opponent's piece keeps the current selection. It does not tell the player about a refused move (US-10).
 - `boolean isSelected(Location square)` (issue #34): returns true when `square` is the selected square, compared by file and rank. `BoardView` uses it to color the selected square.
 - `void clickSquare(Location square)`, captures (issue #33 / GitHub US-08, docs US-10): builds on the two-click move from issue #34. When the selected piece `canMove` to a square that holds an opponent's piece, the board moves the selected piece there, and `Board.move` removes the captured piece. The king is never captured: when the clicked square holds the king, the board is unchanged and the selection stays on the moving piece, as for any refused move. Whether a capture is legal for the moving piece, and the refusal of a piece of its own color, are decided by each piece's `canMove`. The fifty-move count is a later story.
+- `void clickSquare(Location square)`, the piece makes the move (issue #45 / US-12): when the selected piece `canMove` to the clicked square, the controller calls that piece's `move(from, to, board)` instead of `board.move(from, to)`, so a castling king also moves its rook (`King.md`). In TC9, TC12, TC19, TC22, and TC26, "the board moves the piece" now means the selected piece's `move` is called with that board.
 
 No method checks its arguments for null, and no case passes null: our code never passes null (instructor code review, Week 6). TC2, TC5, and TC8 used to pass a null board or location; they were removed with the board check.
 
@@ -76,6 +77,14 @@ The capture cases start from the state issue #34 leaves: b1 `(1, 1)` is selected
 | Output: the board | Cases | the selected piece moves from b1 to c3 and replaces the captured piece; unchanged |
 | Output: the selection after the click | Cases | none; unchanged (still b1) |
 
+### `clickSquare(Location square)`, the piece makes the move (issue #45)
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: what the selected piece answers for the clicked square | Boolean | can move (c3 `(2, 3)`) |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
+| Output: who makes the move | Cases | the selected piece's `move` with the controller's board; never `board.move` directly |
+
 ## Step 4: Test cases (each-choice strategy)
 
 ### Method under test: `BoardController(Board board, Game game)`
@@ -135,3 +144,9 @@ TC9 through TC18 belong to issue #34. These cases continue its numbering, and th
 | TC19: capture an opponent's piece the selected piece can reach | a controller for the mocked board; the board answers true for b1 `(1, 1)` and returns a mocked piece that can move from b1 to c3 `(2, 3)`, and c3 holds a black pawn; click b1, then c3 | the board moves the piece from b1 to c3; the game passes the turn | :white_check_mark: |
 | TC20: refuse to capture the king | a controller for the mocked board; the board answers true for b1 and returns a mocked piece that can move from b1 to c3, and c3 holds the black king; click b1, then c3 | the board does not move any piece; the game does not pass the turn | :white_check_mark: |
 | TC21: a refused king capture keeps the selection | as TC20; click b1, then c3, then ask `isSelected` about b1 | true | :white_check_mark: |
+
+### Method under test: `clickSquare(Location square)`, the piece makes the move (issue #45)
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC28: the selected piece makes its own move | a controller for the mocked board and game; White is to move; the board answers true for b1 `(1, 1)` and returns a mocked White piece that can move from b1 to c3 `(2, 3)`; c3 is empty; click b1, then c3 | the piece is asked once to `move` from b1 to c3 on the controller's board; the board is not asked to `move`; the game passes the turn | :x: |

@@ -6,6 +6,8 @@
 - `boolean isOccupied(Location location)`: returns true when a piece stands on that square and false when it is empty. Does not change the board.
 - `Piece pieceAt(Location location)`: returns the piece on that square. Requires an occupied square and throws `IllegalArgumentException` otherwise. Does not change the board.
 - `void move(Location from, Location to)` (issue #19): puts the piece from `from` on `to`, and `from` becomes empty. A piece already on `to` is replaced; this is the board side of a capture. Moving a piece to its own square leaves the board unchanged. Throws `IllegalArgumentException` when `from` is empty, and then leaves the board unchanged. It does not check whether the move is legal, does not change whose turn it is, and does not touch the UI.
+- `boolean holdsUnmovedPiece(Location square)` (issue #45 / US-12): true when a piece stands on `square` and that piece has never been moved by `move`. A piece that moved and came back has moved. Castling uses it to ask whether the king and the rook are on their original squares and have never moved: only the piece placed there at the start can be unmoved on a square.
+- `boolean isAttackedByOpponentOf(PieceColor color, Location square)` (issue #45 / US-12): true when at least one piece of the other color `attacks` `square` (see `Piece.md`). Castling uses it for the squares the king stands on, crosses, and lands on. US-11 can use it to find check.
 
 No method returns null. The project rules forbid it, so an empty square is reported by `isOccupied` instead of a null from `pieceAt`. Callers ask `isOccupied` before `pieceAt`. TC9 through TC12 used to expect null from `pieceAt` on the empty ranks; they now check those squares with `isOccupied`.
 
@@ -76,6 +78,30 @@ The starting position has a rook on every corner, so each corner can be both a `
 | Output: the board after a rejected move | Collection | unchanged |
 | Output: signal for a rejected move | Cases | none; `IllegalArgumentException` |
 | Output: the number of pieces after a capture (issue #33) | Collection, counted with `isOccupied` over the 64 squares | 31, one fewer than the starting 32 |
+
+### `holdsUnmovedPiece(Location square)` (issue #45)
+
+`move` records each piece it moves. The occupant of the square is a set of cases: the piece placed there at the start that has never moved, no piece because it moved away, and the same piece after it moved away and came back. The square comes from the starting position, so the pair of intervals is already covered by `pieceAt`; e1 and g1 are the squares castling cares about.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the board | Collection of 64 squares | a new `Board`, and that board after some `move` calls |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
+| Input: occupant of `square` | Cases | the starting piece, never moved, the white king on e1 `(4, 1)`; empty, after the g1 knight moved to f3 `(5, 3)`; the g1 knight after it moved to f3 and back to g1 `(6, 1)` |
+| Output: the answer | Boolean | true; false |
+
+### `isAttackedByOpponentOf(PieceColor color, Location square)` (issue #45)
+
+The pieces are a collection of up to 64 squares. The method looks at every square, so the attackers on the first square, a1, and the last square, h8, are the edges of that collection. The kind of attack is a case: a pawn attacks diagonally even when the square is empty, and a rook attacks along an open file. The attacker's color is a case too: only the other color counts.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the board | Collection of 64 squares | a new `Board`, and that board after some `move` calls |
+| Input: `color` | Cases | `WHITE`; `BLACK` |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
+| Input: pieces that attack `square` | Collection | none, e4 `(4, 4)` for White on a new board; white pawns only, e3 `(4, 3)` on a new board; one rook on the last square h8 `(7, 8)`; one rook on the first square a1 `(0, 1)` |
+| Input: color of the attackers | Cases | the other color; the same color as `color` |
+| Output: the answer | Boolean | true; false |
 
 ## Step 4: Test cases (each-choice strategy)
 
@@ -153,3 +179,21 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC41: from an empty square | a new `Board`; move a4 `(0, 4)` to a5 `(0, 5)` | throws `IllegalArgumentException` | :white_check_mark: |
 | TC44: a rejected move leaves the board unchanged | a new `Board`; move a4 `(0, 4)` to a1 `(0, 1)` | `pieceAt(a1)` is still the white rook | :white_check_mark: |
 | TC45: a capture takes the captured piece off the board (issue #33) | a new `Board`; move a1 `(0, 1)` to a8 `(0, 8)`, so the white rook captures the black rook | 31 of the 64 squares are occupied | :white_check_mark: |
+
+### Method under test: `holdsUnmovedPiece(Location square)` (issue #45)
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC58: the starting piece that has never moved | a new `Board`; ask about e1 `(4, 1)` | true | :x: |
+| TC59: a square the piece moved away from | a new `Board`; move g1 `(6, 1)` to f3 `(5, 3)`; ask about g1 | false | :x: |
+| TC60: a piece that moved and came back | a new `Board`; move g1 `(6, 1)` to f3 `(5, 3)`, then f3 back to g1; ask about g1 | false | :x: |
+
+### Method under test: `isAttackedByOpponentOf(PieceColor color, Location square)` (issue #45)
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC61: no opponent piece attacks the square | a new `Board`; ask whether Black attacks e4 `(4, 4)`, with `color = WHITE` | false | :x: |
+| TC62: opponent pawns attack an empty square diagonally | a new `Board`; `color = BLACK`, square e3 `(4, 3)`; the white pawns on d2 and f2 attack it | true | :x: |
+| TC63: only pieces of the same color attack the square | a new `Board`; `color = WHITE`, square e3 `(4, 3)` | false | :x: |
+| TC64: an opponent rook on the last square, h8 | a new `Board`; move the h7 pawn `(7, 7)` to a6 `(0, 6)`; `color = WHITE`, square h3 `(7, 3)`; the h-file from h7 to h4 is empty | true | :x: |
+| TC65: an opponent rook on the first square, a1 | a new `Board`; move the a2 pawn `(0, 2)` to h3 `(7, 3)`; `color = BLACK`, square a6 `(0, 6)`; the a-file from a2 to a5 is empty | true | :x: |
