@@ -274,4 +274,11 @@ public class PawnTests {
 
         assertTrue(attacks);
     }
+
+    @Test
+    public void Attacks_SquareStraightAhead_ReturnsFalse() {
+        boolean attacks = whitePawn.attacks(E2, E3, board);
+
+        assertFalse(attacks);
+    }
 }

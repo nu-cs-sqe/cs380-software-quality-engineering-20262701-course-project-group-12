@@ -378,7 +378,7 @@ that a capture needs.
     d3, so d3 holds a black pawn.
   - **Expected output**: `true`.
 
-- **TC-PAWN-29 — Do not attack the square straight ahead** ( :x: )
+- **TC-PAWN-29 — Do not attack the square straight ahead** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
     `target` is e3 `(4, 3)`. New `Board`, so e3 is empty.

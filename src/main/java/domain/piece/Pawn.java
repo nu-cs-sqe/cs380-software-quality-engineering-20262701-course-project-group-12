@@ -39,7 +39,7 @@ public class Pawn extends Piece {
 
     @Override
     public boolean attacks(Location from, Location target, Board board) {
-        return true;
+        return from.fileDistanceTo(target) == CAPTURE_FILE_DISTANCE;
     }
 
     private boolean canAdvance(Location from, Location to, Board board) {
