@@ -26,6 +26,7 @@ public class PawnTests {
     private static final Location E5 = new Location(4, 5);
     private static final Location E6 = new Location(4, 6);
     private static final Location E7 = new Location(4, 7);
+    private static final Location F2 = new Location(5, 2);
     private static final Location F3 = new Location(5, 3);
     private static final Location F4 = new Location(5, 4);
     private static final Location G1 = new Location(6, 1);
@@ -289,6 +290,16 @@ public class PawnTests {
         board.move(D6, D5);
 
         boolean canMove = whitePawn.canMove(E5, D6, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_EnPassantBesidePawnOfOwnColor_ReturnsFalse() {
+        board.move(F2, F4);
+        board.move(E2, E4);
+
+        boolean canMove = whitePawn.canMove(F4, E5, board);
 
         assertFalse(canMove);
     }

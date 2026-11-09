@@ -396,7 +396,7 @@ The en passant cases start at TC-PAWN-29, after the promotion cases
   - **Expected output**: `false`.
 
 - **TC-PAWN-33 — Reject en passant beside a pawn of the pawn's color**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is f4 `(5, 4)`. `to` is
     e5 `(4, 5)`. New `Board` after `move` of the f2 pawn to f4 and the e2
