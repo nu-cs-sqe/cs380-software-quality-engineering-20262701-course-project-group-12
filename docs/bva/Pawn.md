@@ -371,7 +371,7 @@ The en passant cases start at TC-PAWN-29, after the promotion cases
     pawn that just moved two ranks.
   - **Expected output**: `true`.
 
-- **TC-PAWN-30 — Capture en passant with a black pawn** ( :x: )
+- **TC-PAWN-30 — Capture en passant with a black pawn** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: Black pawn. `from` is d4 `(3, 4)`. `to` is
     e3 `(4, 3)`. New `Board` after `move` of the d7 pawn to d5, d5 to d4,
