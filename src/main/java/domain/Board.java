@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Board {
@@ -91,7 +92,16 @@ public class Board {
     }
 
     public boolean isAttackedByOpponentOf(PieceColor color, Location square) {
-        return false;
+        return allSquares()
+                .filter(this::isOccupied)
+                .anyMatch(attackerSquare ->
+                        pieceAt(attackerSquare).attacks(attackerSquare, square, this));
+    }
+
+    private static Stream<Location> allSquares() {
+        return IntStream.rangeClosed(Location.MIN_FILE, Location.MAX_FILE).boxed()
+                .flatMap(file -> IntStream.rangeClosed(Location.MIN_RANK, Location.MAX_RANK)
+                        .mapToObj(rank -> new Location(file, rank)));
     }
 
     private Optional<Piece> occupantOf(Location location) {
