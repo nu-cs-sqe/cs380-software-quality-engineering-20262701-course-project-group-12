@@ -398,7 +398,7 @@ that a capture needs.
     `target` is g3 `(6, 3)`. New `Board`, so g3 is empty.
   - **Expected output**: `false`.
 
-- **TC-PAWN-32 — Do not attack two squares diagonally forward** ( :x: )
+- **TC-PAWN-32 — Do not attack two squares diagonally forward** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
     `target` is g4 `(6, 4)`. New `Board`, so g4 is empty.
