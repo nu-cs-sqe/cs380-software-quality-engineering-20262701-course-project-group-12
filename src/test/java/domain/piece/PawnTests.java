@@ -290,4 +290,11 @@ public class PawnTests {
 
         assertFalse(attacks);
     }
+
+    @Test
+    public void Attacks_OneRankForwardTwoFilesOver_ReturnsFalse() {
+        boolean attacks = whitePawn.attacks(E2, G3, board);
+
+        assertFalse(attacks);
+    }
 }

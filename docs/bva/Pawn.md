@@ -392,7 +392,7 @@ that a capture needs.
   - **Expected output**: `false`.
 
 - **TC-PAWN-31 — Do not attack one rank forward and two files over**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
     `target` is g3 `(6, 3)`. New `Board`, so g3 is empty.
