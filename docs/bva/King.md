@@ -403,7 +403,7 @@ Fifty-move counting (AC 8) is US-18; a castle is a king move and
   - **State of the system**: White king, e1 to c1. Queenside cleared.
   - **Expected output**: the rook that was on a1 is on d1 `(3, 1)`.
 
-- **TC-KING-37 — Move the rook with a black kingside castle** ( :x: )
+- **TC-KING-37 — Move the rook with a black kingside castle** ( :white_check_mark: )
   - **Method(s) under test**: `move(Location, Location, Board)`
   - **State of the system**: Black king, e8 to g8. Black kingside cleared as in TC-KING-19.
   - **Expected output**: the rook that was on h8 is on f8 `(5, 8)`.

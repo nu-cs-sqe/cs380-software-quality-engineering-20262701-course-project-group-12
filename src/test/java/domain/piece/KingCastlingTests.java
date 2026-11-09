@@ -13,6 +13,7 @@ public class KingCastlingTests {
     private static final Location A1 = new Location(0, 1);
     private static final Location A3 = new Location(0, 3);
     private static final Location A6 = new Location(0, 6);
+    private static final Location A8 = new Location(0, 8);
     private static final Location B1 = new Location(1, 1);
     private static final Location B4 = new Location(1, 4);
     private static final Location B5 = new Location(1, 5);
@@ -42,6 +43,7 @@ public class KingCastlingTests {
     private static final Location H2 = new Location(7, 2);
     private static final Location H3 = new Location(7, 3);
     private static final Location H7 = new Location(7, 7);
+    private static final Location H8 = new Location(7, 8);
     private static final King WHITE_KING = new King(PieceColor.WHITE);
     private static final King BLACK_KING = new King(PieceColor.BLACK);
 
@@ -237,6 +239,16 @@ public class KingCastlingTests {
         WHITE_KING.move(E1, C1, board);
 
         assertSame(queensideRook, board.pieceAt(D1));
+    }
+
+    @Test
+    public void Move_BlackKingside_PutsTheRookOnF8() {
+        clearBlackKingside();
+        Piece kingsideRook = board.pieceAt(H8);
+
+        BLACK_KING.move(E8, G8, board);
+
+        assertSame(kingsideRook, board.pieceAt(F8));
     }
 
     private void clearWhiteKingside() {
