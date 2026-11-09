@@ -11,7 +11,7 @@ public class Queen extends Piece {
     @Override
     public boolean canMove(Location from, Location to, Board board) {
         return isAlongLine(from, to)
-                && !isSameSquare(from, to)
+                && !from.isSameSquareAs(to)
                 && !holdsOwnPiece(to, board)
                 && isPathClear(from, to, board);
     }
@@ -20,9 +20,5 @@ public class Queen extends Piece {
         int fileDistance = from.fileDistanceTo(to);
         int rankDistance = from.rankDistanceTo(to);
         return fileDistance == 0 || rankDistance == 0 || fileDistance == rankDistance;
-    }
-
-    private boolean isSameSquare(Location from, Location to) {
-        return from.getFile() == to.getFile() && from.getRank() == to.getRank();
     }
 }
