@@ -169,7 +169,7 @@ The case numbers start at TC64, after the promotion cases (TC46 to TC53, issue #
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC68: not in check, with legal moves | a new `Board`; ask about White | false | :x: |
+| TC68: not in check, with legal moves | a new `Board`; ask about White | false | :white_check_mark: |
 | TC69: in check with no reply | the Fool's mate position; ask about White | true | :x: |
 | TC70: in check with a reply that blocks the check | the queen check on Black; ask about Black | false | :x: |
 | TC71: not in check and no legal move | Sam Loyd's stalemate; ask about Black | false | :x: |

@@ -73,6 +73,10 @@ public class Board {
         place(movingPiece, to);
     }
 
+    public boolean isCheckmated(PieceColor color) {
+        return false;
+    }
+
     private void clear(Location location) {
         rankOf(location).set(location.getFile(), Optional.empty());
     }

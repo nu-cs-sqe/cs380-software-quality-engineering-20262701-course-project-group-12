@@ -286,6 +286,15 @@ public class BoardTests {
         assertEquals(STARTING_PIECE_COUNT - 1, countPieces(board));
     }
 
+    @Test
+    public void IsCheckmated_NewBoard_ReturnsFalse() {
+        Board board = new Board();
+
+        boolean checkmated = board.isCheckmated(PieceColor.WHITE);
+
+        assertFalse(checkmated);
+    }
+
     private int countPieces(Board board) {
         int pieces = 0;
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
