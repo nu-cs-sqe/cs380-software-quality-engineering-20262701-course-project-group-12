@@ -18,6 +18,7 @@ public class BoardTests {
     private static final Location A5 = new Location(0, 5);
     private static final Location A8 = new Location(0, 8);
     private static final Location B8 = new Location(1, 8);
+    private static final Location C1 = new Location(2, 1);
     private static final Location C6 = new Location(2, 6);
     private static final Location D4 = new Location(3, 4);
     private static final Location D5 = new Location(3, 5);
@@ -389,6 +390,17 @@ public class BoardTests {
         board.move(E4, E5);
         board.move(D7, D6);
         board.move(D6, D5);
+
+        board.move(E5, D6);
+
+        assertTrue(board.isOccupied(D5));
+    }
+
+    @Test
+    public void Move_PieceOtherThanPawnBesidePawnThatMovedTwoRanks_LeavesThatPawnOnTheBoard() {
+        Board board = new Board();
+        board.move(C1, E5);
+        board.move(D7, D5);
 
         board.move(E5, D6);
 

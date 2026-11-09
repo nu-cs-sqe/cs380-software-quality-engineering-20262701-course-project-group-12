@@ -174,4 +174,4 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC60: an en passant capture removes the captured pawn | a new `Board`; move e2 `(4, 2)` to e4, e4 to e5 `(4, 5)`, and d7 `(3, 7)` to d5 `(3, 5)`; move e5 to d6 `(3, 6)` | `isOccupied(d5)` is false | :white_check_mark: |
 | TC61: the capturing pawn lands on the square passed over | as TC60 | `pieceAt(d6)` is the white pawn that moved from e2 | :white_check_mark: |
 | TC62: a pawn that moved one rank at a time is not removed | a new `Board`; move e2 to e4, e4 to e5, d7 to d6, and d6 to d5; move e5 to d6 | `isOccupied(d5)` is true | :white_check_mark: |
-| TC63: a piece that is not a pawn removes nothing | a new `Board`; move c1 `(2, 1)` to e5, and d7 to d5; move e5 to d6 | `isOccupied(d5)` is true | :x: |
+| TC63: a piece that is not a pawn removes nothing | a new `Board`; move c1 `(2, 1)` to e5, and d7 to d5; move e5 to d6 | `isOccupied(d5)` is true | :white_check_mark: |
