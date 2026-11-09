@@ -169,7 +169,7 @@ White is to move. The board answers true for a7 `(0, 7)` and returns a mocked Wh
 | TC30: a capture onto the last rank leaves a promotion pending | the piece can move from a7 to b8 `(1, 8)` and `promotesOn` b8; b8 holds a black knight; click a7, then b8, then ask `isPromotionPending` | true; the board moves the piece from a7 to b8 | :white_check_mark: |
 | TC31: a move that is not a promotion leaves nothing pending | as TC22, and the piece does not `promotesOn` c3 `(2, 3)`; ask `isPromotionPending` | false | :white_check_mark: |
 | TC32: choosing a queen promotes the pawn on the arrival square | as TC28; then choose `QUEEN` | the board promotes a8 to `QUEEN` | :white_check_mark: |
-| TC33: choosing passes the turn | as TC32 | the game passes the turn once | :x: |
+| TC33: choosing passes the turn | as TC32 | the game passes the turn once | :white_check_mark: |
 | TC34: nothing is pending after the choice | as TC32; ask `isPromotionPending` | false | :x: |
 | TC35: a click while a promotion is pending does nothing | as TC28; then click b1 `(1, 1)`, then ask `isSelected` about b1 | false; the board is not asked about b1 | :x: |
 | TC36: a king is not a choice | as TC28; the board throws `IllegalArgumentException` when asked to promote a8 to `KING`; choose `KING` | throws that `IllegalArgumentException` | :x: |

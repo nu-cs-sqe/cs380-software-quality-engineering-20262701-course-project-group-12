@@ -36,7 +36,12 @@ public class BoardController {
     }
 
     public void choosePromotion(PieceType type) {
-        promotionSquare.ifPresent(square -> board.promote(square, type));
+        promotionSquare.ifPresent(square -> finishPromotion(square, type));
+    }
+
+    private void finishPromotion(Location square, PieceType type) {
+        board.promote(square, type);
+        game.passTurn();
     }
 
     public void clickSquare(Location square) {

@@ -439,6 +439,21 @@ public class BoardControllerTests {
     public void ChoosePromotion_Queen_PromotesThePawnOnTheArrivalSquare() {
         expectPawnMoveFromA7ToA8();
         board.promote(A8, PieceType.QUEEN);
+        game.passTurn();
+        BoardController controller = replayedController();
+        controller.clickSquare(A7);
+        controller.clickSquare(A8);
+
+        controller.choosePromotion(PieceType.QUEEN);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ChoosePromotion_Queen_PassesTheTurn() {
+        expectPawnMoveFromA7ToA8();
+        board.promote(A8, PieceType.QUEEN);
+        game.passTurn();
         BoardController controller = replayedController();
         controller.clickSquare(A7);
         controller.clickSquare(A8);
