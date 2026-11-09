@@ -9,6 +9,7 @@ import domain.piece.PieceType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
@@ -81,10 +82,11 @@ public class BoardControllerTests {
     private Piece piece;
 
     @BeforeEach
-    public void createMocks() {
+    public void createMocksForGameInProgress() {
         board = mock(Board.class);
         game = mock(Game.class);
         piece = mock(Piece.class);
+        expect(board.isCheckmated(anyObject(PieceColor.class))).andStubReturn(false);
     }
 
     @Test
@@ -306,6 +308,7 @@ public class BoardControllerTests {
         expect(board.isOccupied(C3)).andReturn(false);
         board.move(B1, C3);
         game.passTurn();
+        expect(game.colorToMove()).andReturn(PieceColor.BLACK);
         Piece previousPlayerPiece = mock(Piece.class);
         expect(board.isOccupied(A2)).andReturn(true);
         expect(board.pieceAt(A2)).andReturn(previousPlayerPiece);
@@ -333,6 +336,7 @@ public class BoardControllerTests {
         expect(board.isOccupied(C3)).andReturn(false);
         board.move(B1, C3);
         game.passTurn();
+        expect(game.colorToMove()).andReturn(PieceColor.BLACK);
         Piece newPlayerPiece = mock(Piece.class);
         expect(board.isOccupied(B8)).andReturn(true);
         expect(board.pieceAt(B8)).andReturn(newPlayerPiece);
@@ -366,6 +370,28 @@ public class BoardControllerTests {
         assertTrue(controller.isSelected(B1));
         assertFalse(controller.isSelected(B8));
         verify(board, piece, game, opponent);
+    }
+
+    @Test
+    public void ClickSquare_MoveThatCheckmates_EndsTheGame() {
+        expect(board.isOccupied(B1)).andReturn(true);
+        expect(board.pieceAt(B1)).andReturn(piece);
+        expect(piece.getColor()).andReturn(PieceColor.WHITE);
+        expect(game.colorToMove()).andReturn(PieceColor.WHITE);
+        expect(board.pieceAt(B1)).andReturn(piece);
+        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        expect(board.isOccupied(C3)).andReturn(false);
+        board.move(B1, C3);
+        game.passTurn();
+        expect(game.colorToMove()).andReturn(PieceColor.BLACK);
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(true);
+        game.endByCheckmate();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
     }
 
     private void expectPieceOnB1() {

@@ -56,7 +56,14 @@ public class BoardController {
         if (!holdsKing(to)) {
             board.move(from, to);
             game.passTurn();
+            endGameIfCheckmated();
             clearSelection();
+        }
+    }
+
+    private void endGameIfCheckmated() {
+        if (board.isCheckmated(game.colorToMove())) {
+            game.endByCheckmate();
         }
     }
 
