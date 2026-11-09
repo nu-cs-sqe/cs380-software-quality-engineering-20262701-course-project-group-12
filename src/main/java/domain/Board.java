@@ -1,5 +1,6 @@
 package domain;
 
+import domain.piece.Bishop;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
@@ -34,7 +35,8 @@ public class Board {
     private static final Map<PieceType, Function<PieceColor, Piece>> PROMOTION_PIECE_MAKERS =
             Map.of(
                     PieceType.QUEEN, Queen::new,
-                    PieceType.ROOK, Rook::new);
+                    PieceType.ROOK, Rook::new,
+                    PieceType.BISHOP, Bishop::new);
 
     private final List<List<Optional<Piece>>> squares = emptySquares();
 

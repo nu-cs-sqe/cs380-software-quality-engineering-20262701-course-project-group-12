@@ -151,7 +151,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | --- | --- | --- | --- |
 | TC46: promote a white pawn to a queen | a new `Board`; move a2 `(0, 2)` to a8 `(0, 8)`; promote a8 to `QUEEN` | `pieceAt(a8)` is a `Queen`; its color is `WHITE` | :white_check_mark: |
 | TC47: promote a white pawn to a rook | as TC46; promote a8 to `ROOK` | `pieceAt(a8)` is a `Rook`; its color is `WHITE` | :white_check_mark: |
-| TC48: promote a white pawn to a bishop | as TC46; promote a8 to `BISHOP` | `pieceAt(a8)` is a `Bishop`; its color is `WHITE` | :x: |
+| TC48: promote a white pawn to a bishop | as TC46; promote a8 to `BISHOP` | `pieceAt(a8)` is a `Bishop`; its color is `WHITE` | :white_check_mark: |
 | TC49: promote a white pawn to a knight | as TC46; promote a8 to `KNIGHT` | `pieceAt(a8)` is a `Knight`; its color is `WHITE` | :x: |
 | TC50: promote a black pawn to a queen | a new `Board`; move h7 `(7, 7)` to h1 `(7, 1)`; promote h1 to `QUEEN` | `pieceAt(h1)` is a `Queen`; its color is `BLACK` | :x: |
 | TC51: a king is not a choice | as TC46; promote a8 to `KING` | throws `IllegalArgumentException` | :x: |
