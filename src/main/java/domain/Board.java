@@ -73,6 +73,10 @@ public class Board {
         place(movingPiece, to);
     }
 
+    public boolean canBeCapturedEnPassant(Location square) {
+        return true;
+    }
+
     private void clear(Location location) {
         rankOf(location).set(location.getFile(), Optional.empty());
     }

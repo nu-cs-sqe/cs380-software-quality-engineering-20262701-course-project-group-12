@@ -17,6 +17,8 @@ public class BoardTests {
     private static final Location A4 = new Location(0, 4);
     private static final Location A5 = new Location(0, 5);
     private static final Location A8 = new Location(0, 8);
+    private static final Location E2 = new Location(4, 2);
+    private static final Location E4 = new Location(4, 4);
     private static final Location H1 = new Location(7, 1);
     private static final Location H5 = new Location(7, 5);
     private static final Location H8 = new Location(7, 8);
@@ -284,6 +286,16 @@ public class BoardTests {
         board.move(A1, A8);
 
         assertEquals(STARTING_PIECE_COUNT - 1, countPieces(board));
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_WhitePawnThatJustMovedTwoRanks_ReturnsTrue() {
+        Board board = new Board();
+        board.move(E2, E4);
+
+        boolean capturable = board.canBeCapturedEnPassant(E4);
+
+        assertTrue(capturable);
     }
 
     private int countPieces(Board board) {
