@@ -67,6 +67,15 @@ public class KingCastlingTests {
         assertTrue(canMove);
     }
 
+    @Test
+    public void CanMove_BlackQueenside_ReturnsTrue() {
+        clearBlackQueenside();
+
+        boolean canMove = BLACK_KING.canMove(E8, C8, board);
+
+        assertTrue(canMove);
+    }
+
     private void clearWhiteKingside() {
         board.move(F1, F4);
         board.move(G1, G4);
@@ -81,5 +90,11 @@ public class KingCastlingTests {
     private void clearBlackKingside() {
         board.move(F8, F5);
         board.move(G8, G5);
+    }
+
+    private void clearBlackQueenside() {
+        board.move(B8, B5);
+        board.move(C8, C5);
+        board.move(D8, D5);
     }
 }
