@@ -28,10 +28,7 @@ public class Game {
     }
 
     public void passTurn() {
-        if (!started) {
-            throw new IllegalStateException(
-                    "Cannot pass the turn before the game has started");
-        }
+        requireStartedTo("pass the turn");
         playerToMove = playerWaiting();
     }
 
@@ -40,10 +37,7 @@ public class Game {
     }
 
     public void endByCheckmate() {
-        if (!started) {
-            throw new IllegalStateException(
-                    "Cannot end the game before the game has started");
-        }
+        requireStartedTo("end the game");
         winner = Optional.of(playerWaiting());
     }
 
@@ -72,22 +66,22 @@ public class Game {
     }
 
     public Player playerOne() {
-        requireStarted("player one");
+        requireStartedTo("read player one");
         return playerOne;
     }
 
     public Player playerTwo() {
-        requireStarted("player two");
+        requireStartedTo("read player two");
         return playerTwo;
     }
 
     public Player playerToMove() {
-        requireStarted("the player to move");
+        requireStartedTo("read the player to move");
         return playerToMove;
     }
 
     public Board board() {
-        requireStarted("the board");
+        requireStartedTo("read the board");
         return board;
     }
 
@@ -107,10 +101,10 @@ public class Game {
         return playerToMove().getColor();
     }
 
-    private void requireStarted(String request) {
+    private void requireStartedTo(String action) {
         if (!started) {
             throw new IllegalStateException(
-                    "Cannot read " + request + " before the game has started");
+                    "Cannot " + action + " before the game has started");
         }
     }
 }
