@@ -363,7 +363,7 @@ square is rejected unless it captures en passant.
 The en passant cases start at TC-PAWN-29, after the promotion cases
 (TC-PAWN-25 to TC-PAWN-28, issue #46).
 
-- **TC-PAWN-29 — Capture en passant with a white pawn** ( :x: )
+- **TC-PAWN-29 — Capture en passant with a white pawn** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e5 `(4, 5)`. `to` is
     d6 `(3, 6)`. New `Board` after `move` of the e2 pawn to e4, e4 to e5,
