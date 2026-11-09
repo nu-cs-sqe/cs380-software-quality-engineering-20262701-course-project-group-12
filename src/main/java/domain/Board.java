@@ -1,6 +1,7 @@
 package domain;
 
 import domain.piece.Bishop;
+import domain.piece.King;
 import domain.piece.Knight;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
@@ -28,7 +29,7 @@ public class Board {
             Knight::new,
             Bishop::new,
             Queen::new,
-            color -> new Piece(PieceType.KING, color),
+            King::new,
             Bishop::new,
             Knight::new,
             Rook::new);
