@@ -293,6 +293,11 @@ public class BoardTests {
         assertPieceClass(A1, Rook.class);
     }
 
+    @Test
+    public void Board_H8_PlacesRook() {
+        assertPieceClass(H8, Rook.class);
+    }
+
     private int countPieces(Board board) {
         int pieces = 0;
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {

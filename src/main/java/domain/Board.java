@@ -28,7 +28,7 @@ public class Board {
             color -> new Piece(PieceType.KING, color),
             color -> new Piece(PieceType.BISHOP, color),
             color -> new Piece(PieceType.KNIGHT, color),
-            color -> new Piece(PieceType.ROOK, color));
+            Rook::new);
 
     private final List<List<Optional<Piece>>> squares = emptySquares();
 
