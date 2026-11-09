@@ -380,7 +380,7 @@ Fifty-move counting (AC 8) is US-18; a castle is a king move and
 
 ### Method under test: `attacks(Location from, Location target, Board board)` (issue #45)
 
-- **TC-KING-33 — Attack an adjoining square** ( :x: )
+- **TC-KING-33 — Attack an adjoining square** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White king. `from` is e4 `(4, 4)`, `target` is e5 `(4, 5)`. New `Board` after `move` of the king from e1 to e4.
   - **Expected output**: `true`.
