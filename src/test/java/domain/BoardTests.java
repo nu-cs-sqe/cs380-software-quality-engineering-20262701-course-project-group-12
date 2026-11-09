@@ -25,6 +25,7 @@ public class BoardTests {
     private static final Location A8 = new Location(0, 8);
     private static final Location H1 = new Location(7, 1);
     private static final Location H5 = new Location(7, 5);
+    private static final Location H7 = new Location(7, 7);
     private static final Location H8 = new Location(7, 8);
     private static final int STARTING_PIECE_COUNT = 32;
 
@@ -322,6 +323,18 @@ public class BoardTests {
 
         assertInstanceOf(Knight.class, promoted);
         assertEquals(PieceColor.WHITE, promoted.getColor());
+    }
+
+    @Test
+    public void Promote_BlackPawnToQueen_PlacesBlackQueen() {
+        Board board = new Board();
+        board.move(H7, H1);
+
+        board.promote(H1, PieceType.QUEEN);
+
+        Piece promoted = board.pieceAt(H1);
+        assertInstanceOf(Queen.class, promoted);
+        assertEquals(PieceColor.BLACK, promoted.getColor());
     }
 
     private Piece promoteWhitePawnOnA8(PieceType type) {

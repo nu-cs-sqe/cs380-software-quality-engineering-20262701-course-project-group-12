@@ -85,7 +85,8 @@ public class Board {
     }
 
     public void promote(Location square, PieceType type) {
-        place(PROMOTION_PIECE_MAKERS.get(type).apply(PieceColor.WHITE), square);
+        PieceColor pawnColor = pieceAt(square).getColor();
+        place(PROMOTION_PIECE_MAKERS.get(type).apply(pawnColor), square);
     }
 
     private void clear(Location location) {
