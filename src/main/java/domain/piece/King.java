@@ -33,7 +33,8 @@ public class King extends Piece {
     }
 
     private Location rookSquareFor(Location from, Location to) {
-        int rookFile = to.getFile() > from.getFile() ? Location.MAX_FILE : Location.MIN_FILE;
+        boolean isKingside = to.getFile() == from.getFile() + CASTLING_DISTANCE;
+        int rookFile = isKingside ? Location.MAX_FILE : Location.MIN_FILE;
         return new Location(rookFile, from.getRank());
     }
 
