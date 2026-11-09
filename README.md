@@ -18,7 +18,14 @@ N/A
 ### Mutation Testing
 N/A
 ### Others
-N/A
+Historical Failed Checks (Before Required Team Meeting)
+
+During our required team meeting, Professor Yiji clarified that commits with failing tests made before the meeting could be documented as exceptions, without needing to redo the commits. Following this guidance, we have listed the commits that had failed checks prior to the meeting.
+- 1799f71 — Display player information in game window
+- 0ca16d0 — Launch welcome screen from application entry point
+- 7ad44fb — Open game window after successful start
+
+Moving forward, we will run all tests locally and ensure they pass before committing changes.
 
 ## Credits
 - Chess piece images by Cburnett, from Wikimedia Commons, used under the BSD license. See `src/main/resources/pieces/LICENSE.txt`.

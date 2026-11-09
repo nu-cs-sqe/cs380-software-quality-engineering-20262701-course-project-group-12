@@ -1,10 +1,18 @@
 package domain.piece;
 
+import domain.Board;
+import domain.Location;
 import org.junit.jupiter.api.Test;
 
+import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class PieceTests {
+    private static final Location D1 = new Location(3, 1);
+    private static final Location D3 = new Location(3, 3);
 
     @Test
     public void Piece_WhitePawn_StoresTypeAndColor() {
@@ -64,6 +72,18 @@ public class PieceTests {
     @Test
     public void Piece_BlackKing_StoresTypeAndColor() {
         assertPiece(PieceType.KING, PieceColor.BLACK);
+    }
+
+    @Test
+    public void CanMove_PieceWithoutMovementRules_ReturnsFalse() {
+        Piece whiteQueen = new Piece(PieceType.QUEEN, PieceColor.WHITE);
+        Board board = mock(Board.class);
+        replay(board);
+
+        boolean canMove = whiteQueen.canMove(D1, D3, board);
+
+        assertFalse(canMove);
+        verify(board);
     }
 
     private void assertPiece(PieceType type, PieceColor color) {
