@@ -19,6 +19,10 @@ one of these holds, and `false` for any other destination:
 - `from` is on the pawn's starting rank, `to` is two squares straight
   forward, and both of those squares are empty.
 - `to` is one square diagonally forward and holds an opponent's piece.
+- `to` is one square diagonally forward and empty, and the square beside
+  `from` on the file of `to` holds an opponent's pawn that
+  `Board.canBeCapturedEnPassant` reports (issue #47 / GitHub US-14, docs
+  US-12).
 
 Forward is toward rank 8 for a white pawn and toward rank 1 for a black
 pawn. The starting rank is rank 2 for White and rank 7 for Black.
@@ -26,10 +30,9 @@ pawn. The starting rank is rank 2 for White and rank 7 for Black.
 Squares use file `0` = a-file through file `7` = h-file, and rank `1`
 through `8`.
 
-Out of scope: promotion on the last rank (US-13) and en passant (US-12).
-A move onto the last rank is an ordinary forward move here. A diagonal
-move onto an empty square is rejected, because en passant is a later
-story.
+Out of scope: promotion on the last rank (US-13). A move onto the last
+rank is an ordinary forward move here. A diagonal move onto an empty
+square is rejected unless it captures en passant.
 
 ## Week 6 instructor review
 
@@ -54,6 +57,9 @@ story.
   - e6 `(4, 6)`, a black pawn one rank past its starting rank
   - e5 `(4, 5)`, a black pawn further down the board
   - d7 `(3, 7)`, a black pawn that captures
+  - e5 `(4, 5)` and f4 `(5, 4)`, white pawns beside a pawn that just
+    moved two ranks
+  - d4 `(3, 4)`, a black pawn beside a pawn that just moved two ranks
 - **Input: `to`**
   - the same square as `from`
   - one square straight forward
@@ -75,6 +81,14 @@ story.
 - **Input: occupant of the square passed over in a two-square advance**
   - empty
   - a piece
+- **Input: the square beside `from`, on the file of `to`, for a diagonal
+  move onto an empty square**
+  - an opponent's pawn that just moved two ranks
+  - an opponent's pawn that reached the square with two one-rank moves
+  - a pawn of the pawn's color that just moved two ranks
+- **Input: moves after the two-rank move**
+  - none
+  - one other move
 - **Input: pawn color**
   - white
   - black
@@ -110,6 +124,18 @@ story.
 - Two invalid inputs are never paired. A blocked two-square advance has
   an empty destination, and a rejected direction has an empty
   destination unless the case is about the occupant.
+- The pawn beside `from` in an en passant capture is a case: an
+  opponent's pawn that can be captured en passant, an opponent's pawn
+  that cannot because it moved one rank at a time, and a pawn of the
+  pawn's own color.
+- The chance to capture en passant lasts one move, so the moves after
+  the two-rank move have two values: none, and one other move.
+- Color sets the direction, so an en passant capture is checked for
+  both colors: toward a lower file for White and toward a higher file
+  for Black.
+- `Board.canBeCapturedEnPassant` answers for the last move made with
+  `Board.move`, so each en passant case sets up the board with `move` in
+  the order the game would.
 
 ### Step 3: Boundary choices
 
@@ -145,6 +171,16 @@ story.
   `(6, 4)` holding a black pawn.
 - One rank forward and two files over onto an opponent: white e2 to g3
   `(6, 3)` holding a black pawn.
+- En passant by a white pawn: e5 to d6 `(3, 6)` right after the black d7
+  pawn moves to d5 `(3, 5)`.
+- En passant by a black pawn: d4 to e3 `(4, 3)` right after the white e2
+  pawn moves to e4.
+- En passant one move too late: the white case, with the g1 knight moving
+  to f3 after the black pawn.
+- Beside an opponent's pawn that moved one rank at a time: white e5 to d6
+  after the black d7 pawn moves to d6 and then d5.
+- Beside a pawn of the pawn's color: white f4 to e5 right after the white
+  e2 pawn moves to e4.
 
 ## Step 4: Test Cases
 
@@ -322,4 +358,48 @@ story.
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`. `to` is
     g3 `(6, 3)`. New `Board` after `move` of the g7 pawn to g3, so g3
     holds a black pawn.
+  - **Expected output**: `false`.
+
+The en passant cases start at TC-PAWN-29, after the promotion cases
+(TC-PAWN-25 to TC-PAWN-28, issue #46).
+
+- **TC-PAWN-29 — Capture en passant with a white pawn** ( :x: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is e5 `(4, 5)`. `to` is
+    d6 `(3, 6)`. New `Board` after `move` of the e2 pawn to e4, e4 to e5,
+    and the d7 pawn to d5 `(3, 5)`, so d6 is empty and d5 holds a black
+    pawn that just moved two ranks.
+  - **Expected output**: `true`.
+
+- **TC-PAWN-30 — Capture en passant with a black pawn** ( :x: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: Black pawn. `from` is d4 `(3, 4)`. `to` is
+    e3 `(4, 3)`. New `Board` after `move` of the d7 pawn to d5, d5 to d4,
+    and the e2 pawn to e4 `(4, 4)`, so e3 is empty and e4 holds a white
+    pawn that just moved two ranks.
+  - **Expected output**: `true`.
+
+- **TC-PAWN-31 — Reject en passant one move too late** ( :x: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is e5 `(4, 5)`. `to` is
+    d6 `(3, 6)`. The board of TC-PAWN-29, then `move` of the g1 knight
+    to f3 `(5, 3)`.
+  - **Expected output**: `false`.
+
+- **TC-PAWN-32 — Reject en passant beside a pawn that moved one rank at
+  a time** ( :x: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is e5 `(4, 5)`. `to` is
+    d6 `(3, 6)`. New `Board` after `move` of the e2 pawn to e4, e4 to e5,
+    the d7 pawn to d6, and d6 to d5, so d6 is empty and d5 holds a black
+    pawn.
+  - **Expected output**: `false`.
+
+- **TC-PAWN-33 — Reject en passant beside a pawn of the pawn's color**
+  ( :x: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is f4 `(5, 4)`. `to` is
+    e5 `(4, 5)`. New `Board` after `move` of the f2 pawn to f4 and the e2
+    pawn to e4, so e5 is empty and e4 holds a white pawn that just moved
+    two ranks.
   - **Expected output**: `false`.
