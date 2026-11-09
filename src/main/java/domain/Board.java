@@ -1,5 +1,6 @@
 package domain;
 
+import domain.piece.Knight;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
@@ -22,7 +23,7 @@ public class Board {
     private static final int BLACK_BACK_RANK = Location.MAX_RANK;
     private static final List<Function<PieceColor, Piece>> BACK_RANK_PIECE_MAKERS = List.of(
             Rook::new,
-            color -> new Piece(PieceType.KNIGHT, color),
+            Knight::new,
             color -> new Piece(PieceType.BISHOP, color),
             color -> new Piece(PieceType.QUEEN, color),
             color -> new Piece(PieceType.KING, color),

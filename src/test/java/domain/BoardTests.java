@@ -1,5 +1,6 @@
 package domain;
 
+import domain.piece.Knight;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
@@ -19,6 +20,7 @@ public class BoardTests {
     private static final Location A4 = new Location(0, 4);
     private static final Location A5 = new Location(0, 5);
     private static final Location A8 = new Location(0, 8);
+    private static final Location B1 = new Location(1, 1);
     private static final Location H1 = new Location(7, 1);
     private static final Location H5 = new Location(7, 5);
     private static final Location H8 = new Location(7, 8);
@@ -296,6 +298,11 @@ public class BoardTests {
     @Test
     public void Board_H8_PlacesRook() {
         assertPieceClass(H8, Rook.class);
+    }
+
+    @Test
+    public void Board_B1_PlacesKnight() {
+        assertPieceClass(B1, Knight.class);
     }
 
     private int countPieces(Board board) {
