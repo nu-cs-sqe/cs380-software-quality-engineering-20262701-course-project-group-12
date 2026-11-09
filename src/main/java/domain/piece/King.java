@@ -32,6 +32,11 @@ public class King extends Piece {
                 && isKingPathSafe(from, to, board);
     }
 
+    private Location rookSquareFor(Location from, Location to) {
+        int rookFile = to.getFile() > from.getFile() ? Location.MAX_FILE : Location.MIN_FILE;
+        return new Location(rookFile, from.getRank());
+    }
+
     private boolean isKingPathSafe(Location from, Location to, Board board) {
         return Stream.of(from, crossedSquare(from, to), to)
                 .noneMatch(square -> board.isAttackedByOpponentOf(getColor(), square));
@@ -40,11 +45,6 @@ public class King extends Piece {
     private Location crossedSquare(Location from, Location to) {
         int towardRook = Integer.signum(to.getFile() - from.getFile());
         return new Location(from.getFile() + towardRook, from.getRank());
-    }
-
-    private Location rookSquareFor(Location from, Location to) {
-        int rookFile = to.getFile() > from.getFile() ? Location.MAX_FILE : Location.MIN_FILE;
-        return new Location(rookFile, from.getRank());
     }
 
     @Override
