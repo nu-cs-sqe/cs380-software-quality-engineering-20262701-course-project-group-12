@@ -55,9 +55,7 @@ public class Pawn extends Piece {
     }
 
     private boolean canCapture(Location from, Location to, Board board) {
-        return rankChange(from, to) == oneSquareForward
-                && from.fileDistanceTo(to) == CAPTURE_FILE_DISTANCE
-                && holdsOpponent(to, board);
+        return attacks(from, to, board) && holdsOpponent(to, board);
     }
 
     private boolean holdsOpponent(Location square, Board board) {
