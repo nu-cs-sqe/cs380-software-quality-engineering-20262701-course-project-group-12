@@ -29,7 +29,10 @@ public class LocationTests {
         assertFalse(isSameSquare);
     }
 
+    private static final int NO_DISTANCE = 0;
     private static final Location A1 = new Location(0, 1);
+    private static final Location H1 = new Location(7, 1);
+    private static final Location H8 = new Location(7, 8);
 
     @Test
     public void Location_File0Rank1_StoresBothLows() {
@@ -81,5 +84,12 @@ public class LocationTests {
     @Test
     public void Location_RankJustAboveInterval_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> new Location(0, 9));
+    }
+
+    @Test
+    public void FileDistanceTo_SameFileDifferentRank_ReturnsZero() {
+        int distance = H1.fileDistanceTo(H8);
+
+        assertEquals(NO_DISTANCE, distance);
     }
 }
