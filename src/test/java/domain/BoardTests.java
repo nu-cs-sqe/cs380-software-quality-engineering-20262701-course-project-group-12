@@ -344,6 +344,13 @@ public class BoardTests {
         assertThrows(IllegalArgumentException.class, () -> board.promote(A8, PieceType.KING));
     }
 
+    @Test
+    public void Promote_ToPawn_ThrowsIllegalArgumentException() {
+        Board board = boardWithWhitePawnOnA8();
+
+        assertThrows(IllegalArgumentException.class, () -> board.promote(A8, PieceType.PAWN));
+    }
+
     private Piece promoteWhitePawnOnA8(PieceType type) {
         Board board = new Board();
         board.move(A2, A8);
