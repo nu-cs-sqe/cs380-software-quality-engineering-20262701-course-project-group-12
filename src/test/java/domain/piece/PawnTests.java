@@ -250,4 +250,11 @@ public class PawnTests {
 
         assertTrue(attacks);
     }
+
+    @Test
+    public void Attacks_EmptySquareDiagonallyForwardTowardLowerFile_ReturnsTrue() {
+        boolean attacks = whitePawn.attacks(E2, D3, board);
+
+        assertTrue(attacks);
+    }
 }

@@ -359,7 +359,7 @@ that a capture needs.
   - **Expected output**: `true`.
 
 - **TC-PAWN-26 — Attack an empty square diagonally forward toward a
-  lower file** ( :x: )
+  lower file** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
     `target` is d3 `(3, 3)`. New `Board`, so d3 is empty.
