@@ -24,6 +24,18 @@ public class Game {
         started = true;
     }
 
+    public void passTurn() {
+        if (!started) {
+            throw new IllegalStateException(
+                    "Cannot pass the turn before the game has started");
+        }
+        if (playerToMove == playerOne) {
+            playerToMove = playerTwo;
+        } else {
+            playerToMove = playerOne;
+        }
+    }
+
     public boolean isStarted() {
         return started;
     }
@@ -58,6 +70,10 @@ public class Game {
 
     public String playerToMoveName() {
         return playerToMove().getName();
+    }
+
+    public PieceColor colorToMove() {
+        return playerToMove().getColor();
     }
 
     private void requireStarted(String request) {
