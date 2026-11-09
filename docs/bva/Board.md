@@ -124,7 +124,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC23: starting position at the corners and the rank edges | implemented in TC1 through TC20 | the occupants listed in those cases | implemented in TC1 through TC20 |
-| TC46: white rook class | a new `Board`; read a1 `(0, 1)` | the piece is a `Rook` | :x: |
+| TC46: white rook class | a new `Board`; read a1 `(0, 1)` | the piece is a `Rook` | :white_check_mark: |
 | TC47: black rook class | a new `Board`; read h8 `(7, 8)` | the piece is a `Rook` | :x: |
 | TC48: white knight class | a new `Board`; read b1 `(1, 1)` | the piece is a `Knight` | :x: |
 | TC49: black knight class | a new `Board`; read g8 `(6, 8)` | the piece is a `Knight` | :x: |

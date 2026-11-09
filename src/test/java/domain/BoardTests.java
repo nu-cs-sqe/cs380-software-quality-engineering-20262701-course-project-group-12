@@ -3,10 +3,12 @@ package domain;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import domain.piece.Rook;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -286,6 +288,11 @@ public class BoardTests {
         assertEquals(STARTING_PIECE_COUNT - 1, countPieces(board));
     }
 
+    @Test
+    public void Board_A1_PlacesRook() {
+        assertPieceClass(A1, Rook.class);
+    }
+
     private int countPieces(Board board) {
         int pieces = 0;
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
@@ -296,6 +303,12 @@ public class BoardTests {
             }
         }
         return pieces;
+    }
+
+    private void assertPieceClass(Location square, Class<? extends Piece> pieceClass) {
+        Board board = new Board();
+
+        assertInstanceOf(pieceClass, board.pieceAt(square));
     }
 
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {

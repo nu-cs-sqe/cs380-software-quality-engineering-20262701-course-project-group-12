@@ -3,6 +3,7 @@ package domain;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import domain.piece.Rook;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +21,7 @@ public class Board {
     private static final int BLACK_PAWN_RANK = 7;
     private static final int BLACK_BACK_RANK = Location.MAX_RANK;
     private static final List<Function<PieceColor, Piece>> BACK_RANK_PIECE_MAKERS = List.of(
-            color -> new Piece(PieceType.ROOK, color),
+            Rook::new,
             color -> new Piece(PieceType.KNIGHT, color),
             color -> new Piece(PieceType.BISHOP, color),
             color -> new Piece(PieceType.QUEEN, color),
