@@ -23,9 +23,10 @@ public class King extends Piece {
     }
 
     private boolean canCastle(Location from, Location to, Board board) {
+        Location rookSquare = rookSquareFor(from, to);
         return board.holdsUnmovedPiece(from)
-                && board.holdsUnmovedPiece(rookSquareFor(from, to))
-                && isPathClear(from, to, board);
+                && board.holdsUnmovedPiece(rookSquare)
+                && isPathClear(from, rookSquare, board);
     }
 
     private Location rookSquareFor(Location from, Location to) {

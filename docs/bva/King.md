@@ -337,7 +337,7 @@ Fifty-move counting (AC 8) is US-18; a castle is a king move and
   - **State of the system**: White king, e1 to g1. Kingside cleared, then `move` of the h1 rook to h3 `(7, 3)`, so h1 is empty.
   - **Expected output**: `false`.
 
-- **TC-KING-25 — Reject a castle with a piece next to the rook** ( :x: )
+- **TC-KING-25 — Reject a castle with a piece next to the rook** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king, e1 to c1. New `Board` after `move` of c1 to c4 and d1 to d4; the b1 knight stays between the king and the a1 rook.
   - **Expected output**: `false`.

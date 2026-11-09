@@ -124,6 +124,16 @@ public class KingCastlingTests {
         assertFalse(canMove);
     }
 
+    @Test
+    public void CanMove_PieceNextToTheRook_ReturnsFalse() {
+        board.move(C1, C4);
+        board.move(D1, D4);
+
+        boolean canMove = WHITE_KING.canMove(E1, C1, board);
+
+        assertFalse(canMove);
+    }
+
     private void clearWhiteKingside() {
         board.move(F1, F4);
         board.move(G1, G4);
