@@ -115,4 +115,11 @@ public class LocationTests {
 
         assertEquals(NO_DISTANCE, distance);
     }
+
+    @Test
+    public void RankDistanceTo_FarthestRankUpward_ReturnsSeven() {
+        int distance = A1.rankDistanceTo(A8);
+
+        assertEquals(FARTHEST_DISTANCE, distance);
+    }
 }
