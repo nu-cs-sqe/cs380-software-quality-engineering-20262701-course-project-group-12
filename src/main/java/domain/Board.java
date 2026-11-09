@@ -31,7 +31,7 @@ public class Board {
             color -> new Piece(PieceType.ROOK, color));
 
     private final List<List<Optional<Piece>>> squares = emptySquares();
-    private boolean lastMoveCoveredTwoRanks;
+    private boolean pawnJustAdvancedTwoRanks;
 
     public Board() {
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
@@ -73,11 +73,15 @@ public class Board {
         Piece movingPiece = pieceAt(from);
         clear(from);
         place(movingPiece, to);
-        lastMoveCoveredTwoRanks = to.getRank() - from.getRank() == TWO_RANKS;
+        pawnJustAdvancedTwoRanks = isPawnAdvancingTwoRanks(movingPiece, from, to);
     }
 
     public boolean canBeCapturedEnPassant(Location square) {
-        return lastMoveCoveredTwoRanks;
+        return pawnJustAdvancedTwoRanks;
+    }
+
+    private boolean isPawnAdvancingTwoRanks(Piece piece, Location from, Location to) {
+        return piece.getType() == PieceType.PAWN && to.getRank() - from.getRank() == TWO_RANKS;
     }
 
     private void clear(Location location) {

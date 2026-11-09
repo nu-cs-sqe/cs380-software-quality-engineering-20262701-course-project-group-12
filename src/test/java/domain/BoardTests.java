@@ -309,6 +309,16 @@ public class BoardTests {
         assertFalse(capturable);
     }
 
+    @Test
+    public void CanBeCapturedEnPassant_RookThatJustMovedTwoRanks_ReturnsFalse() {
+        Board board = new Board();
+        board.move(A1, A3);
+
+        boolean capturable = board.canBeCapturedEnPassant(A3);
+
+        assertFalse(capturable);
+    }
+
     private int countPieces(Board board) {
         int pieces = 0;
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {

@@ -162,7 +162,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | --- | --- | --- | --- |
 | TC54: a white pawn that just moved two ranks | a new `Board`; move e2 `(4, 2)` to e4 `(4, 4)`; ask about e4 | true | :white_check_mark: |
 | TC55: a pawn that just moved one rank | a new `Board`; move e2 to e3 `(4, 3)`; ask about e3 | false | :white_check_mark: |
-| TC56: a piece that is not a pawn moving two ranks | a new `Board`; move a1 `(0, 1)` to a3 `(0, 3)`; ask about a3 | false | :x: |
+| TC56: a piece that is not a pawn moving two ranks | a new `Board`; move a1 `(0, 1)` to a3 `(0, 3)`; ask about a3 | false | :white_check_mark: |
 | TC57: another move ends the chance | a new `Board`; move e2 to e4, then b8 `(1, 8)` to c6 `(2, 6)`; ask about e4 | false | :x: |
 | TC58: a black pawn that just moved two ranks | a new `Board`; move d7 `(3, 7)` to d5 `(3, 5)`; ask about d5 | true | :x: |
 | TC59: another square than the pawn that moved | a new `Board`; move e2 to e4; ask about d4 `(3, 4)` | false | :x: |
