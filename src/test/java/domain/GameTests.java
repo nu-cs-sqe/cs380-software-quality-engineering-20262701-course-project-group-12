@@ -289,4 +289,15 @@ public class GameTests {
 
         assertTrue(game.isOver());
     }
+
+    @Test
+    public void EndByCheckmate_PlayerOneToMove_MakesPlayerTwoTheWinner() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByCheckmate();
+
+        assertEquals("Bob", game.winnerName());
+        assertEquals(PieceColor.BLACK, game.winnerColor());
+    }
 }

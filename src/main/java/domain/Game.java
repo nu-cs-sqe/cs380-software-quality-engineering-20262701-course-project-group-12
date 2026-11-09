@@ -2,6 +2,8 @@ package domain;
 
 import domain.piece.PieceColor;
 
+import java.util.Optional;
+
 public class Game {
     private boolean started;
     private Player playerOne;
@@ -9,6 +11,7 @@ public class Game {
     private Player playerToMove;
     private Board board;
     private boolean over;
+    private Optional<Player> winner = Optional.empty();
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -43,10 +46,19 @@ public class Game {
 
     public void endByCheckmate() {
         over = true;
+        winner = Optional.of(playerTwo);
     }
 
     public boolean isOver() {
         return over;
+    }
+
+    public String winnerName() {
+        return winner.orElseThrow().getName();
+    }
+
+    public PieceColor winnerColor() {
+        return winner.orElseThrow().getColor();
     }
 
     public Player playerOne() {

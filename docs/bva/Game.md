@@ -338,7 +338,7 @@ comes with those stories.
     `endByCheckmate()`.
   - **Expected output**: `isOver()` returns `true`.
 
-- **TC-END-03 — Player 2 wins when Player 1 is checkmated** ( :x: )
+- **TC-END-03 — Player 2 wins when Player 1 is checkmated** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `endByCheckmate()`,
     `winnerName()`, `winnerColor()`
   - **State of the system**: `start("Alice", "Bob")` has completed, so
