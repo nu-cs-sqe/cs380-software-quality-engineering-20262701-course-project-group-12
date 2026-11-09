@@ -8,6 +8,7 @@ public class Game {
     private Player playerTwo;
     private Player playerToMove;
     private Board board;
+    private boolean over;
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -40,8 +41,12 @@ public class Game {
         return started;
     }
 
+    public void endByCheckmate() {
+        over = true;
+    }
+
     public boolean isOver() {
-        return false;
+        return over;
     }
 
     public Player playerOne() {

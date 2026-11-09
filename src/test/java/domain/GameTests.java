@@ -279,4 +279,14 @@ public class GameTests {
 
         assertFalse(over);
     }
+
+    @Test
+    public void EndByCheckmate_StartedGame_EndsTheGame() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByCheckmate();
+
+        assertTrue(game.isOver());
+    }
 }

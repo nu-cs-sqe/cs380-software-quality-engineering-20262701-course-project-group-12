@@ -331,7 +331,7 @@ comes with those stories.
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.
 
-- **TC-END-02 — Checkmate ends the game** ( :x: )
+- **TC-END-02 — Checkmate ends the game** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `endByCheckmate()`,
     `isOver()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then
