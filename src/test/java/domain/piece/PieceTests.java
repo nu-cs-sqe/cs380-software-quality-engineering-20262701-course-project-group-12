@@ -86,6 +86,18 @@ public class PieceTests {
         verify(board);
     }
 
+    @Test
+    public void Attacks_PieceWithoutMovementRules_ReturnsFalse() {
+        Piece whiteQueen = new Piece(PieceType.QUEEN, PieceColor.WHITE);
+        Board board = mock(Board.class);
+        replay(board);
+
+        boolean attacks = whiteQueen.attacks(D1, D3, board);
+
+        assertFalse(attacks);
+        verify(board);
+    }
+
     private void assertPiece(PieceType type, PieceColor color) {
         Piece piece = new Piece(type, color);
 

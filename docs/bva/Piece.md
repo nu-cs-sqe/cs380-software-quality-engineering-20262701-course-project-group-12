@@ -104,7 +104,7 @@ As with `canMove`, a plain `Piece` answers the same for every input, so one case
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC20: a piece without movement rules attacks nothing | a white queen as a plain `Piece`; `from` is d1 `(3, 1)`, `target` is d3 `(3, 3)`; a mocked `Board` that expects no calls | `false` | :x: |
+| TC20: a piece without movement rules attacks nothing | a white queen as a plain `Piece`; `from` is d1 `(3, 1)`, `target` is d3 `(3, 3)`; a mocked `Board` that expects no calls | `false` | :white_check_mark: |
 
 ### Method under test: `move(Location from, Location to, Board board)` (issue #45)
 
