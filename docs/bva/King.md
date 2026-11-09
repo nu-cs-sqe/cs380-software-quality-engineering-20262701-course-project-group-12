@@ -362,7 +362,7 @@ Fifty-move counting (AC 8) is US-18; a castle is a king move and
   - **State of the system**: White king, e1 to c1. Queenside cleared as in TC-KING-18, then `move` of the b8 knight to a3 `(0, 3)`, which attacks b1 only.
   - **Expected output**: `true`.
 
-- **TC-KING-30 — Castle kingside while the rook is attacked** ( :x: )
+- **TC-KING-30 — Castle kingside while the rook is attacked** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king, e1 to g1. Kingside cleared, then `move` of the h2 pawn to a3 and the h7 pawn to a6 `(0, 6)`, so the h8 rook attacks h1 down the open h-file.
   - **Expected output**: `true`.
