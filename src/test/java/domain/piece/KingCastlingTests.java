@@ -10,16 +10,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class KingCastlingTests {
     private static final Location B1 = new Location(1, 1);
     private static final Location B4 = new Location(1, 4);
+    private static final Location B5 = new Location(1, 5);
+    private static final Location B8 = new Location(1, 8);
     private static final Location C1 = new Location(2, 1);
     private static final Location C4 = new Location(2, 4);
+    private static final Location C5 = new Location(2, 5);
+    private static final Location C8 = new Location(2, 8);
     private static final Location D1 = new Location(3, 1);
     private static final Location D4 = new Location(3, 4);
+    private static final Location D5 = new Location(3, 5);
+    private static final Location D8 = new Location(3, 8);
     private static final Location E1 = new Location(4, 1);
+    private static final Location E8 = new Location(4, 8);
     private static final Location F1 = new Location(5, 1);
     private static final Location F4 = new Location(5, 4);
+    private static final Location F5 = new Location(5, 5);
+    private static final Location F8 = new Location(5, 8);
     private static final Location G1 = new Location(6, 1);
     private static final Location G4 = new Location(6, 4);
+    private static final Location G5 = new Location(6, 5);
+    private static final Location G8 = new Location(6, 8);
     private static final King WHITE_KING = new King(PieceColor.WHITE);
+    private static final King BLACK_KING = new King(PieceColor.BLACK);
 
     private Board board;
 
@@ -46,6 +58,15 @@ public class KingCastlingTests {
         assertTrue(canMove);
     }
 
+    @Test
+    public void CanMove_BlackKingside_ReturnsTrue() {
+        clearBlackKingside();
+
+        boolean canMove = BLACK_KING.canMove(E8, G8, board);
+
+        assertTrue(canMove);
+    }
+
     private void clearWhiteKingside() {
         board.move(F1, F4);
         board.move(G1, G4);
@@ -55,5 +76,10 @@ public class KingCastlingTests {
         board.move(B1, B4);
         board.move(C1, C4);
         board.move(D1, D4);
+    }
+
+    private void clearBlackKingside() {
+        board.move(F8, F5);
+        board.move(G8, G5);
     }
 }
