@@ -43,6 +43,6 @@ public class Location {
     }
 
     public int fileDistanceTo(Location other) {
-        return other.file - file;
+        return Math.abs(other.file - file);
     }
 }

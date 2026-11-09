@@ -95,7 +95,7 @@ Every value from Step 3 is used in at least one test case. `-1` and `8` are each
 | --- | --- | --- | --- |
 | TC16: same file, different rank | h1 `(7, 1)` to h8 `(7, 8)` | `0` | :white_check_mark: |
 | TC17: farthest file to the right | a1 `(0, 1)` to h1 `(7, 1)` | `7` | :white_check_mark: |
-| TC18: farthest file to the left | h1 `(7, 1)` to a1 `(0, 1)` | `7` | :x: |
+| TC18: farthest file to the left | h1 `(7, 1)` to a1 `(0, 1)` | `7` | :white_check_mark: |
 
 ### Method under test: `rankDistanceTo(Location other)`
 

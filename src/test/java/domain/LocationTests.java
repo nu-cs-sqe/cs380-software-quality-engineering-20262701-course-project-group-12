@@ -100,4 +100,11 @@ public class LocationTests {
 
         assertEquals(FARTHEST_DISTANCE, distance);
     }
+
+    @Test
+    public void FileDistanceTo_FarthestFileToTheLeft_ReturnsSeven() {
+        int distance = H1.fileDistanceTo(A1);
+
+        assertEquals(FARTHEST_DISTANCE, distance);
+    }
 }
