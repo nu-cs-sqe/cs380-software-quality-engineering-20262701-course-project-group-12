@@ -10,11 +10,10 @@
 - `void clickSquare(Location square)` (issues #34 and #41): handles a click on a square. With nothing selected, a click on a piece of the player to move selects it; a click on an empty square or on an opponent's piece does nothing. With a square selected, a click on the selected square itself clears the selection (US-09 AC 4). A click on any other square is the destination: when the selected piece `canMove` there, the board moves it, the game passes the turn, and the selection is cleared. When it cannot, a click on another piece of the player to move selects that piece instead; a click on an empty square or on an opponent's piece keeps the current selection. It does not tell the player about a refused move (US-10).
 - `boolean isSelected(Location square)` (issue #34): returns true when `square` is the selected square, compared by file and rank. `BoardView` uses it to color the selected square.
 - `void clickSquare(Location square)`, captures (issue #33 / GitHub US-08, docs US-10): builds on the two-click move from issue #34. When the selected piece `canMove` to a square that holds an opponent's piece, the board moves the selected piece there, and `Board.move` removes the captured piece. The king is never captured: when the clicked square holds the king, the board is unchanged and the selection stays on the moving piece, as for any refused move. Whether a capture is legal for the moving piece, and the refusal of a piece of its own color, are decided by each piece's `canMove`. The fifty-move count is a later story.
+- `void clickSquare(Location square)`, checkmate (issue #48 / GitHub US-15, docs US-15): after a move passes the turn, the controller asks `board.isCheckmated(game.colorToMove())`. When the player now to move is checkmated, it calls `game.endByCheckmate()`, so the player who made the move wins. Once `game.isOver()` is true, every click does nothing: no square is selected and no piece moves (US-15 AC 3).
 
 No method checks its arguments for null, and no case passes null: our code never passes null (instructor code review, Week 6). TC2, TC5, and TC8 used to pass a null board or location; they were removed with the board check.
 
-Out of scope: blocking clicks after the game has ended (US-09 AC 8). Nothing
-on `Game` ends the game yet; resign, checkmate, and the draw stories will.
 Refreshing the current-player line on `GameStatsView` is a view change after
 the cases, the way `BoardView` coloring was for #34.
 
@@ -76,6 +75,18 @@ The capture cases start from the state issue #34 leaves: b1 `(1, 1)` is selected
 | Output: the board | Cases | the selected piece moves from b1 to c3 and replaces the captured piece; unchanged |
 | Output: the selection after the click | Cases | none; unchanged (still b1) |
 
+### `clickSquare(Location square)`, checkmate
+
+The checkmate cases start from TC22: White moves the piece on b1 `(1, 1)` to c3 `(2, 3)`, and the game passes the turn, so Black is to move. `Board` and `Game` are mocked with EasyMock, because the controller owns neither checkmate detection nor the result. In every earlier case the game is not over, and after a move the board answers that the player to move is not checkmated.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: what the board answers for `isCheckmated` of the player to move after the move | Boolean | true; false |
+| Input: `game.isOver()` when the click arrives | Boolean | false; true |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
+| Output: the game | Cases | `passTurn`, then `endByCheckmate`; `passTurn` only; unchanged |
+| Output: the selection after a click on a piece of the player to move | Cases | the clicked square; none, when the game is over |
+
 ## Step 4: Test cases (each-choice strategy)
 
 ### Method under test: `BoardController(Board board, Game game)`
@@ -135,3 +146,13 @@ TC9 through TC18 belong to issue #34. These cases continue its numbering, and th
 | TC19: capture an opponent's piece the selected piece can reach | a controller for the mocked board; the board answers true for b1 `(1, 1)` and returns a mocked piece that can move from b1 to c3 `(2, 3)`, and c3 holds a black pawn; click b1, then c3 | the board moves the piece from b1 to c3; the game passes the turn | :white_check_mark: |
 | TC20: refuse to capture the king | a controller for the mocked board; the board answers true for b1 and returns a mocked piece that can move from b1 to c3, and c3 holds the black king; click b1, then c3 | the board does not move any piece; the game does not pass the turn | :white_check_mark: |
 | TC21: a refused king capture keeps the selection | as TC20; click b1, then c3, then ask `isSelected` about b1 | true | :white_check_mark: |
+
+### Method under test: `clickSquare(Location square)`, checkmate
+
+The case numbers start at TC38, after the promotion cases (TC28 to TC37, issue #46).
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC38: a move that checkmates ends the game | as TC22; after the move, Black is to move, and the board answers true for `isCheckmated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn, then ends by checkmate | :x: |
+| TC39: a move that does not checkmate does not end the game | as TC22; after the move, Black is to move, and the board answers false for `isCheckmated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn and does not end | :x: |
+| TC40: a click after the game is over selects nothing | a controller for the mocked board and game; the game is over; White is to move, and b1 holds a White piece; click b1, then ask `isSelected` about b1 | false; the board is not asked about b1 | :x: |

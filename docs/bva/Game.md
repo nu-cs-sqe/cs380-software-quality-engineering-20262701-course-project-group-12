@@ -3,7 +3,9 @@
 `Game` decides whether a new chess game can start and, after a valid start,
 stores the two players, the starting board, and the player to move. Issue #41
 adds `passTurn`, which gives the turn to the other player after a legal move.
-The test cases below use the game's public behavior to observe its state.
+Issue #48 adds `endByCheckmate`, which ends the game when the player to move
+is checkmated. The test cases below use the game's public behavior to observe
+its state.
 
 `start` returns nothing. It throws when a start is rejected. `passTurn`
 returns nothing. It throws when the game has not started.
@@ -264,8 +266,9 @@ after a legal move. Callers never pass arguments, so there is no null case.
 | Output: the color to move | Cases | Black; White |
 | Output: signal for an unstarted game | Cases | `IllegalStateException` |
 
-Out of scope: ending the game so further passes are refused (US-09 AC 8).
-Resign, checkmate, and the draw stories will add that state.
+Out of scope: refusing a pass after the game has ended (US-09 AC 8).
+`BoardController` refuses every click once the game is over (issue #48), so
+it never passes the turn after the end.
 
 - **TC-TURN-01 — Read the color to move after a start** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `colorToMove()`
@@ -296,5 +299,74 @@ Resign, checkmate, and the draw stories will add that state.
 
 - **TC-TURN-05 — Reject reading the color to move before a start** ( :white_check_mark: )
   - **Method(s) under test**: `colorToMove()`
+  - **State of the system**: New game before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+### Methods under test: `endByCheckmate()`, `isOver()`, `winnerName()`, and `winnerColor()`
+
+Issue #48 (GitHub US-15, docs US-15). Checkmate occurs when the player to move
+is in check and has no legal move, so `BoardController` calls `endByCheckmate`
+after `passTurn` when `Board.isCheckmated(colorToMove())` is true. The player
+to move then loses, and the other player, who made the mating move, wins.
+`winnerName()` and `winnerColor()` let `GameStatsController` show the winner
+without reaching through `Player`. Before the game is over there is no winner,
+so they throw instead of returning null. Callers never pass arguments, so there
+is no null case.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the game's state | Cases | unstarted; started with Player 1 to move; started after one pass (Player 2 to move); over |
+| Output: `isOver()` | Boolean | false; true |
+| Output: the winner's name | Cases | Player 1's name; Player 2's name |
+| Output: the winner's color | Cases | White; Black |
+| Output: signal for an unstarted game or a game that is not over | Cases | `IllegalStateException` |
+
+Out of scope: refusing resignation and draw offers after checkmate. Those
+stories are not built yet, and they will check `isOver()`. Checkmate is checked
+before any draw, so its priority over repetition and the seventy-five-move rule
+comes with those stories.
+
+- **TC-END-01 — A started game is not over** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `isOver()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `false`.
+
+- **TC-END-02 — Checkmate ends the game** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `endByCheckmate()`,
+    `isOver()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByCheckmate()`.
+  - **Expected output**: `isOver()` returns `true`.
+
+- **TC-END-03 — Player 2 wins when Player 1 is checkmated** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `endByCheckmate()`,
+    `winnerName()`, `winnerColor()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, so
+    Player 1 is to move, then `endByCheckmate()`.
+  - **Expected output**: `winnerName()` returns `Bob`; `winnerColor()`
+    returns `BLACK`.
+
+- **TC-END-04 — Player 1 wins when Player 2 is checkmated** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `passTurn()`,
+    `endByCheckmate()`, `winnerName()`, `winnerColor()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `passTurn()`, so Player 2 is to move, then `endByCheckmate()`.
+  - **Expected output**: `winnerName()` returns `Alice`; `winnerColor()`
+    returns `WHITE`.
+
+- **TC-END-05 — Reject reading the winner's name before the game is over**
+  ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `winnerName()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Throws `IllegalStateException`.
+
+- **TC-END-06 — Reject reading the winner's color before the game is over**
+  ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `winnerColor()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Throws `IllegalStateException`.
+
+- **TC-END-07 — Reject ending the game before a start** ( :x: )
+  - **Method(s) under test**: `endByCheckmate()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
