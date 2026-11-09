@@ -35,6 +35,7 @@ public class BoardTests {
     private static final Location G8 = new Location(6, 8);
     private static final Location H1 = new Location(7, 1);
     private static final Location H5 = new Location(7, 5);
+    private static final Location H7 = new Location(7, 7);
     private static final Location H8 = new Location(7, 8);
     private static final int STARTING_PIECE_COUNT = 32;
 
@@ -355,6 +356,11 @@ public class BoardTests {
     @Test
     public void Board_A2_PlacesPawn() {
         assertPieceClass(A2, Pawn.class);
+    }
+
+    @Test
+    public void Board_H7_PlacesPawn() {
+        assertPieceClass(H7, Pawn.class);
     }
 
     private int countPieces(Board board) {

@@ -135,7 +135,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC54: white king class | a new `Board`; read e1 `(4, 1)` | the piece is a `King` | :white_check_mark: |
 | TC55: black king class | a new `Board`; read e8 `(4, 8)` | the piece is a `King` | :white_check_mark: |
 | TC56: white pawn class | a new `Board`; read a2 `(0, 2)` | the piece is a `Pawn` | :white_check_mark: |
-| TC57: black pawn class | a new `Board`; read h7 `(7, 7)` | the piece is a `Pawn` | :x: |
+| TC57: black pawn class | a new `Board`; read h7 `(7, 7)` | the piece is a `Pawn` | :white_check_mark: |
 
 ### Method under test: `move(Location from, Location to)`
 
