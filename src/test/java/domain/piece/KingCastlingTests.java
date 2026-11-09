@@ -31,6 +31,7 @@ public class KingCastlingTests {
     private static final Location G4 = new Location(6, 4);
     private static final Location G5 = new Location(6, 5);
     private static final Location G8 = new Location(6, 8);
+    private static final Location H1 = new Location(7, 1);
     private static final King WHITE_KING = new King(PieceColor.WHITE);
     private static final King BLACK_KING = new King(PieceColor.BLACK);
 
@@ -82,6 +83,17 @@ public class KingCastlingTests {
         clearWhiteKingside();
         board.move(E1, F1);
         board.move(F1, E1);
+
+        boolean canMove = WHITE_KING.canMove(E1, G1, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
+    public void CanMove_RookMovedAndCameBack_ReturnsFalse() {
+        clearWhiteKingside();
+        board.move(H1, G1);
+        board.move(G1, H1);
 
         boolean canMove = WHITE_KING.canMove(E1, G1, board);
 

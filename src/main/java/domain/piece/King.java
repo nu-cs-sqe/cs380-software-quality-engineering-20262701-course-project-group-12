@@ -23,7 +23,14 @@ public class King extends Piece {
     }
 
     private boolean canCastle(Location from, Location to, Board board) {
-        return board.holdsUnmovedPiece(from) && isPathClear(from, to, board);
+        return board.holdsUnmovedPiece(from)
+                && board.holdsUnmovedPiece(rookSquareFor(from, to))
+                && isPathClear(from, to, board);
+    }
+
+    private Location rookSquareFor(Location from, Location to) {
+        int rookFile = to.getFile() > from.getFile() ? Location.MAX_FILE : Location.MIN_FILE;
+        return new Location(rookFile, from.getRank());
     }
 
     private boolean isOneSquare(Location from, Location to) {
