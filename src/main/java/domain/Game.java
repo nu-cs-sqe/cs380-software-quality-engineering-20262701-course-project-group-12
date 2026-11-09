@@ -44,7 +44,14 @@ public class Game {
     }
 
     public void endByCheckmate() {
-        winner = Optional.of(playerTwo);
+        winner = Optional.of(playerWaiting());
+    }
+
+    private Player playerWaiting() {
+        if (playerToMove == playerOne) {
+            return playerTwo;
+        }
+        return playerOne;
     }
 
     public boolean isOver() {

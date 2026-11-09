@@ -300,4 +300,16 @@ public class GameTests {
         assertEquals("Bob", game.winnerName());
         assertEquals(PieceColor.BLACK, game.winnerColor());
     }
+
+    @Test
+    public void EndByCheckmate_PlayerTwoToMove_MakesPlayerOneTheWinner() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.passTurn();
+
+        game.endByCheckmate();
+
+        assertEquals("Alice", game.winnerName());
+        assertEquals(PieceColor.WHITE, game.winnerColor());
+    }
 }

@@ -346,7 +346,7 @@ comes with those stories.
   - **Expected output**: `winnerName()` returns `Bob`; `winnerColor()`
     returns `BLACK`.
 
-- **TC-END-04 — Player 1 wins when Player 2 is checkmated** ( :x: )
+- **TC-END-04 — Player 1 wins when Player 2 is checkmated** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `passTurn()`,
     `endByCheckmate()`, `winnerName()`, `winnerColor()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then
