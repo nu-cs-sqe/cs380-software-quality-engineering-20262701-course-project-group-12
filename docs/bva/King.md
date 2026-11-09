@@ -166,7 +166,8 @@ Fifty-move counting (AC 8) is US-18; a castle is a king move and
 - **`attacks`**: an adjoining square, `true`; the castle square g1 with
   a clear kingside, `false`.
 - **`move`**: the rook square for each of the four castles; a one-square
-  king move leaves the rook in place.
+  king move leaves the rook in place; the king's own square after a
+  castle (added after PIT showed that no case checked the king itself).
 
 ## Step 4: Test Cases
 
@@ -417,3 +418,8 @@ Fifty-move counting (AC 8) is US-18; a castle is a king move and
   - **Method(s) under test**: `move(Location, Location, Board)`
   - **State of the system**: White king, e1 to f1 `(5, 1)`. Kingside cleared.
   - **Expected output**: the rook that was on h1 is still on h1.
+
+- **TC-KING-40 — Put the king on g1 with a white kingside castle** ( :x: )
+  - **Method(s) under test**: `move(Location, Location, Board)`
+  - **State of the system**: White king, e1 to g1. Kingside cleared.
+  - **Expected output**: the king that was on e1 is on g1 `(6, 1)`.
