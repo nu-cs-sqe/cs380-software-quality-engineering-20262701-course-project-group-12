@@ -72,6 +72,7 @@ public class Board {
     public void move(Location from, Location to) {
         Piece movingPiece = pieceAt(from);
         clear(from);
+        removePawnCapturedEnPassant(from, to);
         place(movingPiece, to);
         pawnThatJustAdvancedTwoRanks = isPawnAdvancingTwoRanks(movingPiece, from, to)
                 ? Optional.of(to)
@@ -80,6 +81,13 @@ public class Board {
 
     public boolean canBeCapturedEnPassant(Location square) {
         return pawnThatJustAdvancedTwoRanks.filter(square::isSameSquareAs).isPresent();
+    }
+
+    private void removePawnCapturedEnPassant(Location from, Location to) {
+        Location besideFrom = new Location(to.getFile(), from.getRank());
+        if (canBeCapturedEnPassant(besideFrom)) {
+            clear(besideFrom);
+        }
     }
 
     private boolean isPawnAdvancingTwoRanks(Piece piece, Location from, Location to) {

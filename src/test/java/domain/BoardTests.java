@@ -21,10 +21,12 @@ public class BoardTests {
     private static final Location C6 = new Location(2, 6);
     private static final Location D4 = new Location(3, 4);
     private static final Location D5 = new Location(3, 5);
+    private static final Location D6 = new Location(3, 6);
     private static final Location D7 = new Location(3, 7);
     private static final Location E2 = new Location(4, 2);
     private static final Location E3 = new Location(4, 3);
     private static final Location E4 = new Location(4, 4);
+    private static final Location E5 = new Location(4, 5);
     private static final Location H1 = new Location(7, 1);
     private static final Location H5 = new Location(7, 5);
     private static final Location H8 = new Location(7, 8);
@@ -353,6 +355,18 @@ public class BoardTests {
         boolean capturable = board.canBeCapturedEnPassant(D4);
 
         assertFalse(capturable);
+    }
+
+    @Test
+    public void Move_PawnCapturingEnPassant_TakesTheCapturedPawnOffTheBoard() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(E4, E5);
+        board.move(D7, D5);
+
+        board.move(E5, D6);
+
+        assertFalse(board.isOccupied(D5));
     }
 
     private int countPieces(Board board) {
