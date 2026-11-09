@@ -42,6 +42,7 @@ public class BoardController {
     private void finishPromotion(Location square, PieceType type) {
         board.promote(square, type);
         game.passTurn();
+        promotionSquare = Optional.empty();
     }
 
     public void clickSquare(Location square) {
