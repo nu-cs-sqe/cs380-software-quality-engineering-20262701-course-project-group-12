@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class PieceTests {
     private static final Location D1 = new Location(3, 1);
     private static final Location D3 = new Location(3, 3);
+    private static final Location A8 = new Location(0, 8);
 
     @Test
     public void Piece_WhitePawn_StoresTypeAndColor() {
@@ -84,6 +85,15 @@ public class PieceTests {
 
         assertFalse(canMove);
         verify(board);
+    }
+
+    @Test
+    public void PromotesOn_PieceOtherThanPawn_ReturnsFalse() {
+        Piece whiteQueen = new Piece(PieceType.QUEEN, PieceColor.WHITE);
+
+        boolean promotes = whiteQueen.promotesOn(A8);
+
+        assertFalse(promotes);
     }
 
     private void assertPiece(PieceType type, PieceColor color) {

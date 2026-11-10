@@ -31,10 +31,14 @@ public class BoardTests {
     private static final Location B7 = new Location(1, 7);
     private static final Location B8 = new Location(1, 8);
     private static final Location C1 = new Location(2, 1);
+    private static final Location C6 = new Location(2, 6);
     private static final Location C7 = new Location(2, 7);
     private static final Location C8 = new Location(2, 8);
     private static final Location D1 = new Location(3, 1);
     private static final Location D3 = new Location(3, 3);
+    private static final Location D4 = new Location(3, 4);
+    private static final Location D5 = new Location(3, 5);
+    private static final Location D6 = new Location(3, 6);
     private static final Location D7 = new Location(3, 7);
     private static final Location D8 = new Location(3, 8);
     private static final Location E1 = new Location(4, 1);
@@ -410,6 +414,196 @@ public class BoardTests {
         boolean inCheck = board.isInCheck(PieceColor.BLACK);
 
         assertTrue(inCheck);
+    }
+
+    @Test
+    public void Promote_WhitePawnToQueen_PlacesWhiteQueen() {
+        Piece promoted = promoteWhitePawnOnA8(PieceType.QUEEN);
+
+        assertInstanceOf(Queen.class, promoted);
+        assertEquals(PieceColor.WHITE, promoted.getColor());
+    }
+
+    @Test
+    public void Promote_WhitePawnToRook_PlacesWhiteRook() {
+        Piece promoted = promoteWhitePawnOnA8(PieceType.ROOK);
+
+        assertInstanceOf(Rook.class, promoted);
+        assertEquals(PieceColor.WHITE, promoted.getColor());
+    }
+
+    @Test
+    public void Promote_WhitePawnToBishop_PlacesWhiteBishop() {
+        Piece promoted = promoteWhitePawnOnA8(PieceType.BISHOP);
+
+        assertInstanceOf(Bishop.class, promoted);
+        assertEquals(PieceColor.WHITE, promoted.getColor());
+    }
+
+    @Test
+    public void Promote_WhitePawnToKnight_PlacesWhiteKnight() {
+        Piece promoted = promoteWhitePawnOnA8(PieceType.KNIGHT);
+
+        assertInstanceOf(Knight.class, promoted);
+        assertEquals(PieceColor.WHITE, promoted.getColor());
+    }
+
+    @Test
+    public void Promote_BlackPawnToQueen_PlacesBlackQueen() {
+        Board board = new Board();
+        board.move(H7, H1);
+
+        board.promote(H1, PieceType.QUEEN);
+
+        Piece promoted = board.pieceAt(H1);
+        assertInstanceOf(Queen.class, promoted);
+        assertEquals(PieceColor.BLACK, promoted.getColor());
+    }
+
+    @Test
+    public void Promote_ToKing_ThrowsIllegalArgumentException() {
+        Board board = boardWithWhitePawnOnA8();
+
+        assertThrows(IllegalArgumentException.class, () -> board.promote(A8, PieceType.KING));
+    }
+
+    @Test
+    public void Promote_ToPawn_ThrowsIllegalArgumentException() {
+        Board board = boardWithWhitePawnOnA8();
+
+        assertThrows(IllegalArgumentException.class, () -> board.promote(A8, PieceType.PAWN));
+    }
+
+    @Test
+    public void Promote_RejectedChoice_LeavesThePawn() {
+        Board board = boardWithWhitePawnOnA8();
+        Piece whitePawn = board.pieceAt(A8);
+
+        assertThrows(IllegalArgumentException.class, () -> board.promote(A8, PieceType.KING));
+
+        assertSame(whitePawn, board.pieceAt(A8));
+    }
+
+    private Piece promoteWhitePawnOnA8(PieceType type) {
+        Board board = boardWithWhitePawnOnA8();
+        board.promote(A8, type);
+        return board.pieceAt(A8);
+    }
+
+    private Board boardWithWhitePawnOnA8() {
+        Board board = new Board();
+        board.move(A2, A8);
+        return board;
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_WhitePawnThatJustMovedTwoRanks_ReturnsTrue() {
+        Board board = new Board();
+        board.move(E2, E4);
+
+        boolean capturable = board.canBeCapturedEnPassant(E4);
+
+        assertTrue(capturable);
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_PawnThatJustMovedOneRank_ReturnsFalse() {
+        Board board = new Board();
+        board.move(E2, E3);
+
+        boolean capturable = board.canBeCapturedEnPassant(E3);
+
+        assertFalse(capturable);
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_RookThatJustMovedTwoRanks_ReturnsFalse() {
+        Board board = new Board();
+        board.move(A1, A3);
+
+        boolean capturable = board.canBeCapturedEnPassant(A3);
+
+        assertFalse(capturable);
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_PawnThatMovedTwoRanksBeforeAnotherMove_ReturnsFalse() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(B8, C6);
+
+        boolean capturable = board.canBeCapturedEnPassant(E4);
+
+        assertFalse(capturable);
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_BlackPawnThatJustMovedTwoRanks_ReturnsTrue() {
+        Board board = new Board();
+        board.move(D7, D5);
+
+        boolean capturable = board.canBeCapturedEnPassant(D5);
+
+        assertTrue(capturable);
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_SquareOtherThanThePawnThatMoved_ReturnsFalse() {
+        Board board = new Board();
+        board.move(E2, E4);
+
+        boolean capturable = board.canBeCapturedEnPassant(D4);
+
+        assertFalse(capturable);
+    }
+
+    @Test
+    public void Move_PawnCapturingEnPassant_TakesTheCapturedPawnOffTheBoard() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(E4, E5);
+        board.move(D7, D5);
+
+        board.move(E5, D6);
+
+        assertFalse(board.isOccupied(D5));
+    }
+
+    @Test
+    public void Move_PawnCapturingEnPassant_LandsOnTheSquarePassedOver() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(E4, E5);
+        board.move(D7, D5);
+        Piece capturingPawn = board.pieceAt(E5);
+
+        board.move(E5, D6);
+
+        assertSame(capturingPawn, board.pieceAt(D6));
+    }
+
+    @Test
+    public void Move_BesidePawnThatMovedOneRankTwice_LeavesThatPawnOnTheBoard() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(E4, E5);
+        board.move(D7, D6);
+        board.move(D6, D5);
+
+        board.move(E5, D6);
+
+        assertTrue(board.isOccupied(D5));
+    }
+
+    @Test
+    public void Move_PieceOtherThanPawnBesidePawnThatMovedTwoRanks_LeavesThatPawnOnTheBoard() {
+        Board board = new Board();
+        board.move(C1, E5);
+        board.move(D7, D5);
+
+        board.move(E5, D6);
+
+        assertTrue(board.isOccupied(D5));
     }
 
     @Test

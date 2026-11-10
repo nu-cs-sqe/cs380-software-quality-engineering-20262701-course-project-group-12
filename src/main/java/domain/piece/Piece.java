@@ -28,6 +28,10 @@ public class Piece {
         return false;
     }
 
+    public boolean promotesOn(Location square) {
+        return false;
+    }
+
     protected boolean holdsOwnPiece(Location square, Board board) {
         return board.isOccupied(square) && board.pieceAt(square).getColor() == color;
     }
