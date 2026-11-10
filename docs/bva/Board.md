@@ -194,5 +194,5 @@ The case numbers start at TC64, after the piece-class cases (TC46 to TC57, issue
 | TC68: not in check, with legal moves | a new `Board`; ask about White | false | :white_check_mark: |
 | TC69: in check with no reply | the Fool's mate position; ask about White | true | :white_check_mark: |
 | TC70: in check with a reply that blocks the check | the queen check on Black; ask about Black | false | :x: |
-| TC71: not in check and no legal move | Sam Loyd's stalemate; ask about Black | false | :x: |
+| TC71: not in check and no legal move | Sam Loyd's stalemate; ask about Black | false | :white_check_mark: |
 | TC72: the query leaves the board unchanged | the Fool's mate position; ask about White | `pieceAt(h4)` is still the black queen that moved from d8, `pieceAt(e1)` is still the white king, and 32 squares are occupied | :x: |
