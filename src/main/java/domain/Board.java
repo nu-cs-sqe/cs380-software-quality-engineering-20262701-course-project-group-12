@@ -169,7 +169,7 @@ public class Board {
     }
 
     public boolean isLegalMove(Location from, Location to) {
-        return true;
+        return pieceAt(from).canMove(from, to, this);
     }
 
     private Board boardAfterMove(Location from, Location to) {
