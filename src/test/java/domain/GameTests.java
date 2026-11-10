@@ -269,4 +269,70 @@ public class GameTests {
 
         assertThrows(IllegalStateException.class, game::colorToMove);
     }
+
+    @Test
+    public void IsOver_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean over = game.isOver();
+
+        assertFalse(over);
+    }
+
+    @Test
+    public void EndByCheckmate_StartedGame_EndsTheGame() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByCheckmate();
+
+        assertTrue(game.isOver());
+    }
+
+    @Test
+    public void EndByCheckmate_PlayerOneToMove_MakesPlayerTwoTheWinner() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByCheckmate();
+
+        assertEquals("Bob", game.winnerName());
+        assertEquals(PieceColor.BLACK, game.winnerColor());
+    }
+
+    @Test
+    public void EndByCheckmate_PlayerTwoToMove_MakesPlayerOneTheWinner() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.passTurn();
+
+        game.endByCheckmate();
+
+        assertEquals("Alice", game.winnerName());
+        assertEquals(PieceColor.WHITE, game.winnerColor());
+    }
+
+    @Test
+    public void WinnerName_GameNotOver_ThrowsIllegalStateException() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        assertThrows(IllegalStateException.class, game::winnerName);
+    }
+
+    @Test
+    public void WinnerColor_GameNotOver_ThrowsIllegalStateException() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        assertThrows(IllegalStateException.class, game::winnerColor);
+    }
+
+    @Test
+    public void EndByCheckmate_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::endByCheckmate);
+    }
 }

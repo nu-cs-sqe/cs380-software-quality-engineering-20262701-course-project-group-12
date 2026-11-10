@@ -6,6 +6,11 @@
 - `boolean isOccupied(Location location)`: returns true when a piece stands on that square and false when it is empty. Does not change the board.
 - `Piece pieceAt(Location location)`: returns the piece on that square. Requires an occupied square and throws `IllegalArgumentException` otherwise. Does not change the board.
 - `void move(Location from, Location to)` (issue #19): puts the piece from `from` on `to`, and `from` becomes empty. A piece already on `to` is replaced; this is the board side of a capture. Moving a piece to its own square leaves the board unchanged. Throws `IllegalArgumentException` when `from` is empty, and then leaves the board unchanged. It does not check whether the move is legal, does not change whose turn it is, and does not touch the UI.
+- `void promote(Location square, PieceType type)` (issue #46): replaces the pawn on `square` with a new piece of the chosen type and the pawn's color: a `Queen`, `Rook`, `Bishop`, or `Knight`, so the promoted piece moves by its own rules. The choice does not depend on which pieces have been captured. Throws `IllegalArgumentException` when `type` is `KING` or `PAWN`, and then leaves the board unchanged. It does not check that the pawn is on its last rank; `BoardController` calls it only after a pawn arrives there.
+- `void move(Location from, Location to)`, en passant (issue #47 / GitHub US-14): after each move the board remembers whether it was a pawn moving two ranks, the only move that can be captured en passant. When a pawn moves diagonally onto an empty square, and the square beside `from` on the file of `to` holds the pawn that can be captured en passant, that pawn is removed. This is the board side of an en passant capture, the way replacing a piece is the board side of a normal capture.
+- `boolean canBeCapturedEnPassant(Location square)` (issue #47): returns true when `square` holds the pawn that moved two ranks on the last move, and false otherwise. The chance lasts one move: any later move ends it.
+- `boolean isInCheck(PieceColor color)` (issue #48 / GitHub US-15, docs US-15): returns true when a piece of the other color `canMove` onto the square of the king of `color`. Does not change the board.
+- `boolean isCheckmated(PieceColor color)` (issue #48): returns true when the king of `color` is in check and no move by a piece of `color` leaves that king out of check. A move counts only when the piece `canMove` there, and it is tried on a copy, so the board itself does not change. The king is never removed.
 - `boolean holdsUnmovedPiece(Location square)` (issue #45 / US-12): true when a piece stands on `square` and that piece has never been moved by `move`. A piece that moved and came back has moved. Castling uses it to ask whether the king and the rook are on their original squares and have never moved: only the piece placed there at the start can be unmoved on a square.
 - `boolean isAttackedByOpponentOf(PieceColor color, Location square)` (issue #45 / US-12): true when at least one piece of the other color `attacks` `square` (see `Piece.md`). Castling uses it for the squares the king stands on, crosses, and lands on. US-11 can use it to find check.
 
@@ -18,6 +23,8 @@ No method checks its arguments for null, and no case passes null. Our own code i
 File 0 is the a-file and file 7 is the h-file. The squares are private, so the constructor and `move` are checked through `pieceAt` and `isOccupied`.
 
 `BoardView` is a view, and `PieceType` and `PieceColor` are enums, so they have no BVA file.
+
+The `isInCheck` and `isCheckmated` cases use the real pieces that issue #53 puts on the starting board, so each piece's own `canMove` decides what it attacks. Out of scope: refusing a move that leaves the mover's own king in check and showing that a king is in check (issue #44), and stalemate (issue #49).
 
 ## Steps 1-3: Characteristics and partitions
 
@@ -78,6 +85,58 @@ The starting position has a rook on every corner, so each corner can be both a `
 | Output: the board after a rejected move | Collection | unchanged |
 | Output: signal for a rejected move | Cases | none; `IllegalArgumentException` |
 | Output: the number of pieces after a capture (issue #33) | Collection, counted with `isOccupied` over the 64 squares | 31, one fewer than the starting 32 |
+
+### `promote(Location square, PieceType type)`
+
+A pawn is put on its last rank with `move`: the a2 pawn to a8 for White, and the h7 pawn to h1 for Black. The four allowed types each appear once for White, and the queen is repeated for Black, so each color appears. The promoted piece is checked with `assertInstanceOf`, because the piece must be the class that moves by that type's rules, not a plain `Piece`.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
+| Input: occupant of `square` | Cases | a white pawn on a8 `(0, 8)`; a black pawn on h1 `(7, 1)` |
+| Input: `type` | Cases | the choices `QUEEN`, `ROOK`, `BISHOP`, `KNIGHT`; not choices, `KING` and `PAWN` |
+| Output: occupant of `square` after the call | Cases | a `Queen`, `Rook`, `Bishop`, or `Knight` of the pawn's color; the same pawn, after a rejected choice |
+| Output: signal for a rejected promotion | Cases | none; `IllegalArgumentException` |
+
+### `canBeCapturedEnPassant(Location square)`
+
+The board is set up with `move`, which does not check whether a move is legal. A two-rank pawn move is the only move that can be captured en passant, so the cases change one thing at a time: the distance, the type of the piece, the color, the square asked about, and whether another move came after it. The case numbers start at TC66, after the piece-class cases (TC46 to TC57, issue #53) and the promotion cases (TC58 to TC65, issue #46).
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the last move | Cases | a white pawn two ranks, e2 `(4, 2)` to e4 `(4, 4)`; a black pawn two ranks, d7 `(3, 7)` to d5 `(3, 5)`; a pawn one rank, e2 to e3 `(4, 3)`; a rook two ranks, a1 `(0, 1)` to a3 `(0, 3)` |
+| Input: a move after the two-rank pawn move | Cases | none; the black knight b8 `(1, 8)` to c6 `(2, 6)` |
+| Input: `square` | Cases | the square the pawn moved to; another square, d4 `(3, 4)` |
+| Output: the answer | Boolean | true; false |
+
+### `move(Location from, Location to)`, en passant
+
+A white pawn is put on e5 `(4, 5)` with two moves, e2 to e4 and e4 to e5. The black pawn beside it then moves d7 to d5, or reaches d5 with two one-rank moves, which cannot be captured en passant. The capturing move is e5 to d6 `(3, 6)`, the square the black pawn passed over.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the piece moving diagonally onto the empty d6 | Cases | the white pawn from e5; a white bishop on e5 (moved there from c1 `(2, 1)`) |
+| Input: the black pawn on d5 | Cases | can be captured en passant (moved d7 to d5); cannot (moved d7 to d6 `(3, 6)` to d5) |
+| Output: d5 after the move | Boolean, through `isOccupied` | false, the captured pawn is removed; true, nothing is removed |
+| Output: d6 after the move | Pointer | the same white pawn that moved from e5 |
+
+### `isInCheck(PieceColor color)` and `isCheckmated(PieceColor color)`
+
+Each position is set up with `move` from a new `Board`, using real games, so every position can happen in play. `move` does not check legality, so the moves are written as squares.
+
+- Fool's mate: f2 `(5, 2)` to f3 `(5, 3)`, e7 `(4, 7)` to e5 `(4, 5)`, g2 `(6, 2)` to g4 `(6, 4)`, d8 `(3, 8)` to h4 `(7, 4)`. The black queen checks the white king on e1, and White has no reply.
+- Queen check on Black: e2 `(4, 2)` to e4 `(4, 4)`, f7 `(5, 7)` to f6 `(5, 6)`, d1 `(3, 1)` to h5 `(7, 5)`. The white queen checks the black king on e8, and Black can block with g7 `(6, 7)` to g6 `(6, 6)`.
+- Sam Loyd's stalemate: e2 to e3, a7 to a5, d1 to h5, a8 to a6, h5 to a5, h7 to h5, h2 to h4, a6 to h6, a5 to c7, f7 to f6, c7 to d7, e8 to f7, d7 to b7, d8 to d3, b7 to b8, d3 to h7, b8 to c8, f7 to g6, c8 to e6. The black king on g6 is not in check, and Black has no legal move: the f6 pawn is pinned by the white queen on e6, and every other black piece is blocked.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: `color` | Cases | White; Black |
+| Input: whether a piece of the other color reaches the king of `color` | Boolean | no (a new `Board`; Fool's mate for Black); yes (Fool's mate for White; the queen check on Black) |
+| Input: whether a move of `color` leaves its king out of check | Boolean | yes (a new `Board`; the queen check on Black); no (Fool's mate for White; Sam Loyd's stalemate) |
+| Input: a move that `canMove` allows but that leaves the king in check | Cases | a reply that does not answer the check (Fool's mate); a pinned piece (the f6 pawn in Sam Loyd's stalemate) |
+| Output: `isInCheck` | Boolean | true; false |
+| Output: `isCheckmated` | Boolean | true only when the king is in check and no move leaves it out of check; false otherwise |
+| Output: the board after `isCheckmated` | Collection | unchanged; the king stays on its square |
 
 ### `holdsUnmovedPiece(Location square)` (issue #45)
 
@@ -180,20 +239,74 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC44: a rejected move leaves the board unchanged | a new `Board`; move a4 `(0, 4)` to a1 `(0, 1)` | `pieceAt(a1)` is still the white rook | :white_check_mark: |
 | TC45: a capture takes the captured piece off the board (issue #33) | a new `Board`; move a1 `(0, 1)` to a8 `(0, 8)`, so the white rook captures the black rook | 31 of the 64 squares are occupied | :white_check_mark: |
 
+### Method under test: `promote(Location square, PieceType type)`
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC58: promote a white pawn to a queen | a new `Board`; move a2 `(0, 2)` to a8 `(0, 8)`; promote a8 to `QUEEN` | `pieceAt(a8)` is a `Queen`; its color is `WHITE` | :white_check_mark: |
+| TC59: promote a white pawn to a rook | as TC58; promote a8 to `ROOK` | `pieceAt(a8)` is a `Rook`; its color is `WHITE` | :white_check_mark: |
+| TC60: promote a white pawn to a bishop | as TC58; promote a8 to `BISHOP` | `pieceAt(a8)` is a `Bishop`; its color is `WHITE` | :white_check_mark: |
+| TC61: promote a white pawn to a knight | as TC58; promote a8 to `KNIGHT` | `pieceAt(a8)` is a `Knight`; its color is `WHITE` | :white_check_mark: |
+| TC62: promote a black pawn to a queen | a new `Board`; move h7 `(7, 7)` to h1 `(7, 1)`; promote h1 to `QUEEN` | `pieceAt(h1)` is a `Queen`; its color is `BLACK` | :white_check_mark: |
+| TC63: a king is not a choice | as TC58; promote a8 to `KING` | throws `IllegalArgumentException` | :white_check_mark: |
+| TC64: a pawn is not a choice | as TC58; promote a8 to `PAWN` | throws `IllegalArgumentException` | :white_check_mark: |
+| TC65: a rejected choice leaves the pawn | as TC63 | `pieceAt(a8)` is still the white pawn that moved from a2 | :white_check_mark: |
+
+### Method under test: `canBeCapturedEnPassant(Location square)`
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC66: a white pawn that just moved two ranks | a new `Board`; move e2 `(4, 2)` to e4 `(4, 4)`; ask about e4 | true | :white_check_mark: |
+| TC67: a pawn that just moved one rank | a new `Board`; move e2 to e3 `(4, 3)`; ask about e3 | false | :white_check_mark: |
+| TC68: a piece that is not a pawn moving two ranks | a new `Board`; move a1 `(0, 1)` to a3 `(0, 3)`; ask about a3 | false | :white_check_mark: |
+| TC69: another move ends the chance | a new `Board`; move e2 to e4, then b8 `(1, 8)` to c6 `(2, 6)`; ask about e4 | false | :white_check_mark: |
+| TC70: a black pawn that just moved two ranks | a new `Board`; move d7 `(3, 7)` to d5 `(3, 5)`; ask about d5 | true | :white_check_mark: |
+| TC71: another square than the pawn that moved | a new `Board`; move e2 to e4; ask about d4 `(3, 4)` | false | :white_check_mark: |
+
+### Method under test: `move(Location from, Location to)`, en passant
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC72: an en passant capture removes the captured pawn | a new `Board`; move e2 `(4, 2)` to e4, e4 to e5 `(4, 5)`, and d7 `(3, 7)` to d5 `(3, 5)`; move e5 to d6 `(3, 6)` | `isOccupied(d5)` is false | :white_check_mark: |
+| TC73: the capturing pawn lands on the square passed over | as TC72 | `pieceAt(d6)` is the white pawn that moved from e2 | :white_check_mark: |
+| TC74: a pawn that moved one rank at a time is not removed | a new `Board`; move e2 to e4, e4 to e5, d7 to d6, and d6 to d5; move e5 to d6 | `isOccupied(d5)` is true | :white_check_mark: |
+| TC75: a piece that is not a pawn removes nothing | a new `Board`; move c1 `(2, 1)` to e5, and d7 to d5; move e5 to d6 | `isOccupied(d5)` is true | :white_check_mark: |
+
+### Method under test: `isInCheck(PieceColor color)`
+
+The case numbers start at TC76, after the piece-class cases (TC46 to TC57, issue #53), the promotion cases (TC58 to TC65, issue #46), and the en passant cases (TC66 to TC75, issue #47).
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC76: no piece reaches the king | a new `Board`; ask about White | false | :white_check_mark: |
+| TC77: a piece of the other color reaches the white king | the Fool's mate position; ask about White | true | :white_check_mark: |
+| TC78: the other king is not in check | the Fool's mate position; ask about Black | false | :white_check_mark: |
+| TC79: a piece of the other color reaches the black king | the queen check on Black; ask about Black | true | :white_check_mark: |
+
+### Method under test: `isCheckmated(PieceColor color)`
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC80: not in check, with legal moves | a new `Board`; ask about White | false | :white_check_mark: |
+| TC81: in check with no reply | the Fool's mate position; ask about White | true | :white_check_mark: |
+| TC82: in check with a reply that blocks the check | the queen check on Black; ask about Black | false | :white_check_mark: |
+| TC83: not in check and no legal move | Sam Loyd's stalemate; ask about Black | false | :white_check_mark: |
+| TC84: the query leaves the board unchanged | the Fool's mate position; ask about White | `pieceAt(h4)` is still the black queen that moved from d8, `pieceAt(e1)` is still the white king, and 32 squares are occupied | :white_check_mark: |
+
 ### Method under test: `holdsUnmovedPiece(Location square)` (issue #45)
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC58: the starting piece that has never moved | a new `Board`; ask about e1 `(4, 1)` | true | :white_check_mark: |
-| TC59: a square the piece moved away from | a new `Board`; move g1 `(6, 1)` to f3 `(5, 3)`; ask about g1 | false | :white_check_mark: |
-| TC60: a piece that moved and came back | a new `Board`; move g1 `(6, 1)` to f3 `(5, 3)`, then f3 back to g1; ask about g1 | false | :white_check_mark: |
+| TC85: the starting piece that has never moved | a new `Board`; ask about e1 `(4, 1)` | true | :white_check_mark: |
+| TC86: a square the piece moved away from | a new `Board`; move g1 `(6, 1)` to f3 `(5, 3)`; ask about g1 | false | :white_check_mark: |
+| TC87: a piece that moved and came back | a new `Board`; move g1 `(6, 1)` to f3 `(5, 3)`, then f3 back to g1; ask about g1 | false | :white_check_mark: |
 
 ### Method under test: `isAttackedByOpponentOf(PieceColor color, Location square)` (issue #45)
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC61: no opponent piece attacks the square | a new `Board`; ask whether Black attacks e4 `(4, 4)`, with `color = WHITE` | false | :white_check_mark: |
-| TC62: opponent pawns attack an empty square diagonally | a new `Board`; `color = BLACK`, square e3 `(4, 3)`; the white pawns on d2 and f2 attack it | true | :white_check_mark: |
-| TC63: only pieces of the same color attack the square | a new `Board`; `color = WHITE`, square e3 `(4, 3)` | false | :white_check_mark: |
-| TC64: an opponent rook on the last square, h8 | a new `Board`; move the h7 pawn `(7, 7)` to a6 `(0, 6)`; `color = WHITE`, square h3 `(7, 3)`; the h-file from h7 to h4 is empty | true | :white_check_mark: |
-| TC65: an opponent rook on the first square, a1 | a new `Board`; move the a2 pawn `(0, 2)` to h3 `(7, 3)`; `color = BLACK`, square a6 `(0, 6)`; the a-file from a2 to a5 is empty | true | :white_check_mark: |
+| TC88: no opponent piece attacks the square | a new `Board`; ask whether Black attacks e4 `(4, 4)`, with `color = WHITE` | false | :white_check_mark: |
+| TC89: opponent pawns attack an empty square diagonally | a new `Board`; `color = BLACK`, square e3 `(4, 3)`; the white pawns on d2 and f2 attack it | true | :white_check_mark: |
+| TC90: only pieces of the same color attack the square | a new `Board`; `color = WHITE`, square e3 `(4, 3)` | false | :white_check_mark: |
+| TC91: an opponent rook on the last square, h8 | a new `Board`; move the h7 pawn `(7, 7)` to a6 `(0, 6)`; `color = WHITE`, square h3 `(7, 3)`; the h-file from h7 to h4 is empty | true | :white_check_mark: |
+| TC92: an opponent rook on the first square, a1 | a new `Board`; move the a2 pawn `(0, 2)` to h3 `(7, 3)`; `color = BLACK`, square a6 `(0, 6)`; the a-file from a2 to a5 is empty | true | :white_check_mark: |

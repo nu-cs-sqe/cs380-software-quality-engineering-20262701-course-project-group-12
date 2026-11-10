@@ -11,10 +11,13 @@ public class Pawn extends Piece {
     private static final int WHITE_STARTING_RANK = 2;
     private static final int BLACK_STARTING_RANK = 7;
     private static final int CAPTURE_FILE_DISTANCE = 1;
+    private static final int WHITE_LAST_RANK = Location.MAX_RANK;
+    private static final int BLACK_LAST_RANK = Location.MIN_RANK;
 
     private final int oneSquareForward;
     private final int twoSquaresForward;
     private final int startingRank;
+    private final int lastRank;
 
     public Pawn(PieceColor color) {
         super(PieceType.PAWN, color);
@@ -22,10 +25,12 @@ public class Pawn extends Piece {
             oneSquareForward = WHITE_ONE_SQUARE_FORWARD;
             twoSquaresForward = WHITE_TWO_SQUARES_FORWARD;
             startingRank = WHITE_STARTING_RANK;
+            lastRank = WHITE_LAST_RANK;
         } else {
             oneSquareForward = BLACK_ONE_SQUARE_FORWARD;
             twoSquaresForward = BLACK_TWO_SQUARES_FORWARD;
             startingRank = BLACK_STARTING_RANK;
+            lastRank = BLACK_LAST_RANK;
         }
     }
 
@@ -43,6 +48,11 @@ public class Pawn extends Piece {
                 && from.fileDistanceTo(target) == CAPTURE_FILE_DISTANCE;
     }
 
+    @Override
+    public boolean promotesOn(Location square) {
+        return square.getRank() == lastRank;
+    }
+
     private boolean canAdvance(Location from, Location to, Board board) {
         if (board.isOccupied(to)) {
             return false;
@@ -55,7 +65,13 @@ public class Pawn extends Piece {
     }
 
     private boolean canCapture(Location from, Location to, Board board) {
-        return attacks(from, to, board) && holdsOpponent(to, board);
+        return attacks(from, to, board)
+                && (holdsOpponent(to, board) || canCaptureEnPassant(from, to, board));
+    }
+
+    private boolean canCaptureEnPassant(Location from, Location to, Board board) {
+        Location besideFrom = new Location(to.getFile(), from.getRank());
+        return board.canBeCapturedEnPassant(besideFrom) && holdsOpponent(besideFrom, board);
     }
 
     private boolean holdsOpponent(Location square, Board board) {

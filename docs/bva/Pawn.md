@@ -2,9 +2,9 @@
 
 `Pawn` is the piece that advances straight toward the opponent and
 captures only one square diagonally forward (issue #16 / GitHub US-06,
-docs US-04). It extends `Piece`. This analysis covers `canMove`. The
-constructor only stores `PieceType.PAWN` and the color through `Piece`,
-so it has no cases of its own.
+docs US-04). It extends `Piece`. This analysis covers `canMove` and
+`promotesOn`. The constructor only stores `PieceType.PAWN` and the color
+through `Piece`, so it has no cases of its own.
 
 `canMove` is a query. It does not move the pawn. `Board.move` still
 places the piece. Occupancy comes from a real `Board` (this team owns
@@ -19,6 +19,10 @@ one of these holds, and `false` for any other destination:
 - `from` is on the pawn's starting rank, `to` is two squares straight
   forward, and both of those squares are empty.
 - `to` is one square diagonally forward and holds an opponent's piece.
+- `to` is one square diagonally forward and empty, and the square beside
+  `from` on the file of `to` holds an opponent's pawn that
+  `Board.canBeCapturedEnPassant` reports (issue #47 / GitHub US-14, docs
+  US-12).
 
 Forward is toward rank 8 for a white pawn and toward rank 1 for a black
 pawn. The starting rank is rank 2 for White and rank 7 for Black.
@@ -26,10 +30,15 @@ pawn. The starting rank is rank 2 for White and rank 7 for Black.
 Squares use file `0` = a-file through file `7` = h-file, and rank `1`
 through `8`.
 
-Out of scope: promotion on the last rank (US-13) and en passant (US-12).
-A move onto the last rank is an ordinary forward move here. A diagonal
-move onto an empty square is rejected, because en passant is a later
-story.
+`promotesOn(Location square)` (issue #46 / GitHub US-13, docs US-13)
+returns `true` when `square` is on the pawn's last rank, the rank where it
+is promoted: rank 8 for White and rank 1 for Black. It returns `false`
+for any other square. `canMove` still treats a move onto the last rank as
+an ordinary forward move; the promotion that follows the move is handled
+by `BoardController` and `Board`.
+
+A diagonal move onto an empty square is rejected unless it captures en
+passant.
 
 `attacks(Location from, Location target, Board board)` (issue #45 /
 US-12) overrides `Piece.attacks`. A pawn attacks the two squares one
@@ -42,9 +51,9 @@ straight move is never an attack. The board is not consulted.
 - **No null checks.** This is a standalone Java application, so the code
   makes sure `null` is never passed around instead of checking for it.
   `canMove` has no null cases and does not throw for a null argument.
-- **No magic numbers.** The starting ranks, the forward direction of each
-  color, and the one- and two-square distances become named constants in
-  `Pawn` and in the tests.
+- **No magic numbers.** The starting ranks, the last ranks, the forward
+  direction of each color, and the one- and two-square distances become
+  named constants in `Pawn` and in the tests.
 
 ## Boundaries Considered
 
@@ -60,6 +69,9 @@ straight move is never an attack. The board is not consulted.
   - e6 `(4, 6)`, a black pawn one rank past its starting rank
   - e5 `(4, 5)`, a black pawn further down the board
   - d7 `(3, 7)`, a black pawn that captures
+  - e5 `(4, 5)` and f4 `(5, 4)`, white pawns beside a pawn that just
+    moved two ranks
+  - d4 `(3, 4)`, a black pawn beside a pawn that just moved two ranks
 - **Input: `to`**
   - the same square as `from`
   - one square straight forward
@@ -81,6 +93,14 @@ straight move is never an attack. The board is not consulted.
 - **Input: occupant of the square passed over in a two-square advance**
   - empty
   - a piece
+- **Input: the square beside `from`, on the file of `to`, for a diagonal
+  move onto an empty square**
+  - an opponent's pawn that just moved two ranks
+  - an opponent's pawn that reached the square with two one-rank moves
+  - a pawn of the pawn's color that just moved two ranks
+- **Input: moves after the two-rank move**
+  - none
+  - one other move
 - **Input: pawn color**
   - white
   - black
@@ -116,6 +136,18 @@ straight move is never an attack. The board is not consulted.
 - Two invalid inputs are never paired. A blocked two-square advance has
   an empty destination, and a rejected direction has an empty
   destination unless the case is about the occupant.
+- The pawn beside `from` in an en passant capture is a case: an
+  opponent's pawn that can be captured en passant, an opponent's pawn
+  that cannot because it moved one rank at a time, and a pawn of the
+  pawn's own color.
+- The chance to capture en passant lasts one move, so the moves after
+  the two-rank move have two values: none, and one other move.
+- Color sets the direction, so an en passant capture is checked for
+  both colors: toward a lower file for White and toward a higher file
+  for Black.
+- `Board.canBeCapturedEnPassant` answers for the last move made with
+  `Board.move`, so each en passant case sets up the board with `move` in
+  the order the game would.
 
 ### Step 3: Boundary choices
 
@@ -151,6 +183,16 @@ straight move is never an attack. The board is not consulted.
   `(6, 4)` holding a black pawn.
 - One rank forward and two files over onto an opponent: white e2 to g3
   `(6, 3)` holding a black pawn.
+- En passant by a white pawn: e5 to d6 `(3, 6)` right after the black d7
+  pawn moves to d5 `(3, 5)`.
+- En passant by a black pawn: d4 to e3 `(4, 3)` right after the white e2
+  pawn moves to e4.
+- En passant one move too late: the white case, with the g1 knight moving
+  to f3 after the black pawn.
+- Beside an opponent's pawn that moved one rank at a time: white e5 to d6
+  after the black d7 pawn moves to d6 and then d5.
+- Beside a pawn of the pawn's color: white f4 to e5 right after the white
+  e2 pawn moves to e4.
 
 ## Boundaries for `attacks` (issue #45)
 
@@ -349,57 +391,153 @@ that a capture needs.
     holds a black pawn.
   - **Expected output**: `false`.
 
+The en passant cases start at TC-PAWN-29, after the promotion cases
+(TC-PAWN-25 to TC-PAWN-28, issue #46).
+
+- **TC-PAWN-29 — Capture en passant with a white pawn** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is e5 `(4, 5)`. `to` is
+    d6 `(3, 6)`. New `Board` after `move` of the e2 pawn to e4, e4 to e5,
+    and the d7 pawn to d5 `(3, 5)`, so d6 is empty and d5 holds a black
+    pawn that just moved two ranks.
+  - **Expected output**: `true`.
+
+- **TC-PAWN-30 — Capture en passant with a black pawn** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: Black pawn. `from` is d4 `(3, 4)`. `to` is
+    e3 `(4, 3)`. New `Board` after `move` of the d7 pawn to d5, d5 to d4,
+    and the e2 pawn to e4 `(4, 4)`, so e3 is empty and e4 holds a white
+    pawn that just moved two ranks.
+  - **Expected output**: `true`.
+
+- **TC-PAWN-31 — Reject en passant one move too late** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is e5 `(4, 5)`. `to` is
+    d6 `(3, 6)`. The board of TC-PAWN-29, then `move` of the g1 knight
+    to f3 `(5, 3)`.
+  - **Expected output**: `false`.
+
+- **TC-PAWN-32 — Reject en passant beside a pawn that moved one rank at
+  a time** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is e5 `(4, 5)`. `to` is
+    d6 `(3, 6)`. New `Board` after `move` of the e2 pawn to e4, e4 to e5,
+    the d7 pawn to d6, and d6 to d5, so d6 is empty and d5 holds a black
+    pawn.
+  - **Expected output**: `false`.
+
+- **TC-PAWN-33 — Reject en passant beside a pawn of the pawn's color**
+  ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is f4 `(5, 4)`. `to` is
+    e5 `(4, 5)`. New `Board` after `move` of the f2 pawn to f4 and the e2
+    pawn to e4, so e5 is empty and e4 holds a white pawn that just moved
+    two ranks.
+  - **Expected output**: `false`.
+
 ### Method under test: `attacks(Location from, Location target, Board board)` (issue #45)
 
-- **TC-PAWN-25 — Attack an empty square diagonally forward toward a
+- **TC-PAWN-34 — Attack an empty square diagonally forward toward a
   higher file** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
     `target` is f3 `(5, 3)`. New `Board`, so f3 is empty.
   - **Expected output**: `true`.
 
-- **TC-PAWN-26 — Attack an empty square diagonally forward toward a
+- **TC-PAWN-35 — Attack an empty square diagonally forward toward a
   lower file** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
     `target` is d3 `(3, 3)`. New `Board`, so d3 is empty.
   - **Expected output**: `true`.
 
-- **TC-PAWN-27 — Attack with a black pawn** ( :white_check_mark: )
+- **TC-PAWN-36 — Attack with a black pawn** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: Black pawn. `from` is e7 `(4, 7)`.
     `target` is d6 `(3, 6)`. New `Board`, so d6 is empty.
   - **Expected output**: `true`.
 
-- **TC-PAWN-28 — Attack a square that holds an opponent** ( :white_check_mark: )
+- **TC-PAWN-37 — Attack a square that holds an opponent** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
     `target` is d3 `(3, 3)`. New `Board` after `move` of the d7 pawn to
     d3, so d3 holds a black pawn.
   - **Expected output**: `true`.
 
-- **TC-PAWN-29 — Do not attack the square straight ahead** ( :white_check_mark: )
+- **TC-PAWN-38 — Do not attack the square straight ahead** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
     `target` is e3 `(4, 3)`. New `Board`, so e3 is empty.
   - **Expected output**: `false`.
 
-- **TC-PAWN-30 — Do not attack diagonally backward** ( :white_check_mark: )
+- **TC-PAWN-39 — Do not attack diagonally backward** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e4 `(4, 4)`.
     `target` is f3 `(5, 3)`. New `Board` after `move` of the e2 pawn to
     e4, so f3 is empty.
   - **Expected output**: `false`.
 
-- **TC-PAWN-31 — Do not attack one rank forward and two files over**
+- **TC-PAWN-40 — Do not attack one rank forward and two files over**
   ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
     `target` is g3 `(6, 3)`. New `Board`, so g3 is empty.
   - **Expected output**: `false`.
 
-- **TC-PAWN-32 — Do not attack two squares diagonally forward** ( :white_check_mark: )
+- **TC-PAWN-41 — Do not attack two squares diagonally forward** ( :white_check_mark: )
   - **Method(s) under test**: `attacks(Location, Location, Board)`
   - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
     `target` is g4 `(6, 4)`. New `Board`, so g4 is empty.
+  - **Expected output**: `false`.
+
+## Boundaries Considered for `promotesOn(Location square)`
+
+### Step 1: Inputs and outputs
+
+- **Input: pawn color**
+  - white
+  - black
+- **Input: rank of `square`**
+  - the pawn's last rank: 8 for White, 1 for Black
+  - one rank before the last rank: 7 for White, 2 for Black
+- **Output: promoted**
+  - `true`
+  - `false`
+
+### Step 2: Categories
+
+- The rank of `square` is a boundary at the pawn's last rank. The last
+  rank is the edge, and the rank before it is just inside.
+- The last rank depends on the color, so each color is checked at its own
+  last rank.
+- The file does not matter, so every case uses the a-file.
+- The board is not an input; a pawn answers from the square alone.
+
+### Step 3: Boundary choices
+
+- White pawn: a8 `(0, 8)`, a7 `(0, 7)`.
+- Black pawn: a1 `(0, 1)`, a2 `(0, 2)`.
+
+## Step 4: Test Cases for `promotesOn(Location square)`
+
+### Method under test: `promotesOn(Location square)`
+
+- **TC-PAWN-25 — Promote a white pawn on rank 8** ( :white_check_mark: )
+  - **Method(s) under test**: `promotesOn(Location)`
+  - **State of the system**: White pawn. `square` is a8 `(0, 8)`.
+  - **Expected output**: `true`.
+
+- **TC-PAWN-26 — Do not promote a white pawn on rank 7** ( :white_check_mark: )
+  - **Method(s) under test**: `promotesOn(Location)`
+  - **State of the system**: White pawn. `square` is a7 `(0, 7)`.
+  - **Expected output**: `false`.
+
+- **TC-PAWN-27 — Promote a black pawn on rank 1** ( :white_check_mark: )
+  - **Method(s) under test**: `promotesOn(Location)`
+  - **State of the system**: Black pawn. `square` is a1 `(0, 1)`.
+  - **Expected output**: `true`.
+
+- **TC-PAWN-28 — Do not promote a black pawn on rank 2** ( :white_check_mark: )
+  - **Method(s) under test**: `promotesOn(Location)`
+  - **State of the system**: Black pawn. `square` is a2 `(0, 2)`.
   - **Expected output**: `false`.
