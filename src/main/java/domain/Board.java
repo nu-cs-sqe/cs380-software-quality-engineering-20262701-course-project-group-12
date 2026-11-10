@@ -26,6 +26,7 @@ public class Board {
     private static final int WHITE_PAWN_RANK = 2;
     private static final int BLACK_PAWN_RANK = 7;
     private static final int BLACK_BACK_RANK = Location.MAX_RANK;
+    private static final int TWO_RANKS = 2;
     private static final List<Function<PieceColor, Piece>> BACK_RANK_PIECE_MAKERS = List.of(
             Rook::new,
             Knight::new,
@@ -43,6 +44,7 @@ public class Board {
                     PieceType.KNIGHT, Knight::new);
 
     private final List<List<Optional<Piece>>> squares = emptySquares();
+    private Optional<Location> pawnThatJustAdvancedTwoRanks = Optional.empty();
 
     public Board() {
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
@@ -83,7 +85,30 @@ public class Board {
     public void move(Location from, Location to) {
         Piece movingPiece = pieceAt(from);
         clear(from);
+        removePawnCapturedEnPassant(movingPiece, from, to);
         place(movingPiece, to);
+        pawnThatJustAdvancedTwoRanks = isPawnAdvancingTwoRanks(movingPiece, from, to)
+                ? Optional.of(to)
+                : Optional.empty();
+    }
+
+    public boolean canBeCapturedEnPassant(Location square) {
+        return pawnThatJustAdvancedTwoRanks.filter(square::isSameSquareAs).isPresent();
+    }
+
+    private void removePawnCapturedEnPassant(Piece movingPiece, Location from, Location to) {
+        Location besideFrom = new Location(to.getFile(), from.getRank());
+        if (isPawn(movingPiece) && canBeCapturedEnPassant(besideFrom)) {
+            clear(besideFrom);
+        }
+    }
+
+    private boolean isPawnAdvancingTwoRanks(Piece piece, Location from, Location to) {
+        return isPawn(piece) && Math.abs(to.getRank() - from.getRank()) == TWO_RANKS;
+    }
+
+    private boolean isPawn(Piece piece) {
+        return piece.getType() == PieceType.PAWN;
     }
 
     public void promote(Location square, PieceType type) {

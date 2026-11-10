@@ -26,10 +26,20 @@ public class BoardTests {
     private static final Location A5 = new Location(0, 5);
     private static final Location A8 = new Location(0, 8);
     private static final Location B1 = new Location(1, 1);
+    private static final Location B8 = new Location(1, 8);
     private static final Location C1 = new Location(2, 1);
+    private static final Location C6 = new Location(2, 6);
     private static final Location D1 = new Location(3, 1);
+    private static final Location D4 = new Location(3, 4);
+    private static final Location D5 = new Location(3, 5);
+    private static final Location D6 = new Location(3, 6);
+    private static final Location D7 = new Location(3, 7);
     private static final Location D8 = new Location(3, 8);
     private static final Location E1 = new Location(4, 1);
+    private static final Location E2 = new Location(4, 2);
+    private static final Location E3 = new Location(4, 3);
+    private static final Location E4 = new Location(4, 4);
+    private static final Location E5 = new Location(4, 5);
     private static final Location E8 = new Location(4, 8);
     private static final Location F8 = new Location(5, 8);
     private static final Location G8 = new Location(6, 8);
@@ -381,6 +391,116 @@ public class BoardTests {
         Board board = new Board();
         board.move(A2, A8);
         return board;
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_WhitePawnThatJustMovedTwoRanks_ReturnsTrue() {
+        Board board = new Board();
+        board.move(E2, E4);
+
+        boolean capturable = board.canBeCapturedEnPassant(E4);
+
+        assertTrue(capturable);
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_PawnThatJustMovedOneRank_ReturnsFalse() {
+        Board board = new Board();
+        board.move(E2, E3);
+
+        boolean capturable = board.canBeCapturedEnPassant(E3);
+
+        assertFalse(capturable);
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_RookThatJustMovedTwoRanks_ReturnsFalse() {
+        Board board = new Board();
+        board.move(A1, A3);
+
+        boolean capturable = board.canBeCapturedEnPassant(A3);
+
+        assertFalse(capturable);
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_PawnThatMovedTwoRanksBeforeAnotherMove_ReturnsFalse() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(B8, C6);
+
+        boolean capturable = board.canBeCapturedEnPassant(E4);
+
+        assertFalse(capturable);
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_BlackPawnThatJustMovedTwoRanks_ReturnsTrue() {
+        Board board = new Board();
+        board.move(D7, D5);
+
+        boolean capturable = board.canBeCapturedEnPassant(D5);
+
+        assertTrue(capturable);
+    }
+
+    @Test
+    public void CanBeCapturedEnPassant_SquareOtherThanThePawnThatMoved_ReturnsFalse() {
+        Board board = new Board();
+        board.move(E2, E4);
+
+        boolean capturable = board.canBeCapturedEnPassant(D4);
+
+        assertFalse(capturable);
+    }
+
+    @Test
+    public void Move_PawnCapturingEnPassant_TakesTheCapturedPawnOffTheBoard() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(E4, E5);
+        board.move(D7, D5);
+
+        board.move(E5, D6);
+
+        assertFalse(board.isOccupied(D5));
+    }
+
+    @Test
+    public void Move_PawnCapturingEnPassant_LandsOnTheSquarePassedOver() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(E4, E5);
+        board.move(D7, D5);
+        Piece capturingPawn = board.pieceAt(E5);
+
+        board.move(E5, D6);
+
+        assertSame(capturingPawn, board.pieceAt(D6));
+    }
+
+    @Test
+    public void Move_BesidePawnThatMovedOneRankTwice_LeavesThatPawnOnTheBoard() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(E4, E5);
+        board.move(D7, D6);
+        board.move(D6, D5);
+
+        board.move(E5, D6);
+
+        assertTrue(board.isOccupied(D5));
+    }
+
+    @Test
+    public void Move_PieceOtherThanPawnBesidePawnThatMovedTwoRanks_LeavesThatPawnOnTheBoard() {
+        Board board = new Board();
+        board.move(C1, E5);
+        board.move(D7, D5);
+
+        board.move(E5, D6);
+
+        assertTrue(board.isOccupied(D5));
     }
 
     @Test

@@ -7,6 +7,8 @@
 - `Piece pieceAt(Location location)`: returns the piece on that square. Requires an occupied square and throws `IllegalArgumentException` otherwise. Does not change the board.
 - `void move(Location from, Location to)` (issue #19): puts the piece from `from` on `to`, and `from` becomes empty. A piece already on `to` is replaced; this is the board side of a capture. Moving a piece to its own square leaves the board unchanged. Throws `IllegalArgumentException` when `from` is empty, and then leaves the board unchanged. It does not check whether the move is legal, does not change whose turn it is, and does not touch the UI.
 - `void promote(Location square, PieceType type)` (issue #46): replaces the pawn on `square` with a new piece of the chosen type and the pawn's color: a `Queen`, `Rook`, `Bishop`, or `Knight`, so the promoted piece moves by its own rules. The choice does not depend on which pieces have been captured. Throws `IllegalArgumentException` when `type` is `KING` or `PAWN`, and then leaves the board unchanged. It does not check that the pawn is on its last rank; `BoardController` calls it only after a pawn arrives there.
+- `void move(Location from, Location to)`, en passant (issue #47 / GitHub US-14): after each move the board remembers whether it was a pawn moving two ranks, the only move that can be captured en passant. When a pawn moves diagonally onto an empty square, and the square beside `from` on the file of `to` holds the pawn that can be captured en passant, that pawn is removed. This is the board side of an en passant capture, the way replacing a piece is the board side of a normal capture.
+- `boolean canBeCapturedEnPassant(Location square)` (issue #47): returns true when `square` holds the pawn that moved two ranks on the last move, and false otherwise. The chance lasts one move: any later move ends it.
 
 No method returns null. The project rules forbid it, so an empty square is reported by `isOccupied` instead of a null from `pieceAt`. Callers ask `isOccupied` before `pieceAt`. TC9 through TC12 used to expect null from `pieceAt` on the empty ranks; they now check those squares with `isOccupied`.
 
@@ -89,6 +91,28 @@ A pawn is put on its last rank with `move`: the a2 pawn to a8 for White, and the
 | Input: `type` | Cases | the choices `QUEEN`, `ROOK`, `BISHOP`, `KNIGHT`; not choices, `KING` and `PAWN` |
 | Output: occupant of `square` after the call | Cases | a `Queen`, `Rook`, `Bishop`, or `Knight` of the pawn's color; the same pawn, after a rejected choice |
 | Output: signal for a rejected promotion | Cases | none; `IllegalArgumentException` |
+
+### `canBeCapturedEnPassant(Location square)`
+
+The board is set up with `move`, which does not check whether a move is legal. A two-rank pawn move is the only move that can be captured en passant, so the cases change one thing at a time: the distance, the type of the piece, the color, the square asked about, and whether another move came after it. The case numbers start at TC66, after the piece-class cases (TC46 to TC57, issue #53) and the promotion cases (TC58 to TC65, issue #46).
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the last move | Cases | a white pawn two ranks, e2 `(4, 2)` to e4 `(4, 4)`; a black pawn two ranks, d7 `(3, 7)` to d5 `(3, 5)`; a pawn one rank, e2 to e3 `(4, 3)`; a rook two ranks, a1 `(0, 1)` to a3 `(0, 3)` |
+| Input: a move after the two-rank pawn move | Cases | none; the black knight b8 `(1, 8)` to c6 `(2, 6)` |
+| Input: `square` | Cases | the square the pawn moved to; another square, d4 `(3, 4)` |
+| Output: the answer | Boolean | true; false |
+
+### `move(Location from, Location to)`, en passant
+
+A white pawn is put on e5 `(4, 5)` with two moves, e2 to e4 and e4 to e5. The black pawn beside it then moves d7 to d5, or reaches d5 with two one-rank moves, which cannot be captured en passant. The capturing move is e5 to d6 `(3, 6)`, the square the black pawn passed over.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the piece moving diagonally onto the empty d6 | Cases | the white pawn from e5; a white bishop on e5 (moved there from c1 `(2, 1)`) |
+| Input: the black pawn on d5 | Cases | can be captured en passant (moved d7 to d5); cannot (moved d7 to d6 `(3, 6)` to d5) |
+| Output: d5 after the move | Boolean, through `isOccupied` | false, the captured pawn is removed; true, nothing is removed |
+| Output: d6 after the move | Pointer | the same white pawn that moved from e5 |
 
 ## Step 4: Test cases (each-choice strategy)
 
@@ -179,3 +203,23 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC63: a king is not a choice | as TC58; promote a8 to `KING` | throws `IllegalArgumentException` | :white_check_mark: |
 | TC64: a pawn is not a choice | as TC58; promote a8 to `PAWN` | throws `IllegalArgumentException` | :white_check_mark: |
 | TC65: a rejected choice leaves the pawn | as TC63 | `pieceAt(a8)` is still the white pawn that moved from a2 | :white_check_mark: |
+
+### Method under test: `canBeCapturedEnPassant(Location square)`
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC66: a white pawn that just moved two ranks | a new `Board`; move e2 `(4, 2)` to e4 `(4, 4)`; ask about e4 | true | :white_check_mark: |
+| TC67: a pawn that just moved one rank | a new `Board`; move e2 to e3 `(4, 3)`; ask about e3 | false | :white_check_mark: |
+| TC68: a piece that is not a pawn moving two ranks | a new `Board`; move a1 `(0, 1)` to a3 `(0, 3)`; ask about a3 | false | :white_check_mark: |
+| TC69: another move ends the chance | a new `Board`; move e2 to e4, then b8 `(1, 8)` to c6 `(2, 6)`; ask about e4 | false | :white_check_mark: |
+| TC70: a black pawn that just moved two ranks | a new `Board`; move d7 `(3, 7)` to d5 `(3, 5)`; ask about d5 | true | :white_check_mark: |
+| TC71: another square than the pawn that moved | a new `Board`; move e2 to e4; ask about d4 `(3, 4)` | false | :white_check_mark: |
+
+### Method under test: `move(Location from, Location to)`, en passant
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC72: an en passant capture removes the captured pawn | a new `Board`; move e2 `(4, 2)` to e4, e4 to e5 `(4, 5)`, and d7 `(3, 7)` to d5 `(3, 5)`; move e5 to d6 `(3, 6)` | `isOccupied(d5)` is false | :white_check_mark: |
+| TC73: the capturing pawn lands on the square passed over | as TC72 | `pieceAt(d6)` is the white pawn that moved from e2 | :white_check_mark: |
+| TC74: a pawn that moved one rank at a time is not removed | a new `Board`; move e2 to e4, e4 to e5, d7 to d6, and d6 to d5; move e5 to d6 | `isOccupied(d5)` is true | :white_check_mark: |
+| TC75: a piece that is not a pawn removes nothing | a new `Board`; move c1 `(2, 1)` to e5, and d7 to d5; move e5 to d6 | `isOccupied(d5)` is true | :white_check_mark: |
