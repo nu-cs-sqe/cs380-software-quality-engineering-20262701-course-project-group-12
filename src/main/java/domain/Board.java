@@ -169,7 +169,9 @@ public class Board {
     }
 
     public boolean isLegalMove(Location from, Location to) {
-        return pieceAt(from).canMove(from, to, this);
+        Piece movingPiece = pieceAt(from);
+        return movingPiece.canMove(from, to, this)
+                && !boardAfterMove(from, to).isInCheck(movingPiece.getColor());
     }
 
     private Board boardAfterMove(Location from, Location to) {
