@@ -313,6 +313,15 @@ public class BoardTests {
     }
 
     @Test
+    public void IsInCheck_NewBoard_ReturnsFalse() {
+        Board board = new Board();
+
+        boolean inCheck = board.isInCheck(PieceColor.WHITE);
+
+        assertFalse(inCheck);
+    }
+
+    @Test
     public void Board_A1_PlacesRook() {
         assertPieceClass(A1, Rook.class);
     }

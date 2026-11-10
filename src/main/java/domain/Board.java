@@ -78,6 +78,10 @@ public class Board {
         place(movingPiece, to);
     }
 
+    public boolean isInCheck(PieceColor color) {
+        return false;
+    }
+
     public boolean isCheckmated(PieceColor color) {
         return false;
     }

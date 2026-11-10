@@ -182,7 +182,7 @@ The case numbers start at TC64, after the piece-class cases (TC46 to TC57, issue
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC64: no piece reaches the king | a new `Board`; ask about White | false | :x: |
+| TC64: no piece reaches the king | a new `Board`; ask about White | false | :white_check_mark: |
 | TC65: a piece of the other color reaches the white king | the Fool's mate position; ask about White | true | :x: |
 | TC66: the other king is not in check | the Fool's mate position; ask about Black | false | :x: |
 | TC67: a piece of the other color reaches the black king | the queen check on Black; ask about Black | true | :x: |
