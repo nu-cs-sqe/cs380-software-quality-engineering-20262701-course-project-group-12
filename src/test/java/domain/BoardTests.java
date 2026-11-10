@@ -338,6 +338,15 @@ public class BoardTests {
     }
 
     @Test
+    public void IsInCheck_BlackKingWhileWhiteIsInCheck_ReturnsFalse() {
+        Board board = foolsMate();
+
+        boolean inCheck = board.isInCheck(PieceColor.BLACK);
+
+        assertFalse(inCheck);
+    }
+
+    @Test
     public void Board_A1_PlacesRook() {
         assertPieceClass(A1, Rook.class);
     }

@@ -81,16 +81,20 @@ public class Board {
     }
 
     public boolean isInCheck(PieceColor color) {
-        Location kingSquare = kingSquare();
+        Location kingSquare = kingSquareOf(color);
         return occupiedSquares()
                 .anyMatch(square -> pieceAt(square).canMove(square, kingSquare, this));
     }
 
-    private Location kingSquare() {
+    private Location kingSquareOf(PieceColor color) {
         return occupiedSquares()
-                .filter(square -> pieceAt(square).getType() == PieceType.KING)
+                .filter(square -> isKingOf(color, pieceAt(square)))
                 .findFirst()
                 .orElseThrow();
+    }
+
+    private boolean isKingOf(PieceColor color, Piece piece) {
+        return piece.getType() == PieceType.KING && piece.getColor() == color;
     }
 
     private Stream<Location> occupiedSquares() {
