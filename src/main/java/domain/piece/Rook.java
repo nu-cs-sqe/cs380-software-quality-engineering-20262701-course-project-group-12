@@ -8,15 +8,11 @@ public class Rook extends Piece {
         super(PieceType.ROOK, color);
     }
 
+    @Override
     public boolean canMove(Location from, Location to, Board board) {
         return isAlongRookLine(from, to)
-                && !isFriendlyPiece(to, board)
-                && pathIsClear(from, to, board);
-    }
-
-    private boolean isFriendlyPiece(Location destination, Board board) {
-        return board.isOccupied(destination)
-                && board.pieceAt(destination).getColor() == getColor();
+                && !holdsOwnPiece(to, board)
+                && isPathClear(from, to, board);
     }
 
     private boolean isAlongRookLine(Location from, Location to) {
@@ -29,20 +25,5 @@ public class Rook extends Piece {
 
     private boolean isAlongRank(Location from, Location to) {
         return from.getRank() == to.getRank() && from.getFile() != to.getFile();
-    }
-
-    private boolean pathIsClear(Location from, Location to, Board board) {
-        int fileStep = Integer.signum(to.getFile() - from.getFile());
-        int rankStep = Integer.signum(to.getRank() - from.getRank());
-        int file = from.getFile() + fileStep;
-        int rank = from.getRank() + rankStep;
-        while (file != to.getFile() || rank != to.getRank()) {
-            if (board.isOccupied(new Location(file, rank))) {
-                return false;
-            }
-            file += fileStep;
-            rank += rankStep;
-        }
-        return true;
     }
 }
