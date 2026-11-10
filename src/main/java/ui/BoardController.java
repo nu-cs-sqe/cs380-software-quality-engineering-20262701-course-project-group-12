@@ -64,7 +64,7 @@ public class BoardController {
 
     private void moveOrChangeSelection(Location from, Location to) {
         Piece movingPiece = board.pieceAt(from);
-        if (movingPiece.canMove(from, to, board)) {
+        if (board.isLegalMove(from, to)) {
             moveUnlessCapturingKing(movingPiece, from, to);
         } else {
             select(to);

@@ -216,7 +216,7 @@ Issue #44 (GitHub US-11). The case numbers start at TC41, after the checkmate ca
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC41: a move the board refuses leaves the board unchanged | White is to move; b1 `(1, 1)` holds a White piece; the board answers false for `isLegalMove(b1, c3)` and false for `isOccupied(c3)`; click b1, then c3 `(2, 3)` | the board does not move any piece; the game does not pass the turn; the piece is not asked `canMove` | :x: |
+| TC41: a move the board refuses leaves the board unchanged | White is to move; b1 `(1, 1)` holds a White piece; the board answers false for `isLegalMove(b1, c3)` and false for `isOccupied(c3)`; click b1, then c3 `(2, 3)` | the board does not move any piece; the game does not pass the turn; the piece is not asked `canMove` | :white_check_mark: |
 | TC42: a refused move onto the last rank leaves nothing pending | White is to move; a7 `(0, 7)` holds a White piece; the board answers false for `isLegalMove(a7, a8)` and false for `isOccupied(a8)`; click a7, then a8 `(0, 8)`, then ask `isPromotionPending` | false; the board does not move any piece | :x: |
 | TC43: a promotion that checkmates ends the game | as TC32; after the choice, Black is to move, and the board answers true for `isCheckmated(BLACK)` | the board promotes a8 to `QUEEN`; the game passes the turn, then ends by checkmate | :x: |
 | TC44: a promotion that does not checkmate does not end the game | as TC32; after the choice, Black is to move, and the board answers false for `isCheckmated(BLACK)` | the board promotes a8 to `QUEEN`; the game passes the turn and does not end | :x: |
