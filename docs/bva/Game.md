@@ -416,7 +416,7 @@ without a new click case.
   - **Expected output**: `isOver()` returns `true`; `isStalemate()` returns
     `false`.
 
-- **TC-END-11 — Reject reading the winner's name after a stalemate** ( :x: )
+- **TC-END-11 — Reject reading the winner's name after a stalemate** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `endByStalemate()`,
     `winnerName()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then

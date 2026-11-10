@@ -367,4 +367,13 @@ public class GameTests {
         assertTrue(game.isOver());
         assertFalse(game.isStalemate());
     }
+
+    @Test
+    public void WinnerName_AfterStalemate_ThrowsIllegalStateException() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByStalemate();
+
+        assertThrows(IllegalStateException.class, game::winnerName);
+    }
 }
