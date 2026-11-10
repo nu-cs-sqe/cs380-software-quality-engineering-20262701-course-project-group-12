@@ -545,6 +545,17 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void ChoosePromotion_PromotionThatDoesNotCheckmate_DoesNotEndTheGame() {
+        expectWhitePromotionToQueenOnA8ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(false);
+        BoardController controller = controllerWithPromotionPendingOnA8();
+
+        controller.choosePromotion(PieceType.QUEEN);
+
+        verify(board, piece, game);
+    }
+
     private BoardController controllerWithPromotionPendingOnA8() {
         BoardController controller = replayedController();
         controller.clickSquare(A7);
