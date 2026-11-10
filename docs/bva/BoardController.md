@@ -14,6 +14,7 @@
 - `boolean isPromotionPending()` (issue #46): returns true while a pawn waits on the last rank for the player's choice. `BoardView` uses it to ask for the choice.
 - `void choosePromotion(PieceType type)` (issue #46): when a promotion is pending, the board promotes the pawn on the arrival square to `type`, the game passes the turn, and nothing is pending any more. When the board rejects the type (a king or a pawn), its `IllegalArgumentException` goes through, the promotion stays pending, and the turn does not pass.
 - `void clickSquare(Location square)`, checkmate (issue #48 / GitHub US-15, docs US-15): after a move passes the turn, the controller asks `board.isCheckmated(game.colorToMove())`. When the player now to move is checkmated, it calls `game.endByCheckmate()`, so the player who made the move wins. Once `game.isOver()` is true, every click does nothing: no square is selected and no piece moves (US-15 AC 3).
+- `void clickSquare(Location square)`, stalemate (issue #49 / GitHub US-16, docs US-16): after a move passes the turn, if the player now to move is not checkmated, the controller asks `board.isStalemated(game.colorToMove())`. When that player is stalemated, it calls `game.endByStalemate()`, so the game is a draw. Checkmate is asked first: a position in check with no reply is never ended as a stalemate. A click after the game is over is already TC40.
 
 No method checks its arguments for null, and no case passes null: our code never passes null (instructor code review, Week 6). TC2, TC5, and TC8 used to pass a null board or location; they were removed with the board check.
 
@@ -109,6 +110,21 @@ The checkmate cases start from TC22: White moves the piece on b1 `(1, 1)` to c3 
 | Output: the game | Cases | `passTurn`, then `endByCheckmate`; `passTurn` only; unchanged |
 | Output: the selection after a click on a piece of the player to move | Cases | the clicked square; none, when the game is over |
 
+### `clickSquare(Location square)`, stalemate
+
+The stalemate cases start from the same move as the checkmate cases: White
+moves the piece on b1 `(1, 1)` to c3 `(2, 3)`, and the game passes the turn,
+so Black is to move. Checkmate is asked first. `Board` and `Game` are mocked
+with EasyMock, because the controller owns neither stalemate detection nor the
+result.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: what the board answers for `isCheckmated` of the player to move after the move | Boolean | true; false |
+| Input: what the board answers for `isStalemated` of the player to move after the move | Boolean | true (only when not checkmated); false |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
+| Output: the game | Cases | `passTurn`, then `endByCheckmate`; `passTurn`, then `endByStalemate`; `passTurn` only |
+
 ## Step 4: Test cases (each-choice strategy)
 
 ### Method under test: `BoardController(Board board, Game game)`
@@ -194,6 +210,14 @@ The case numbers start at TC38, after the promotion cases (TC28 to TC37, issue #
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC38: a move that checkmates ends the game | as TC22; after the move, Black is to move, and the board answers true for `isCheckmated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn, then ends by checkmate | :white_check_mark: |
-| TC39: a move that does not checkmate does not end the game | as TC22; after the move, Black is to move, and the board answers false for `isCheckmated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn and does not end | :white_check_mark: |
+| TC38: a move that checkmates ends the game | as TC22; after the move, Black is to move, and the board answers true for `isCheckmated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn, then ends by checkmate; the board is not asked `isStalemated` | :white_check_mark: |
+| TC39: a move that does not checkmate does not end the game | as TC22; after the move, Black is to move, and the board answers false for `isCheckmated(BLACK)` and false for `isStalemated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn and does not end | :white_check_mark: |
 | TC40: a click after the game is over selects nothing | a controller for the mocked board and game; the game is over; White is to move, and b1 holds a White piece; click b1, then ask `isSelected` about b1 | false; the board is not asked about b1 | :white_check_mark: |
+
+### Method under test: `clickSquare(Location square)`, stalemate
+
+The case numbers start at TC41, after the checkmate cases (TC38 to TC40, issue #48). A click after stalemate is already TC40, because `isOver()` is true.
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC41: a move that stalemates ends the game as a draw | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)` and true for `isStalemated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn, then ends by stalemate; the game does not end by checkmate | :x: |
