@@ -395,7 +395,7 @@ stories will add their own endings. `BoardController` already refuses every
 click once `isOver()` is true, so further moves after stalemate are refused
 without a new click case.
 
-- **TC-END-08 — A started game is not a stalemate** ( :x: )
+- **TC-END-08 — A started game is not a stalemate** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `isStalemate()`
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.

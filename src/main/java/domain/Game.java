@@ -52,6 +52,10 @@ public class Game {
         return winner.isPresent();
     }
 
+    public boolean isStalemate() {
+        return false;
+    }
+
     public String winnerName() {
         return winner().getName();
     }
