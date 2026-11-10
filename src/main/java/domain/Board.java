@@ -56,6 +56,7 @@ public class Board {
     private Board(Board original) {
         allSquares().forEach(square ->
                 rankOf(square).set(square.getFile(), original.occupantOf(square)));
+        pawnThatJustAdvancedTwoRanks = original.pawnThatJustAdvancedTwoRanks;
     }
 
     private static List<List<Optional<Piece>>> emptySquares() {
