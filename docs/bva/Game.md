@@ -404,7 +404,7 @@ move. The method takes no arguments, so there is no null case.
     four moves, so White is to move.
   - **Expected output**: Returns `true`.
 
-- **TC-CHECK-03 — Black to move is in check** ( :x: )
+- **TC-CHECK-03 — Black to move is in check** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `passTurn()`,
     `isPlayerToMoveInCheck()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then the
