@@ -11,6 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameTests {
     private static final Location A1 = new Location(0, 1);
+    private static final Location D8 = new Location(3, 8);
+    private static final Location E5 = new Location(4, 5);
+    private static final Location E7 = new Location(4, 7);
+    private static final Location F2 = new Location(5, 2);
+    private static final Location F3 = new Location(5, 3);
+    private static final Location G2 = new Location(6, 2);
+    private static final Location G4 = new Location(6, 4);
+    private static final Location H4 = new Location(7, 4);
 
     @Test
     public void IsStarted_NewGame_ReturnsFalse() {
@@ -344,5 +352,28 @@ public class GameTests {
         boolean inCheck = game.isPlayerToMoveInCheck();
 
         assertFalse(inCheck);
+    }
+
+    @Test
+    public void IsPlayerToMoveInCheck_WhiteToMoveInCheck_ReturnsTrue() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        playFoolsMate(game);
+
+        boolean inCheck = game.isPlayerToMoveInCheck();
+
+        assertTrue(inCheck);
+    }
+
+    private void playFoolsMate(Game game) {
+        play(game, F2, F3);
+        play(game, E7, E5);
+        play(game, G2, G4);
+        play(game, D8, H4);
+    }
+
+    private void play(Game game, Location from, Location to) {
+        game.board().move(from, to);
+        game.passTurn();
     }
 }

@@ -396,7 +396,7 @@ move. The method takes no arguments, so there is no null case.
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.
 
-- **TC-CHECK-02 — White to move is in check** ( :x: )
+- **TC-CHECK-02 — White to move is in check** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `passTurn()`,
     `isPlayerToMoveInCheck()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then

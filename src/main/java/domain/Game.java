@@ -53,7 +53,7 @@ public class Game {
     }
 
     public boolean isPlayerToMoveInCheck() {
-        return false;
+        return board().isInCheck(colorToMove());
     }
 
     public String winnerName() {
