@@ -42,6 +42,7 @@ public class BoardController {
     private void finishPromotion(Location square, PieceType type) {
         board.promote(square, type);
         game.passTurn();
+        endGameIfCheckmated();
         promotionSquare = Optional.empty();
     }
 

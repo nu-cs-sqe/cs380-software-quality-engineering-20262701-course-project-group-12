@@ -533,11 +533,36 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void ChoosePromotion_PromotionThatCheckmates_EndsTheGame() {
+        expectWhitePromotionToQueenOnA8ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(true);
+        game.endByCheckmate();
+        BoardController controller = controllerWithPromotionPendingOnA8();
+
+        controller.choosePromotion(PieceType.QUEEN);
+
+        verify(board, piece, game);
+    }
+
     private BoardController controllerWithPromotionPendingOnA8() {
         BoardController controller = replayedController();
         controller.clickSquare(A7);
         controller.clickSquare(A8);
         return controller;
+    }
+
+    private void expectWhitePromotionToQueenOnA8ThenBlackToMove() {
+        expect(board.isOccupied(A7)).andReturn(true);
+        expect(board.pieceAt(A7)).andReturn(piece).times(2);
+        expect(piece.getColor()).andReturn(PieceColor.WHITE);
+        expect(game.colorToMove()).andReturn(PieceColor.WHITE);
+        expect(board.isLegalMove(A7, A8)).andReturn(true);
+        board.move(A7, A8);
+        expect(piece.promotesOn(A8)).andReturn(true);
+        board.promote(A8, PieceType.QUEEN);
+        game.passTurn();
+        expect(game.colorToMove()).andReturn(PieceColor.BLACK);
     }
 
     private void expectQueenPromotionOnA8() {
