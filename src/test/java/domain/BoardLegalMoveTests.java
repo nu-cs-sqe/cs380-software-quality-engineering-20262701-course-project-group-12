@@ -1,8 +1,10 @@
 package domain;
 
+import domain.piece.Piece;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardLegalMoveTests {
@@ -188,6 +190,18 @@ public class BoardLegalMoveTests {
         boolean legal = board.isLegalMove(E8, E7);
 
         assertTrue(legal);
+    }
+
+    @Test
+    public void IsLegalMove_EnPassantPin_LeavesTheBoardUnchanged() {
+        Board board = enPassantPinnedByRook();
+        Piece whitePawn = board.pieceAt(E5);
+
+        board.isLegalMove(E5, D6);
+
+        assertSame(whitePawn, board.pieceAt(E5));
+        assertFalse(board.isOccupied(D6));
+        assertTrue(board.canBeCapturedEnPassant(D5));
     }
 
     private Board knightPinnedByBishop() {
