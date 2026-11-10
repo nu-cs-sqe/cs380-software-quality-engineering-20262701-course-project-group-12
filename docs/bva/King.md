@@ -34,6 +34,9 @@ for c1 or c8):
   king placed on e1 or e8 at the start can be unmoved on its square.
 - `Board.holdsUnmovedPiece(rook square)`: that rook has never moved and
   has not been captured.
+- The rook square holds a piece of the king's color. A pawn promoted on
+  the opponent's first rank is a new piece that has never moved, so an
+  unmoved piece on the corner is not enough by itself.
 - Every square between the king and that rook is empty.
 - `Board.isAttackedByOpponentOf` is false for the square the king stands
   on, the square it crosses, and `to`. b1, b8, and the rook square may be
@@ -154,7 +157,11 @@ Fifty-move counting (AC 8) is US-18; a castle is a king move and
   e1 to b1 `(1, 1)` (three files along the rank).
 - **Input: history of the king**: never moved; moved to f1 and back.
 - **Input: history of the chosen rook**: never moved; moved and back;
-  gone (moved off its square). The other rook moved and back.
+  gone (moved off its square). The other rook moved and back. An unmoved
+  opponent piece on the rook square (added after review found that a
+  promoted pawn counts as unmoved). Only promotion (US-13) puts one there,
+  so the case uses a partial EasyMock `Board` whose `holdsUnmovedPiece`
+  reports every piece as unmoved.
 - **Input: squares between the king and the rook**: a collection of 2
   (kingside) or 3 (queenside) squares. All empty; the square next to the
   rook occupied (b1, not on the king's path). The square next to the king
@@ -376,6 +383,11 @@ Fifty-move counting (AC 8) is US-18; a castle is a king move and
 - **TC-KING-32 — Reject three files toward the queenside rook** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king, e1 to b1 `(1, 1)`. Queenside cleared, so b1 is empty.
+  - **Expected output**: `false`.
+
+- **TC-KING-41 — Reject a castle toward an unmoved opponent piece on the rook square** ( :x: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king, e1 to g1. Partial mock of a new `Board` whose `holdsUnmovedPiece` returns `true` for every square, as it does for a piece promoted onto h1. Kingside cleared, then `move` of the g8 knight to h1, which attacks none of e1, f1, and g1.
   - **Expected output**: `false`.
 
 
