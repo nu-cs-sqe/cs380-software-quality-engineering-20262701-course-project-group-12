@@ -30,10 +30,17 @@ public class BoardTests {
     private static final Location D1 = new Location(3, 1);
     private static final Location D8 = new Location(3, 8);
     private static final Location E1 = new Location(4, 1);
+    private static final Location E5 = new Location(4, 5);
+    private static final Location E7 = new Location(4, 7);
     private static final Location E8 = new Location(4, 8);
+    private static final Location F2 = new Location(5, 2);
+    private static final Location F3 = new Location(5, 3);
     private static final Location F8 = new Location(5, 8);
+    private static final Location G2 = new Location(6, 2);
+    private static final Location G4 = new Location(6, 4);
     private static final Location G8 = new Location(6, 8);
     private static final Location H1 = new Location(7, 1);
+    private static final Location H4 = new Location(7, 4);
     private static final Location H5 = new Location(7, 5);
     private static final Location H7 = new Location(7, 7);
     private static final Location H8 = new Location(7, 8);
@@ -322,6 +329,15 @@ public class BoardTests {
     }
 
     @Test
+    public void IsInCheck_WhiteKingReachedByBlackQueen_ReturnsTrue() {
+        Board board = foolsMate();
+
+        boolean inCheck = board.isInCheck(PieceColor.WHITE);
+
+        assertTrue(inCheck);
+    }
+
+    @Test
     public void Board_A1_PlacesRook() {
         assertPieceClass(A1, Rook.class);
     }
@@ -379,6 +395,15 @@ public class BoardTests {
     @Test
     public void Board_H7_PlacesPawn() {
         assertPieceClass(H7, Pawn.class);
+    }
+
+    private Board foolsMate() {
+        Board board = new Board();
+        board.move(F2, F3);
+        board.move(E7, E5);
+        board.move(G2, G4);
+        board.move(D8, H4);
+        return board;
     }
 
     private int countPieces(Board board) {

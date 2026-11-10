@@ -6,6 +6,7 @@ import domain.piece.Knight;
 import domain.piece.Pawn;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
+import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
 
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Board {
@@ -79,7 +81,23 @@ public class Board {
     }
 
     public boolean isInCheck(PieceColor color) {
-        return false;
+        Location kingSquare = kingSquare();
+        return occupiedSquares()
+                .anyMatch(square -> pieceAt(square).canMove(square, kingSquare, this));
+    }
+
+    private Location kingSquare() {
+        return occupiedSquares()
+                .filter(square -> pieceAt(square).getType() == PieceType.KING)
+                .findFirst()
+                .orElseThrow();
+    }
+
+    private Stream<Location> occupiedSquares() {
+        return IntStream.rangeClosed(Location.MIN_FILE, Location.MAX_FILE).boxed()
+                .flatMap(file -> IntStream.rangeClosed(Location.MIN_RANK, Location.MAX_RANK)
+                        .mapToObj(rank -> new Location(file, rank)))
+                .filter(this::isOccupied);
     }
 
     public boolean isCheckmated(PieceColor color) {
