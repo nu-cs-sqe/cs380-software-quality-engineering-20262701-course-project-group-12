@@ -356,4 +356,15 @@ public class GameTests {
         assertTrue(game.isOver());
         assertTrue(game.isStalemate());
     }
+
+    @Test
+    public void EndByCheckmate_StartedGame_IsNotStalemate() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByCheckmate();
+
+        assertTrue(game.isOver());
+        assertFalse(game.isStalemate());
+    }
 }

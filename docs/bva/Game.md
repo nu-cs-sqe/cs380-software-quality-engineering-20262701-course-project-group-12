@@ -408,7 +408,7 @@ without a new click case.
   - **Expected output**: `isOver()` returns `true`; `isStalemate()` returns
     `true`.
 
-- **TC-END-10 — Checkmate is not a stalemate** ( :x: )
+- **TC-END-10 — Checkmate is not a stalemate** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `endByCheckmate()`,
     `isStalemate()`, `isOver()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then
