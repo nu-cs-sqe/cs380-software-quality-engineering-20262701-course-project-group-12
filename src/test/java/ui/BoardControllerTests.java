@@ -442,6 +442,21 @@ public class BoardControllerTests {
     }
 
     @Test
+    public void ClickSquare_RefusedMoveOntoLastRank_LeavesNothingPending() {
+        expectSelectableWhitePiece(A7);
+        expect(board.pieceAt(A7)).andReturn(piece);
+        expect(board.isLegalMove(A7, A8)).andReturn(false);
+        expect(board.isOccupied(A8)).andReturn(false);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(A7);
+        controller.clickSquare(A8);
+
+        assertFalse(controller.isPromotionPending());
+        verify(board, piece, game);
+    }
+
+    @Test
     public void ClickSquare_GameOver_SelectsNothing() {
         expect(game.isOver()).andReturn(true);
         BoardController controller = replayedController();
