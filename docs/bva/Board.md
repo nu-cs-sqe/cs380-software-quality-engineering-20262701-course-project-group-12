@@ -248,21 +248,21 @@ Every value from Step 3 is used in at least one test case. A square is written a
 
 ### Method under test: `isInCheck(PieceColor color)`
 
-The case numbers start at TC64, after the piece-class cases (TC46 to TC57, issue #53) and the en passant cases (up to TC63, issue #47).
+The case numbers start at TC76, after the piece-class cases (TC46 to TC57, issue #53), the promotion cases (TC58 to TC65, issue #46), and the en passant cases (TC66 to TC75, issue #47).
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC64: no piece reaches the king | a new `Board`; ask about White | false | :white_check_mark: |
-| TC65: a piece of the other color reaches the white king | the Fool's mate position; ask about White | true | :white_check_mark: |
-| TC66: the other king is not in check | the Fool's mate position; ask about Black | false | :white_check_mark: |
-| TC67: a piece of the other color reaches the black king | the queen check on Black; ask about Black | true | :white_check_mark: |
+| TC76: no piece reaches the king | a new `Board`; ask about White | false | :white_check_mark: |
+| TC77: a piece of the other color reaches the white king | the Fool's mate position; ask about White | true | :white_check_mark: |
+| TC78: the other king is not in check | the Fool's mate position; ask about Black | false | :white_check_mark: |
+| TC79: a piece of the other color reaches the black king | the queen check on Black; ask about Black | true | :white_check_mark: |
 
 ### Method under test: `isCheckmated(PieceColor color)`
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC68: not in check, with legal moves | a new `Board`; ask about White | false | :white_check_mark: |
-| TC69: in check with no reply | the Fool's mate position; ask about White | true | :white_check_mark: |
-| TC70: in check with a reply that blocks the check | the queen check on Black; ask about Black | false | :white_check_mark: |
-| TC71: not in check and no legal move | Sam Loyd's stalemate; ask about Black | false | :white_check_mark: |
-| TC72: the query leaves the board unchanged | the Fool's mate position; ask about White | `pieceAt(h4)` is still the black queen that moved from d8, `pieceAt(e1)` is still the white king, and 32 squares are occupied | :white_check_mark: |
+| TC80: not in check, with legal moves | a new `Board`; ask about White | false | :white_check_mark: |
+| TC81: in check with no reply | the Fool's mate position; ask about White | true | :white_check_mark: |
+| TC82: in check with a reply that blocks the check | the queen check on Black; ask about Black | false | :white_check_mark: |
+| TC83: not in check and no legal move | Sam Loyd's stalemate; ask about Black | false | :white_check_mark: |
+| TC84: the query leaves the board unchanged | the Fool's mate position; ask about White | `pieceAt(h4)` is still the black queen that moved from d8, `pieceAt(e1)` is still the white king, and 32 squares are occupied | :white_check_mark: |
