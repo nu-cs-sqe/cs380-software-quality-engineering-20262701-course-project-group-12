@@ -155,18 +155,17 @@ public class Board {
     }
 
     public boolean isCheckmated(PieceColor color) {
-        return isInCheck(color) && !hasMoveOutOfCheck(color);
+        return isInCheck(color) && !hasLegalMove(color);
     }
 
-    private boolean hasMoveOutOfCheck(PieceColor color) {
+    private boolean hasLegalMove(PieceColor color) {
         return occupiedSquares()
                 .filter(from -> pieceAt(from).getColor() == color)
-                .anyMatch(from -> hasMoveOutOfCheckFrom(from, color));
+                .anyMatch(this::hasLegalMoveFrom);
     }
 
-    private boolean hasMoveOutOfCheckFrom(Location from, PieceColor color) {
-        return allSquares().anyMatch(to -> pieceAt(from).canMove(from, to, this)
-                && !boardAfterMove(from, to).isInCheck(color));
+    private boolean hasLegalMoveFrom(Location from) {
+        return allSquares().anyMatch(to -> isLegalMove(from, to));
     }
 
     public boolean isLegalMove(Location from, Location to) {
