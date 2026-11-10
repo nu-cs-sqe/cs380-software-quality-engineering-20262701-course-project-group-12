@@ -140,6 +140,15 @@ public class BoardLegalMoveTests {
         assertTrue(legal);
     }
 
+    @Test
+    public void IsLegalMove_KingOutOfCheckToAttackedSquare_ReturnsFalse() {
+        Board board = queenChecksWhite();
+
+        boolean legal = board.isLegalMove(E2, F3);
+
+        assertFalse(legal);
+    }
+
     private Board knightPinnedByBishop() {
         Board board = new Board();
         board.move(E2, E4);
