@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PawnTests {
+    private static final Location A1 = new Location(0, 1);
     private static final Location A2 = new Location(0, 2);
     private static final Location A5 = new Location(0, 5);
     private static final Location A7 = new Location(0, 7);
@@ -242,5 +243,33 @@ public class PawnTests {
         boolean canMove = whitePawn.canMove(E2, G3, board);
 
         assertFalse(canMove);
+    }
+
+    @Test
+    public void PromotesOn_WhitePawnOnRankEight_ReturnsTrue() {
+        boolean promotes = whitePawn.promotesOn(A8);
+
+        assertTrue(promotes);
+    }
+
+    @Test
+    public void PromotesOn_WhitePawnOnRankSeven_ReturnsFalse() {
+        boolean promotes = whitePawn.promotesOn(A7);
+
+        assertFalse(promotes);
+    }
+
+    @Test
+    public void PromotesOn_BlackPawnOnRankOne_ReturnsTrue() {
+        boolean promotes = blackPawn.promotesOn(A1);
+
+        assertTrue(promotes);
+    }
+
+    @Test
+    public void PromotesOn_BlackPawnOnRankTwo_ReturnsFalse() {
+        boolean promotes = blackPawn.promotesOn(A2);
+
+        assertFalse(promotes);
     }
 }

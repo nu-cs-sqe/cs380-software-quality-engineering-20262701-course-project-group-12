@@ -2,6 +2,7 @@ package ui;
 
 import domain.Location;
 import domain.piece.Piece;
+import domain.piece.PieceType;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,6 +16,9 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.List;
+import java.util.Locale;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class BoardView extends JPanel {
@@ -32,6 +36,8 @@ public class BoardView extends JPanel {
     private static final char FIRST_FILE_LETTER = 'a';
     private static final Color LABEL_INK = Color.DARK_GRAY;
     private static final Font LABEL_FONT = new Font(Font.SANS_SERIF, Font.BOLD, TILE_SIZE / 5);
+    private static final List<PieceType> PROMOTION_CHOICES =
+            List.of(PieceType.QUEEN, PieceType.ROOK, PieceType.BISHOP, PieceType.KNIGHT);
 
     private final BoardController boardController;
     private final Runnable afterClick;
@@ -58,9 +64,31 @@ public class BoardView extends JPanel {
     private void clickAt(Point point) {
         if (isOnBoard(point)) {
             boardController.clickSquare(squareAt(point));
+            repaint();
+            askForPromotionWhilePending();
             afterClick.run();
             repaint();
         }
+    }
+
+    private void askForPromotionWhilePending() {
+        while (boardController.isPromotionPending()) {
+            askForPromotion();
+        }
+    }
+
+    private void askForPromotion() {
+        Object[] labels = PROMOTION_CHOICES.stream().map(BoardView::labelOf).toArray();
+        int choice = JOptionPane.showOptionDialog(this, Messages.text("promotion.question"),
+                Messages.text("promotion.title"), JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null, labels, labels[0]);
+        if (choice != JOptionPane.CLOSED_OPTION) {
+            boardController.choosePromotion(PROMOTION_CHOICES.get(choice));
+        }
+    }
+
+    private static String labelOf(PieceType type) {
+        return Messages.text("promotion." + type.name().toLowerCase(Locale.ROOT));
     }
 
     private boolean isOnBoard(Point point) {

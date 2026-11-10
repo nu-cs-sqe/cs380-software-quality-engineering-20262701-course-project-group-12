@@ -6,12 +6,14 @@ import domain.piece.Knight;
 import domain.piece.Pawn;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
+import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -33,6 +35,12 @@ public class Board {
             Bishop::new,
             Knight::new,
             Rook::new);
+    private static final Map<PieceType, Function<PieceColor, Piece>> PROMOTION_PIECE_MAKERS =
+            Map.of(
+                    PieceType.QUEEN, Queen::new,
+                    PieceType.ROOK, Rook::new,
+                    PieceType.BISHOP, Bishop::new,
+                    PieceType.KNIGHT, Knight::new);
 
     private final List<List<Optional<Piece>>> squares = emptySquares();
 
@@ -76,6 +84,15 @@ public class Board {
         Piece movingPiece = pieceAt(from);
         clear(from);
         place(movingPiece, to);
+    }
+
+    public void promote(Location square, PieceType type) {
+        if (!PROMOTION_PIECE_MAKERS.containsKey(type)) {
+            throw new IllegalArgumentException("Cannot promote a pawn to a " + type
+                    + "; the choices are a queen, rook, bishop, or knight");
+        }
+        PieceColor pawnColor = pieceAt(square).getColor();
+        place(PROMOTION_PIECE_MAKERS.get(type).apply(pawnColor), square);
     }
 
     private void clear(Location location) {
