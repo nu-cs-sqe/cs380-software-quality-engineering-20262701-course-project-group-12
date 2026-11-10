@@ -80,8 +80,8 @@ The capture cases start from the state issue #34 leaves: b1 `(1, 1)` is selected
 | --- | --- | --- |
 | Input: the occupant of a square the selected piece can reach | Cases | an opponent's piece other than the king (a black pawn on c3); the opponent's king is never reachable (issue #44) |
 | Input: `square` | Pointer | a location (no null: callers never pass one) |
-| Output: the board | Cases | the selected piece moves from b1 to c3 and replaces the captured piece; unchanged |
-| Output: the selection after the click | Cases | none; unchanged (still b1) |
+| Output: the board | Cases | the selected piece moves from b1 to c3 and replaces the captured piece |
+| Output: the selection after the click | Cases | none |
 
 ### `clickSquare(Location square)`, promotions, `isPromotionPending()`, and `choosePromotion(PieceType type)`
 
