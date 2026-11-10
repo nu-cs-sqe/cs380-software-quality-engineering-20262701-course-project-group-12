@@ -355,6 +355,19 @@ public class BoardTests {
     }
 
     @Test
+    public void IsCheckmated_FoolsMate_LeavesTheBoardUnchanged() {
+        Board board = foolsMate();
+        Piece blackQueen = board.pieceAt(H4);
+        Piece whiteKing = board.pieceAt(E1);
+
+        board.isCheckmated(PieceColor.WHITE);
+
+        assertSame(blackQueen, board.pieceAt(H4));
+        assertSame(whiteKing, board.pieceAt(E1));
+        assertEquals(STARTING_PIECE_COUNT, countPieces(board));
+    }
+
+    @Test
     public void IsCheckmated_NotInCheckWithNoLegalMove_ReturnsFalse() {
         Board board = samLoydsStalemate();
 
