@@ -385,7 +385,7 @@ Fifty-move counting (AC 8) is US-18; a castle is a king move and
   - **State of the system**: White king, e1 to b1 `(1, 1)`. Queenside cleared, so b1 is empty.
   - **Expected output**: `false`.
 
-- **TC-KING-41 — Reject a castle toward an unmoved opponent piece on the rook square** ( :x: )
+- **TC-KING-41 — Reject a castle toward an unmoved opponent piece on the rook square** ( :white_check_mark: )
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king, e1 to g1. Partial mock of a new `Board` whose `holdsUnmovedPiece` returns `true` for every square, as it does for a piece promoted onto h1. Kingside cleared, then `move` of the g8 knight to h1, which attacks none of e1, f1, and g1.
   - **Expected output**: `false`.

@@ -28,6 +28,7 @@ public class King extends Piece {
         Location rookSquare = rookSquareFor(from, to);
         return board.holdsUnmovedPiece(from)
                 && board.holdsUnmovedPiece(rookSquare)
+                && holdsOwnPiece(rookSquare, board)
                 && isPathClear(from, rookSquare, board)
                 && isKingPathSafe(from, to, board);
     }

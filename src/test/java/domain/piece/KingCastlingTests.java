@@ -5,6 +5,10 @@ import domain.Location;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.partialMockBuilder;
+import static org.easymock.EasyMock.replay;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -213,6 +217,17 @@ public class KingCastlingTests {
     }
 
     @Test
+    public void CanMove_UnmovedOpponentPieceOnRookSquare_ReturnsFalse() {
+        board = boardWhereEveryPieceIsUnmoved();
+        clearWhiteKingside();
+        board.move(G8, H1);
+
+        boolean canMove = WHITE_KING.canMove(E1, G1, board);
+
+        assertFalse(canMove);
+    }
+
+    @Test
     public void Attacks_CastleSquare_ReturnsFalse() {
         clearWhiteKingside();
 
@@ -279,6 +294,16 @@ public class KingCastlingTests {
         WHITE_KING.move(E1, G1, board);
 
         assertSame(king, board.pieceAt(G1));
+    }
+
+    private static Board boardWhereEveryPieceIsUnmoved() {
+        Board partialBoard = partialMockBuilder(Board.class)
+                .withConstructor()
+                .addMockedMethod("holdsUnmovedPiece")
+                .createMock();
+        expect(partialBoard.holdsUnmovedPiece(anyObject())).andStubReturn(true);
+        replay(partialBoard);
+        return partialBoard;
     }
 
     private void clearWhiteKingside() {
