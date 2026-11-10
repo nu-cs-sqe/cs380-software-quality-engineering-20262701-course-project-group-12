@@ -137,7 +137,8 @@ public class Board {
         return occupiedSquares()
                 .filter(square -> isKingOf(color, pieceAt(square)))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalStateException(
+                        "Cannot look for check: the board has no " + color + " king"));
     }
 
     private boolean isKingOf(PieceColor color, Piece piece) {

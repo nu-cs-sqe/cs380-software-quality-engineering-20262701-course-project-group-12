@@ -417,6 +417,14 @@ public class BoardTests {
     }
 
     @Test
+    public void IsInCheck_NoKingOfThatColor_ThrowsIllegalStateException() {
+        Board board = new Board();
+        board.move(D8, E1);
+
+        assertThrows(IllegalStateException.class, () -> board.isInCheck(PieceColor.WHITE));
+    }
+
+    @Test
     public void Promote_WhitePawnToQueen_PlacesWhiteQueen() {
         Piece promoted = promoteWhitePawnOnA8(PieceType.QUEEN);
 

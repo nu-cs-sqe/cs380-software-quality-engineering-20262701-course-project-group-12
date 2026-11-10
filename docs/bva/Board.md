@@ -331,4 +331,4 @@ The case numbers start at TC85, after the check and checkmate cases (TC76 to TC8
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC101: no king of that color | a new `Board`; move d8 `(3, 8)` to e1 `(4, 1)`; ask about White | throws `IllegalStateException` | :x: |
+| TC101: no king of that color | a new `Board`; move d8 `(3, 8)` to e1 `(4, 1)`; ask about White | throws `IllegalStateException` | :white_check_mark: |
