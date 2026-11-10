@@ -37,6 +37,9 @@ public class GameStatsController {
         if (game.isOver()) {
             return Messages.format(CHECKMATE_KEYS.get(game.winnerColor()), game.winnerName());
         }
+        if (game.isPlayerToMoveInCheck()) {
+            return Messages.format("stats.check", game.playerToMoveName());
+        }
         return currentPlayerLine();
     }
 

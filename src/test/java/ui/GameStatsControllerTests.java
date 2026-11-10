@@ -94,6 +94,7 @@ public class GameStatsControllerTests {
         expect(game.playerTwoName()).andStubReturn("Bo");
         expect(game.playerToMoveName()).andReturn("Ada").andReturn("Bo");
         expect(game.isOver()).andStubReturn(false);
+        expect(game.isPlayerToMoveInCheck()).andStubReturn(false);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
@@ -139,6 +140,24 @@ public class GameStatsControllerTests {
         controller.refreshStatus();
 
         assertEquals("Checkmate: Ada (White) wins", view.currentPlayerLine());
+    }
+
+    @Test
+    public void RefreshStatus_PlayerToMoveInCheck_ShowsTheCheck() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andReturn("Ada").andReturn("Bo");
+        expect(game.isOver()).andStubReturn(false);
+        expect(game.isPlayerToMoveInCheck()).andStubReturn(true);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("Current player: Bo (in check)", view.currentPlayerLine());
     }
 
     private static Game startedGame(
