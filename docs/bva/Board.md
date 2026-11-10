@@ -9,6 +9,8 @@
 - `void promote(Location square, PieceType type)` (issue #46): replaces the pawn on `square` with a new piece of the chosen type and the pawn's color: a `Queen`, `Rook`, `Bishop`, or `Knight`, so the promoted piece moves by its own rules. The choice does not depend on which pieces have been captured. Throws `IllegalArgumentException` when `type` is `KING` or `PAWN`, and then leaves the board unchanged. It does not check that the pawn is on its last rank; `BoardController` calls it only after a pawn arrives there.
 - `void move(Location from, Location to)`, en passant (issue #47 / GitHub US-14): after each move the board remembers whether it was a pawn moving two ranks, the only move that can be captured en passant. When a pawn moves diagonally onto an empty square, and the square beside `from` on the file of `to` holds the pawn that can be captured en passant, that pawn is removed. This is the board side of an en passant capture, the way replacing a piece is the board side of a normal capture.
 - `boolean canBeCapturedEnPassant(Location square)` (issue #47): returns true when `square` holds the pawn that moved two ranks on the last move, and false otherwise. The chance lasts one move: any later move ends it.
+- `boolean isInCheck(PieceColor color)` (issue #48 / GitHub US-15, docs US-15): returns true when a piece of the other color `canMove` onto the square of the king of `color`. Does not change the board.
+- `boolean isCheckmated(PieceColor color)` (issue #48): returns true when the king of `color` is in check and no move by a piece of `color` leaves that king out of check. A move counts only when the piece `canMove` there, and it is tried on a copy, so the board itself does not change. The king is never removed.
 
 No method returns null. The project rules forbid it, so an empty square is reported by `isOccupied` instead of a null from `pieceAt`. Callers ask `isOccupied` before `pieceAt`. TC9 through TC12 used to expect null from `pieceAt` on the empty ranks; they now check those squares with `isOccupied`.
 
@@ -19,6 +21,8 @@ No method checks its arguments for null, and no case passes null. Our own code i
 File 0 is the a-file and file 7 is the h-file. The squares are private, so the constructor and `move` are checked through `pieceAt` and `isOccupied`.
 
 `BoardView` is a view, and `PieceType` and `PieceColor` are enums, so they have no BVA file.
+
+The `isInCheck` and `isCheckmated` cases use the real pieces that issue #53 puts on the starting board, so each piece's own `canMove` decides what it attacks. Out of scope: refusing a move that leaves the mover's own king in check and showing that a king is in check (issue #44), and stalemate (issue #49).
 
 ## Steps 1-3: Characteristics and partitions
 
@@ -113,6 +117,24 @@ A white pawn is put on e5 `(4, 5)` with two moves, e2 to e4 and e4 to e5. The bl
 | Input: the black pawn on d5 | Cases | can be captured en passant (moved d7 to d5); cannot (moved d7 to d6 `(3, 6)` to d5) |
 | Output: d5 after the move | Boolean, through `isOccupied` | false, the captured pawn is removed; true, nothing is removed |
 | Output: d6 after the move | Pointer | the same white pawn that moved from e5 |
+
+### `isInCheck(PieceColor color)` and `isCheckmated(PieceColor color)`
+
+Each position is set up with `move` from a new `Board`, using real games, so every position can happen in play. `move` does not check legality, so the moves are written as squares.
+
+- Fool's mate: f2 `(5, 2)` to f3 `(5, 3)`, e7 `(4, 7)` to e5 `(4, 5)`, g2 `(6, 2)` to g4 `(6, 4)`, d8 `(3, 8)` to h4 `(7, 4)`. The black queen checks the white king on e1, and White has no reply.
+- Queen check on Black: e2 `(4, 2)` to e4 `(4, 4)`, f7 `(5, 7)` to f6 `(5, 6)`, d1 `(3, 1)` to h5 `(7, 5)`. The white queen checks the black king on e8, and Black can block with g7 `(6, 7)` to g6 `(6, 6)`.
+- Sam Loyd's stalemate: e2 to e3, a7 to a5, d1 to h5, a8 to a6, h5 to a5, h7 to h5, h2 to h4, a6 to h6, a5 to c7, f7 to f6, c7 to d7, e8 to f7, d7 to b7, d8 to d3, b7 to b8, d3 to h7, b8 to c8, f7 to g6, c8 to e6. The black king on g6 is not in check, and Black has no legal move: the f6 pawn is pinned by the white queen on e6, and every other black piece is blocked.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: `color` | Cases | White; Black |
+| Input: whether a piece of the other color reaches the king of `color` | Boolean | no (a new `Board`; Fool's mate for Black); yes (Fool's mate for White; the queen check on Black) |
+| Input: whether a move of `color` leaves its king out of check | Boolean | yes (a new `Board`; the queen check on Black); no (Fool's mate for White; Sam Loyd's stalemate) |
+| Input: a move that `canMove` allows but that leaves the king in check | Cases | a reply that does not answer the check (Fool's mate); a pinned piece (the f6 pawn in Sam Loyd's stalemate) |
+| Output: `isInCheck` | Boolean | true; false |
+| Output: `isCheckmated` | Boolean | true only when the king is in check and no move leaves it out of check; false otherwise |
+| Output: the board after `isCheckmated` | Collection | unchanged; the king stays on its square |
 
 ## Step 4: Test cases (each-choice strategy)
 
@@ -223,3 +245,24 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC73: the capturing pawn lands on the square passed over | as TC72 | `pieceAt(d6)` is the white pawn that moved from e2 | :white_check_mark: |
 | TC74: a pawn that moved one rank at a time is not removed | a new `Board`; move e2 to e4, e4 to e5, d7 to d6, and d6 to d5; move e5 to d6 | `isOccupied(d5)` is true | :white_check_mark: |
 | TC75: a piece that is not a pawn removes nothing | a new `Board`; move c1 `(2, 1)` to e5, and d7 to d5; move e5 to d6 | `isOccupied(d5)` is true | :white_check_mark: |
+
+### Method under test: `isInCheck(PieceColor color)`
+
+The case numbers start at TC76, after the piece-class cases (TC46 to TC57, issue #53), the promotion cases (TC58 to TC65, issue #46), and the en passant cases (TC66 to TC75, issue #47).
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC76: no piece reaches the king | a new `Board`; ask about White | false | :white_check_mark: |
+| TC77: a piece of the other color reaches the white king | the Fool's mate position; ask about White | true | :white_check_mark: |
+| TC78: the other king is not in check | the Fool's mate position; ask about Black | false | :white_check_mark: |
+| TC79: a piece of the other color reaches the black king | the queen check on Black; ask about Black | true | :white_check_mark: |
+
+### Method under test: `isCheckmated(PieceColor color)`
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC80: not in check, with legal moves | a new `Board`; ask about White | false | :white_check_mark: |
+| TC81: in check with no reply | the Fool's mate position; ask about White | true | :white_check_mark: |
+| TC82: in check with a reply that blocks the check | the queen check on Black; ask about Black | false | :white_check_mark: |
+| TC83: not in check and no legal move | Sam Loyd's stalemate; ask about Black | false | :white_check_mark: |
+| TC84: the query leaves the board unchanged | the Fool's mate position; ask about White | `pieceAt(h4)` is still the black queen that moved from d8, `pieceAt(e1)` is still the white king, and 32 squares are occupied | :white_check_mark: |
