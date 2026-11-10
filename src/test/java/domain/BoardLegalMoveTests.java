@@ -9,7 +9,10 @@ public class BoardLegalMoveTests {
     private static final Location A1 = new Location(0, 1);
     private static final Location A2 = new Location(0, 2);
     private static final Location A3 = new Location(0, 3);
+    private static final Location A4 = new Location(0, 4);
     private static final Location A5 = new Location(0, 5);
+    private static final Location A6 = new Location(0, 6);
+    private static final Location A7 = new Location(0, 7);
     private static final Location B1 = new Location(1, 1);
     private static final Location B4 = new Location(1, 4);
     private static final Location B5 = new Location(1, 5);
@@ -101,6 +104,15 @@ public class BoardLegalMoveTests {
         assertFalse(legal);
     }
 
+    @Test
+    public void IsLegalMove_EnPassantCaptureOfCheckingPawn_ReturnsTrue() {
+        Board board = pawnChecksWhite();
+
+        boolean legal = board.isLegalMove(E5, D6);
+
+        assertTrue(legal);
+    }
+
     private Board knightPinnedByBishop() {
         Board board = new Board();
         board.move(E2, E4);
@@ -153,6 +165,21 @@ public class BoardLegalMoveTests {
         board.move(C3, B4);
         board.move(F6, G8);
         board.move(B4, A5);
+        board.move(D7, D5);
+        return board;
+    }
+
+    private Board pawnChecksWhite() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(A7, A6);
+        board.move(E4, E5);
+        board.move(A6, A5);
+        board.move(E1, E2);
+        board.move(A5, A4);
+        board.move(E2, E3);
+        board.move(H7, H6);
+        board.move(E3, E4);
         board.move(D7, D5);
         return board;
     }
