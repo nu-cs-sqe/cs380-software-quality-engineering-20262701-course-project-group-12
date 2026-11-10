@@ -308,7 +308,7 @@ The case numbers start at TC85, after the check and checkmate cases (TC76 to TC8
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC85: a move the piece can make that keeps the king safe | a new `Board`; ask about b1 `(1, 1)` to c3 `(2, 3)` | true | :x: |
+| TC85: a move the piece can make that keeps the king safe | a new `Board`; ask about b1 `(1, 1)` to c3 `(2, 3)` | true | :white_check_mark: |
 | TC86: a move the piece cannot make | a new `Board`; ask about a1 `(0, 1)` to a3 `(0, 3)` | false | :x: |
 | TC87: a pinned piece leaves the line to its king | the pin position; ask about c6 `(2, 6)` to d4 `(3, 4)` | false | :x: |
 | TC88: the king steps next to the other king | kings face to face; ask about e3 `(4, 3)` to e4 `(4, 4)` | false | :x: |

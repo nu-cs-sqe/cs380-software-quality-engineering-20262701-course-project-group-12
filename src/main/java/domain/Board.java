@@ -168,6 +168,10 @@ public class Board {
                 && !boardAfterMove(from, to).isInCheck(color));
     }
 
+    public boolean isLegalMove(Location from, Location to) {
+        return true;
+    }
+
     private Board boardAfterMove(Location from, Location to) {
         Board copy = new Board(this);
         copy.move(from, to);
