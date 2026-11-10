@@ -113,6 +113,15 @@ public class BoardLegalMoveTests {
         assertTrue(legal);
     }
 
+    @Test
+    public void IsLegalMove_MoveThatIgnoresTheCheck_ReturnsFalse() {
+        Board board = queenChecksWhite();
+
+        boolean legal = board.isLegalMove(A2, A3);
+
+        assertFalse(legal);
+    }
+
     private Board knightPinnedByBishop() {
         Board board = new Board();
         board.move(E2, E4);
@@ -181,6 +190,17 @@ public class BoardLegalMoveTests {
         board.move(H7, H6);
         board.move(E3, E4);
         board.move(D7, D5);
+        return board;
+    }
+
+    private Board queenChecksWhite() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(E7, E5);
+        board.move(E1, E2);
+        board.move(D8, H4);
+        board.move(D2, D3);
+        board.move(H4, E4);
         return board;
     }
 }
