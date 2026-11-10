@@ -19,7 +19,7 @@ File 0 is the a-file and file 7 is the h-file. The squares are private, so the c
 
 `BoardView` is a view, and `PieceType` and `PieceColor` are enums, so they have no BVA file.
 
-The `isInCheck` and `isCheckmated` cases need the real pieces that issue #53 puts on the starting board, because a plain `Piece` never `canMove`. They are implemented after #53 is merged into `main`. Out of scope: refusing a move that leaves the mover's own king in check and showing that a king is in check (issue #44), and stalemate (issue #49).
+The `isInCheck` and `isCheckmated` cases use the real pieces that issue #53 puts on the starting board, so each piece's own `canMove` decides what it attacks. Out of scope: refusing a move that leaves the mover's own king in check and showing that a king is in check (issue #44), and stalemate (issue #49).
 
 ## Steps 1-3: Characteristics and partitions
 
@@ -178,7 +178,7 @@ Every value from Step 3 is used in at least one test case. A square is written a
 
 ### Method under test: `isInCheck(PieceColor color)`
 
-The case numbers start at TC64, after the promotion cases (TC46 to TC53, issue #46) and the en passant cases (TC54 to TC63, issue #47).
+The case numbers start at TC64, after the piece-class cases (TC46 to TC57, issue #53) and the en passant cases (up to TC63, issue #47).
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
