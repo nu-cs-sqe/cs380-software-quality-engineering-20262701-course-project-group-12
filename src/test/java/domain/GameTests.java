@@ -382,6 +382,13 @@ public class GameTests {
         assertTrue(inCheck);
     }
 
+    @Test
+    public void IsPlayerToMoveInCheck_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::isPlayerToMoveInCheck);
+    }
+
     private void playFoolsMate(Game game) {
         play(game, F2, F3);
         play(game, E7, E5);

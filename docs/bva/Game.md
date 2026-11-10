@@ -412,7 +412,7 @@ move. The method takes no arguments, so there is no null case.
     of the three moves, so Black is to move.
   - **Expected output**: Returns `true`.
 
-- **TC-CHECK-04 — Reject looking for check before a start** ( :x: )
+- **TC-CHECK-04 — Reject looking for check before a start** ( :white_check_mark: )
   - **Method(s) under test**: `isPlayerToMoveInCheck()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
