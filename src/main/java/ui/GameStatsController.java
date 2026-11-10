@@ -1,8 +1,15 @@
 package ui;
 
 import domain.Game;
+import domain.piece.PieceColor;
+
+import java.util.Map;
 
 public class GameStatsController {
+    private static final Map<PieceColor, String> CHECKMATE_KEYS = Map.of(
+            PieceColor.WHITE, "stats.checkmate.white",
+            PieceColor.BLACK, "stats.checkmate.black");
+
     private final Game game;
     private GameStatsView view;
 
@@ -22,8 +29,15 @@ public class GameStatsController {
         return view;
     }
 
-    public void refreshCurrentPlayer() {
-        view.showCurrentPlayer(currentPlayerLine());
+    public void refreshStatus() {
+        view.showCurrentPlayer(statusLine());
+    }
+
+    private String statusLine() {
+        if (game.isOver()) {
+            return Messages.format(CHECKMATE_KEYS.get(game.winnerColor()), game.winnerName());
+        }
+        return currentPlayerLine();
     }
 
     private String currentPlayerLine() {

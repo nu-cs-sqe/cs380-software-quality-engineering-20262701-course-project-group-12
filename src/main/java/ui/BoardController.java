@@ -46,7 +46,7 @@ public class BoardController {
     }
 
     public void clickSquare(Location square) {
-        if (isPromotionPending()) {
+        if (game.isOver() || isPromotionPending()) {
             return;
         }
         selectedSquare.ifPresentOrElse(
@@ -84,6 +84,13 @@ public class BoardController {
             promotionSquare = Optional.of(arrival);
         } else {
             game.passTurn();
+            endGameIfCheckmated();
+        }
+    }
+
+    private void endGameIfCheckmated() {
+        if (board.isCheckmated(game.colorToMove())) {
+            game.endByCheckmate();
         }
     }
 

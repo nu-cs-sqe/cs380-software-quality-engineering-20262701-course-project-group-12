@@ -24,12 +24,18 @@ public class BoardTests {
     private static final Location A3 = new Location(0, 3);
     private static final Location A4 = new Location(0, 4);
     private static final Location A5 = new Location(0, 5);
+    private static final Location A6 = new Location(0, 6);
+    private static final Location A7 = new Location(0, 7);
     private static final Location A8 = new Location(0, 8);
     private static final Location B1 = new Location(1, 1);
+    private static final Location B7 = new Location(1, 7);
     private static final Location B8 = new Location(1, 8);
     private static final Location C1 = new Location(2, 1);
     private static final Location C6 = new Location(2, 6);
+    private static final Location C7 = new Location(2, 7);
+    private static final Location C8 = new Location(2, 8);
     private static final Location D1 = new Location(3, 1);
+    private static final Location D3 = new Location(3, 3);
     private static final Location D4 = new Location(3, 4);
     private static final Location D5 = new Location(3, 5);
     private static final Location D6 = new Location(3, 6);
@@ -40,11 +46,23 @@ public class BoardTests {
     private static final Location E3 = new Location(4, 3);
     private static final Location E4 = new Location(4, 4);
     private static final Location E5 = new Location(4, 5);
+    private static final Location E6 = new Location(4, 6);
+    private static final Location E7 = new Location(4, 7);
     private static final Location E8 = new Location(4, 8);
+    private static final Location F2 = new Location(5, 2);
+    private static final Location F3 = new Location(5, 3);
+    private static final Location F6 = new Location(5, 6);
+    private static final Location F7 = new Location(5, 7);
     private static final Location F8 = new Location(5, 8);
+    private static final Location G2 = new Location(6, 2);
+    private static final Location G4 = new Location(6, 4);
+    private static final Location G6 = new Location(6, 6);
     private static final Location G8 = new Location(6, 8);
     private static final Location H1 = new Location(7, 1);
+    private static final Location H2 = new Location(7, 2);
+    private static final Location H4 = new Location(7, 4);
     private static final Location H5 = new Location(7, 5);
+    private static final Location H6 = new Location(7, 6);
     private static final Location H7 = new Location(7, 7);
     private static final Location H8 = new Location(7, 8);
     private static final int STARTING_PIECE_COUNT = 32;
@@ -314,6 +332,91 @@ public class BoardTests {
     }
 
     @Test
+    public void IsCheckmated_NewBoard_ReturnsFalse() {
+        Board board = new Board();
+
+        boolean checkmated = board.isCheckmated(PieceColor.WHITE);
+
+        assertFalse(checkmated);
+    }
+
+    @Test
+    public void IsCheckmated_InCheckWithNoReply_ReturnsTrue() {
+        Board board = foolsMate();
+
+        boolean checkmated = board.isCheckmated(PieceColor.WHITE);
+
+        assertTrue(checkmated);
+    }
+
+    @Test
+    public void IsCheckmated_InCheckWithReplyThatBlocks_ReturnsFalse() {
+        Board board = queenCheckOnBlack();
+
+        boolean checkmated = board.isCheckmated(PieceColor.BLACK);
+
+        assertFalse(checkmated);
+    }
+
+    @Test
+    public void IsCheckmated_FoolsMate_LeavesTheBoardUnchanged() {
+        Board board = foolsMate();
+        Piece blackQueen = board.pieceAt(H4);
+        Piece whiteKing = board.pieceAt(E1);
+
+        board.isCheckmated(PieceColor.WHITE);
+
+        assertSame(blackQueen, board.pieceAt(H4));
+        assertSame(whiteKing, board.pieceAt(E1));
+        assertEquals(STARTING_PIECE_COUNT, countPieces(board));
+    }
+
+    @Test
+    public void IsCheckmated_NotInCheckWithNoLegalMove_ReturnsFalse() {
+        Board board = samLoydsStalemate();
+
+        boolean checkmated = board.isCheckmated(PieceColor.BLACK);
+
+        assertFalse(checkmated);
+    }
+
+    @Test
+    public void IsInCheck_NewBoard_ReturnsFalse() {
+        Board board = new Board();
+
+        boolean inCheck = board.isInCheck(PieceColor.WHITE);
+
+        assertFalse(inCheck);
+    }
+
+    @Test
+    public void IsInCheck_WhiteKingReachedByBlackQueen_ReturnsTrue() {
+        Board board = foolsMate();
+
+        boolean inCheck = board.isInCheck(PieceColor.WHITE);
+
+        assertTrue(inCheck);
+    }
+
+    @Test
+    public void IsInCheck_BlackKingWhileWhiteIsInCheck_ReturnsFalse() {
+        Board board = foolsMate();
+
+        boolean inCheck = board.isInCheck(PieceColor.BLACK);
+
+        assertFalse(inCheck);
+    }
+
+    @Test
+    public void IsInCheck_BlackKingReachedByWhiteQueen_ReturnsTrue() {
+        Board board = queenCheckOnBlack();
+
+        boolean inCheck = board.isInCheck(PieceColor.BLACK);
+
+        assertTrue(inCheck);
+    }
+
+    @Test
     public void Promote_WhitePawnToQueen_PlacesWhiteQueen() {
         Piece promoted = promoteWhitePawnOnA8(PieceType.QUEEN);
 
@@ -561,6 +664,47 @@ public class BoardTests {
     @Test
     public void Board_H7_PlacesPawn() {
         assertPieceClass(H7, Pawn.class);
+    }
+
+    private Board foolsMate() {
+        Board board = new Board();
+        board.move(F2, F3);
+        board.move(E7, E5);
+        board.move(G2, G4);
+        board.move(D8, H4);
+        return board;
+    }
+
+    private Board queenCheckOnBlack() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(F7, F6);
+        board.move(D1, H5);
+        return board;
+    }
+
+    private Board samLoydsStalemate() {
+        Board board = new Board();
+        board.move(E2, E3);
+        board.move(A7, A5);
+        board.move(D1, H5);
+        board.move(A8, A6);
+        board.move(H5, A5);
+        board.move(H7, H5);
+        board.move(H2, H4);
+        board.move(A6, H6);
+        board.move(A5, C7);
+        board.move(F7, F6);
+        board.move(C7, D7);
+        board.move(E8, F7);
+        board.move(D7, B7);
+        board.move(D8, D3);
+        board.move(B7, B8);
+        board.move(D3, H7);
+        board.move(B8, C8);
+        board.move(F7, G6);
+        board.move(C8, E6);
+        return board;
     }
 
     private int countPieces(Board board) {

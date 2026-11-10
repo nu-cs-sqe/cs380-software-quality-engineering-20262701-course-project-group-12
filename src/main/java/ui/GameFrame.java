@@ -16,7 +16,7 @@ public class GameFrame extends JFrame {
                 stats.createView(),
                 new BoardView(
                         new BoardController(game.board(), game),
-                        stats::refreshCurrentPlayer));
+                        stats::refreshStatus));
         setTitle(Messages.text("game.window.title"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();

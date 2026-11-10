@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Board {
@@ -50,6 +51,11 @@ public class Board {
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
             placeStartingPiecesOnFile(file);
         }
+    }
+
+    private Board(Board original) {
+        allSquares().forEach(square ->
+                rankOf(square).set(square.getFile(), original.occupantOf(square)));
     }
 
     private static List<List<Optional<Piece>>> emptySquares() {
@@ -118,6 +124,54 @@ public class Board {
         }
         PieceColor pawnColor = pieceAt(square).getColor();
         place(PROMOTION_PIECE_MAKERS.get(type).apply(pawnColor), square);
+    }
+
+    public boolean isInCheck(PieceColor color) {
+        Location kingSquare = kingSquareOf(color);
+        return occupiedSquares()
+                .anyMatch(square -> pieceAt(square).canMove(square, kingSquare, this));
+    }
+
+    private Location kingSquareOf(PieceColor color) {
+        return occupiedSquares()
+                .filter(square -> isKingOf(color, pieceAt(square)))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    private boolean isKingOf(PieceColor color, Piece piece) {
+        return piece.getType() == PieceType.KING && piece.getColor() == color;
+    }
+
+    private Stream<Location> occupiedSquares() {
+        return allSquares().filter(this::isOccupied);
+    }
+
+    private static Stream<Location> allSquares() {
+        return IntStream.rangeClosed(Location.MIN_FILE, Location.MAX_FILE).boxed()
+                .flatMap(file -> IntStream.rangeClosed(Location.MIN_RANK, Location.MAX_RANK)
+                        .mapToObj(rank -> new Location(file, rank)));
+    }
+
+    public boolean isCheckmated(PieceColor color) {
+        return isInCheck(color) && !hasMoveOutOfCheck(color);
+    }
+
+    private boolean hasMoveOutOfCheck(PieceColor color) {
+        return occupiedSquares()
+                .filter(from -> pieceAt(from).getColor() == color)
+                .anyMatch(from -> hasMoveOutOfCheckFrom(from, color));
+    }
+
+    private boolean hasMoveOutOfCheckFrom(Location from, PieceColor color) {
+        return allSquares().anyMatch(to -> pieceAt(from).canMove(from, to, this)
+                && !boardAfterMove(from, to).isInCheck(color));
+    }
+
+    private Board boardAfterMove(Location from, Location to) {
+        Board copy = new Board(this);
+        copy.move(from, to);
+        return copy;
     }
 
     private void clear(Location location) {
