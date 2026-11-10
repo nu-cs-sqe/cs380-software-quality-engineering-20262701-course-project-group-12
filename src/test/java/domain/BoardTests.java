@@ -314,6 +314,86 @@ public class BoardTests {
     }
 
     @Test
+    public void Promote_WhitePawnToQueen_PlacesWhiteQueen() {
+        Piece promoted = promoteWhitePawnOnA8(PieceType.QUEEN);
+
+        assertInstanceOf(Queen.class, promoted);
+        assertEquals(PieceColor.WHITE, promoted.getColor());
+    }
+
+    @Test
+    public void Promote_WhitePawnToRook_PlacesWhiteRook() {
+        Piece promoted = promoteWhitePawnOnA8(PieceType.ROOK);
+
+        assertInstanceOf(Rook.class, promoted);
+        assertEquals(PieceColor.WHITE, promoted.getColor());
+    }
+
+    @Test
+    public void Promote_WhitePawnToBishop_PlacesWhiteBishop() {
+        Piece promoted = promoteWhitePawnOnA8(PieceType.BISHOP);
+
+        assertInstanceOf(Bishop.class, promoted);
+        assertEquals(PieceColor.WHITE, promoted.getColor());
+    }
+
+    @Test
+    public void Promote_WhitePawnToKnight_PlacesWhiteKnight() {
+        Piece promoted = promoteWhitePawnOnA8(PieceType.KNIGHT);
+
+        assertInstanceOf(Knight.class, promoted);
+        assertEquals(PieceColor.WHITE, promoted.getColor());
+    }
+
+    @Test
+    public void Promote_BlackPawnToQueen_PlacesBlackQueen() {
+        Board board = new Board();
+        board.move(H7, H1);
+
+        board.promote(H1, PieceType.QUEEN);
+
+        Piece promoted = board.pieceAt(H1);
+        assertInstanceOf(Queen.class, promoted);
+        assertEquals(PieceColor.BLACK, promoted.getColor());
+    }
+
+    @Test
+    public void Promote_ToKing_ThrowsIllegalArgumentException() {
+        Board board = boardWithWhitePawnOnA8();
+
+        assertThrows(IllegalArgumentException.class, () -> board.promote(A8, PieceType.KING));
+    }
+
+    @Test
+    public void Promote_ToPawn_ThrowsIllegalArgumentException() {
+        Board board = boardWithWhitePawnOnA8();
+
+        assertThrows(IllegalArgumentException.class, () -> board.promote(A8, PieceType.PAWN));
+    }
+
+    @Test
+    public void Promote_RejectedChoice_LeavesThePawn() {
+        Board board = boardWithWhitePawnOnA8();
+        Piece whitePawn = board.pieceAt(A8);
+
+        assertThrows(IllegalArgumentException.class, () -> board.promote(A8, PieceType.KING));
+
+        assertSame(whitePawn, board.pieceAt(A8));
+    }
+
+    private Piece promoteWhitePawnOnA8(PieceType type) {
+        Board board = boardWithWhitePawnOnA8();
+        board.promote(A8, type);
+        return board.pieceAt(A8);
+    }
+
+    private Board boardWithWhitePawnOnA8() {
+        Board board = new Board();
+        board.move(A2, A8);
+        return board;
+    }
+
+    @Test
     public void CanBeCapturedEnPassant_WhitePawnThatJustMovedTwoRanks_ReturnsTrue() {
         Board board = new Board();
         board.move(E2, E4);

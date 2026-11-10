@@ -13,6 +13,7 @@ import domain.piece.Rook;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -35,6 +36,12 @@ public class Board {
             Bishop::new,
             Knight::new,
             Rook::new);
+    private static final Map<PieceType, Function<PieceColor, Piece>> PROMOTION_PIECE_MAKERS =
+            Map.of(
+                    PieceType.QUEEN, Queen::new,
+                    PieceType.ROOK, Rook::new,
+                    PieceType.BISHOP, Bishop::new,
+                    PieceType.KNIGHT, Knight::new);
 
     private final List<List<Optional<Piece>>> squares = emptySquares();
     private Optional<Location> pawnThatJustAdvancedTwoRanks = Optional.empty();
@@ -102,6 +109,15 @@ public class Board {
 
     private boolean isPawn(Piece piece) {
         return piece.getType() == PieceType.PAWN;
+    }
+
+    public void promote(Location square, PieceType type) {
+        if (!PROMOTION_PIECE_MAKERS.containsKey(type)) {
+            throw new IllegalArgumentException("Cannot promote a pawn to a " + type
+                    + "; the choices are a queen, rook, bishop, or knight");
+        }
+        PieceColor pawnColor = pieceAt(square).getColor();
+        place(PROMOTION_PIECE_MAKERS.get(type).apply(pawnColor), square);
     }
 
     private void clear(Location location) {

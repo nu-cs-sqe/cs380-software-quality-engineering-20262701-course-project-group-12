@@ -12,6 +12,7 @@ public class BoardController {
     private final Board board;
     private final Game game;
     private Optional<Location> selectedSquare = Optional.empty();
+    private Optional<Location> promotionSquare = Optional.empty();
 
     public BoardController(Board board, Game game) {
         this.board = board;
@@ -30,7 +31,24 @@ public class BoardController {
         return selectedSquare.filter(square::isSameSquareAs).isPresent();
     }
 
+    public boolean isPromotionPending() {
+        return promotionSquare.isPresent();
+    }
+
+    public void choosePromotion(PieceType type) {
+        promotionSquare.ifPresent(square -> finishPromotion(square, type));
+    }
+
+    private void finishPromotion(Location square, PieceType type) {
+        board.promote(square, type);
+        game.passTurn();
+        promotionSquare = Optional.empty();
+    }
+
     public void clickSquare(Location square) {
+        if (isPromotionPending()) {
+            return;
+        }
         selectedSquare.ifPresentOrElse(
                 selected -> handleClickWithSelection(selected, square),
                 () -> select(square));
@@ -45,18 +63,27 @@ public class BoardController {
     }
 
     private void moveOrChangeSelection(Location from, Location to) {
-        if (board.pieceAt(from).canMove(from, to, board)) {
-            moveUnlessCapturingKing(from, to);
+        Piece movingPiece = board.pieceAt(from);
+        if (movingPiece.canMove(from, to, board)) {
+            moveUnlessCapturingKing(movingPiece, from, to);
         } else {
             select(to);
         }
     }
 
-    private void moveUnlessCapturingKing(Location from, Location to) {
+    private void moveUnlessCapturingKing(Piece movingPiece, Location from, Location to) {
         if (!holdsKing(to)) {
             board.move(from, to);
-            game.passTurn();
+            passTurnUnlessPromoting(movingPiece, to);
             clearSelection();
+        }
+    }
+
+    private void passTurnUnlessPromoting(Piece movingPiece, Location arrival) {
+        if (movingPiece.promotesOn(arrival)) {
+            promotionSquare = Optional.of(arrival);
+        } else {
+            game.passTurn();
         }
     }
 

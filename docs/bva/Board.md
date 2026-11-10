@@ -6,6 +6,7 @@
 - `boolean isOccupied(Location location)`: returns true when a piece stands on that square and false when it is empty. Does not change the board.
 - `Piece pieceAt(Location location)`: returns the piece on that square. Requires an occupied square and throws `IllegalArgumentException` otherwise. Does not change the board.
 - `void move(Location from, Location to)` (issue #19): puts the piece from `from` on `to`, and `from` becomes empty. A piece already on `to` is replaced; this is the board side of a capture. Moving a piece to its own square leaves the board unchanged. Throws `IllegalArgumentException` when `from` is empty, and then leaves the board unchanged. It does not check whether the move is legal, does not change whose turn it is, and does not touch the UI.
+- `void promote(Location square, PieceType type)` (issue #46): replaces the pawn on `square` with a new piece of the chosen type and the pawn's color: a `Queen`, `Rook`, `Bishop`, or `Knight`, so the promoted piece moves by its own rules. The choice does not depend on which pieces have been captured. Throws `IllegalArgumentException` when `type` is `KING` or `PAWN`, and then leaves the board unchanged. It does not check that the pawn is on its last rank; `BoardController` calls it only after a pawn arrives there.
 - `void move(Location from, Location to)`, en passant (issue #47 / GitHub US-14): after each move the board remembers whether it was a pawn moving two ranks, the only move that can be captured en passant. When a pawn moves diagonally onto an empty square, and the square beside `from` on the file of `to` holds the pawn that can be captured en passant, that pawn is removed. This is the board side of an en passant capture, the way replacing a piece is the board side of a normal capture.
 - `boolean canBeCapturedEnPassant(Location square)` (issue #47): returns true when `square` holds the pawn that moved two ranks on the last move, and false otherwise. The chance lasts one move: any later move ends it.
 
@@ -78,6 +79,18 @@ The starting position has a rook on every corner, so each corner can be both a `
 | Output: the board after a rejected move | Collection | unchanged |
 | Output: signal for a rejected move | Cases | none; `IllegalArgumentException` |
 | Output: the number of pieces after a capture (issue #33) | Collection, counted with `isOccupied` over the 64 squares | 31, one fewer than the starting 32 |
+
+### `promote(Location square, PieceType type)`
+
+A pawn is put on its last rank with `move`: the a2 pawn to a8 for White, and the h7 pawn to h1 for Black. The four allowed types each appear once for White, and the queen is repeated for Black, so each color appears. The promoted piece is checked with `assertInstanceOf`, because the piece must be the class that moves by that type's rules, not a plain `Piece`.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
+| Input: occupant of `square` | Cases | a white pawn on a8 `(0, 8)`; a black pawn on h1 `(7, 1)` |
+| Input: `type` | Cases | the choices `QUEEN`, `ROOK`, `BISHOP`, `KNIGHT`; not choices, `KING` and `PAWN` |
+| Output: occupant of `square` after the call | Cases | a `Queen`, `Rook`, `Bishop`, or `Knight` of the pawn's color; the same pawn, after a rejected choice |
+| Output: signal for a rejected promotion | Cases | none; `IllegalArgumentException` |
 
 ### `canBeCapturedEnPassant(Location square)`
 
@@ -177,6 +190,19 @@ Every value from Step 3 is used in at least one test case. A square is written a
 | TC41: from an empty square | a new `Board`; move a4 `(0, 4)` to a5 `(0, 5)` | throws `IllegalArgumentException` | :white_check_mark: |
 | TC44: a rejected move leaves the board unchanged | a new `Board`; move a4 `(0, 4)` to a1 `(0, 1)` | `pieceAt(a1)` is still the white rook | :white_check_mark: |
 | TC45: a capture takes the captured piece off the board (issue #33) | a new `Board`; move a1 `(0, 1)` to a8 `(0, 8)`, so the white rook captures the black rook | 31 of the 64 squares are occupied | :white_check_mark: |
+
+### Method under test: `promote(Location square, PieceType type)`
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC58: promote a white pawn to a queen | a new `Board`; move a2 `(0, 2)` to a8 `(0, 8)`; promote a8 to `QUEEN` | `pieceAt(a8)` is a `Queen`; its color is `WHITE` | :white_check_mark: |
+| TC59: promote a white pawn to a rook | as TC58; promote a8 to `ROOK` | `pieceAt(a8)` is a `Rook`; its color is `WHITE` | :white_check_mark: |
+| TC60: promote a white pawn to a bishop | as TC58; promote a8 to `BISHOP` | `pieceAt(a8)` is a `Bishop`; its color is `WHITE` | :white_check_mark: |
+| TC61: promote a white pawn to a knight | as TC58; promote a8 to `KNIGHT` | `pieceAt(a8)` is a `Knight`; its color is `WHITE` | :white_check_mark: |
+| TC62: promote a black pawn to a queen | a new `Board`; move h7 `(7, 7)` to h1 `(7, 1)`; promote h1 to `QUEEN` | `pieceAt(h1)` is a `Queen`; its color is `BLACK` | :white_check_mark: |
+| TC63: a king is not a choice | as TC58; promote a8 to `KING` | throws `IllegalArgumentException` | :white_check_mark: |
+| TC64: a pawn is not a choice | as TC58; promote a8 to `PAWN` | throws `IllegalArgumentException` | :white_check_mark: |
+| TC65: a rejected choice leaves the pawn | as TC63 | `pieceAt(a8)` is still the white pawn that moved from a2 | :white_check_mark: |
 
 ### Method under test: `canBeCapturedEnPassant(Location square)`
 
