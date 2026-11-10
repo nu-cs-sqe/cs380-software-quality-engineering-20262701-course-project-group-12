@@ -391,7 +391,7 @@ move. The method takes no arguments, so there is no null case.
 | Output: the answer | Boolean | true; false |
 | Output: signal for an unstarted game | Cases | `IllegalStateException` |
 
-- **TC-CHECK-01 — The player to move is not in check at the start** ( :x: )
+- **TC-CHECK-01 — The player to move is not in check at the start** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `isPlayerToMoveInCheck()`
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.

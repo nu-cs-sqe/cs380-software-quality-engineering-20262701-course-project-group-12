@@ -335,4 +335,14 @@ public class GameTests {
 
         assertThrows(IllegalStateException.class, game::endByCheckmate);
     }
+
+    @Test
+    public void IsPlayerToMoveInCheck_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean inCheck = game.isPlayerToMoveInCheck();
+
+        assertFalse(inCheck);
+    }
 }
