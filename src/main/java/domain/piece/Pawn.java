@@ -61,7 +61,12 @@ public class Pawn extends Piece {
     private boolean canCapture(Location from, Location to, Board board) {
         return rankChange(from, to) == oneSquareForward
                 && from.fileDistanceTo(to) == CAPTURE_FILE_DISTANCE
-                && holdsOpponent(to, board);
+                && (holdsOpponent(to, board) || canCaptureEnPassant(from, to, board));
+    }
+
+    private boolean canCaptureEnPassant(Location from, Location to, Board board) {
+        Location besideFrom = new Location(to.getFile(), from.getRank());
+        return board.canBeCapturedEnPassant(besideFrom) && holdsOpponent(besideFrom, board);
     }
 
     private boolean holdsOpponent(Location square, Board board) {
