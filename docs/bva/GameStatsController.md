@@ -127,6 +127,6 @@ TC9 still holds: the player to move is not in check, so the line is unchanged.
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then `playerToMoveName()` is Bo, the game is not over, `isPlayerToMoveInCheck()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Current player: Bo (in check)`
 
-- **TC13: refresh after checkmate shows the result, not the check** ( :x: )
+- **TC13: refresh after checkmate shows the result, not the check** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isPlayerToMoveInCheck()` is true, `winnerName()` is Bo, `winnerColor()` is `BLACK`, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Checkmate: Bo (Black) wins`

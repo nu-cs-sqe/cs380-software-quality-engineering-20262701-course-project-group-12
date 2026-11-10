@@ -160,6 +160,26 @@ public class GameStatsControllerTests {
         assertEquals("Current player: Bo (in check)", view.currentPlayerLine());
     }
 
+    @Test
+    public void RefreshStatus_CheckmatedPlayerInCheck_ShowsTheCheckmate() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isPlayerToMoveInCheck()).andStubReturn(true);
+        expect(game.winnerName()).andStubReturn("Bo");
+        expect(game.winnerColor()).andStubReturn(PieceColor.BLACK);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("Checkmate: Bo (Black) wins", view.currentPlayerLine());
+    }
+
     private static Game startedGame(
             String playerOneName, String playerTwoName, String playerToMoveName) {
         Game game = createMock(Game.class);
