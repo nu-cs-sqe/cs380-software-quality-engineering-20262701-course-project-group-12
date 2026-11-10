@@ -1,7 +1,9 @@
 package domain;
 
 import domain.piece.Bishop;
+import domain.piece.King;
 import domain.piece.Knight;
+import domain.piece.Pawn;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
@@ -25,14 +27,14 @@ public class Board {
     private static final int BLACK_PAWN_RANK = 7;
     private static final int BLACK_BACK_RANK = Location.MAX_RANK;
     private static final List<Function<PieceColor, Piece>> BACK_RANK_PIECE_MAKERS = List.of(
-            color -> new Piece(PieceType.ROOK, color),
-            color -> new Piece(PieceType.KNIGHT, color),
-            color -> new Piece(PieceType.BISHOP, color),
-            color -> new Piece(PieceType.QUEEN, color),
-            color -> new Piece(PieceType.KING, color),
-            color -> new Piece(PieceType.BISHOP, color),
-            color -> new Piece(PieceType.KNIGHT, color),
-            color -> new Piece(PieceType.ROOK, color));
+            Rook::new,
+            Knight::new,
+            Bishop::new,
+            Queen::new,
+            King::new,
+            Bishop::new,
+            Knight::new,
+            Rook::new);
     private static final Map<PieceType, Function<PieceColor, Piece>> PROMOTION_PIECE_MAKERS =
             Map.of(
                     PieceType.QUEEN, Queen::new,
@@ -59,8 +61,8 @@ public class Board {
     private void placeStartingPiecesOnFile(int file) {
         Function<PieceColor, Piece> backRankPiece = BACK_RANK_PIECE_MAKERS.get(file);
         place(backRankPiece.apply(PieceColor.WHITE), new Location(file, WHITE_BACK_RANK));
-        place(new Piece(PieceType.PAWN, PieceColor.WHITE), new Location(file, WHITE_PAWN_RANK));
-        place(new Piece(PieceType.PAWN, PieceColor.BLACK), new Location(file, BLACK_PAWN_RANK));
+        place(new Pawn(PieceColor.WHITE), new Location(file, WHITE_PAWN_RANK));
+        place(new Pawn(PieceColor.BLACK), new Location(file, BLACK_PAWN_RANK));
         place(backRankPiece.apply(PieceColor.BLACK), new Location(file, BLACK_BACK_RANK));
     }
 

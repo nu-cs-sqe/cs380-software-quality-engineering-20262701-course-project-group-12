@@ -1,7 +1,9 @@
 package domain;
 
 import domain.piece.Bishop;
+import domain.piece.King;
 import domain.piece.Knight;
+import domain.piece.Pawn;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
@@ -23,6 +25,14 @@ public class BoardTests {
     private static final Location A4 = new Location(0, 4);
     private static final Location A5 = new Location(0, 5);
     private static final Location A8 = new Location(0, 8);
+    private static final Location B1 = new Location(1, 1);
+    private static final Location C1 = new Location(2, 1);
+    private static final Location D1 = new Location(3, 1);
+    private static final Location D8 = new Location(3, 8);
+    private static final Location E1 = new Location(4, 1);
+    private static final Location E8 = new Location(4, 8);
+    private static final Location F8 = new Location(5, 8);
+    private static final Location G8 = new Location(6, 8);
     private static final Location H1 = new Location(7, 1);
     private static final Location H5 = new Location(7, 5);
     private static final Location H7 = new Location(7, 7);
@@ -373,6 +383,66 @@ public class BoardTests {
         return board;
     }
 
+    @Test
+    public void Board_A1_PlacesRook() {
+        assertPieceClass(A1, Rook.class);
+    }
+
+    @Test
+    public void Board_H8_PlacesRook() {
+        assertPieceClass(H8, Rook.class);
+    }
+
+    @Test
+    public void Board_B1_PlacesKnight() {
+        assertPieceClass(B1, Knight.class);
+    }
+
+    @Test
+    public void Board_G8_PlacesKnight() {
+        assertPieceClass(G8, Knight.class);
+    }
+
+    @Test
+    public void Board_C1_PlacesBishop() {
+        assertPieceClass(C1, Bishop.class);
+    }
+
+    @Test
+    public void Board_F8_PlacesBishop() {
+        assertPieceClass(F8, Bishop.class);
+    }
+
+    @Test
+    public void Board_D1_PlacesQueen() {
+        assertPieceClass(D1, Queen.class);
+    }
+
+    @Test
+    public void Board_D8_PlacesQueen() {
+        assertPieceClass(D8, Queen.class);
+    }
+
+    @Test
+    public void Board_E1_PlacesKing() {
+        assertPieceClass(E1, King.class);
+    }
+
+    @Test
+    public void Board_E8_PlacesKing() {
+        assertPieceClass(E8, King.class);
+    }
+
+    @Test
+    public void Board_A2_PlacesPawn() {
+        assertPieceClass(A2, Pawn.class);
+    }
+
+    @Test
+    public void Board_H7_PlacesPawn() {
+        assertPieceClass(H7, Pawn.class);
+    }
+
     private int countPieces(Board board) {
         int pieces = 0;
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
@@ -383,6 +453,12 @@ public class BoardTests {
             }
         }
         return pieces;
+    }
+
+    private void assertPieceClass(Location square, Class<? extends Piece> pieceClass) {
+        Board board = new Board();
+
+        assertInstanceOf(pieceClass, board.pieceAt(square));
     }
 
     private void assertOccupant(int file, int rank, PieceType type, PieceColor color) {
