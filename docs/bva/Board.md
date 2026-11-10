@@ -322,7 +322,7 @@ The case numbers start at TC85, after the check and checkmate cases (TC76 to TC8
 | TC96: blocking the check | queen check on Black; ask about g7 `(6, 7)` to g6 `(6, 6)` | true | :white_check_mark: |
 | TC97: capturing one of two checking pieces | the double check position; ask about g7 `(6, 7)` to f6 `(5, 6)` | false | :white_check_mark: |
 | TC98: blocking one of two checking pieces | the double check position; ask about c7 `(2, 7)` to c6 `(2, 6)` | false | :white_check_mark: |
-| TC99: the king steps out of double check | the double check position; ask about e8 `(4, 8)` to e7 `(4, 7)` | true | :x: |
+| TC99: the king steps out of double check | the double check position; ask about e8 `(4, 8)` to e7 `(4, 7)` | true | :white_check_mark: |
 | TC100: the query leaves the board unchanged | the en passant pin position; ask about e5 `(4, 5)` to d6 `(3, 6)` | `pieceAt(e5)` is still the white pawn that moved from e2, `isOccupied(d6)` is false, and `canBeCapturedEnPassant(d5)` is still true | :x: |
 
 `isCheckmated` counts a move out of check only when `isLegalMove` allows it, so the en passant capture in TC91 also keeps the player from being reported checkmated (US-11 AC 9). TC80 to TC84 still hold.

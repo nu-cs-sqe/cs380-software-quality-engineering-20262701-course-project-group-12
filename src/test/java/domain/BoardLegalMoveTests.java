@@ -181,6 +181,15 @@ public class BoardLegalMoveTests {
         assertFalse(legal);
     }
 
+    @Test
+    public void IsLegalMove_KingOutOfDoubleCheck_ReturnsTrue() {
+        Board board = doubleCheckOnBlack();
+
+        boolean legal = board.isLegalMove(E8, E7);
+
+        assertTrue(legal);
+    }
+
     private Board knightPinnedByBishop() {
         Board board = new Board();
         board.move(E2, E4);
