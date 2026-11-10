@@ -316,7 +316,7 @@ The case numbers start at TC85, after the check and checkmate cases (TC76 to TC8
 | TC90: an en passant capture that opens a rank to the king | the en passant pin position; ask about e5 `(4, 5)` to d6 `(3, 6)` | false | :white_check_mark: |
 | TC91: an en passant capture of the checking pawn | the pawn check position; ask about e5 `(4, 5)` to d6 `(3, 6)` | true | :white_check_mark: |
 | TC92: a move that ignores the check | queen check on White; ask about a2 `(0, 2)` to a3 `(0, 3)` | false | :white_check_mark: |
-| TC93: capturing the checking piece | queen check on White; ask about d3 `(3, 3)` to e4 `(4, 4)` | true | :x: |
+| TC93: capturing the checking piece | queen check on White; ask about d3 `(3, 3)` to e4 `(4, 4)` | true | :white_check_mark: |
 | TC94: the king steps out of check to an unattacked square | queen check on White; ask about e2 `(4, 2)` to d2 `(3, 2)` | true | :x: |
 | TC95: the king steps out of check to an attacked square | queen check on White; ask about e2 `(4, 2)` to f3 `(5, 3)` | false | :x: |
 | TC96: blocking the check | queen check on Black; ask about g7 `(6, 7)` to g6 `(6, 6)` | true | :x: |
