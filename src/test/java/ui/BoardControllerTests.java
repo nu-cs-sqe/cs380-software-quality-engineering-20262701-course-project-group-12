@@ -78,8 +78,6 @@ public class BoardControllerTests {
     private static final Location A7 = new Location(0, 7);
     private static final Location A8 = new Location(0, Location.MAX_RANK);
     private static final Piece BLACK_PAWN = new Piece(PieceType.PAWN, PieceColor.BLACK);
-    private static final Piece BLACK_KING = new Piece(PieceType.KING, PieceColor.BLACK);
-    private static final Piece BLACK_KNIGHT = new Piece(PieceType.KNIGHT, PieceColor.BLACK);
 
     private Board board;
     private Game game;
@@ -135,7 +133,6 @@ public class BoardControllerTests {
     public void ClickSquare_PieceThenSquareItCanReach_MovesPiece() {
         expectPieceOnB1();
         expect(board.isLegalMove(B1, C3)).andReturn(true);
-        expect(board.isOccupied(C3)).andReturn(false);
         board.move(B1, C3);
         expect(piece.promotesOn(C3)).andReturn(false);
         game.passTurn();
@@ -151,7 +148,6 @@ public class BoardControllerTests {
     public void ClickSquare_LegalMove_PassesTheTurn() {
         expectPieceOnB1();
         expect(board.isLegalMove(B1, C3)).andReturn(true);
-        expect(board.isOccupied(C3)).andReturn(false);
         board.move(B1, C3);
         expect(piece.promotesOn(C3)).andReturn(false);
         game.passTurn();
@@ -165,7 +161,7 @@ public class BoardControllerTests {
 
     @Test
     public void ClickSquare_PieceThenSquareItCannotReach_LeavesBoardUnchanged() {
-        expectPieceOnB1();
+        expectSelectableWhitePiece(B1);
         expect(board.isLegalMove(B1, B3)).andReturn(false);
         expect(board.isOccupied(B3)).andReturn(false);
         BoardController controller = replayedController();
@@ -178,7 +174,7 @@ public class BoardControllerTests {
 
     @Test
     public void ClickSquare_MoveTheBoardRefuses_LeavesBoardUnchanged() {
-        expectPieceOnB1();
+        expectSelectableWhitePiece(B1);
         expect(board.isLegalMove(B1, C3)).andReturn(false);
         expect(board.isOccupied(C3)).andReturn(false);
         BoardController controller = replayedController();
@@ -205,7 +201,6 @@ public class BoardControllerTests {
     public void ClickSquare_AfterMove_SelectsNothing() {
         expectPieceOnB1();
         expect(board.isLegalMove(B1, C3)).andReturn(true);
-        expect(board.isOccupied(C3)).andReturn(false);
         board.move(B1, C3);
         expect(piece.promotesOn(C3)).andReturn(false);
         game.passTurn();
@@ -221,7 +216,7 @@ public class BoardControllerTests {
 
     @Test
     public void ClickSquare_RefusedMoveOntoEmptySquare_KeepsSelection() {
-        expectPieceOnB1();
+        expectSelectableWhitePiece(B1);
         expect(board.isLegalMove(B1, B3)).andReturn(false);
         expect(board.isOccupied(B3)).andReturn(false);
         BoardController controller = replayedController();
@@ -235,7 +230,7 @@ public class BoardControllerTests {
 
     @Test
     public void ClickSquare_RefusedMoveOntoEmptySquare_DoesNotPassTheTurn() {
-        expectPieceOnB1();
+        expectSelectableWhitePiece(B1);
         expect(board.isLegalMove(B1, B3)).andReturn(false);
         expect(board.isOccupied(B3)).andReturn(false);
         BoardController controller = replayedController();
@@ -248,7 +243,7 @@ public class BoardControllerTests {
 
     @Test
     public void ClickSquare_PieceTheSelectedOneCannotReach_SelectsThatPiece() {
-        expectPieceOnB1();
+        expectSelectableWhitePiece(B1);
         expect(board.isLegalMove(B1, D2)).andReturn(false);
         expectSelectableWhitePiece(D2);
         BoardController controller = replayedController();
@@ -273,33 +268,6 @@ public class BoardControllerTests {
         controller.clickSquare(B1);
         controller.clickSquare(C3);
 
-        verify(board, piece, game);
-    }
-
-    @Test
-    public void ClickSquare_KingTheSelectedPieceCanReach_LeavesBoardUnchanged() {
-        expectPieceOnB1();
-        expect(board.isLegalMove(B1, C3)).andReturn(true);
-        givenOnC3(BLACK_KING);
-        BoardController controller = replayedController();
-
-        controller.clickSquare(B1);
-        controller.clickSquare(C3);
-
-        verify(board, piece, game);
-    }
-
-    @Test
-    public void ClickSquare_RefusedKingCapture_KeepsSelection() {
-        expectPieceOnB1();
-        expect(board.isLegalMove(B1, C3)).andReturn(true);
-        givenOnC3(BLACK_KING);
-        BoardController controller = replayedController();
-        controller.clickSquare(B1);
-
-        controller.clickSquare(C3);
-
-        assertTrue(controller.isSelected(B1));
         verify(board, piece, game);
     }
 
@@ -359,7 +327,7 @@ public class BoardControllerTests {
 
     @Test
     public void ClickSquare_UnreachableOpponent_KeepsSelection() {
-        expectPieceOnB1();
+        expectSelectableWhitePiece(B1);
         expect(board.isLegalMove(B1, B8)).andReturn(false);
         Piece opponent = mock(Piece.class);
         expect(board.isOccupied(B8)).andReturn(true);
@@ -393,7 +361,6 @@ public class BoardControllerTests {
     public void ClickSquare_MoveThatIsNotPromotion_LeavesNothingPending() {
         expectPieceOnB1();
         expect(board.isLegalMove(B1, C3)).andReturn(true);
-        expect(board.isOccupied(C3)).andReturn(false);
         board.move(B1, C3);
         expect(piece.promotesOn(C3)).andReturn(false);
         game.passTurn();
@@ -444,7 +411,6 @@ public class BoardControllerTests {
     @Test
     public void ClickSquare_RefusedMoveOntoLastRank_LeavesNothingPending() {
         expectSelectableWhitePiece(A7);
-        expect(board.pieceAt(A7)).andReturn(piece);
         expect(board.isLegalMove(A7, A8)).andReturn(false);
         expect(board.isOccupied(A8)).andReturn(false);
         BoardController controller = replayedController();
@@ -472,8 +438,6 @@ public class BoardControllerTests {
         expectSelectableWhitePiece(A7);
         expect(board.pieceAt(A7)).andReturn(piece);
         expect(board.isLegalMove(A7, B8)).andReturn(true);
-        expect(board.isOccupied(B8)).andReturn(true);
-        expect(board.pieceAt(B8)).andReturn(BLACK_KNIGHT);
         board.move(A7, B8);
         expect(piece.promotesOn(B8)).andReturn(true);
         BoardController controller = replayedController();
@@ -537,7 +501,6 @@ public class BoardControllerTests {
         expect(game.colorToMove()).andReturn(PieceColor.WHITE);
         expect(board.pieceAt(B1)).andReturn(piece);
         expect(board.isLegalMove(B1, C3)).andReturn(true);
-        expect(board.isOccupied(C3)).andReturn(false);
         board.move(B1, C3);
         expect(piece.promotesOn(C3)).andReturn(false);
         game.passTurn();
@@ -591,7 +554,6 @@ public class BoardControllerTests {
         expectSelectableWhitePiece(A7);
         expect(board.pieceAt(A7)).andReturn(piece);
         expect(board.isLegalMove(A7, A8)).andReturn(true);
-        expect(board.isOccupied(A8)).andReturn(false);
         board.move(A7, A8);
         expect(piece.promotesOn(A8)).andReturn(true);
     }

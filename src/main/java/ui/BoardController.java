@@ -63,20 +63,18 @@ public class BoardController {
     }
 
     private void moveOrChangeSelection(Location from, Location to) {
-        Piece movingPiece = board.pieceAt(from);
         if (board.isLegalMove(from, to)) {
-            moveUnlessCapturingKing(movingPiece, from, to);
+            move(from, to);
         } else {
             select(to);
         }
     }
 
-    private void moveUnlessCapturingKing(Piece movingPiece, Location from, Location to) {
-        if (!holdsKing(to)) {
-            board.move(from, to);
-            passTurnUnlessPromoting(movingPiece, to);
-            clearSelection();
-        }
+    private void move(Location from, Location to) {
+        Piece movingPiece = board.pieceAt(from);
+        board.move(from, to);
+        passTurnUnlessPromoting(movingPiece, to);
+        clearSelection();
     }
 
     private void passTurnUnlessPromoting(Piece movingPiece, Location arrival) {
@@ -92,10 +90,6 @@ public class BoardController {
         if (board.isCheckmated(game.colorToMove())) {
             game.endByCheckmate();
         }
-    }
-
-    private boolean holdsKing(Location square) {
-        return board.isOccupied(square) && board.pieceAt(square).getType() == PieceType.KING;
     }
 
     private void select(Location square) {
