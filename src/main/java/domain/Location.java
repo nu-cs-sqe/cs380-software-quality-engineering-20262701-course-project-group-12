@@ -41,4 +41,12 @@ public class Location {
     public boolean isSameSquareAs(Location other) {
         return file == other.file && rank == other.rank;
     }
+
+    public int fileDistanceTo(Location other) {
+        return Math.abs(other.file - file);
+    }
+
+    public int rankDistanceTo(Location other) {
+        return Math.abs(other.rank - rank);
+    }
 }

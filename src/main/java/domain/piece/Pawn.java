@@ -29,6 +29,7 @@ public class Pawn extends Piece {
         }
     }
 
+    @Override
     public boolean canMove(Location from, Location to, Board board) {
         if (isOnSameFile(from, to)) {
             return canAdvance(from, to, board);
@@ -49,7 +50,7 @@ public class Pawn extends Piece {
 
     private boolean canCapture(Location from, Location to, Board board) {
         return rankChange(from, to) == oneSquareForward
-                && fileDistance(from, to) == CAPTURE_FILE_DISTANCE
+                && from.fileDistanceTo(to) == CAPTURE_FILE_DISTANCE
                 && holdsOpponent(to, board);
     }
 
@@ -71,9 +72,5 @@ public class Pawn extends Piece {
 
     private int rankChange(Location from, Location to) {
         return to.getRank() - from.getRank();
-    }
-
-    private int fileDistance(Location from, Location to) {
-        return Math.abs(to.getFile() - from.getFile());
     }
 }

@@ -11,18 +11,15 @@ public class Knight extends Piece {
         super(PieceType.KNIGHT, color);
     }
 
+    @Override
     public boolean canMove(Location from, Location to, Board board) {
         return isKnightJump(from, to) && !holdsOwnPiece(to, board);
     }
 
     private boolean isKnightJump(Location from, Location to) {
-        int fileDistance = Math.abs(to.getFile() - from.getFile());
-        int rankDistance = Math.abs(to.getRank() - from.getRank());
+        int fileDistance = from.fileDistanceTo(to);
+        int rankDistance = from.rankDistanceTo(to);
         return fileDistance == SHORT_LEG && rankDistance == LONG_LEG
                 || fileDistance == LONG_LEG && rankDistance == SHORT_LEG;
-    }
-
-    private boolean holdsOwnPiece(Location square, Board board) {
-        return board.isOccupied(square) && board.pieceAt(square).getColor() == getColor();
     }
 }
