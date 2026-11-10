@@ -30,11 +30,15 @@ public class BoardTests {
     private static final Location D1 = new Location(3, 1);
     private static final Location D8 = new Location(3, 8);
     private static final Location E1 = new Location(4, 1);
+    private static final Location E2 = new Location(4, 2);
+    private static final Location E4 = new Location(4, 4);
     private static final Location E5 = new Location(4, 5);
     private static final Location E7 = new Location(4, 7);
     private static final Location E8 = new Location(4, 8);
     private static final Location F2 = new Location(5, 2);
     private static final Location F3 = new Location(5, 3);
+    private static final Location F6 = new Location(5, 6);
+    private static final Location F7 = new Location(5, 7);
     private static final Location F8 = new Location(5, 8);
     private static final Location G2 = new Location(6, 2);
     private static final Location G4 = new Location(6, 4);
@@ -347,6 +351,15 @@ public class BoardTests {
     }
 
     @Test
+    public void IsInCheck_BlackKingReachedByWhiteQueen_ReturnsTrue() {
+        Board board = queenCheckOnBlack();
+
+        boolean inCheck = board.isInCheck(PieceColor.BLACK);
+
+        assertTrue(inCheck);
+    }
+
+    @Test
     public void Board_A1_PlacesRook() {
         assertPieceClass(A1, Rook.class);
     }
@@ -412,6 +425,14 @@ public class BoardTests {
         board.move(E7, E5);
         board.move(G2, G4);
         board.move(D8, H4);
+        return board;
+    }
+
+    private Board queenCheckOnBlack() {
+        Board board = new Board();
+        board.move(E2, E4);
+        board.move(F7, F6);
+        board.move(D1, H5);
         return board;
     }
 
