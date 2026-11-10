@@ -11,6 +11,7 @@ public class Game {
     private Player playerToMove;
     private Board board;
     private Optional<Player> winner = Optional.empty();
+    private boolean stalemate;
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -41,6 +42,10 @@ public class Game {
         winner = Optional.of(playerWaiting());
     }
 
+    public void endByStalemate() {
+        stalemate = true;
+    }
+
     private Player playerWaiting() {
         if (playerToMove == playerOne) {
             return playerTwo;
@@ -49,11 +54,11 @@ public class Game {
     }
 
     public boolean isOver() {
-        return winner.isPresent();
+        return winner.isPresent() || stalemate;
     }
 
     public boolean isStalemate() {
-        return false;
+        return stalemate;
     }
 
     public String winnerName() {

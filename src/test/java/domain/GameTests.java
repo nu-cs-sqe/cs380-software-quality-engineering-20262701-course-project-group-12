@@ -345,4 +345,15 @@ public class GameTests {
 
         assertFalse(stalemate);
     }
+
+    @Test
+    public void EndByStalemate_StartedGame_EndsTheGame() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByStalemate();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isStalemate());
+    }
 }

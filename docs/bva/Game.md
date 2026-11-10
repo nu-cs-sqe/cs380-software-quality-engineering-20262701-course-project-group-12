@@ -400,7 +400,7 @@ without a new click case.
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.
 
-- **TC-END-09 — Stalemate ends the game as a draw** ( :x: )
+- **TC-END-09 — Stalemate ends the game as a draw** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `endByStalemate()`,
     `isOver()`, `isStalemate()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then
