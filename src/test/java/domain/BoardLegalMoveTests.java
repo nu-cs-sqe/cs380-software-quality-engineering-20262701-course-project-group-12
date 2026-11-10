@@ -21,6 +21,7 @@ public class BoardLegalMoveTests {
     private static final Location C3 = new Location(2, 3);
     private static final Location C5 = new Location(2, 5);
     private static final Location C6 = new Location(2, 6);
+    private static final Location C7 = new Location(2, 7);
     private static final Location D1 = new Location(3, 1);
     private static final Location D2 = new Location(3, 2);
     private static final Location D3 = new Location(3, 3);
@@ -167,6 +168,15 @@ public class BoardLegalMoveTests {
         Board board = doubleCheckOnBlack();
 
         boolean legal = board.isLegalMove(G7, F6);
+
+        assertFalse(legal);
+    }
+
+    @Test
+    public void IsLegalMove_BlockOfOneOfTwoCheckingPieces_ReturnsFalse() {
+        Board board = doubleCheckOnBlack();
+
+        boolean legal = board.isLegalMove(C7, C6);
 
         assertFalse(legal);
     }
