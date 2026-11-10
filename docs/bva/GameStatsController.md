@@ -92,9 +92,11 @@ Step 1:
 Step 2/3:
 - game over -> Boolean: false, true
 - winner -> Cases: Player 1 / White, Player 2 / Black
+- result of a game that is over -> Cases: checkmate, draw by repetition (issue #59)
 - output is:
   - `Current player: <name of the player to move>` while the game is not over
-  - `Checkmate: <winner's name> (<winner's color>) wins` once the game is over
+  - `Checkmate: <winner's name> (<winner's color>) wins` once the game is over by checkmate
+  - `Draw by repetition` once the game is drawn by repetition
 
 - **TC9: refresh after the turn passes** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while `playerToMoveName()` was Ada. Then `playerToMoveName()` is Bo, the game is not over, and `refreshStatus()` runs.
@@ -107,3 +109,11 @@ Step 2/3:
 - **TC11: refresh after Player 1 checkmates Player 2** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `winnerName()` is Ada, `winnerColor()` is `WHITE`, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Checkmate: Ada (White) wins`
+
+Issue #59 (GitHub US-19, docs US-18). After a draw by repetition, the same line
+shows the result instead of the player to move (US-19 AC 8). A draw has no
+winner, so the line names no player.
+
+- **TC12: refresh after a draw by repetition** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Draw by repetition`

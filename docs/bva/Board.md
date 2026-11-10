@@ -11,6 +11,8 @@
 - `boolean canBeCapturedEnPassant(Location square)` (issue #47): returns true when `square` holds the pawn that moved two ranks on the last move, and false otherwise. The chance lasts one move: any later move ends it.
 - `boolean isInCheck(PieceColor color)` (issue #48 / GitHub US-15, docs US-15): returns true when a piece of the other color `canMove` onto the square of the king of `color`. Does not change the board.
 - `boolean isCheckmated(PieceColor color)` (issue #48): returns true when the king of `color` is in check and no move by a piece of `color` leaves that king out of check. A move counts only when the piece `canMove` there, and it is tried on a copy, so the board itself does not change. The king is never removed.
+- `Position position(PieceColor colorToMove)` (issue #59 / GitHub US-19, docs US-18): returns the position on the board, with `colorToMove` to move, for the repetition rules. Its cases are in `Position.md`, which checks the positions it builds.
+- `Position positionAfterMove(Location from, Location to, PieceColor colorToMove)` (issue #59): returns the position the board would have after `move(from, to)`, with `colorToMove` to move. The move is made on a copy, so the board does not change.
 
 No method returns null. The project rules forbid it, so an empty square is reported by `isOccupied` instead of a null from `pieceAt`. Callers ask `isOccupied` before `pieceAt`. TC9 through TC12 used to expect null from `pieceAt` on the empty ranks; they now check those squares with `isOccupied`.
 
@@ -135,6 +137,17 @@ Each position is set up with `move` from a new `Board`, using real games, so eve
 | Output: `isInCheck` | Boolean | true; false |
 | Output: `isCheckmated` | Boolean | true only when the king is in check and no move leaves it out of check; false otherwise |
 | Output: the board after `isCheckmated` | Collection | unchanged; the king stays on its square |
+
+### `positionAfterMove(Location from, Location to, PieceColor colorToMove)`
+
+The move is the white knight from g1 `(6, 1)` to f3 `(5, 3)`, with Black to move after it. The expected position is built by making the same move on a second new `Board` and asking it for `position(BLACK)`.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: `from` and `to` | Pointer | locations (no null: callers never pass one) |
+| Input: `colorToMove` | Cases | Black, the player to move after a White move |
+| Output: the position | Cases | the same as the board's position after `move(g1, f3)` |
+| Output: the board after the call | Collection | unchanged: g1 still holds the knight, and f3 is empty |
 
 ## Step 4: Test cases (each-choice strategy)
 
@@ -266,3 +279,18 @@ The case numbers start at TC76, after the piece-class cases (TC46 to TC57, issue
 | TC82: in check with a reply that blocks the check | the queen check on Black; ask about Black | false | :white_check_mark: |
 | TC83: not in check and no legal move | Sam Loyd's stalemate; ask about Black | false | :white_check_mark: |
 | TC84: the query leaves the board unchanged | the Fool's mate position; ask about White | `pieceAt(h4)` is still the black queen that moved from d8, `pieceAt(e1)` is still the white king, and 32 squares are occupied | :white_check_mark: |
+
+### Method under test: `position(PieceColor colorToMove)`
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC85: the position on the board | implemented in Position TC1 to TC9 | the positions those cases compare | implemented in Position TC1 to TC9 |
+
+### Method under test: `positionAfterMove(Location from, Location to, PieceColor colorToMove)`
+
+The case numbers continue after the checkmate cases (TC76 to TC84, issue #48).
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC86: the position after a move | a new `Board`; `positionAfterMove(g1, f3, BLACK)`, compared with a second new `Board` after `move(g1, f3)` and `position(BLACK)` | `isSameAs` returns true | :x: |
+| TC87: the board does not change | a new `Board`; `positionAfterMove(g1, f3, BLACK)` | `pieceAt(g1)` is still the white knight; `isOccupied(f3)` is false | :x: |
