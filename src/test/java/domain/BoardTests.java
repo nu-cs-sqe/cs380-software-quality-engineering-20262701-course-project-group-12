@@ -324,6 +324,15 @@ public class BoardTests {
     }
 
     @Test
+    public void IsCheckmated_InCheckWithNoReply_ReturnsTrue() {
+        Board board = foolsMate();
+
+        boolean checkmated = board.isCheckmated(PieceColor.WHITE);
+
+        assertTrue(checkmated);
+    }
+
+    @Test
     public void IsInCheck_NewBoard_ReturnsFalse() {
         Board board = new Board();
 

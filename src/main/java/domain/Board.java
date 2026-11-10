@@ -105,7 +105,7 @@ public class Board {
     }
 
     public boolean isCheckmated(PieceColor color) {
-        return false;
+        return isInCheck(color);
     }
 
     private void clear(Location location) {
