@@ -346,6 +346,15 @@ public class BoardTests {
     }
 
     @Test
+    public void IsCheckmated_InCheckWithReplyThatBlocks_ReturnsFalse() {
+        Board board = queenCheckOnBlack();
+
+        boolean checkmated = board.isCheckmated(PieceColor.BLACK);
+
+        assertFalse(checkmated);
+    }
+
+    @Test
     public void IsCheckmated_NotInCheckWithNoLegalMove_ReturnsFalse() {
         Board board = samLoydsStalemate();
 

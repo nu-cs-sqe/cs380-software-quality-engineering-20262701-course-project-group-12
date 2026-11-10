@@ -44,6 +44,11 @@ public class Board {
         }
     }
 
+    private Board(Board original) {
+        allSquares().forEach(square ->
+                rankOf(square).set(square.getFile(), original.occupantOf(square)));
+    }
+
     private static List<List<Optional<Piece>>> emptySquares() {
         return Stream.generate(Board::emptyRank).limit(RANKS).collect(Collectors.toList());
     }
@@ -98,14 +103,34 @@ public class Board {
     }
 
     private Stream<Location> occupiedSquares() {
+        return allSquares().filter(this::isOccupied);
+    }
+
+    private static Stream<Location> allSquares() {
         return IntStream.rangeClosed(Location.MIN_FILE, Location.MAX_FILE).boxed()
                 .flatMap(file -> IntStream.rangeClosed(Location.MIN_RANK, Location.MAX_RANK)
-                        .mapToObj(rank -> new Location(file, rank)))
-                .filter(this::isOccupied);
+                        .mapToObj(rank -> new Location(file, rank)));
     }
 
     public boolean isCheckmated(PieceColor color) {
-        return isInCheck(color);
+        return isInCheck(color) && !hasMoveOutOfCheck(color);
+    }
+
+    private boolean hasMoveOutOfCheck(PieceColor color) {
+        return occupiedSquares()
+                .filter(from -> pieceAt(from).getColor() == color)
+                .anyMatch(from -> hasMoveOutOfCheckFrom(from, color));
+    }
+
+    private boolean hasMoveOutOfCheckFrom(Location from, PieceColor color) {
+        return allSquares().anyMatch(to -> pieceAt(from).canMove(from, to, this)
+                && !boardAfterMove(from, to).isInCheck(color));
+    }
+
+    private Board boardAfterMove(Location from, Location to) {
+        Board copy = new Board(this);
+        copy.move(from, to);
+        return copy;
     }
 
     private void clear(Location location) {
