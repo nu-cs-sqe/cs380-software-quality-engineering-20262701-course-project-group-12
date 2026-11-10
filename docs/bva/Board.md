@@ -320,7 +320,7 @@ The case numbers start at TC85, after the check and checkmate cases (TC76 to TC8
 | TC94: the king steps out of check to an unattacked square | queen check on White; ask about e2 `(4, 2)` to d2 `(3, 2)` | true | :white_check_mark: |
 | TC95: the king steps out of check to an attacked square | queen check on White; ask about e2 `(4, 2)` to f3 `(5, 3)` | false | :white_check_mark: |
 | TC96: blocking the check | queen check on Black; ask about g7 `(6, 7)` to g6 `(6, 6)` | true | :white_check_mark: |
-| TC97: capturing one of two checking pieces | the double check position; ask about g7 `(6, 7)` to f6 `(5, 6)` | false | :x: |
+| TC97: capturing one of two checking pieces | the double check position; ask about g7 `(6, 7)` to f6 `(5, 6)` | false | :white_check_mark: |
 | TC98: blocking one of two checking pieces | the double check position; ask about c7 `(2, 7)` to c6 `(2, 6)` | false | :x: |
 | TC99: the king steps out of double check | the double check position; ask about e8 `(4, 8)` to e7 `(4, 7)` | true | :x: |
 | TC100: the query leaves the board unchanged | the en passant pin position; ask about e5 `(4, 5)` to d6 `(3, 6)` | `pieceAt(e5)` is still the white pawn that moved from e2, `isOccupied(d6)` is false, and `canBeCapturedEnPassant(d5)` is still true | :x: |

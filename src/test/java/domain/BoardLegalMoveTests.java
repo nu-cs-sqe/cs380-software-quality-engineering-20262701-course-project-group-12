@@ -17,6 +17,7 @@ public class BoardLegalMoveTests {
     private static final Location B4 = new Location(1, 4);
     private static final Location B5 = new Location(1, 5);
     private static final Location B8 = new Location(1, 8);
+    private static final Location C2 = new Location(2, 2);
     private static final Location C3 = new Location(2, 3);
     private static final Location C5 = new Location(2, 5);
     private static final Location C6 = new Location(2, 6);
@@ -161,6 +162,15 @@ public class BoardLegalMoveTests {
         assertTrue(legal);
     }
 
+    @Test
+    public void IsLegalMove_CaptureOfOneOfTwoCheckingPieces_ReturnsFalse() {
+        Board board = doubleCheckOnBlack();
+
+        boolean legal = board.isLegalMove(G7, F6);
+
+        assertFalse(legal);
+    }
+
     private Board knightPinnedByBishop() {
         Board board = new Board();
         board.move(E2, E4);
@@ -248,6 +258,22 @@ public class BoardLegalMoveTests {
         board.move(E2, E4);
         board.move(F7, F6);
         board.move(D1, H5);
+        return board;
+    }
+
+    private Board doubleCheckOnBlack() {
+        Board board = new Board();
+        board.move(C2, C3);
+        board.move(E7, E6);
+        board.move(D1, A4);
+        board.move(A7, A6);
+        board.move(G1, F3);
+        board.move(A6, A5);
+        board.move(F3, E5);
+        board.move(H7, H6);
+        board.move(E5, D7);
+        board.move(H6, H5);
+        board.move(D7, F6);
         return board;
     }
 }
