@@ -459,7 +459,7 @@ starting position has occurred n + 1 times.
   - **Expected output**: Returns `false`.
 
 - **TC-REP-08 — A position seen four times is not a fivefold repetition**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `isFivefoldRepetition()`
   - **State of the system**: Started game after three round trips, so the
     starting position has occurred four times.

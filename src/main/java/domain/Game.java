@@ -70,6 +70,10 @@ public class Game {
         return occurrencesOf(positionAfterMove) + ONE_MORE_OCCURRENCE >= THREEFOLD;
     }
 
+    public boolean isFivefoldRepetition() {
+        return false;
+    }
+
     private Position currentPosition() {
         return positions.get(positions.size() - 1);
     }

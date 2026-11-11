@@ -21,6 +21,7 @@ public class GameTests {
     private static final Location G8 = new Location(6, 8);
     private static final int ROUND_TRIPS_FOR_SECOND_OCCURRENCE = 1;
     private static final int ROUND_TRIPS_FOR_THIRD_OCCURRENCE = 2;
+    private static final int ROUND_TRIPS_FOR_FOURTH_OCCURRENCE = 3;
 
     @Test
     public void IsStarted_NewGame_ReturnsFalse() {
@@ -409,6 +410,15 @@ public class GameTests {
         boolean canClaim = game.canClaimDrawByRepetitionWith(B8, C6);
 
         assertFalse(canClaim);
+    }
+
+    @Test
+    public void IsFivefoldRepetition_PositionSeenFourTimes_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_FOURTH_OCCURRENCE);
+
+        boolean fivefold = game.isFivefoldRepetition();
+
+        assertFalse(fivefold);
     }
 
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
