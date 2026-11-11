@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public class Game {
     private static final int THREEFOLD = 3;
+    private static final int ONE_MORE_OCCURRENCE = 1;
 
     private final List<Position> positions = new ArrayList<>();
     private boolean started;
@@ -64,7 +65,9 @@ public class Game {
     }
 
     public boolean canClaimDrawByRepetitionWith(Location from, Location to) {
-        return true;
+        Position positionAfterMove =
+                board.positionAfterMove(from, to, playerWaiting().getColor());
+        return occurrencesOf(positionAfterMove) + ONE_MORE_OCCURRENCE >= THREEFOLD;
     }
 
     private Position currentPosition() {

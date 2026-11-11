@@ -444,7 +444,7 @@ starting position has occurred n + 1 times.
   - **Expected output**: Returns `true`.
 
 - **TC-REP-06 — A move that makes the second occurrence cannot be claimed**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canClaimDrawByRepetitionWith(Location,
     Location)`
   - **State of the system**: Started game after one round trip less the last

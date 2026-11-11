@@ -391,6 +391,15 @@ public class GameTests {
         assertTrue(canClaim);
     }
 
+    @Test
+    public void CanClaimDrawByRepetitionWith_MoveMakingSecondOccurrence_ReturnsFalse() {
+        Game game = gameBeforeLastMoveOfRoundTrip(ROUND_TRIPS_FOR_SECOND_OCCURRENCE);
+
+        boolean canClaim = game.canClaimDrawByRepetitionWith(F6, G8);
+
+        assertFalse(canClaim);
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");
