@@ -393,6 +393,17 @@ public class BoardTests {
     }
 
     @Test
+    public void PositionAfterMove_KnightToF3_LeavesTheBoardUnchanged() {
+        Board board = new Board();
+        Piece whiteKnight = board.pieceAt(G1);
+
+        board.positionAfterMove(G1, F3, PieceColor.BLACK);
+
+        assertSame(whiteKnight, board.pieceAt(G1));
+        assertFalse(board.isOccupied(F3));
+    }
+
+    @Test
     public void IsInCheck_NewBoard_ReturnsFalse() {
         Board board = new Board();
 

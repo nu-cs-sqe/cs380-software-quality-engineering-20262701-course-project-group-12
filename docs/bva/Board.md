@@ -293,4 +293,4 @@ The case numbers continue after the checkmate cases (TC76 to TC84, issue #48).
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC86: the position after a move | a new `Board`; `positionAfterMove(g1, f3, BLACK)`, compared with a second new `Board` after `move(g1, f3)` and `position(BLACK)` | `isSameAs` returns true | :white_check_mark: |
-| TC87: the board does not change | a new `Board`; `positionAfterMove(g1, f3, BLACK)` | `pieceAt(g1)` is still the white knight; `isOccupied(f3)` is false | :x: |
+| TC87: the board does not change | a new `Board`; `positionAfterMove(g1, f3, BLACK)` | `pieceAt(g1)` is still the white knight; `isOccupied(f3)` is false | :white_check_mark: |
