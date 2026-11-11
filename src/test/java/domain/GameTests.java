@@ -441,6 +441,17 @@ public class GameTests {
         assertFalse(drawn);
     }
 
+    @Test
+    public void EndByRepetition_StartedGame_DrawsTheGame() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByRepetition();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isDrawnByRepetition());
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");

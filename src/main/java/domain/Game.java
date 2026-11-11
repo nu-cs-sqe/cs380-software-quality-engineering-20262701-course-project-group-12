@@ -18,6 +18,7 @@ public class Game {
     private Player playerToMove;
     private Board board;
     private Optional<Player> winner = Optional.empty();
+    private boolean drawnByRepetition;
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -71,8 +72,12 @@ public class Game {
         return occurrencesOf(positionAfterMove) + ONE_MORE_OCCURRENCE >= THREEFOLD;
     }
 
+    public void endByRepetition() {
+        drawnByRepetition = true;
+    }
+
     public boolean isDrawnByRepetition() {
-        return false;
+        return drawnByRepetition;
     }
 
     public boolean isFivefoldRepetition() {
@@ -88,7 +93,7 @@ public class Game {
     }
 
     public boolean isOver() {
-        return winner.isPresent();
+        return winner.isPresent() || drawnByRepetition;
     }
 
     public String winnerName() {

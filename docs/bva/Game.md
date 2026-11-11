@@ -477,7 +477,7 @@ starting position has occurred n + 1 times.
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.
 
-- **TC-REP-11 — A repetition ends the game as a draw** ( :x: )
+- **TC-REP-11 — A repetition ends the game as a draw** ( :white_check_mark: )
   - **Method(s) under test**: `endByRepetition()`, `isOver()`,
     `isDrawnByRepetition()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then
