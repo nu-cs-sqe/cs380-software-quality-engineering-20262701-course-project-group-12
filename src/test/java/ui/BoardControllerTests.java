@@ -503,6 +503,17 @@ public class BoardControllerTests {
     }
 
     @Test
+    public void CanClaimDraw_PlayerToMoveCanClaimRepetition_ReturnsTrue() {
+        expect(game.canClaimDrawByRepetition()).andReturn(true);
+        BoardController controller = replayedController();
+
+        boolean canClaim = controller.canClaimDraw();
+
+        assertTrue(canClaim);
+        verify(board, piece, game);
+    }
+
+    @Test
     public void CanClaimDraw_PlayerToMoveCannotClaimAndNoMoveWaits_ReturnsFalse() {
         expect(game.canClaimDrawByRepetition()).andStubReturn(false);
         BoardController controller = replayedController();

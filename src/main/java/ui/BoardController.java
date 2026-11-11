@@ -46,7 +46,7 @@ public class BoardController {
     }
 
     public boolean canClaimDraw() {
-        return false;
+        return game.canClaimDrawByRepetition();
     }
 
     public void clickSquare(Location square) {
