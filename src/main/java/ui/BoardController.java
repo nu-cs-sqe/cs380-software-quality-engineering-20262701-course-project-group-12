@@ -13,6 +13,7 @@ public class BoardController {
     private final Game game;
     private Optional<Location> selectedSquare = Optional.empty();
     private Optional<Location> promotionSquare = Optional.empty();
+    private boolean drawClaimWithMovePending;
 
     public BoardController(Board board, Game game) {
         this.board = board;
@@ -46,7 +47,11 @@ public class BoardController {
     }
 
     public boolean canClaimDraw() {
-        return game.canClaimDrawByRepetition();
+        return game.canClaimDrawByRepetition() || isDrawClaimWithMovePending();
+    }
+
+    private boolean isDrawClaimWithMovePending() {
+        return drawClaimWithMovePending;
     }
 
     public void claimDraw() {
@@ -83,9 +88,17 @@ public class BoardController {
 
     private void moveUnlessCapturingKing(Piece movingPiece, Location from, Location to) {
         if (!holdsKing(to)) {
+            moveUnlessItCanBeClaimed(movingPiece, from, to);
+            clearSelection();
+        }
+    }
+
+    private void moveUnlessItCanBeClaimed(Piece movingPiece, Location from, Location to) {
+        if (game.canClaimDrawByRepetitionWith(from, to)) {
+            drawClaimWithMovePending = true;
+        } else {
             board.move(from, to);
             passTurnUnlessPromoting(movingPiece, to);
-            clearSelection();
         }
     }
 
