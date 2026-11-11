@@ -168,6 +168,10 @@ public class Board {
                 && !boardAfterMove(from, to).isInCheck(color));
     }
 
+    public Position position(PieceColor colorToMove) {
+        return new Position();
+    }
+
     private Board boardAfterMove(Location from, Location to) {
         Board copy = new Board(this);
         copy.move(from, to);

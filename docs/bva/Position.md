@@ -43,7 +43,7 @@ through `8`. Each position is built with `Board.move` from a new `Board`, then
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC1: the same pieces and player to move | two new `Board`s; White to move in both | true | :x: |
+| TC1: the same pieces and player to move | two new `Board`s; White to move in both | true | :white_check_mark: |
 | TC2: another player to move | two new `Board`s; White to move in one, Black in the other | false | :x: |
 | TC3: a piece on another square | a new `Board`, and a new `Board` after `move` of g1 `(6, 1)` to f3 `(5, 3)`; White to move in both | false | :x: |
 | TC4: two knights of the same color swap squares | a new `Board`, and a new `Board` after `move` of b1 `(1, 1)` to a3 `(0, 3)`, g1 to b1, and a3 to g1; White to move in both | true | :x: |
