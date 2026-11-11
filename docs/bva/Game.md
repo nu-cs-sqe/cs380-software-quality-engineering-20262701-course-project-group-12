@@ -429,7 +429,7 @@ starting position has occurred n + 1 times.
     starting position has occurred three times.
   - **Expected output**: Returns `true`.
 
-- **TC-REP-04 — A new position after a repetition cannot be claimed** ( :x: )
+- **TC-REP-04 — A new position after a repetition cannot be claimed** ( :white_check_mark: )
   - **Method(s) under test**: `canClaimDrawByRepetition()`
   - **State of the system**: Started game after two round trips, then e2 to
     e4 and `passTurn()`.
