@@ -485,7 +485,7 @@ starting position has occurred n + 1 times.
   - **Expected output**: `isOver()` returns `true`; `isDrawnByRepetition()`
     returns `true`.
 
-- **TC-REP-12 — Reject ending the game by repetition before a start** ( :x: )
+- **TC-REP-12 — Reject ending the game by repetition before a start** ( :white_check_mark: )
   - **Method(s) under test**: `endByRepetition()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.

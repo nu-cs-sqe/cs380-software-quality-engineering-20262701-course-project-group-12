@@ -452,6 +452,13 @@ public class GameTests {
         assertTrue(game.isDrawnByRepetition());
     }
 
+    @Test
+    public void EndByRepetition_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::endByRepetition);
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");

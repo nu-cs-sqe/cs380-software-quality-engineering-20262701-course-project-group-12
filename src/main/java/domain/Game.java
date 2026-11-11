@@ -73,6 +73,7 @@ public class Game {
     }
 
     public void endByRepetition() {
+        requireStartedTo("end the game");
         drawnByRepetition = true;
     }
 
