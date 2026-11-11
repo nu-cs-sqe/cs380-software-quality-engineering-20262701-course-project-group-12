@@ -18,7 +18,9 @@ public class PositionTests {
     private static final Location E4 = new Location(4, 4);
     private static final Location E5 = new Location(4, 5);
     private static final Location E7 = new Location(4, 7);
+    private static final Location F2 = new Location(5, 2);
     private static final Location F3 = new Location(5, 3);
+    private static final Location F4 = new Location(5, 4);
     private static final Location G1 = new Location(6, 1);
 
     @Test
@@ -110,6 +112,21 @@ public class PositionTests {
         Board board = new Board();
         board.move(E2, E4);
         Board other = new Board();
+        other.move(E2, E3);
+        other.move(E3, E4);
+
+        boolean same = board.position(PieceColor.BLACK).isSameAs(other.position(PieceColor.BLACK));
+
+        assertTrue(same);
+    }
+
+    @Test
+    public void IsSameAs_PawnBesideBelongsToTheOtherPlayer_ReturnsTrue() {
+        Board board = new Board();
+        board.move(F2, F4);
+        board.move(E2, E4);
+        Board other = new Board();
+        other.move(F2, F4);
         other.move(E2, E3);
         other.move(E3, E4);
 

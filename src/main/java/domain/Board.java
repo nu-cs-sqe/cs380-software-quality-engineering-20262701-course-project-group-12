@@ -172,15 +172,18 @@ public class Board {
     public Position position(PieceColor colorToMove) {
         return new Position(colorToMove,
                 allSquares().map(this::occupantOf).collect(Collectors.toUnmodifiableList()),
-                isEnPassantCaptureAvailable());
+                isEnPassantCaptureAvailableTo(colorToMove));
     }
 
-    private boolean isEnPassantCaptureAvailable() {
-        return pawnThatJustAdvancedTwoRanks.filter(this::hasPieceBeside).isPresent();
+    private boolean isEnPassantCaptureAvailableTo(PieceColor color) {
+        return pawnThatJustAdvancedTwoRanks
+                .filter(square -> hasPieceOfColorBeside(color, square))
+                .isPresent();
     }
 
-    private boolean hasPieceBeside(Location square) {
-        return occupiedSquares().anyMatch(other -> isBeside(other, square));
+    private boolean hasPieceOfColorBeside(PieceColor color, Location square) {
+        return occupiedSquares().anyMatch(other ->
+                isBeside(other, square) && pieceAt(other).getColor() == color);
     }
 
     private static boolean isBeside(Location square, Location other) {
