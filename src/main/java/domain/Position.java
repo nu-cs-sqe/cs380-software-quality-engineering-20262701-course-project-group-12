@@ -22,10 +22,10 @@ public class Position {
 
     private boolean hasSamePiecesAs(Position other) {
         return IntStream.range(0, occupants.size()).allMatch(square ->
-                occupiedAlike(occupants.get(square), other.occupants.get(square)));
+                holdSamePiece(occupants.get(square), other.occupants.get(square)));
     }
 
-    private static boolean occupiedAlike(Optional<Piece> mine, Optional<Piece> theirs) {
-        return mine.isPresent() == theirs.isPresent();
+    private static boolean holdSamePiece(Optional<Piece> mine, Optional<Piece> theirs) {
+        return mine.map(Piece::getType).equals(theirs.map(Piece::getType));
     }
 }

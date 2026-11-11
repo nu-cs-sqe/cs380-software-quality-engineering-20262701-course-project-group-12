@@ -1,12 +1,14 @@
 package domain;
 
 import domain.piece.PieceColor;
+import domain.piece.PieceType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PositionTests {
+    private static final Location A2 = new Location(0, 2);
     private static final Location A3 = new Location(0, 3);
     private static final Location B1 = new Location(1, 1);
     private static final Location F3 = new Location(5, 3);
@@ -54,5 +56,16 @@ public class PositionTests {
         boolean same = position.isSameAs(board.position(PieceColor.WHITE));
 
         assertTrue(same);
+    }
+
+    @Test
+    public void IsSameAs_SquareWithPieceOfAnotherType_ReturnsFalse() {
+        Board board = new Board();
+        board.promote(A2, PieceType.QUEEN);
+        Position position = new Board().position(PieceColor.WHITE);
+
+        boolean same = position.isSameAs(board.position(PieceColor.WHITE));
+
+        assertFalse(same);
     }
 }
