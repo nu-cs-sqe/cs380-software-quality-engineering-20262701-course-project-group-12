@@ -3,6 +3,7 @@ package domain;
 import domain.piece.PieceColor;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PositionTests {
@@ -14,5 +15,15 @@ public class PositionTests {
         boolean same = position.isSameAs(other);
 
         assertTrue(same);
+    }
+
+    @Test
+    public void IsSameAs_AnotherPlayerToMove_ReturnsFalse() {
+        Position position = new Board().position(PieceColor.WHITE);
+        Position other = new Board().position(PieceColor.BLACK);
+
+        boolean same = position.isSameAs(other);
+
+        assertFalse(same);
     }
 }

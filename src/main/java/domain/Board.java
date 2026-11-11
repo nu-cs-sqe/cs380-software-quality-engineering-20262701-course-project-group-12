@@ -169,7 +169,7 @@ public class Board {
     }
 
     public Position position(PieceColor colorToMove) {
-        return new Position();
+        return new Position(colorToMove);
     }
 
     private Board boardAfterMove(Location from, Location to) {
