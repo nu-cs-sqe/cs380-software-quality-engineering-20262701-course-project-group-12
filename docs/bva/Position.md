@@ -48,7 +48,7 @@ through `8`. Each position is built with `Board.move` from a new `Board`, then
 | TC3: a piece on another square | a new `Board`, and a new `Board` after `move` of g1 `(6, 1)` to f3 `(5, 3)`; White to move in both | false | :white_check_mark: |
 | TC4: two knights of the same color swap squares | a new `Board`, and a new `Board` after `move` of b1 `(1, 1)` to a3 `(0, 3)`, g1 to b1, and a3 to g1; White to move in both | true | :white_check_mark: |
 | TC5: a square holds a piece of another type | a new `Board`, and a new `Board` after `promote` of a2 `(0, 2)` to `QUEEN`; White to move in both | false | :white_check_mark: |
-| TC6: squares hold pieces of the other color | a new `Board` after `move` of e2 `(4, 2)` to e4 `(4, 4)` and e7 `(4, 7)` to e5 `(4, 5)`, and a new `Board` after `move` of e7 to e4 and e2 to e5; White to move in both | false | :x: |
+| TC6: squares hold pieces of the other color | a new `Board` after `move` of e2 `(4, 2)` to e4 `(4, 4)` and e7 `(4, 7)` to e5 `(4, 5)`, and a new `Board` after `move` of e7 to e4 and e2 to e5; White to move in both | false | :white_check_mark: |
 | TC7: an en passant capture available in one only | a new `Board` after `move` of d7 `(3, 7)` to d4 `(3, 4)` and e2 to e4, and a new `Board` after `move` of d7 to d4, e2 to e3 `(4, 3)`, and e3 to e4; Black to move in both | false | :x: |
 | TC8: a two-rank pawn move with no pawn beside it | a new `Board` after `move` of e2 to e4, and a new `Board` after `move` of e2 to e3 and e3 to e4; Black to move in both | true | :x: |
 | TC9: the pawn beside belongs to the other player | a new `Board` after `move` of f2 `(5, 2)` to f4 `(5, 4)` and e2 to e4, and a new `Board` after `move` of f2 to f4, e2 to e3, and e3 to e4; Black to move in both | true | :x: |

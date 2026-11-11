@@ -26,6 +26,7 @@ public class Position {
     }
 
     private static boolean holdSamePiece(Optional<Piece> mine, Optional<Piece> theirs) {
-        return mine.map(Piece::getType).equals(theirs.map(Piece::getType));
+        return mine.map(Piece::getType).equals(theirs.map(Piece::getType))
+                && mine.map(Piece::getColor).equals(theirs.map(Piece::getColor));
     }
 }
