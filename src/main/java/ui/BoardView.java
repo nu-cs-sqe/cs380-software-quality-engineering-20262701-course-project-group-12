@@ -65,9 +65,27 @@ public class BoardView extends JPanel {
         if (isOnBoard(point)) {
             boardController.clickSquare(squareAt(point));
             repaint();
+            askForDrawClaimWithWaitingMove();
             askForPromotionWhilePending();
             afterClick.run();
             repaint();
+        }
+    }
+
+    private void askForDrawClaimWithWaitingMove() {
+        if (boardController.isDrawClaimWithMovePending()) {
+            int answer = JOptionPane.showConfirmDialog(this,
+                    Messages.text("draw.claimWithMove.question"),
+                    Messages.text("draw.claimWithMove.title"), JOptionPane.YES_NO_OPTION);
+            answerDrawClaim(answer == JOptionPane.YES_OPTION);
+        }
+    }
+
+    private void answerDrawClaim(boolean claimed) {
+        if (claimed) {
+            boardController.claimDraw();
+        } else {
+            boardController.declineDrawClaim();
         }
     }
 

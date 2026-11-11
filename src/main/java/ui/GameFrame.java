@@ -12,11 +12,22 @@ public class GameFrame extends JFrame {
     }
 
     private GameFrame(Game game, GameStatsController stats) {
+        this(stats, new BoardController(game.board(), game));
+    }
+
+    private GameFrame(GameStatsController stats, BoardController boardController) {
+        this(stats, boardController, new DrawClaimView(boardController, stats::refreshStatus));
+    }
+
+    private GameFrame(
+            GameStatsController stats, BoardController boardController, DrawClaimView drawClaim) {
         this(
                 stats.createView(),
-                new BoardView(
-                        new BoardController(game.board(), game),
-                        stats::refreshStatus));
+                new BoardView(boardController, () -> {
+                    stats.refreshStatus();
+                    drawClaim.refresh();
+                }));
+        getContentPane().add(drawClaim, BorderLayout.SOUTH);
         setTitle(Messages.text("game.window.title"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
