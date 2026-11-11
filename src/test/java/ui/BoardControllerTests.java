@@ -624,6 +624,20 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void DeclineDrawClaim_MoveWaitsForTheClaim_MakesTheMove() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        board.move(B1, C3);
+        expect(piece.promotesOn(C3)).andReturn(false);
+        game.passTurn();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        controller.declineDrawClaim();
+
+        assertFalse(controller.isDrawClaimWithMovePending());
+        verify(board, piece, game);
+    }
+
     private void expectMoveFromB1ToC3MakingThirdOccurrence() {
         expectPieceOnB1();
         expect(piece.canMove(B1, C3, board)).andReturn(true);

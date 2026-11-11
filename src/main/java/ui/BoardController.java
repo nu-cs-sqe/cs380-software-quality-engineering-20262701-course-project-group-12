@@ -13,7 +13,7 @@ public class BoardController {
     private final Game game;
     private Optional<Location> selectedSquare = Optional.empty();
     private Optional<Location> promotionSquare = Optional.empty();
-    private boolean drawClaimWithMovePending;
+    private Optional<WaitingMove> moveWaitingForClaim = Optional.empty();
 
     public BoardController(Board board, Game game) {
         this.board = board;
@@ -51,7 +51,16 @@ public class BoardController {
     }
 
     public boolean isDrawClaimWithMovePending() {
-        return drawClaimWithMovePending;
+        return moveWaitingForClaim.isPresent();
+    }
+
+    public void declineDrawClaim() {
+        moveWaitingForClaim.ifPresent(this::makeWaitingMove);
+    }
+
+    private void makeWaitingMove(WaitingMove move) {
+        moveWaitingForClaim = Optional.empty();
+        makeMove(move.piece, move.from, move.to);
     }
 
     public void claimDraw() {
@@ -95,11 +104,15 @@ public class BoardController {
 
     private void moveUnlessItCanBeClaimed(Piece movingPiece, Location from, Location to) {
         if (game.canClaimDrawByRepetitionWith(from, to)) {
-            drawClaimWithMovePending = true;
+            moveWaitingForClaim = Optional.of(new WaitingMove(movingPiece, from, to));
         } else {
-            board.move(from, to);
-            passTurnUnlessPromoting(movingPiece, to);
+            makeMove(movingPiece, from, to);
         }
+    }
+
+    private void makeMove(Piece movingPiece, Location from, Location to) {
+        board.move(from, to);
+        passTurnUnlessPromoting(movingPiece, to);
     }
 
     private void passTurnUnlessPromoting(Piece movingPiece, Location arrival) {
@@ -139,5 +152,17 @@ public class BoardController {
 
     private void clearSelection() {
         selectedSquare = Optional.empty();
+    }
+
+    private static final class WaitingMove {
+        private final Piece piece;
+        private final Location from;
+        private final Location to;
+
+        private WaitingMove(Piece piece, Location from, Location to) {
+            this.piece = piece;
+            this.from = from;
+            this.to = to;
+        }
     }
 }
