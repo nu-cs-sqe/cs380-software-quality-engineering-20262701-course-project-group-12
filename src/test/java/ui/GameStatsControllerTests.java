@@ -111,6 +111,7 @@ public class GameStatsControllerTests {
         expect(game.playerTwoName()).andStubReturn("Bo");
         expect(game.playerToMoveName()).andStubReturn("Ada");
         expect(game.isOver()).andStubReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Bo");
         expect(game.winnerColor()).andStubReturn(PieceColor.BLACK);
         replay(game);
@@ -130,6 +131,7 @@ public class GameStatsControllerTests {
         expect(game.playerTwoName()).andStubReturn("Bo");
         expect(game.playerToMoveName()).andStubReturn("Ada");
         expect(game.isOver()).andStubReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Ada");
         expect(game.winnerColor()).andStubReturn(PieceColor.WHITE);
         replay(game);
@@ -139,6 +141,24 @@ public class GameStatsControllerTests {
         controller.refreshStatus();
 
         assertEquals("Checkmate: Ada (White) wins", view.currentPlayerLine());
+    }
+
+    @Test
+    void RefreshStatus_DrawByRepetition_ShowsTheDraw() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(true);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("Draw by repetition", view.currentPlayerLine());
     }
 
     private static Game startedGame(

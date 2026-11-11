@@ -114,6 +114,6 @@ Issue #59 (GitHub US-19, docs US-18). After a draw by repetition, the same line
 shows the result instead of the player to move (US-19 AC 8). A draw has no
 winner, so the line names no player.
 
-- **TC12: refresh after a draw by repetition** ( :x: )
+- **TC12: refresh after a draw by repetition** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by repetition`

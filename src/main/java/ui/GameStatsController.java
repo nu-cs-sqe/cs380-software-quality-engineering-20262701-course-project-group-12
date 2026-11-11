@@ -35,9 +35,16 @@ public class GameStatsController {
 
     private String statusLine() {
         if (game.isOver()) {
-            return Messages.format(CHECKMATE_KEYS.get(game.winnerColor()), game.winnerName());
+            return resultLine();
         }
         return currentPlayerLine();
+    }
+
+    private String resultLine() {
+        if (game.isDrawnByRepetition()) {
+            return Messages.text("stats.drawByRepetition");
+        }
+        return Messages.format(CHECKMATE_KEYS.get(game.winnerColor()), game.winnerName());
     }
 
     private String currentPlayerLine() {
