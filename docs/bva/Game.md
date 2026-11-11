@@ -471,7 +471,7 @@ starting position has occurred n + 1 times.
     starting position has occurred five times.
   - **Expected output**: Returns `true`.
 
-- **TC-REP-10 — A started game is not drawn by repetition** ( :x: )
+- **TC-REP-10 — A started game is not drawn by repetition** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`,
     `isDrawnByRepetition()`
   - **State of the system**: `start("Alice", "Bob")` has completed.

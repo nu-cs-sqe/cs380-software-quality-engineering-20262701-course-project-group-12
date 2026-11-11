@@ -431,6 +431,16 @@ public class GameTests {
         assertTrue(fivefold);
     }
 
+    @Test
+    public void IsDrawnByRepetition_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean drawn = game.isDrawnByRepetition();
+
+        assertFalse(drawn);
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");

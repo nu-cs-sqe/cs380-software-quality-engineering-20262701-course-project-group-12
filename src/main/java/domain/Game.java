@@ -71,6 +71,10 @@ public class Game {
         return occurrencesOf(positionAfterMove) + ONE_MORE_OCCURRENCE >= THREEFOLD;
     }
 
+    public boolean isDrawnByRepetition() {
+        return false;
+    }
+
     public boolean isFivefoldRepetition() {
         return occurrencesOf(currentPosition()) >= FIVEFOLD;
     }
