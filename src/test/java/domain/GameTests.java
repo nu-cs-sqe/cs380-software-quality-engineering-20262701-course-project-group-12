@@ -382,6 +382,15 @@ public class GameTests {
         assertFalse(canClaim);
     }
 
+    @Test
+    public void CanClaimDrawByRepetitionWith_MoveMakingThirdOccurrence_ReturnsTrue() {
+        Game game = gameBeforeLastMoveOfRoundTrip(ROUND_TRIPS_FOR_THIRD_OCCURRENCE);
+
+        boolean canClaim = game.canClaimDrawByRepetitionWith(F6, G8);
+
+        assertTrue(canClaim);
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");
@@ -391,6 +400,14 @@ public class GameTests {
             playMove(game, F3, G1);
             playMove(game, F6, G8);
         }
+        return game;
+    }
+
+    private static Game gameBeforeLastMoveOfRoundTrip(int roundTrips) {
+        Game game = gameAfterKnightRoundTrips(roundTrips - 1);
+        playMove(game, G1, F3);
+        playMove(game, G8, F6);
+        playMove(game, F3, G1);
         return game;
     }
 

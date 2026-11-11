@@ -63,6 +63,10 @@ public class Game {
         return occurrencesOf(currentPosition()) >= THREEFOLD;
     }
 
+    public boolean canClaimDrawByRepetitionWith(Location from, Location to) {
+        return true;
+    }
+
     private Position currentPosition() {
         return positions.get(positions.size() - 1);
     }
