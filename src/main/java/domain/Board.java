@@ -175,6 +175,10 @@ public class Board {
                 isEnPassantCaptureAvailableTo(colorToMove));
     }
 
+    public Position positionAfterMove(Location from, Location to, PieceColor colorToMove) {
+        return boardAfterMove(from, to).position(colorToMove);
+    }
+
     private boolean isEnPassantCaptureAvailableTo(PieceColor color) {
         return pawnThatJustAdvancedTwoRanks
                 .filter(square -> hasPieceOfColorBeside(color, square))
