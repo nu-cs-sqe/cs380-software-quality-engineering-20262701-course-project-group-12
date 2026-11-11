@@ -451,7 +451,7 @@ starting position has occurred n + 1 times.
     move, so Black is to move; ask about f6 to g8.
   - **Expected output**: Returns `false`.
 
-- **TC-REP-07 — A move to a new position cannot be claimed** ( :x: )
+- **TC-REP-07 — A move to a new position cannot be claimed** ( :white_check_mark: )
   - **Method(s) under test**: `canClaimDrawByRepetitionWith(Location,
     Location)`
   - **State of the system**: Started game after two round trips less the
