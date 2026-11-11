@@ -226,7 +226,7 @@ The case numbers start at TC41, after the checkmate cases (TC38 to TC40, issue #
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC41: the player to move can claim a repetition | a controller for the mocked board and game; the game answers true for `canClaimDrawByRepetition`; ask `canClaimDraw` | true | :x: |
-| TC42: the player to move cannot claim, and no move waits | as TC41, but the game answers false; ask `canClaimDraw` | false | :x: |
+| TC42: the player to move cannot claim, and no move waits | as TC41, but the game answers false; ask `canClaimDraw` | false | :white_check_mark: |
 | TC43: a correct claim ends the game by repetition | as TC41; `claimDraw` | the game ends by repetition | :x: |
 | TC44: an incorrect claim does nothing | as TC42; `claimDraw` | the game does not end | :x: |
 | TC45: a move that makes a fivefold repetition ends the game | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)`, and the game answers true for `isFivefoldRepetition` | the board moves the piece from b1 to c3; the game passes the turn, then ends by repetition | :x: |

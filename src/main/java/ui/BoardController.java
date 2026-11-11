@@ -45,6 +45,10 @@ public class BoardController {
         promotionSquare = Optional.empty();
     }
 
+    public boolean canClaimDraw() {
+        return false;
+    }
+
     public void clickSquare(Location square) {
         if (game.isOver() || isPromotionPending()) {
             return;
