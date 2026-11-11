@@ -70,7 +70,7 @@ public class BoardController {
     }
 
     public void clickSquare(Location square) {
-        if (game.isOver() || isPromotionPending()) {
+        if (game.isOver() || isPromotionPending() || isDrawClaimWithMovePending()) {
             return;
         }
         selectedSquare.ifPresentOrElse(

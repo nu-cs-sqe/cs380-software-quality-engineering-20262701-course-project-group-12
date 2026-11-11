@@ -236,4 +236,4 @@ The case numbers start at TC41, after the checkmate cases (TC38 to TC40, issue #
 | TC49: a waiting move can be claimed | as TC48, and the game answers false for `canClaimDrawByRepetition`; ask `canClaimDraw` | true | :white_check_mark: |
 | TC50: claiming with a waiting move ends the game by repetition | as TC48; `claimDraw` | the game ends by repetition; the board does not move any piece | :white_check_mark: |
 | TC51: declining makes the waiting move | as TC48; `declineDrawClaim`, then ask `isDrawClaimWithMovePending` | false; the board moves the piece from b1 to c3; the game passes the turn | :white_check_mark: |
-| TC52: a click while a move waits does nothing | as TC48; click b1, then ask `isSelected` about b1 | false; the board is not asked about b1 | :x: |
+| TC52: a click while a move waits does nothing | as TC48; click b1, then ask `isSelected` about b1 | false; the board is not asked about b1 | :white_check_mark: |

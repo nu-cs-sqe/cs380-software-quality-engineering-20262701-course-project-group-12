@@ -638,6 +638,17 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void ClickSquare_WhileMoveWaitsForTheClaim_DoesNothing() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        controller.clickSquare(B1);
+
+        assertFalse(controller.isSelected(B1));
+        verify(board, piece, game);
+    }
+
     private void expectMoveFromB1ToC3MakingThirdOccurrence() {
         expectPieceOnB1();
         expect(piece.canMove(B1, C3, board)).andReturn(true);
