@@ -16,6 +16,7 @@ public class GameTests {
     private static final Location G1 = new Location(6, 1);
     private static final Location G8 = new Location(6, 8);
     private static final int ROUND_TRIPS_FOR_SECOND_OCCURRENCE = 1;
+    private static final int ROUND_TRIPS_FOR_THIRD_OCCURRENCE = 2;
 
     @Test
     public void IsStarted_NewGame_ReturnsFalse() {
@@ -358,6 +359,15 @@ public class GameTests {
         boolean canClaim = game.canClaimDrawByRepetition();
 
         assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetition_PositionSeenThreeTimes_ReturnsTrue() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_THIRD_OCCURRENCE);
+
+        boolean canClaim = game.canClaimDrawByRepetition();
+
+        assertTrue(canClaim);
     }
 
     private static Game gameAfterKnightRoundTrips(int roundTrips) {

@@ -2,9 +2,14 @@ package domain;
 
 import domain.piece.PieceColor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Game {
+    private static final int THREEFOLD = 3;
+
+    private final List<Position> positions = new ArrayList<>();
     private boolean started;
     private Player playerOne;
     private Player playerTwo;
@@ -25,11 +30,17 @@ public class Game {
         playerToMove = playerOne;
         board = new Board();
         started = true;
+        recordPosition();
     }
 
     public void passTurn() {
         requireStartedTo("pass the turn");
         playerToMove = playerWaiting();
+        recordPosition();
+    }
+
+    private void recordPosition() {
+        positions.add(board.position(playerToMove.getColor()));
     }
 
     public boolean isStarted() {
@@ -49,7 +60,15 @@ public class Game {
     }
 
     public boolean canClaimDrawByRepetition() {
-        return false;
+        return occurrencesOf(currentPosition()) >= THREEFOLD;
+    }
+
+    private Position currentPosition() {
+        return positions.get(positions.size() - 1);
+    }
+
+    private long occurrencesOf(Position position) {
+        return positions.stream().filter(position::isSameAs).count();
     }
 
     public boolean isOver() {
