@@ -231,7 +231,7 @@ The case numbers start at TC41, after the checkmate cases (TC38 to TC40, issue #
 | TC44: an incorrect claim does nothing | as TC42; `claimDraw` | the game does not end | :white_check_mark: |
 | TC45: a move that makes a fivefold repetition ends the game | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)`, and the game answers true for `isFivefoldRepetition` | the board moves the piece from b1 to c3; the game passes the turn, then ends by repetition | :white_check_mark: |
 | TC46: a move that does not make a fivefold repetition does not end the game | as TC45, but the game answers false for `isFivefoldRepetition` | the board moves the piece from b1 to c3; the game passes the turn and does not end | :white_check_mark: |
-| TC47: checkmate wins over a fivefold repetition | as TC45, but the board answers true for `isCheckmated(BLACK)` | the game passes the turn, then ends by checkmate, not by repetition | :x: |
+| TC47: checkmate wins over a fivefold repetition | as TC45, but the board answers true for `isCheckmated(BLACK)` | the game passes the turn, then ends by checkmate, not by repetition | :white_check_mark: |
 | TC48: a move that would make the third occurrence waits for the claim | as TC22, but the game answers true for `canClaimDrawByRepetitionWith(b1, c3)`; click b1, then c3; ask `isDrawClaimWithMovePending` | true; the board does not move any piece; the game does not pass the turn | :x: |
 | TC49: a waiting move can be claimed | as TC48, and the game answers false for `canClaimDrawByRepetition`; ask `canClaimDraw` | true | :x: |
 | TC50: claiming with a waiting move ends the game by repetition | as TC48; `claimDraw` | the game ends by repetition; the board does not move any piece | :x: |

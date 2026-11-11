@@ -573,6 +573,20 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void ClickSquare_CheckmateThatIsAlsoFivefoldRepetition_EndsTheGameByCheckmate() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(true);
+        expect(game.isFivefoldRepetition()).andStubReturn(true);
+        game.endByCheckmate();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
+    }
+
     private void expectWhiteMoveFromB1ToC3ThenBlackToMove() {
         expect(board.isOccupied(B1)).andReturn(true);
         expect(board.pieceAt(B1)).andReturn(piece);
