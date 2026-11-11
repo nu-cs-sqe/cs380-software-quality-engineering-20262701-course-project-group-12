@@ -11,7 +11,10 @@ public class PositionTests {
     private static final Location A2 = new Location(0, 2);
     private static final Location A3 = new Location(0, 3);
     private static final Location B1 = new Location(1, 1);
+    private static final Location D4 = new Location(3, 4);
+    private static final Location D7 = new Location(3, 7);
     private static final Location E2 = new Location(4, 2);
+    private static final Location E3 = new Location(4, 3);
     private static final Location E4 = new Location(4, 4);
     private static final Location E5 = new Location(4, 5);
     private static final Location E7 = new Location(4, 7);
@@ -83,6 +86,21 @@ public class PositionTests {
         other.move(E2, E5);
 
         boolean same = board.position(PieceColor.WHITE).isSameAs(other.position(PieceColor.WHITE));
+
+        assertFalse(same);
+    }
+
+    @Test
+    public void IsSameAs_EnPassantCaptureAvailableInOneOnly_ReturnsFalse() {
+        Board board = new Board();
+        board.move(D7, D4);
+        board.move(E2, E4);
+        Board other = new Board();
+        other.move(D7, D4);
+        other.move(E2, E3);
+        other.move(E3, E4);
+
+        boolean same = board.position(PieceColor.BLACK).isSameAs(other.position(PieceColor.BLACK));
 
         assertFalse(same);
     }

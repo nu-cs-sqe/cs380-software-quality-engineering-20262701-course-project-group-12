@@ -170,7 +170,8 @@ public class Board {
 
     public Position position(PieceColor colorToMove) {
         return new Position(colorToMove,
-                allSquares().map(this::occupantOf).collect(Collectors.toUnmodifiableList()));
+                allSquares().map(this::occupantOf).collect(Collectors.toUnmodifiableList()),
+                pawnThatJustAdvancedTwoRanks.isPresent());
     }
 
     private Board boardAfterMove(Location from, Location to) {

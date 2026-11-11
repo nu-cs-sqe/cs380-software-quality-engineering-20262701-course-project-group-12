@@ -10,14 +10,19 @@ import java.util.stream.IntStream;
 public class Position {
     private final PieceColor colorToMove;
     private final List<Optional<Piece>> occupants;
+    private final boolean enPassantCaptureAvailable;
 
-    Position(PieceColor colorToMove, List<Optional<Piece>> occupants) {
+    Position(PieceColor colorToMove, List<Optional<Piece>> occupants,
+            boolean enPassantCaptureAvailable) {
         this.colorToMove = colorToMove;
         this.occupants = occupants;
+        this.enPassantCaptureAvailable = enPassantCaptureAvailable;
     }
 
     public boolean isSameAs(Position other) {
-        return colorToMove == other.colorToMove && hasSamePiecesAs(other);
+        return colorToMove == other.colorToMove
+                && hasSamePiecesAs(other)
+                && enPassantCaptureAvailable == other.enPassantCaptureAvailable;
     }
 
     private boolean hasSamePiecesAs(Position other) {
