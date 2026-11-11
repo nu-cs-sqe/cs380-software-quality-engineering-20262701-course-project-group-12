@@ -104,4 +104,17 @@ public class PositionTests {
 
         assertFalse(same);
     }
+
+    @Test
+    public void IsSameAs_TwoRankPawnMoveWithNoPawnBeside_ReturnsTrue() {
+        Board board = new Board();
+        board.move(E2, E4);
+        Board other = new Board();
+        other.move(E2, E3);
+        other.move(E3, E4);
+
+        boolean same = board.position(PieceColor.BLACK).isSameAs(other.position(PieceColor.BLACK));
+
+        assertTrue(same);
+    }
 }
