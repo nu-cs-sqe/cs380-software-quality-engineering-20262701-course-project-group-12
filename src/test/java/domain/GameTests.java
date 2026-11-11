@@ -22,6 +22,7 @@ public class GameTests {
     private static final int ROUND_TRIPS_FOR_SECOND_OCCURRENCE = 1;
     private static final int ROUND_TRIPS_FOR_THIRD_OCCURRENCE = 2;
     private static final int ROUND_TRIPS_FOR_FOURTH_OCCURRENCE = 3;
+    private static final int ROUND_TRIPS_FOR_FIFTH_OCCURRENCE = 4;
 
     @Test
     public void IsStarted_NewGame_ReturnsFalse() {
@@ -419,6 +420,15 @@ public class GameTests {
         boolean fivefold = game.isFivefoldRepetition();
 
         assertFalse(fivefold);
+    }
+
+    @Test
+    public void IsFivefoldRepetition_PositionSeenFiveTimes_ReturnsTrue() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_FIFTH_OCCURRENCE);
+
+        boolean fivefold = game.isFivefoldRepetition();
+
+        assertTrue(fivefold);
     }
 
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
