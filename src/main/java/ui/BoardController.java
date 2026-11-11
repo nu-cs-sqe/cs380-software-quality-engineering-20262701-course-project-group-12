@@ -49,6 +49,10 @@ public class BoardController {
         return game.canClaimDrawByRepetition();
     }
 
+    public void claimDraw() {
+        game.endByRepetition();
+    }
+
     public void clickSquare(Location square) {
         if (game.isOver() || isPromotionPending()) {
             return;

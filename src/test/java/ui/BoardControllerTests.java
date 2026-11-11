@@ -524,6 +524,17 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void ClaimDraw_ClaimIsCorrect_EndsTheGameByRepetition() {
+        expect(game.canClaimDrawByRepetition()).andStubReturn(true);
+        game.endByRepetition();
+        BoardController controller = replayedController();
+
+        controller.claimDraw();
+
+        verify(board, piece, game);
+    }
+
     private void expectWhiteMoveFromB1ToC3ThenBlackToMove() {
         expect(board.isOccupied(B1)).andReturn(true);
         expect(board.pieceAt(B1)).andReturn(piece);
