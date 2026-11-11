@@ -335,4 +335,14 @@ public class GameTests {
 
         assertThrows(IllegalStateException.class, game::endByCheckmate);
     }
+
+    @Test
+    public void CanClaimDrawByRepetition_NewGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean canClaim = game.canClaimDrawByRepetition();
+
+        assertFalse(canClaim);
+    }
 }

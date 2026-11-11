@@ -410,7 +410,7 @@ starting position has occurred n + 1 times.
 | Output: each answer | Boolean | true; false |
 | Output: signal for an unstarted game | Cases | `IllegalStateException` |
 
-- **TC-REP-01 — A new game cannot claim a repetition** ( :x: )
+- **TC-REP-01 — A new game cannot claim a repetition** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`,
     `canClaimDrawByRepetition()`
   - **State of the system**: `start("Alice", "Bob")` has completed, so the

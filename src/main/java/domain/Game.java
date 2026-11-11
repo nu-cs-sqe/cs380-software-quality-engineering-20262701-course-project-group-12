@@ -48,6 +48,10 @@ public class Game {
         return playerOne;
     }
 
+    public boolean canClaimDrawByRepetition() {
+        return false;
+    }
+
     public boolean isOver() {
         return winner.isPresent();
     }
