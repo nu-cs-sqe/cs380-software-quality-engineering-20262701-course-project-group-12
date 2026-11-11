@@ -94,11 +94,11 @@ public class BoardController {
             promotionSquare = Optional.of(arrival);
         } else {
             game.passTurn();
-            endGameIfCheckmated();
+            endGameIfOver();
         }
     }
 
-    private void endGameIfCheckmated() {
+    private void endGameIfOver() {
         if (board.isCheckmated(game.colorToMove())) {
             game.endByCheckmate();
         } else if (game.isFivefoldRepetition()) {
