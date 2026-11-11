@@ -9,18 +9,20 @@
 - `Piece pieceAt(Location location)`: returns `board.pieceAt(location)`. It does not choose a different piece. `Board` throws `IllegalArgumentException` for an empty square, and the controller lets that exception through. No method returns null.
 - `void clickSquare(Location square)` (issues #34 and #41): handles a click on a square. With nothing selected, a click on a piece of the player to move selects it; a click on an empty square or on an opponent's piece does nothing. With a square selected, a click on the selected square itself clears the selection (US-09 AC 4). A click on any other square is the destination: when the selected piece `canMove` there, the board moves it, the game passes the turn, and the selection is cleared. When it cannot, a click on another piece of the player to move selects that piece instead; a click on an empty square or on an opponent's piece keeps the current selection. It does not tell the player about a refused move (US-10).
 - `boolean isSelected(Location square)` (issue #34): returns true when `square` is the selected square, compared by file and rank. `BoardView` uses it to color the selected square.
-- `void clickSquare(Location square)`, captures (issue #33 / GitHub US-08, docs US-10): builds on the two-click move from issue #34. When the selected piece `canMove` to a square that holds an opponent's piece, the board moves the selected piece there, and `Board.move` removes the captured piece. The king is never captured: when the clicked square holds the king, the board is unchanged and the selection stays on the moving piece, as for any refused move. Whether a capture is legal for the moving piece, and the refusal of a piece of its own color, are decided by each piece's `canMove`. The fifty-move count is a later story.
+- `void clickSquare(Location square)`, captures (issue #33 / GitHub US-08, docs US-10): builds on the two-click move from issue #34. When the selected piece `canMove` to a square that holds an opponent's piece, the board moves the selected piece there, and `Board.move` removes the captured piece. The king is never captured: a move that would capture it is one the opponent could only allow by leaving their king in check, which `Board.isLegalMove` refuses (issue #44). Whether a capture is legal for the moving piece, and the refusal of a piece of its own color, are decided by each piece's `canMove`. The fifty-move count is a later story.
 - `void clickSquare(Location square)`, promotions (issue #46 / GitHub US-13): when the selected piece `promotesOn` the square it moves to, the move is unfinished. The board moves the pawn there and the selection is cleared, but the game does not pass the turn: a promotion is pending until the player chooses. While a promotion is pending, a click on the board does nothing. A capture onto the last rank is promoted the same way.
 - `boolean isPromotionPending()` (issue #46): returns true while a pawn waits on the last rank for the player's choice. `BoardView` uses it to ask for the choice.
 - `void choosePromotion(PieceType type)` (issue #46): when a promotion is pending, the board promotes the pawn on the arrival square to `type`, the game passes the turn, and nothing is pending any more. When the board rejects the type (a king or a pawn), its `IllegalArgumentException` goes through, the promotion stays pending, and the turn does not pass.
+- `void clickSquare(Location square)`, keeping the king out of check (issue #44 / GitHub US-11): the controller asks `board.isLegalMove(from, to)` instead of asking the selected piece `canMove`. The board answers false for a move the piece cannot make and for a move that leaves the mover's own king in check, so both are refused the same way (US-10): the board is unchanged, the turn does not pass, and the selection follows the rules above. A pawn move onto the last rank is checked the same way before any promotion is pending. Because no legal move leaves a king in check, no move can capture a king (US-11 AC 5), so the controller no longer refuses a king capture itself.
+- `void choosePromotion(PieceType type)`, checkmate (issue #44, US-11 AC 8): after the promotion passes the turn, the controller asks `board.isCheckmated(game.colorToMove())`, as after any other move, and calls `game.endByCheckmate()` when the player now to move is checkmated.
 - `void clickSquare(Location square)`, checkmate (issue #48 / GitHub US-15, docs US-15): after a move passes the turn, the controller asks `board.isCheckmated(game.colorToMove())`. When the player now to move is checkmated, it calls `game.endByCheckmate()`, so the player who made the move wins. Once `game.isOver()` is true, every click does nothing: no square is selected and no piece moves (US-15 AC 3).
 
 No method checks its arguments for null, and no case passes null: our code never passes null (instructor code review, Week 6). TC2, TC5, and TC8 used to pass a null board or location; they were removed with the board check.
 
 Refreshing the current-player line on `GameStatsView` is a view change after
 the cases, the way `BoardView` coloring was for #34. For promotions, an en
-passant capture onto the last rank (US-14), giving check with the promoted
-piece (US-11), and the fifty-move count (US-18) are later stories. Asking the
+passant capture onto the last rank (US-14) and the fifty-move count (US-18)
+are later stories; checkmate with the promoted piece is issue #44. Asking the
 player for the choice is a `BoardView` change after the cases.
 
 The starting position itself is specified on `Board`. These cases check the pass-through. Each test mocks `Board` and `Game` with EasyMock, because the controller does not own the board's behavior or the turn.
@@ -76,10 +78,10 @@ The capture cases start from the state issue #34 leaves: b1 `(1, 1)` is selected
 
 | Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
 | --- | --- | --- |
-| Input: the occupant of a square the selected piece can reach | Cases | an opponent's piece other than the king (a black pawn on c3); the opponent's king (the black king on c3) |
+| Input: the occupant of a square the selected piece can reach | Cases | an opponent's piece other than the king (a black pawn on c3); the opponent's king is never reachable (issue #44) |
 | Input: `square` | Pointer | a location (no null: callers never pass one) |
-| Output: the board | Cases | the selected piece moves from b1 to c3 and replaces the captured piece; unchanged |
-| Output: the selection after the click | Cases | none; unchanged (still b1) |
+| Output: the board | Cases | the selected piece moves from b1 to c3 and replaces the captured piece |
+| Output: the selection after the click | Cases | none |
 
 ### `clickSquare(Location square)`, promotions, `isPromotionPending()`, and `choosePromotion(PieceType type)`
 
@@ -166,8 +168,8 @@ TC9 through TC18 belong to issue #34. These cases continue its numbering, and th
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC19: capture an opponent's piece the selected piece can reach | a controller for the mocked board; the board answers true for b1 `(1, 1)` and returns a mocked piece that can move from b1 to c3 `(2, 3)`, and c3 holds a black pawn; click b1, then c3 | the board moves the piece from b1 to c3; the game passes the turn | :white_check_mark: |
-| TC20: refuse to capture the king | a controller for the mocked board; the board answers true for b1 and returns a mocked piece that can move from b1 to c3, and c3 holds the black king; click b1, then c3 | the board does not move any piece; the game does not pass the turn | :white_check_mark: |
-| TC21: a refused king capture keeps the selection | as TC20; click b1, then c3, then ask `isSelected` about b1 | true | :white_check_mark: |
+| TC20: removed (issue #44) | it expected the controller to refuse capturing the king itself. No legal move can reach a king, because `Board.isLegalMove` refuses every move that leaves a king in check (US-11 AC 5), so the controller no longer looks for one | — | removed |
+| TC21: removed (issue #44) | it expected the selection to stay after that refusal; see TC20 | — | removed |
 
 ### Method under test: `clickSquare(Location square)`, promotions, `isPromotionPending()`, and `choosePromotion(PieceType type)`
 
@@ -197,3 +199,26 @@ The case numbers start at TC38, after the promotion cases (TC28 to TC37, issue #
 | TC38: a move that checkmates ends the game | as TC22; after the move, Black is to move, and the board answers true for `isCheckmated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn, then ends by checkmate | :white_check_mark: |
 | TC39: a move that does not checkmate does not end the game | as TC22; after the move, Black is to move, and the board answers false for `isCheckmated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn and does not end | :white_check_mark: |
 | TC40: a click after the game is over selects nothing | a controller for the mocked board and game; the game is over; White is to move, and b1 holds a White piece; click b1, then ask `isSelected` about b1 | false; the board is not asked about b1 | :white_check_mark: |
+
+### Method under test: `clickSquare(Location square)` and `choosePromotion(PieceType type)`, keeping the king out of check
+
+Issue #44 (GitHub US-11). The case numbers start at TC41, after the checkmate cases (TC38 to TC40, issue #48). `Board` and `Game` are mocked with EasyMock, because the controller owns neither the move rules nor the result.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: what the board answers for `isLegalMove` from the selected square to the clicked square | Boolean | true; false (for example, the move leaves the mover's king in check) |
+| Input: whether the move reaches the last rank | Boolean | no (b1 `(1, 1)` to c3 `(2, 3)`); yes (a7 `(0, 7)` to a8 `(0, 8)`) |
+| Input: what the board answers for `isCheckmated` of the player to move after a promotion | Boolean | true; false |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
+| Output: the board | Cases | the piece moves; unchanged |
+| Output: the game | Cases | `passTurn`, then `endByCheckmate`; `passTurn` only; unchanged |
+| Output: `isPromotionPending()` | Boolean | false, after a refused move onto the last rank |
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC41: a move the board refuses leaves the board unchanged | White is to move; b1 `(1, 1)` holds a White piece; the board answers false for `isLegalMove(b1, c3)` and false for `isOccupied(c3)`; click b1, then c3 `(2, 3)` | the board does not move any piece; the game does not pass the turn; the piece is not asked `canMove` | :white_check_mark: |
+| TC42: a refused move onto the last rank leaves nothing pending | White is to move; a7 `(0, 7)` holds a White piece; the board answers false for `isLegalMove(a7, a8)` and false for `isOccupied(a8)`; click a7, then a8 `(0, 8)`, then ask `isPromotionPending` | false; the board does not move any piece | :white_check_mark: |
+| TC43: a promotion that checkmates ends the game | as TC32; after the choice, Black is to move, and the board answers true for `isCheckmated(BLACK)` | the board promotes a8 to `QUEEN`; the game passes the turn, then ends by checkmate | :white_check_mark: |
+| TC44: a promotion that does not checkmate does not end the game | as TC32; after the choice, Black is to move, and the board answers false for `isCheckmated(BLACK)` | the board promotes a8 to `QUEEN`; the game passes the turn and does not end | :white_check_mark: |
+
+TC9 through TC40 asked the mocked piece `canMove`. From TC41 on, they ask the mocked board `isLegalMove` with the same answer and expect the same result. A legal move no longer asks the board what stands on the arrival square, because the controller no longer looks for a king there.

@@ -52,6 +52,10 @@ public class Game {
         return winner.isPresent();
     }
 
+    public boolean isPlayerToMoveInCheck() {
+        return board().isInCheck(colorToMove());
+    }
+
     public String winnerName() {
         return winner().getName();
     }

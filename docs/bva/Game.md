@@ -370,3 +370,49 @@ comes with those stories.
   - **Method(s) under test**: `endByCheckmate()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
+
+### Method under test: `isPlayerToMoveInCheck()`
+
+Issue #44 (GitHub US-11 AC 6). `GameStatsController` shows that the player to
+move is in check. `Game` owns the board and knows who is to move, so it asks
+`board().isInCheck(colorToMove())` and the controller does not reach through
+`board()`. The positions are played with `board().move` on the game's own
+board, and the game passes the turn after each move, as `BoardController`
+does. Fool's mate: f2 to f3, e7 to e5, g2 to g4, d8 to h4, so the black queen
+checks the white king and White is to move. Queen check on Black: e2 to e4,
+f7 to f6, d1 to h5, so the white queen checks the black king and Black is to
+move. The method takes no arguments, so there is no null case.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the game's state | Cases | unstarted; started |
+| Input: the color to move | Cases | White; Black |
+| Input: whether that player's king is in check | Boolean | no (the starting board); yes (Fool's mate for White; queen check on Black) |
+| Output: the answer | Boolean | true; false |
+| Output: signal for an unstarted game | Cases | `IllegalStateException` |
+
+- **TC-CHECK-01 — The player to move is not in check at the start** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `isPlayerToMoveInCheck()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `false`.
+
+- **TC-CHECK-02 — White to move is in check** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `passTurn()`,
+    `isPlayerToMoveInCheck()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    Fool's mate is played on `board()` with `passTurn()` after each of the
+    four moves, so White is to move.
+  - **Expected output**: Returns `true`.
+
+- **TC-CHECK-03 — Black to move is in check** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `passTurn()`,
+    `isPlayerToMoveInCheck()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then the
+    queen check on Black is played on `board()` with `passTurn()` after each
+    of the three moves, so Black is to move.
+  - **Expected output**: Returns `true`.
+
+- **TC-CHECK-04 — Reject looking for check before a start** ( :white_check_mark: )
+  - **Method(s) under test**: `isPlayerToMoveInCheck()`
+  - **State of the system**: New game before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.
