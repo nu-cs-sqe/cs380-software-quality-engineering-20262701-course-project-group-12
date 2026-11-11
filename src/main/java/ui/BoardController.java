@@ -50,7 +50,7 @@ public class BoardController {
         return game.canClaimDrawByRepetition() || isDrawClaimWithMovePending();
     }
 
-    private boolean isDrawClaimWithMovePending() {
+    public boolean isDrawClaimWithMovePending() {
         return drawClaimWithMovePending;
     }
 

@@ -590,6 +590,17 @@ public class BoardControllerTests {
     }
 
     @Test
+    public void ClickSquare_MoveMakingThirdOccurrence_WaitsForTheClaim() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        boolean waiting = controller.isDrawClaimWithMovePending();
+
+        assertTrue(waiting);
+        verify(board, piece, game);
+    }
+
+    @Test
     public void CanClaimDraw_MoveWaitsForTheClaim_ReturnsTrue() {
         expectMoveFromB1ToC3MakingThirdOccurrence();
         expect(game.canClaimDrawByRepetition()).andStubReturn(false);
