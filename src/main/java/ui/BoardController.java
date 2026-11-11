@@ -50,7 +50,9 @@ public class BoardController {
     }
 
     public void claimDraw() {
-        game.endByRepetition();
+        if (canClaimDraw()) {
+            game.endByRepetition();
+        }
     }
 
     public void clickSquare(Location square) {
