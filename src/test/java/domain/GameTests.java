@@ -11,6 +11,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameTests {
     private static final Location A1 = new Location(0, 1);
+    private static final Location F3 = new Location(5, 3);
+    private static final Location F6 = new Location(5, 6);
+    private static final Location G1 = new Location(6, 1);
+    private static final Location G8 = new Location(6, 8);
+    private static final int ROUND_TRIPS_FOR_SECOND_OCCURRENCE = 1;
 
     @Test
     public void IsStarted_NewGame_ReturnsFalse() {
@@ -344,5 +349,31 @@ public class GameTests {
         boolean canClaim = game.canClaimDrawByRepetition();
 
         assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetition_PositionSeenTwice_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_SECOND_OCCURRENCE);
+
+        boolean canClaim = game.canClaimDrawByRepetition();
+
+        assertFalse(canClaim);
+    }
+
+    private static Game gameAfterKnightRoundTrips(int roundTrips) {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        for (int roundTrip = 0; roundTrip < roundTrips; roundTrip++) {
+            playMove(game, G1, F3);
+            playMove(game, G8, F6);
+            playMove(game, F3, G1);
+            playMove(game, F6, G8);
+        }
+        return game;
+    }
+
+    private static void playMove(Game game, Location from, Location to) {
+        game.board().move(from, to);
+        game.passTurn();
     }
 }

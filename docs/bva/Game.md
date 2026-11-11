@@ -417,7 +417,7 @@ starting position has occurred n + 1 times.
     starting position has occurred once.
   - **Expected output**: Returns `false`.
 
-- **TC-REP-02 — A position seen twice cannot be claimed** ( :x: )
+- **TC-REP-02 — A position seen twice cannot be claimed** ( :white_check_mark: )
   - **Method(s) under test**: `canClaimDrawByRepetition()`
   - **State of the system**: Started game after one round trip, so the
     starting position has occurred twice.
