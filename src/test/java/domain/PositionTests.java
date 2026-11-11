@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PositionTests {
+    private static final Location F3 = new Location(5, 3);
+    private static final Location G1 = new Location(6, 1);
+
     @Test
     public void IsSameAs_SamePiecesAndPlayerToMove_ReturnsTrue() {
         Position position = new Board().position(PieceColor.WHITE);
@@ -23,6 +26,17 @@ public class PositionTests {
         Position other = new Board().position(PieceColor.BLACK);
 
         boolean same = position.isSameAs(other);
+
+        assertFalse(same);
+    }
+
+    @Test
+    public void IsSameAs_PieceOnAnotherSquare_ReturnsFalse() {
+        Board board = new Board();
+        board.move(G1, F3);
+        Position position = new Board().position(PieceColor.WHITE);
+
+        boolean same = position.isSameAs(board.position(PieceColor.WHITE));
 
         assertFalse(same);
     }
