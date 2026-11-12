@@ -526,6 +526,13 @@ public class GameTests {
     }
 
     @Test
+    public void Resign_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, () -> game.resign(PieceColor.WHITE));
+    }
+
+    @Test
     public void IsWonByResignation_StartedGame_ReturnsFalse() {
         Game game = new Game();
         game.start("Alice", "Bob");

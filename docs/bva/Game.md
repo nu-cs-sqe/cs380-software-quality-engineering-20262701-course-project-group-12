@@ -604,7 +604,7 @@ AC 3). No argument is ever null: callers pass `PieceColor.WHITE` or
     `endByRepetition()`, then `resign(WHITE)`.
   - **Expected output**: `isWonByResignation()` returns `false`.
 
-- **TC-RES-07 — Reject resigning before a start** ( :x: )
+- **TC-RES-07 — Reject resigning before a start** ( :white_check_mark: )
   - **Method(s) under test**: `resign(PieceColor)`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.

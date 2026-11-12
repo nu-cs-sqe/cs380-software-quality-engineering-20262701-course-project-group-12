@@ -95,6 +95,7 @@ public class Game {
     }
 
     public void resign(PieceColor resigningColor) {
+        requireStartedTo("resign");
         if (isOver()) {
             return;
         }
