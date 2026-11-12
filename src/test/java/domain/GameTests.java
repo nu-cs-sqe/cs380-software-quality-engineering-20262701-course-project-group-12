@@ -469,6 +469,17 @@ public class GameTests {
         assertThrows(IllegalStateException.class, game::endByRepetition);
     }
 
+    @Test
+    public void Resign_WhiteResigns_MakesPlayerTwoTheWinner() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.resign(PieceColor.WHITE);
+
+        assertEquals("Bob", game.winnerName());
+        assertEquals(PieceColor.BLACK, game.winnerColor());
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");

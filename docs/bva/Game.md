@@ -561,7 +561,7 @@ AC 3). No argument is ever null: callers pass `PieceColor.WHITE` or
 | Output: `isOver()` and `isWonByResignation()` | Boolean | true; false |
 | Output: signal for an unstarted game | Cases | `IllegalStateException` |
 
-- **TC-RES-01 — Player 2 wins when White resigns** ( :x: )
+- **TC-RES-01 — Player 2 wins when White resigns** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `resign(PieceColor)`,
     `winnerName()`, `winnerColor()`
   - **State of the system**: `start("Alice", "Bob")` has completed, so White

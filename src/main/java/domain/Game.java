@@ -93,6 +93,10 @@ public class Game {
         return positions.stream().filter(position::isSameAs).count();
     }
 
+    public void resign(PieceColor resigningColor) {
+        winner = Optional.of(playerTwo);
+    }
+
     public boolean isOver() {
         return winner.isPresent() || drawnByRepetition;
     }
