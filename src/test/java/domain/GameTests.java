@@ -534,20 +534,15 @@ public class GameTests {
     }
 
     private void playFoolsMate(Game game) {
-        play(game, F2, F3);
-        play(game, E7, E5);
-        play(game, G2, G4);
-        play(game, D8, H4);
-    }
-
-    private void play(Game game, Location from, Location to) {
-        game.board().move(from, to);
-        game.passTurn();
+        playMove(game, F2, F3);
+        playMove(game, E7, E5);
+        playMove(game, G2, G4);
+        playMove(game, D8, H4);
     }
 
     private void playQueenCheckOnBlack(Game game) {
-        play(game, E2, E4);
-        play(game, F7, F6);
-        play(game, D1, H5);
+        playMove(game, E2, E4);
+        playMove(game, F7, F6);
+        playMove(game, D1, H5);
     }
 }
