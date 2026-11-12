@@ -480,6 +480,17 @@ public class GameTests {
         assertEquals(PieceColor.BLACK, game.winnerColor());
     }
 
+    @Test
+    public void Resign_BlackResignsOnWhitesTurn_MakesPlayerOneTheWinner() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.resign(PieceColor.BLACK);
+
+        assertEquals("Alice", game.winnerName());
+        assertEquals(PieceColor.WHITE, game.winnerColor());
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");

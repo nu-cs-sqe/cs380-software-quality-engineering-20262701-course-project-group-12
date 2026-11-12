@@ -569,7 +569,7 @@ AC 3). No argument is ever null: callers pass `PieceColor.WHITE` or
   - **Expected output**: `winnerName()` returns `Bob`; `winnerColor()`
     returns `BLACK`.
 
-- **TC-RES-02 — Player 1 wins when Black resigns on White's turn** ( :x: )
+- **TC-RES-02 — Player 1 wins when Black resigns on White's turn** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `resign(PieceColor)`,
     `winnerName()`, `winnerColor()`
   - **State of the system**: `start("Alice", "Bob")` has completed, so White

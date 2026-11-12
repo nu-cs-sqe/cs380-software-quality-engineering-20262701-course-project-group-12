@@ -94,7 +94,14 @@ public class Game {
     }
 
     public void resign(PieceColor resigningColor) {
-        winner = Optional.of(playerTwo);
+        winner = Optional.of(playerOtherThan(resigningColor));
+    }
+
+    private Player playerOtherThan(PieceColor color) {
+        if (playerOne.getColor() == color) {
+            return playerTwo;
+        }
+        return playerOne;
     }
 
     public boolean isOver() {
