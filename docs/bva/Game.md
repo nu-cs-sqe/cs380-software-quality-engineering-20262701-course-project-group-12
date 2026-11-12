@@ -597,7 +597,7 @@ AC 3). No argument is ever null: callers pass `PieceColor.WHITE` or
   - **Expected output**: `winnerName()` still returns `Bob`;
     `isWonByResignation()` returns `false`.
 
-- **TC-RES-06 — A resignation after a draw by repetition is ignored** ( :x: )
+- **TC-RES-06 — A resignation after a draw by repetition is ignored** ( :white_check_mark: )
   - **Method(s) under test**: `endByRepetition()`, `resign(PieceColor)`,
     `isWonByResignation()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then

@@ -515,6 +515,17 @@ public class GameTests {
     }
 
     @Test
+    public void Resign_AfterDrawByRepetition_IsIgnored() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByRepetition();
+
+        game.resign(PieceColor.WHITE);
+
+        assertFalse(game.isWonByResignation());
+    }
+
+    @Test
     public void IsWonByResignation_StartedGame_ReturnsFalse() {
         Game game = new Game();
         game.start("Alice", "Bob");
