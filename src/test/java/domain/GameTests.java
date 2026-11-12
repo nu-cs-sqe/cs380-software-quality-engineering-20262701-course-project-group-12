@@ -545,4 +545,14 @@ public class GameTests {
         playMove(game, F7, F6);
         playMove(game, D1, H5);
     }
+
+    @Test
+    public void CanOfferDraw_NewGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean canOffer = game.canOfferDraw();
+
+        assertFalse(canOffer);
+    }
 }

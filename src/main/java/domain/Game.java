@@ -93,6 +93,10 @@ public class Game {
         return positions.stream().filter(position::isSameAs).count();
     }
 
+    public boolean canOfferDraw() {
+        return false;
+    }
+
     public boolean isOver() {
         return winner.isPresent() || drawnByRepetition;
     }

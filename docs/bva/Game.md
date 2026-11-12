@@ -578,7 +578,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
 | Output: each answer | Boolean | true; false |
 | Output: signal for an unstarted game | Cases | `IllegalStateException` |
 
-- **TC-AGREE-01 — A new game cannot offer a draw** ( :x: )
+- **TC-AGREE-01 — A new game cannot offer a draw** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `canOfferDraw()`
   - **State of the system**: `start("Alice", "Bob")` has completed, so no
     move has been made.
