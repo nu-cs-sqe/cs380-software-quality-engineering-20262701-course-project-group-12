@@ -94,6 +94,7 @@ public class GameStatsControllerTests {
         expect(game.playerTwoName()).andStubReturn("Bo");
         expect(game.playerToMoveName()).andReturn("Ada").andReturn("Bo");
         expect(game.isOver()).andStubReturn(false);
+        expect(game.isPlayerToMoveInCheck()).andStubReturn(false);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
@@ -159,6 +160,45 @@ public class GameStatsControllerTests {
         controller.refreshStatus();
 
         assertEquals("Draw by repetition", view.currentPlayerLine());
+    }
+
+    @Test
+    public void RefreshStatus_PlayerToMoveInCheck_ShowsTheCheck() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andReturn("Ada").andReturn("Bo");
+        expect(game.isOver()).andStubReturn(false);
+        expect(game.isPlayerToMoveInCheck()).andStubReturn(true);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("Current player: Bo (in check)", view.currentPlayerLine());
+    }
+
+    @Test
+    public void RefreshStatus_CheckmatedPlayerInCheck_ShowsTheCheckmate() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isPlayerToMoveInCheck()).andStubReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(false);
+        expect(game.winnerName()).andStubReturn("Bo");
+        expect(game.winnerColor()).andStubReturn(PieceColor.BLACK);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("Checkmate: Bo (Black) wins", view.currentPlayerLine());
     }
 
     private static Game startedGame(

@@ -97,6 +97,10 @@ public class Game {
         return winner.isPresent() || drawnByRepetition;
     }
 
+    public boolean isPlayerToMoveInCheck() {
+        return board().isInCheck(colorToMove());
+    }
+
     public String winnerName() {
         return winner().getName();
     }

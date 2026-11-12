@@ -110,6 +110,29 @@ Step 2/3:
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `winnerName()` is Ada, `winnerColor()` is `WHITE`, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Checkmate: Ada (White) wins`
 
+Issue #44 (GitHub US-11 AC 6). While the game is not over and the player to
+move is in check, the status line says so next to the player's name. A
+checkmated player is also in check, but the checkmate line wins, so the check
+is only asked about while the game is not over.
+
+Step 1:
+- input (added): whether the player to move is in check (`isPlayerToMoveInCheck()`)
+
+Step 2/3:
+- in check -> Boolean: false, true
+- output (added): `Current player: <name of the player to move> (in check)`
+  while the game is not over and the player to move is in check
+
+TC9 still holds: the player to move is not in check, so the line is unchanged.
+
+- **TC12: refresh while the player to move is in check** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then `playerToMoveName()` is Bo, the game is not over, `isPlayerToMoveInCheck()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Current player: Bo (in check)`
+
+- **TC13: refresh after checkmate shows the result, not the check** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isPlayerToMoveInCheck()` is true, `winnerName()` is Bo, `winnerColor()` is `BLACK`, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Checkmate: Bo (Black) wins`
+
 Issue #59 (GitHub US-19, docs US-18). After a draw by repetition, the same line
 shows the result instead of the player to move (US-19 AC 8). A draw has no
 winner, so the line names no player.

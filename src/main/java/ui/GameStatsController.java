@@ -37,6 +37,9 @@ public class GameStatsController {
         if (game.isOver()) {
             return resultLine();
         }
+        if (game.isPlayerToMoveInCheck()) {
+            return Messages.format("stats.check", game.playerToMoveName());
+        }
         return currentPlayerLine();
     }
 

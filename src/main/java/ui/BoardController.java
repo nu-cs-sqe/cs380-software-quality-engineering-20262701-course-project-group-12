@@ -43,6 +43,7 @@ public class BoardController {
     private void finishPromotion(Location square, PieceType type) {
         board.promote(square, type);
         game.passTurn();
+        endGameIfOver();
         promotionSquare = Optional.empty();
     }
 
@@ -87,19 +88,17 @@ public class BoardController {
     }
 
     private void moveOrChangeSelection(Location from, Location to) {
-        Piece movingPiece = board.pieceAt(from);
-        if (movingPiece.canMove(from, to, board)) {
-            moveUnlessCapturingKing(movingPiece, from, to);
+        if (board.isLegalMove(from, to)) {
+            move(from, to);
         } else {
             select(to);
         }
     }
 
-    private void moveUnlessCapturingKing(Piece movingPiece, Location from, Location to) {
-        if (!holdsKing(to)) {
-            moveUnlessItCanBeClaimed(movingPiece, from, to);
-            clearSelection();
-        }
+    private void move(Location from, Location to) {
+        Piece movingPiece = board.pieceAt(from);
+        moveUnlessItCanBeClaimed(movingPiece, from, to);
+        clearSelection();
     }
 
     private void moveUnlessItCanBeClaimed(Piece movingPiece, Location from, Location to) {
@@ -130,10 +129,6 @@ public class BoardController {
         } else if (game.isFivefoldRepetition()) {
             game.endByRepetition();
         }
-    }
-
-    private boolean holdsKing(Location square) {
-        return board.isOccupied(square) && board.pieceAt(square).getType() == PieceType.KING;
     }
 
     private void select(Location square) {
