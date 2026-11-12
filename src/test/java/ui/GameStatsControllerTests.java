@@ -215,6 +215,17 @@ public class GameStatsControllerTests {
         assertEquals("Resignation: Bo (Black) wins", view.currentPlayerLine());
     }
 
+    @Test
+    void RefreshStatus_PlayerTwoResigns_ShowsPlayerOneWins() {
+        Game game = gameWonByResignation("Ada", PieceColor.WHITE);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("Resignation: Ada (White) wins", view.currentPlayerLine());
+    }
+
     private static Game gameWonByResignation(String winnerName, PieceColor winnerColor) {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);
