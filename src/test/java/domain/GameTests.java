@@ -33,6 +33,7 @@ public class GameTests {
     private static final int ROUND_TRIPS_FOR_THIRD_OCCURRENCE = 2;
     private static final int ROUND_TRIPS_FOR_FOURTH_OCCURRENCE = 3;
     private static final int ROUND_TRIPS_FOR_FIFTH_OCCURRENCE = 4;
+    private static final int MOVES_BY_BOTH_PLAYERS = 2;
 
     @Test
     public void IsStarted_NewGame_ReturnsFalse() {
@@ -554,5 +555,23 @@ public class GameTests {
         boolean canOffer = game.canOfferDraw();
 
         assertFalse(canOffer);
+    }
+
+    @Test
+    public void CanOfferDraw_AfterOneMove_ReturnsFalse() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS - 1);
+
+        boolean canOffer = game.canOfferDraw();
+
+        assertFalse(canOffer);
+    }
+
+    private static Game gameAfterMoves(int moves) {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        for (int move = 0; move < moves; move++) {
+            game.passTurn();
+        }
+        return game;
     }
 }

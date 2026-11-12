@@ -584,7 +584,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
     move has been made.
   - **Expected output**: Returns `false`.
 
-- **TC-AGREE-02 — A draw cannot be offered after one move** ( :x: )
+- **TC-AGREE-02 — A draw cannot be offered after one move** ( :white_check_mark: )
   - **Method(s) under test**: `passTurn()`, `canOfferDraw()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then
     `passTurn()` once, so only White has moved.
