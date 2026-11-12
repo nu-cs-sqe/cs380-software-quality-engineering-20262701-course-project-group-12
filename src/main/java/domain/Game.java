@@ -10,6 +10,7 @@ public class Game {
     private static final int THREEFOLD = 3;
     private static final int FIVEFOLD = 5;
     private static final int ONE_MORE_OCCURRENCE = 1;
+    private static final int MOVES_BY_BOTH_PLAYERS = 2;
 
     private final List<Position> positions = new ArrayList<>();
     private boolean started;
@@ -19,6 +20,7 @@ public class Game {
     private Board board;
     private Optional<Player> winner = Optional.empty();
     private boolean drawnByRepetition;
+    private int movesMade;
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -39,6 +41,7 @@ public class Game {
     public void passTurn() {
         requireStartedTo("pass the turn");
         playerToMove = playerWaiting();
+        movesMade++;
         recordPosition();
     }
 
@@ -94,7 +97,7 @@ public class Game {
     }
 
     public boolean canOfferDraw() {
-        return false;
+        return movesMade >= MOVES_BY_BOTH_PLAYERS;
     }
 
     public boolean isOver() {

@@ -566,6 +566,15 @@ public class GameTests {
         assertFalse(canOffer);
     }
 
+    @Test
+    public void CanOfferDraw_AfterBothPlayersMoved_ReturnsTrue() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+
+        boolean canOffer = game.canOfferDraw();
+
+        assertTrue(canOffer);
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

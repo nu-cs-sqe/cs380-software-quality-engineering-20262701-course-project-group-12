@@ -590,7 +590,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
     `passTurn()` once, so only White has moved.
   - **Expected output**: Returns `false`.
 
-- **TC-AGREE-03 — A draw can be offered after both players have moved** ( :x: )
+- **TC-AGREE-03 — A draw can be offered after both players have moved** ( :white_check_mark: )
   - **Method(s) under test**: `passTurn()`, `canOfferDraw()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then
     `passTurn()` twice, so both players have moved.
