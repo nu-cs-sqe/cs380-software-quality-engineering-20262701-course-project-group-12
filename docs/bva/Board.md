@@ -350,13 +350,13 @@ The case numbers start at TC85, after the check and checkmate cases (TC76 to TC8
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC85: the position on the board | implemented in Position TC1 to TC9 | the positions those cases compare | implemented in Position TC1 to TC9 |
+| TC102: the position on the board | implemented in Position TC1 to TC9 | the positions those cases compare | implemented in Position TC1 to TC9 |
 
 ### Method under test: `positionAfterMove(Location from, Location to, PieceColor colorToMove)`
 
-The case numbers continue after the checkmate cases (TC76 to TC84, issue #48).
+The case numbers continue after the check cases (TC85 to TC101, issue #44).
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC86: the position after a move | a new `Board`; `positionAfterMove(g1, f3, BLACK)`, compared with a second new `Board` after `move(g1, f3)` and `position(BLACK)` | `isSameAs` returns true | :white_check_mark: |
-| TC87: the board does not change | a new `Board`; `positionAfterMove(g1, f3, BLACK)` | `pieceAt(g1)` is still the white knight; `isOccupied(f3)` is false | :white_check_mark: |
+| TC103: the position after a move | a new `Board`; `positionAfterMove(g1, f3, BLACK)`, compared with a second new `Board` after `move(g1, f3)` and `position(BLACK)` | `isSameAs` returns true | :white_check_mark: |
+| TC104: the board does not change | a new `Board`; `positionAfterMove(g1, f3, BLACK)` | `pieceAt(g1)` is still the white knight; `isOccupied(f3)` is false | :white_check_mark: |
