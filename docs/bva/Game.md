@@ -589,7 +589,7 @@ AC 3). No argument is ever null: callers pass `PieceColor.WHITE` or
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.
 
-- **TC-RES-05 — A resignation after checkmate is ignored** ( :x: )
+- **TC-RES-05 — A resignation after checkmate is ignored** ( :white_check_mark: )
   - **Method(s) under test**: `endByCheckmate()`, `resign(PieceColor)`,
     `winnerName()`, `isWonByResignation()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then

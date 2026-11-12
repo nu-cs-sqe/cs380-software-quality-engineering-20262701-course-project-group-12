@@ -503,6 +503,18 @@ public class GameTests {
     }
 
     @Test
+    public void Resign_AfterCheckmate_KeepsTheCheckmateWinner() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByCheckmate();
+
+        game.resign(PieceColor.BLACK);
+
+        assertEquals("Bob", game.winnerName());
+        assertFalse(game.isWonByResignation());
+    }
+
+    @Test
     public void IsWonByResignation_StartedGame_ReturnsFalse() {
         Game game = new Game();
         game.start("Alice", "Bob");
