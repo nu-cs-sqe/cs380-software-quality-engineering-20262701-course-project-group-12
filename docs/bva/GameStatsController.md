@@ -140,3 +140,21 @@ winner, so the line names no player.
 - **TC14: refresh after a draw by repetition** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by repetition`
+
+Issue #61 (GitHub US-21, docs US-21). After the opponent accepts a draw offer,
+the same line shows a draw by agreement instead of the player to move (US-21
+AC 7). A draw has no winner, so the line names no player.
+
+Step 1:
+- input (added): whether the game is drawn by agreement (`isDrawnByAgreement()`)
+
+Step 2/3:
+- result of a game that is over -> Cases (added): draw by agreement
+- output (added): `Draw by agreement` once the game is drawn by agreement
+
+TC10, TC11, and TC13 still hold: the game answers false for
+`isDrawnByAgreement()`, so a checkmate still shows the winner.
+
+- **TC15: refresh after a draw by agreement** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isDrawnByAgreement()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Draw by agreement`

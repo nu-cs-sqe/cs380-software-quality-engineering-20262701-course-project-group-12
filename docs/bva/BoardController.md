@@ -21,6 +21,11 @@
 - `void clickSquare(Location square)`, repetition (issue #59): when the board answers true for `isLegalMove` from the selected square to the clicked square and `game.canClaimDrawByRepetitionWith(from, to)` is true, the board does not move yet. The move waits for the player to claim the draw or decline it (US-19 AC 4), and clicks do nothing while it waits. After a move passes the turn and is not checkmate, `game.isFivefoldRepetition()` ends the game by repetition with no claim (US-19 AC 6). Checkmate is checked first, so it still wins (US-19 AC 7).
 - `boolean isDrawClaimWithMovePending()` (issue #59): returns true while a move waits for the claim. `BoardView` uses it to ask the player whether to claim the draw.
 - `void declineDrawClaim()` (issue #59): makes the waiting move as usual: the board moves the piece, the game passes the turn, and the checks for checkmate and fivefold repetition run.
+- `boolean canOfferDraw()` (issue #61 / GitHub US-21, docs US-21): returns `game.canOfferDraw()`. The view offers Offer Draw only then.
+- `void offerDraw(PieceColor offeringColor)` (issue #61): passes the offer to `game.offerDraw(offeringColor)`.
+- `boolean isDrawOffered()` (issue #61): returns `game.isDrawOffered()`. The view shows the offer to the opponent, with Accept and Decline, only then.
+- `void acceptDrawOffer()` and `void declineDrawOffer()` (issue #61): pass the answer to `game.acceptDrawOffer()` and `game.declineDrawOffer()`. `Game` decides when an offer can be made, ends it after the opponent's move, and ends the game on an acceptance, so the controller only forwards. Once the game is drawn by agreement, `clickSquare` already refuses further moves through `game.isOver()` (US-21 AC 7).
+- `boolean canClaimDraw()`, after the game is over (issue #61): returns false once `game.isOver()` is true. Otherwise a position that occurred three times could still be claimed after a draw by agreement, the game would also end by repetition, and the window would show a draw by repetition instead of a draw by agreement (US-21 AC 7). The same holds after checkmate.
 
 No method checks its arguments for null, and no case passes null: our code never passes null (instructor code review, Week 6). TC2, TC5, and TC8 used to pass a null board or location; they were removed with the board check.
 
@@ -131,6 +136,20 @@ The move cases start from TC22: White moves the piece on b1 `(1, 1)` to c3 `(2, 
 | Output: `canClaimDraw()` and `isDrawClaimWithMovePending()` | Boolean | true; false |
 | Output: the board | Cases | the piece moves from b1 to c3; unchanged |
 | Output: the game | Cases | `endByRepetition`; `passTurn`, then `endByRepetition`; `passTurn`, then `endByCheckmate`; `passTurn` only; unchanged |
+
+### `canOfferDraw()`, `offerDraw(PieceColor offeringColor)`, `isDrawOffered()`, `acceptDrawOffer()`, `declineDrawOffer()`, and `canClaimDraw()` after the game is over
+
+`Game` is mocked with EasyMock, because the controller does not own the offer or the result. Each boolean answer is checked both ways, so a controller that always answered the same would fail. The Offer Draw, Accept, and Decline buttons are a view change after the cases. A draw claim once the game is over is refused; the case where the game is not over is TC45.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: what the game answers for `canOfferDraw` | Boolean | false; true |
+| Input: what the game answers for `isDrawOffered` | Boolean | false; true |
+| Input: `offeringColor` | Cases | White (the same forwarding holds for Black) |
+| Input: whether the game is over when a draw could be claimed | Boolean | false; true, after a draw by agreement |
+| Output: `canOfferDraw()` and `isDrawOffered()` | Boolean | the game's answer |
+| Output: `canClaimDraw()` | Boolean | true; false, once the game is over |
+| Output: the game | Cases | `offerDraw` with the same color; `acceptDrawOffer`; `declineDrawOffer` |
 
 ## Step 4: Test cases (each-choice strategy)
 
@@ -262,3 +281,18 @@ The case numbers start at TC45, after the cases that keep the king out of check 
 | TC54: claiming with a waiting move ends the game by repetition | as TC52; `claimDraw` | the game ends by repetition; the board does not move any piece | :white_check_mark: |
 | TC55: declining makes the waiting move | as TC52; `declineDrawClaim`, then ask `isDrawClaimWithMovePending` | false; the board moves the piece from b1 to c3; the game passes the turn | :white_check_mark: |
 | TC56: a click while a move waits does nothing | as TC52; click b1, then ask `isSelected` about b1 | false; the board is not asked about b1 | :white_check_mark: |
+
+### Method under test: `canOfferDraw()`, `offerDraw(PieceColor offeringColor)`, `isDrawOffered()`, `acceptDrawOffer()`, `declineDrawOffer()`, and `canClaimDraw()` after the game is over
+
+The case numbers continue after the repetition cases (TC45 to TC56, issue #59).
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC57: no draw can be offered | a controller for the mocked board and game; the game answers false for `canOfferDraw`; ask `canOfferDraw` | false | :x: |
+| TC58: a draw can be offered | as TC57, but the game answers true | true | :x: |
+| TC59: an offer is passed to the game | a controller for the mocked board and game; `offerDraw(WHITE)` | the game is asked to `offerDraw(WHITE)` | :x: |
+| TC60: no draw is offered | a controller for the mocked board and game; the game answers false for `isDrawOffered`; ask `isDrawOffered` | false | :x: |
+| TC61: a draw is offered | as TC60, but the game answers true | true | :x: |
+| TC62: an acceptance is passed to the game | a controller for the mocked board and game; `acceptDrawOffer` | the game is asked to `acceptDrawOffer` | :x: |
+| TC63: a decline is passed to the game | a controller for the mocked board and game; `declineDrawOffer` | the game is asked to `declineDrawOffer` | :x: |
+| TC64: a draw cannot be claimed once the game is over | as TC45, but the game answers true for `isOver`, as after a draw by agreement; ask `canClaimDraw` | false | :x: |
