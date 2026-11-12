@@ -575,6 +575,16 @@ public class GameTests {
         assertTrue(canOffer);
     }
 
+    @Test
+    public void IsDrawOffered_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean offered = game.isDrawOffered();
+
+        assertFalse(offered);
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

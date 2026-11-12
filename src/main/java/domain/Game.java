@@ -100,6 +100,10 @@ public class Game {
         return movesMade >= MOVES_BY_BOTH_PLAYERS;
     }
 
+    public boolean isDrawOffered() {
+        return false;
+    }
+
     public boolean isOver() {
         return winner.isPresent() || drawnByRepetition;
     }

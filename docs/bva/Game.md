@@ -596,7 +596,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
     `passTurn()` twice, so both players have moved.
   - **Expected output**: Returns `true`.
 
-- **TC-AGREE-04 — A started game has no draw offer** ( :x: )
+- **TC-AGREE-04 — A started game has no draw offer** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `isDrawOffered()`
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.
