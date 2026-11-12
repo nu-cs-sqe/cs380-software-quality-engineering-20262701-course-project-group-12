@@ -584,7 +584,7 @@ AC 3). No argument is ever null: callers pass `PieceColor.WHITE` or
   - **Expected output**: `isOver()` returns `true`; `isWonByResignation()`
     returns `true`.
 
-- **TC-RES-04 — A started game is not won by resignation** ( :x: )
+- **TC-RES-04 — A started game is not won by resignation** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `isWonByResignation()`
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.

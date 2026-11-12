@@ -104,6 +104,10 @@ public class Game {
         return playerOne;
     }
 
+    public boolean isWonByResignation() {
+        return false;
+    }
+
     public boolean isOver() {
         return winner.isPresent() || drawnByRepetition;
     }

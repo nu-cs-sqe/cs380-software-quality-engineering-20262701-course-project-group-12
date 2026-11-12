@@ -491,6 +491,16 @@ public class GameTests {
         assertEquals(PieceColor.WHITE, game.winnerColor());
     }
 
+    @Test
+    public void IsWonByResignation_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean wonByResignation = game.isWonByResignation();
+
+        assertFalse(wonByResignation);
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");
