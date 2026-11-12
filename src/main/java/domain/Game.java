@@ -21,6 +21,7 @@ public class Game {
     private Optional<Player> winner = Optional.empty();
     private boolean drawnByRepetition;
     private int movesMade;
+    private Optional<PieceColor> drawOfferedBy = Optional.empty();
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -100,8 +101,12 @@ public class Game {
         return movesMade >= MOVES_BY_BOTH_PLAYERS;
     }
 
+    public void offerDraw(PieceColor offeringColor) {
+        drawOfferedBy = Optional.of(offeringColor);
+    }
+
     public boolean isDrawOffered() {
-        return false;
+        return drawOfferedBy.isPresent();
     }
 
     public boolean isOver() {

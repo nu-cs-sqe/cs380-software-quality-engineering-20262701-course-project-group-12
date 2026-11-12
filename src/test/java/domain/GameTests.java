@@ -585,6 +585,15 @@ public class GameTests {
         assertFalse(offered);
     }
 
+    @Test
+    public void OfferDraw_AfterBothPlayersMoved_MakesTheOfferPending() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+
+        game.offerDraw(PieceColor.WHITE);
+
+        assertTrue(game.isDrawOffered());
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

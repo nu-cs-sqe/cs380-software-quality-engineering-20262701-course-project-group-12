@@ -601,7 +601,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.
 
-- **TC-AGREE-05 — An offer after both players have moved is pending** ( :x: )
+- **TC-AGREE-05 — An offer after both players have moved is pending** ( :white_check_mark: )
   - **Method(s) under test**: `offerDraw(PieceColor)`, `isDrawOffered()`
   - **State of the system**: As TC-AGREE-03, then `offerDraw(WHITE)`.
   - **Expected output**: Returns `true`.
