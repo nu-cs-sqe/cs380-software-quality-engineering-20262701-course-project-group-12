@@ -4,6 +4,7 @@ import domain.Board;
 import domain.Game;
 import domain.Location;
 import domain.piece.Piece;
+import domain.piece.PieceColor;
 import domain.piece.PieceType;
 
 import java.util.Optional;
@@ -68,6 +69,10 @@ public class BoardController {
         if (canClaimDraw()) {
             game.endByRepetition();
         }
+    }
+
+    public void resign(PieceColor resigningColor) {
+        game.resign(resigningColor);
     }
 
     public void clickSquare(Location square) {

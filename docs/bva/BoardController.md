@@ -279,4 +279,4 @@ The case number continues after the repetition cases (TC45 to TC56, issue #59).
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC57: a resignation is passed to the game | a controller for the mocked board and game; `resign(WHITE)` | the game is asked to `resign(WHITE)` | :x: |
+| TC57: a resignation is passed to the game | a controller for the mocked board and game; `resign(WHITE)` | the game is asked to `resign(WHITE)` | :white_check_mark: |
