@@ -577,7 +577,7 @@ AC 3). No argument is ever null: callers pass `PieceColor.WHITE` or
   - **Expected output**: `winnerName()` returns `Alice`; `winnerColor()`
     returns `WHITE`.
 
-- **TC-RES-03 — A resignation ends the game** ( :x: )
+- **TC-RES-03 — A resignation ends the game** ( :white_check_mark: )
   - **Method(s) under test**: `resign(PieceColor)`, `isOver()`,
     `isWonByResignation()`
   - **State of the system**: As TC-RES-01.

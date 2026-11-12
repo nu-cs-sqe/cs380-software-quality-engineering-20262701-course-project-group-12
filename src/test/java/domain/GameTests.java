@@ -492,6 +492,17 @@ public class GameTests {
     }
 
     @Test
+    public void Resign_StartedGame_EndsTheGameByResignation() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.resign(PieceColor.WHITE);
+
+        assertTrue(game.isOver());
+        assertTrue(game.isWonByResignation());
+    }
+
+    @Test
     public void IsWonByResignation_StartedGame_ReturnsFalse() {
         Game game = new Game();
         game.start("Alice", "Bob");

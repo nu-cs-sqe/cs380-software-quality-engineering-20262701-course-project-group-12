@@ -19,6 +19,7 @@ public class Game {
     private Board board;
     private Optional<Player> winner = Optional.empty();
     private boolean drawnByRepetition;
+    private boolean wonByResignation;
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -95,6 +96,7 @@ public class Game {
 
     public void resign(PieceColor resigningColor) {
         winner = Optional.of(playerOtherThan(resigningColor));
+        wonByResignation = true;
     }
 
     private Player playerOtherThan(PieceColor color) {
@@ -105,7 +107,7 @@ public class Game {
     }
 
     public boolean isWonByResignation() {
-        return false;
+        return wonByResignation;
     }
 
     public boolean isOver() {
