@@ -28,6 +28,7 @@ public class Board {
     private static final int BLACK_PAWN_RANK = 7;
     private static final int BLACK_BACK_RANK = Location.MAX_RANK;
     private static final int TWO_RANKS = 2;
+    private static final int ADJACENT_FILE_DISTANCE = 1;
     private static final List<Function<PieceColor, Piece>> BACK_RANK_PIECE_MAKERS = List.of(
             Rook::new,
             Knight::new,
@@ -173,6 +174,32 @@ public class Board {
         Piece movingPiece = pieceAt(from);
         return movingPiece.canMove(from, to, this)
                 && !boardAfterMove(from, to).isInCheck(movingPiece.getColor());
+    }
+
+    public Position position(PieceColor colorToMove) {
+        return new Position(colorToMove,
+                allSquares().map(this::occupantOf).collect(Collectors.toUnmodifiableList()),
+                isEnPassantCaptureAvailableTo(colorToMove));
+    }
+
+    public Position positionAfterMove(Location from, Location to, PieceColor colorToMove) {
+        return boardAfterMove(from, to).position(colorToMove);
+    }
+
+    private boolean isEnPassantCaptureAvailableTo(PieceColor color) {
+        return pawnThatJustAdvancedTwoRanks
+                .filter(square -> hasPieceOfColorBeside(color, square))
+                .isPresent();
+    }
+
+    private boolean hasPieceOfColorBeside(PieceColor color, Location square) {
+        return occupiedSquares().anyMatch(other ->
+                isBeside(other, square) && pieceAt(other).getColor() == color);
+    }
+
+    private static boolean isBeside(Location square, Location other) {
+        return square.getRank() == other.getRank()
+                && square.fileDistanceTo(other) == ADJACENT_FILE_DISTANCE;
     }
 
     private Board boardAfterMove(Location from, Location to) {

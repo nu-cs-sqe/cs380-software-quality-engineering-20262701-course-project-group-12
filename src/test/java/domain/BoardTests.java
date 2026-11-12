@@ -54,6 +54,7 @@ public class BoardTests {
     private static final Location F6 = new Location(5, 6);
     private static final Location F7 = new Location(5, 7);
     private static final Location F8 = new Location(5, 8);
+    private static final Location G1 = new Location(6, 1);
     private static final Location G2 = new Location(6, 2);
     private static final Location G4 = new Location(6, 4);
     private static final Location G6 = new Location(6, 6);
@@ -378,6 +379,28 @@ public class BoardTests {
         boolean checkmated = board.isCheckmated(PieceColor.BLACK);
 
         assertFalse(checkmated);
+    }
+
+    @Test
+    public void PositionAfterMove_KnightToF3_MatchesTheBoardAfterThatMove() {
+        Board board = new Board();
+        Board movedBoard = new Board();
+        movedBoard.move(G1, F3);
+
+        Position position = board.positionAfterMove(G1, F3, PieceColor.BLACK);
+
+        assertTrue(position.isSameAs(movedBoard.position(PieceColor.BLACK)));
+    }
+
+    @Test
+    public void PositionAfterMove_KnightToF3_LeavesTheBoardUnchanged() {
+        Board board = new Board();
+        Piece whiteKnight = board.pieceAt(G1);
+
+        board.positionAfterMove(G1, F3, PieceColor.BLACK);
+
+        assertSame(whiteKnight, board.pieceAt(G1));
+        assertFalse(board.isOccupied(F3));
     }
 
     @Test

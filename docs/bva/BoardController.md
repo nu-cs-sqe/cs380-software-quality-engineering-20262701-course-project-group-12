@@ -16,6 +16,11 @@
 - `void clickSquare(Location square)`, keeping the king out of check (issue #44 / GitHub US-11): the controller asks `board.isLegalMove(from, to)` instead of asking the selected piece `canMove`. The board answers false for a move the piece cannot make and for a move that leaves the mover's own king in check, so both are refused the same way (US-10): the board is unchanged, the turn does not pass, and the selection follows the rules above. A pawn move onto the last rank is checked the same way before any promotion is pending. Because no legal move leaves a king in check, no move can capture a king (US-11 AC 5), so the controller no longer refuses a king capture itself.
 - `void choosePromotion(PieceType type)`, checkmate (issue #44, US-11 AC 8): after the promotion passes the turn, the controller asks `board.isCheckmated(game.colorToMove())`, as after any other move, and calls `game.endByCheckmate()` when the player now to move is checkmated.
 - `void clickSquare(Location square)`, checkmate (issue #48 / GitHub US-15, docs US-15): after a move passes the turn, the controller asks `board.isCheckmated(game.colorToMove())`. When the player now to move is checkmated, it calls `game.endByCheckmate()`, so the player who made the move wins. Once `game.isOver()` is true, every click does nothing: no square is selected and no piece moves (US-15 AC 3).
+- `boolean canClaimDraw()` (issue #59 / GitHub US-19, docs US-18): returns true when the player to move can claim a draw by repetition now (`game.canClaimDrawByRepetition()`), or while a move that would make a position occur the third time is waiting for the claim. `BoardView` offers Claim Draw only then, so the claim is offered only when it is correct (US-19 AC 5).
+- `void claimDraw()` (issue #59): when `canClaimDraw()` is true, the game ends by repetition (`game.endByRepetition()`), and a waiting move is not made. Otherwise nothing happens.
+- `void clickSquare(Location square)`, repetition (issue #59): when the board answers true for `isLegalMove` from the selected square to the clicked square and `game.canClaimDrawByRepetitionWith(from, to)` is true, the board does not move yet. The move waits for the player to claim the draw or decline it (US-19 AC 4), and clicks do nothing while it waits. After a move passes the turn and is not checkmate, `game.isFivefoldRepetition()` ends the game by repetition with no claim (US-19 AC 6). Checkmate is checked first, so it still wins (US-19 AC 7).
+- `boolean isDrawClaimWithMovePending()` (issue #59): returns true while a move waits for the claim. `BoardView` uses it to ask the player whether to claim the draw.
+- `void declineDrawClaim()` (issue #59): makes the waiting move as usual: the board moves the piece, the game passes the turn, and the checks for checkmate and fivefold repetition run.
 
 No method checks its arguments for null, and no case passes null: our code never passes null (instructor code review, Week 6). TC2, TC5, and TC8 used to pass a null board or location; they were removed with the board check.
 
@@ -110,6 +115,22 @@ The checkmate cases start from TC22: White moves the piece on b1 `(1, 1)` to c3 
 | Input: `square` | Pointer | a location (no null: callers never pass one) |
 | Output: the game | Cases | `passTurn`, then `endByCheckmate`; `passTurn` only; unchanged |
 | Output: the selection after a click on a piece of the player to move | Cases | the clicked square; none, when the game is over |
+
+### `canClaimDraw()`, `claimDraw()`, `clickSquare(Location square)`, repetition, `isDrawClaimWithMovePending()`, and `declineDrawClaim()`
+
+The move cases start from TC22: White moves the piece on b1 `(1, 1)` to c3 `(2, 3)`, and the game passes the turn, so Black is to move. `Board` and `Game` are mocked with EasyMock, because the controller owns neither the position history nor the result. In every earlier case the game answers false for `canClaimDrawByRepetitionWith` and for `isFivefoldRepetition`, so those cases still check what they did. Asking the player whether to claim with a waiting move, and the Claim Draw button, are `BoardView` changes after the cases.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: what the game answers for `canClaimDrawByRepetition` | Boolean | true; false |
+| Input: what the game answers for `canClaimDrawByRepetitionWith(b1, c3)` | Boolean | true; false |
+| Input: whether a move waits for the claim | Boolean | nothing waits; the b1 to c3 move waits |
+| Input: what the game answers for `isFivefoldRepetition` after the move | Boolean | true; false |
+| Input: what the board answers for `isCheckmated` after the move | Boolean | false; true, when the move is also a fivefold repetition |
+| Input: a click while a move waits | Cases | a click on a White piece (b1) |
+| Output: `canClaimDraw()` and `isDrawClaimWithMovePending()` | Boolean | true; false |
+| Output: the board | Cases | the piece moves from b1 to c3; unchanged |
+| Output: the game | Cases | `endByRepetition`; `passTurn`, then `endByRepetition`; `passTurn`, then `endByCheckmate`; `passTurn` only; unchanged |
 
 ## Step 4: Test cases (each-choice strategy)
 
@@ -222,3 +243,22 @@ Issue #44 (GitHub US-11). The case numbers start at TC41, after the checkmate ca
 | TC44: a promotion that does not checkmate does not end the game | as TC32; after the choice, Black is to move, and the board answers false for `isCheckmated(BLACK)` | the board promotes a8 to `QUEEN`; the game passes the turn and does not end | :white_check_mark: |
 
 TC9 through TC40 asked the mocked piece `canMove`. From TC41 on, they ask the mocked board `isLegalMove` with the same answer and expect the same result. A legal move no longer asks the board what stands on the arrival square, because the controller no longer looks for a king there.
+
+### Method under test: `canClaimDraw()`, `claimDraw()`, `clickSquare(Location square)`, repetition, `isDrawClaimWithMovePending()`, and `declineDrawClaim()`
+
+The case numbers start at TC45, after the cases that keep the king out of check (TC41 to TC44, issue #44).
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC45: the player to move can claim a repetition | a controller for the mocked board and game; the game answers true for `canClaimDrawByRepetition`; ask `canClaimDraw` | true | :white_check_mark: |
+| TC46: the player to move cannot claim, and no move waits | as TC45, but the game answers false; ask `canClaimDraw` | false | :white_check_mark: |
+| TC47: a correct claim ends the game by repetition | as TC45; `claimDraw` | the game ends by repetition | :white_check_mark: |
+| TC48: an incorrect claim does nothing | as TC46; `claimDraw` | the game does not end | :white_check_mark: |
+| TC49: a move that makes a fivefold repetition ends the game | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)`, and the game answers true for `isFivefoldRepetition` | the board moves the piece from b1 to c3; the game passes the turn, then ends by repetition | :white_check_mark: |
+| TC50: a move that does not make a fivefold repetition does not end the game | as TC49, but the game answers false for `isFivefoldRepetition` | the board moves the piece from b1 to c3; the game passes the turn and does not end | :white_check_mark: |
+| TC51: checkmate wins over a fivefold repetition | as TC49, but the board answers true for `isCheckmated(BLACK)` | the game passes the turn, then ends by checkmate, not by repetition | :white_check_mark: |
+| TC52: a move that would make the third occurrence waits for the claim | as TC22, but the game answers true for `canClaimDrawByRepetitionWith(b1, c3)`; click b1, then c3; ask `isDrawClaimWithMovePending` | true; the board does not move any piece; the game does not pass the turn | :white_check_mark: |
+| TC53: a waiting move can be claimed | as TC52, and the game answers false for `canClaimDrawByRepetition`; ask `canClaimDraw` | true | :white_check_mark: |
+| TC54: claiming with a waiting move ends the game by repetition | as TC52; `claimDraw` | the game ends by repetition; the board does not move any piece | :white_check_mark: |
+| TC55: declining makes the waiting move | as TC52; `declineDrawClaim`, then ask `isDrawClaimWithMovePending` | false; the board moves the piece from b1 to c3; the game passes the turn | :white_check_mark: |
+| TC56: a click while a move waits does nothing | as TC52; click b1, then ask `isSelected` about b1 | false; the board is not asked about b1 | :white_check_mark: |

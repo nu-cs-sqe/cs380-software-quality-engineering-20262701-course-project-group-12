@@ -11,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameTests {
     private static final Location A1 = new Location(0, 1);
+    private static final Location B8 = new Location(1, 8);
+    private static final Location C6 = new Location(2, 6);
     private static final Location D1 = new Location(3, 1);
     private static final Location D8 = new Location(3, 8);
     private static final Location E2 = new Location(4, 2);
@@ -21,10 +23,16 @@ public class GameTests {
     private static final Location F3 = new Location(5, 3);
     private static final Location F6 = new Location(5, 6);
     private static final Location F7 = new Location(5, 7);
+    private static final Location G1 = new Location(6, 1);
     private static final Location G2 = new Location(6, 2);
     private static final Location G4 = new Location(6, 4);
+    private static final Location G8 = new Location(6, 8);
     private static final Location H4 = new Location(7, 4);
     private static final Location H5 = new Location(7, 5);
+    private static final int ROUND_TRIPS_FOR_SECOND_OCCURRENCE = 1;
+    private static final int ROUND_TRIPS_FOR_THIRD_OCCURRENCE = 2;
+    private static final int ROUND_TRIPS_FOR_FOURTH_OCCURRENCE = 3;
+    private static final int ROUND_TRIPS_FOR_FIFTH_OCCURRENCE = 4;
 
     @Test
     public void IsStarted_NewGame_ReturnsFalse() {
@@ -351,6 +359,142 @@ public class GameTests {
     }
 
     @Test
+    public void CanClaimDrawByRepetition_NewGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean canClaim = game.canClaimDrawByRepetition();
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetition_PositionSeenTwice_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_SECOND_OCCURRENCE);
+
+        boolean canClaim = game.canClaimDrawByRepetition();
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetition_PositionSeenThreeTimes_ReturnsTrue() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_THIRD_OCCURRENCE);
+
+        boolean canClaim = game.canClaimDrawByRepetition();
+
+        assertTrue(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetition_NewPositionAfterRepetition_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_THIRD_OCCURRENCE);
+        playMove(game, E2, E4);
+
+        boolean canClaim = game.canClaimDrawByRepetition();
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetitionWith_MoveMakingThirdOccurrence_ReturnsTrue() {
+        Game game = gameBeforeLastMoveOfRoundTrip(ROUND_TRIPS_FOR_THIRD_OCCURRENCE);
+
+        boolean canClaim = game.canClaimDrawByRepetitionWith(F6, G8);
+
+        assertTrue(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetitionWith_MoveMakingSecondOccurrence_ReturnsFalse() {
+        Game game = gameBeforeLastMoveOfRoundTrip(ROUND_TRIPS_FOR_SECOND_OCCURRENCE);
+
+        boolean canClaim = game.canClaimDrawByRepetitionWith(F6, G8);
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetitionWith_MoveToNewPosition_ReturnsFalse() {
+        Game game = gameBeforeLastMoveOfRoundTrip(ROUND_TRIPS_FOR_THIRD_OCCURRENCE);
+
+        boolean canClaim = game.canClaimDrawByRepetitionWith(B8, C6);
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void IsFivefoldRepetition_PositionSeenFourTimes_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_FOURTH_OCCURRENCE);
+
+        boolean fivefold = game.isFivefoldRepetition();
+
+        assertFalse(fivefold);
+    }
+
+    @Test
+    public void IsFivefoldRepetition_PositionSeenFiveTimes_ReturnsTrue() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_FIFTH_OCCURRENCE);
+
+        boolean fivefold = game.isFivefoldRepetition();
+
+        assertTrue(fivefold);
+    }
+
+    @Test
+    public void IsDrawnByRepetition_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean drawn = game.isDrawnByRepetition();
+
+        assertFalse(drawn);
+    }
+
+    @Test
+    public void EndByRepetition_StartedGame_DrawsTheGame() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByRepetition();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isDrawnByRepetition());
+    }
+
+    @Test
+    public void EndByRepetition_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::endByRepetition);
+    }
+
+    private static Game gameAfterKnightRoundTrips(int roundTrips) {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        for (int roundTrip = 0; roundTrip < roundTrips; roundTrip++) {
+            playMove(game, G1, F3);
+            playMove(game, G8, F6);
+            playMove(game, F3, G1);
+            playMove(game, F6, G8);
+        }
+        return game;
+    }
+
+    private static Game gameBeforeLastMoveOfRoundTrip(int roundTrips) {
+        Game game = gameAfterKnightRoundTrips(roundTrips - 1);
+        playMove(game, G1, F3);
+        playMove(game, G8, F6);
+        playMove(game, F3, G1);
+        return game;
+    }
+
+    private static void playMove(Game game, Location from, Location to) {
+        game.board().move(from, to);
+        game.passTurn();
+    }
+
+    @Test
     public void IsPlayerToMoveInCheck_StartedGame_ReturnsFalse() {
         Game game = new Game();
         game.start("Alice", "Bob");
@@ -390,20 +534,15 @@ public class GameTests {
     }
 
     private void playFoolsMate(Game game) {
-        play(game, F2, F3);
-        play(game, E7, E5);
-        play(game, G2, G4);
-        play(game, D8, H4);
-    }
-
-    private void play(Game game, Location from, Location to) {
-        game.board().move(from, to);
-        game.passTurn();
+        playMove(game, F2, F3);
+        playMove(game, E7, E5);
+        playMove(game, G2, G4);
+        playMove(game, D8, H4);
     }
 
     private void playQueenCheckOnBlack(Game game) {
-        play(game, E2, E4);
-        play(game, F7, F6);
-        play(game, D1, H5);
+        playMove(game, E2, E4);
+        playMove(game, F7, F6);
+        playMove(game, D1, H5);
     }
 }

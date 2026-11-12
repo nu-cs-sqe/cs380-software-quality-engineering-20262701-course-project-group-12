@@ -2,15 +2,23 @@ package domain;
 
 import domain.piece.PieceColor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Game {
+    private static final int THREEFOLD = 3;
+    private static final int FIVEFOLD = 5;
+    private static final int ONE_MORE_OCCURRENCE = 1;
+
+    private final List<Position> positions = new ArrayList<>();
     private boolean started;
     private Player playerOne;
     private Player playerTwo;
     private Player playerToMove;
     private Board board;
     private Optional<Player> winner = Optional.empty();
+    private boolean drawnByRepetition;
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -25,11 +33,17 @@ public class Game {
         playerToMove = playerOne;
         board = new Board();
         started = true;
+        recordPosition();
     }
 
     public void passTurn() {
         requireStartedTo("pass the turn");
         playerToMove = playerWaiting();
+        recordPosition();
+    }
+
+    private void recordPosition() {
+        positions.add(board.position(playerToMove.getColor()));
     }
 
     public boolean isStarted() {
@@ -48,8 +62,39 @@ public class Game {
         return playerOne;
     }
 
+    public boolean canClaimDrawByRepetition() {
+        return occurrencesOf(currentPosition()) >= THREEFOLD;
+    }
+
+    public boolean canClaimDrawByRepetitionWith(Location from, Location to) {
+        Position positionAfterMove =
+                board.positionAfterMove(from, to, playerWaiting().getColor());
+        return occurrencesOf(positionAfterMove) + ONE_MORE_OCCURRENCE >= THREEFOLD;
+    }
+
+    public void endByRepetition() {
+        requireStartedTo("end the game");
+        drawnByRepetition = true;
+    }
+
+    public boolean isDrawnByRepetition() {
+        return drawnByRepetition;
+    }
+
+    public boolean isFivefoldRepetition() {
+        return occurrencesOf(currentPosition()) >= FIVEFOLD;
+    }
+
+    private Position currentPosition() {
+        return positions.get(positions.size() - 1);
+    }
+
+    private long occurrencesOf(Position position) {
+        return positions.stream().filter(position::isSameAs).count();
+    }
+
     public boolean isOver() {
-        return winner.isPresent();
+        return winner.isPresent() || drawnByRepetition;
     }
 
     public boolean isPlayerToMoveInCheck() {

@@ -90,6 +90,9 @@ public class BoardControllerTests {
         piece = mock(Piece.class);
         expect(game.isOver()).andStubReturn(false);
         expect(board.isCheckmated(anyObject(PieceColor.class))).andStubReturn(false);
+        expect(game.isFivefoldRepetition()).andStubReturn(false);
+        expect(game.canClaimDrawByRepetitionWith(
+                anyObject(Location.class), anyObject(Location.class))).andStubReturn(false);
     }
 
     @Test
@@ -492,6 +495,163 @@ public class BoardControllerTests {
 
         assertFalse(controller.isSelected(B1));
         verify(board, piece, game);
+    }
+
+    @Test
+    public void CanClaimDraw_PlayerToMoveCanClaimRepetition_ReturnsTrue() {
+        expect(game.canClaimDrawByRepetition()).andReturn(true);
+        BoardController controller = replayedController();
+
+        boolean canClaim = controller.canClaimDraw();
+
+        assertTrue(canClaim);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void CanClaimDraw_PlayerToMoveCannotClaimAndNoMoveWaits_ReturnsFalse() {
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        BoardController controller = replayedController();
+
+        boolean canClaim = controller.canClaimDraw();
+
+        assertFalse(canClaim);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClaimDraw_ClaimIsCorrect_EndsTheGameByRepetition() {
+        expect(game.canClaimDrawByRepetition()).andStubReturn(true);
+        game.endByRepetition();
+        BoardController controller = replayedController();
+
+        controller.claimDraw();
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClaimDraw_ClaimIsIncorrect_DoesNotEndTheGame() {
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        BoardController controller = replayedController();
+
+        controller.claimDraw();
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_MoveMakingFivefoldRepetition_EndsTheGameByRepetition() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(false);
+        expect(game.isFivefoldRepetition()).andReturn(true);
+        game.endByRepetition();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_MoveNotMakingFivefoldRepetition_DoesNotEndTheGame() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(false);
+        expect(game.isFivefoldRepetition()).andReturn(false);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_CheckmateThatIsAlsoFivefoldRepetition_EndsTheGameByCheckmate() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(true);
+        expect(game.isFivefoldRepetition()).andStubReturn(true);
+        game.endByCheckmate();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_MoveMakingThirdOccurrence_WaitsForTheClaim() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        boolean waiting = controller.isDrawClaimWithMovePending();
+
+        assertTrue(waiting);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void CanClaimDraw_MoveWaitsForTheClaim_ReturnsTrue() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        boolean canClaim = controller.canClaimDraw();
+
+        assertTrue(canClaim);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClaimDraw_MoveWaitsForTheClaim_EndsTheGameByRepetition() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        game.endByRepetition();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        controller.claimDraw();
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void DeclineDrawClaim_MoveWaitsForTheClaim_MakesTheMove() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        board.move(B1, C3);
+        expect(piece.promotesOn(C3)).andReturn(false);
+        game.passTurn();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        controller.declineDrawClaim();
+
+        assertFalse(controller.isDrawClaimWithMovePending());
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_WhileMoveWaitsForTheClaim_DoesNothing() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        controller.clickSquare(B1);
+
+        assertFalse(controller.isSelected(B1));
+        verify(board, piece, game);
+    }
+
+    private void expectMoveFromB1ToC3MakingThirdOccurrence() {
+        expectPieceOnB1();
+        expect(board.isLegalMove(B1, C3)).andReturn(true);
+        expect(game.canClaimDrawByRepetitionWith(B1, C3)).andReturn(true);
+    }
+
+    private BoardController controllerWithMoveWaitingForTheClaim() {
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+        return controller;
     }
 
     private void expectWhiteMoveFromB1ToC3ThenBlackToMove() {
