@@ -145,7 +145,7 @@ winner, so the line names no player.
 Issue #60 (GitHub US-20, docs US-20). After a resignation, the same line shows
 the opponent's name and color as the winner by resignation (US-20 AC 4).
 
-- **TC15: refresh after Player 1 resigns** ( :x: )
+- **TC15: refresh after Player 1 resigns** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isWonByResignation()` is true, `winnerName()` is Bo, `winnerColor()` is `BLACK`, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Resignation: Bo (Black) wins`
 
