@@ -34,6 +34,7 @@ public class GameTests {
     private static final int ROUND_TRIPS_FOR_FOURTH_OCCURRENCE = 3;
     private static final int ROUND_TRIPS_FOR_FIFTH_OCCURRENCE = 4;
     private static final int ROUND_TRIPS_FOR_NINETY_NINE_HALF_MOVES = 24;
+    private static final int ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES = 25;
     private static final int MOVES_BY_BOTH_PLAYERS = 2;
 
     @Test
@@ -796,6 +797,15 @@ public class GameTests {
         boolean canClaim = game.canClaimDrawByFiftyMove();
 
         assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByFiftyMove_OneHundredQuietHalfMoves_ReturnsTrue() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES);
+
+        boolean canClaim = game.canClaimDrawByFiftyMove();
+
+        assertTrue(canClaim);
     }
 
     private static Game gameAfterMoves(int moves) {

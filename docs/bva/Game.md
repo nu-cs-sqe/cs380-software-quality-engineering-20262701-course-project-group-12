@@ -792,7 +792,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
     g1 to f3, g8 to f6, and f3 to g1, so the count is 99.
   - **Expected output**: Returns `false`.
 
-- **TC-FIFTY-03 — 100 quiet half-moves can be claimed** ( :x: )
+- **TC-FIFTY-03 — 100 quiet half-moves can be claimed** ( :white_check_mark: )
   - **Method(s) under test**: `canClaimDrawByFiftyMove()`
   - **State of the system**: Started game after 25 quiet round trips, so the
     count is 100.
