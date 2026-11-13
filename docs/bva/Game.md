@@ -612,7 +612,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
     `offerDraw(BLACK)`.
   - **Expected output**: Returns `false`.
 
-- **TC-AGREE-07 — A second offer cannot be made while one is pending** ( :x: )
+- **TC-AGREE-07 — A second offer cannot be made while one is pending** ( :white_check_mark: )
   - **Method(s) under test**: `offerDraw(PieceColor)`, `canOfferDraw()`
   - **State of the system**: As TC-AGREE-05.
   - **Expected output**: `canOfferDraw()` returns `false`.

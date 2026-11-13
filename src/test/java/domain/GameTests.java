@@ -603,6 +603,16 @@ public class GameTests {
         assertFalse(game.isDrawOffered());
     }
 
+    @Test
+    public void CanOfferDraw_OfferPending_ReturnsFalse() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+        game.offerDraw(PieceColor.WHITE);
+
+        boolean canOffer = game.canOfferDraw();
+
+        assertFalse(canOffer);
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");
