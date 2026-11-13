@@ -12,9 +12,11 @@ import domain.piece.Rook;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -46,6 +48,7 @@ public class Board {
                     PieceType.KNIGHT, Knight::new);
 
     private final List<List<Optional<Piece>>> squares = emptySquares();
+    private final Set<Piece> movedPieces = Collections.newSetFromMap(new IdentityHashMap<>());
     private Optional<Location> pawnThatJustAdvancedTwoRanks = Optional.empty();
     private int halfMoveCount;
 
@@ -98,6 +101,7 @@ public class Board {
         clear(from);
         removePawnCapturedEnPassant(movingPiece, from, to);
         place(movingPiece, to);
+        movedPieces.add(movingPiece);
         pawnThatJustAdvancedTwoRanks = isPawnAdvancingTwoRanks(movingPiece, from, to)
                 ? Optional.of(to)
                 : Optional.empty();
@@ -226,6 +230,21 @@ public class Board {
 
     private void clear(Location location) {
         rankOf(location).set(location.getFile(), Optional.empty());
+    }
+
+    public boolean holdsUnmovedPiece(Location square) {
+        return isOccupied(square) && !movedPieces.contains(pieceAt(square));
+    }
+
+    public boolean isAttackedByOpponentOf(PieceColor color, Location square) {
+        return allSquares()
+                .filter(attackerSquare -> holdsOpponentOf(color, attackerSquare))
+                .anyMatch(attackerSquare ->
+                        pieceAt(attackerSquare).attacks(attackerSquare, square, this));
+    }
+
+    private boolean holdsOpponentOf(PieceColor color, Location square) {
+        return isOccupied(square) && pieceAt(square).getColor() != color;
     }
 
     private Optional<Piece> occupantOf(Location location) {

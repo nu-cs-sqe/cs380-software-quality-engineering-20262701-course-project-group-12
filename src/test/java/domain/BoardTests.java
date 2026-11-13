@@ -61,6 +61,7 @@ public class BoardTests {
     private static final Location G8 = new Location(6, 8);
     private static final Location H1 = new Location(7, 1);
     private static final Location H2 = new Location(7, 2);
+    private static final Location H3 = new Location(7, 3);
     private static final Location H4 = new Location(7, 4);
     private static final Location H5 = new Location(7, 5);
     private static final Location H6 = new Location(7, 6);
@@ -695,6 +696,67 @@ public class BoardTests {
     @Test
     public void Board_H7_PlacesPawn() {
         assertPieceClass(H7, Pawn.class);
+    }
+
+    @Test
+    public void HoldsUnmovedPiece_StartingPieceThatNeverMoved_ReturnsTrue() {
+        Board board = new Board();
+
+        assertTrue(board.holdsUnmovedPiece(E1));
+    }
+
+    @Test
+    public void HoldsUnmovedPiece_SquareThePieceMovedAwayFrom_ReturnsFalse() {
+        Board board = new Board();
+        board.move(G1, F3);
+
+        assertFalse(board.holdsUnmovedPiece(G1));
+    }
+
+    @Test
+    public void HoldsUnmovedPiece_PieceThatMovedAndCameBack_ReturnsFalse() {
+        Board board = new Board();
+        board.move(G1, F3);
+        board.move(F3, G1);
+
+        assertFalse(board.holdsUnmovedPiece(G1));
+    }
+
+    @Test
+    public void IsAttackedByOpponentOf_NoOpponentPieceAttacks_ReturnsFalse() {
+        Board board = new Board();
+
+        assertFalse(board.isAttackedByOpponentOf(PieceColor.WHITE, E4));
+    }
+
+    @Test
+    public void IsAttackedByOpponentOf_OpponentPawnsAttackEmptySquare_ReturnsTrue() {
+        Board board = new Board();
+
+        assertTrue(board.isAttackedByOpponentOf(PieceColor.BLACK, E3));
+    }
+
+    @Test
+    public void IsAttackedByOpponentOf_OnlyPiecesOfSameColorAttack_ReturnsFalse() {
+        Board board = new Board();
+
+        assertFalse(board.isAttackedByOpponentOf(PieceColor.WHITE, E3));
+    }
+
+    @Test
+    public void IsAttackedByOpponentOf_OpponentRookOnLastSquare_ReturnsTrue() {
+        Board board = new Board();
+        board.move(H7, A6);
+
+        assertTrue(board.isAttackedByOpponentOf(PieceColor.WHITE, H3));
+    }
+
+    @Test
+    public void IsAttackedByOpponentOf_OpponentRookOnFirstSquare_ReturnsTrue() {
+        Board board = new Board();
+        board.move(A2, H3);
+
+        assertTrue(board.isAttackedByOpponentOf(PieceColor.BLACK, A6));
     }
 
     private Board foolsMate() {
