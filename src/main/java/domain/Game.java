@@ -57,6 +57,7 @@ public class Game {
     }
 
     public void endByStalemate() {
+        requireStartedTo("end by stalemate");
         stalemate = true;
     }
 

@@ -409,6 +409,13 @@ public class GameTests {
     }
 
     @Test
+    public void EndByStalemate_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::endByStalemate);
+    }
+
+    @Test
     public void CanClaimDrawByRepetition_NewGame_ReturnsFalse() {
         Game game = new Game();
         game.start("Alice", "Bob");

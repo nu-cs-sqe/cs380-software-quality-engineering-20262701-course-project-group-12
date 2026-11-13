@@ -430,7 +430,7 @@ without a new click case.
     `endByStalemate()`.
   - **Expected output**: Throws `IllegalStateException`.
 
-- **TC-END-13 — Reject ending by stalemate before a start** ( :x: )
+- **TC-END-13 — Reject ending by stalemate before a start** ( :white_check_mark: )
   - **Method(s) under test**: `endByStalemate()`
 
 ### Method under test: `isPlayerToMoveInCheck()`
