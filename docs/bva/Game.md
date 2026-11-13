@@ -568,7 +568,7 @@ case.
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.
 
-- **TC-DEAD-02 — A dead position ends the game as a draw** ( :x: )
+- **TC-DEAD-02 — A dead position ends the game as a draw** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `endByDeadPosition()`,
     `isOver()`, `isDrawnByDeadPosition()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then

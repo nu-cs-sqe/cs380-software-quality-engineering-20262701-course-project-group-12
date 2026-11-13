@@ -479,6 +479,17 @@ public class GameTests {
         assertFalse(drawn);
     }
 
+    @Test
+    public void EndByDeadPosition_StartedGame_DrawsTheGame() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByDeadPosition();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isDrawnByDeadPosition());
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");

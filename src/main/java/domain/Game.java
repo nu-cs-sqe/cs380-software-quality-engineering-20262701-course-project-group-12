@@ -19,6 +19,7 @@ public class Game {
     private Board board;
     private Optional<Player> winner = Optional.empty();
     private boolean drawnByRepetition;
+    private boolean drawnByDeadPosition;
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -81,8 +82,12 @@ public class Game {
         return drawnByRepetition;
     }
 
+    public void endByDeadPosition() {
+        drawnByDeadPosition = true;
+    }
+
     public boolean isDrawnByDeadPosition() {
-        return false;
+        return drawnByDeadPosition;
     }
 
     public boolean isFivefoldRepetition() {
@@ -98,7 +103,7 @@ public class Game {
     }
 
     public boolean isOver() {
-        return winner.isPresent() || drawnByRepetition;
+        return winner.isPresent() || drawnByRepetition || drawnByDeadPosition;
     }
 
     public boolean isPlayerToMoveInCheck() {
