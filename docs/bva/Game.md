@@ -820,7 +820,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
     QUEEN)`, and `passTurn()`.
   - **Expected output**: Returns `false`.
 
-- **TC-FIFTY-08 — A move that makes the count 100 can be claimed** ( :x: )
+- **TC-FIFTY-08 — A move that makes the count 100 can be claimed** ( :white_check_mark: )
   - **Method(s) under test**: `canClaimDrawByFiftyMoveWith(Location,
     Location)`
   - **State of the system**: As TC-FIFTY-02, so Black is to move; ask about
@@ -828,7 +828,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
   - **Expected output**: Returns `true`.
 
 - **TC-FIFTY-09 — A move that would make the count 99 cannot be claimed**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `canClaimDrawByFiftyMoveWith(Location,
     Location)`
   - **State of the system**: Started game after 24 quiet round trips, then

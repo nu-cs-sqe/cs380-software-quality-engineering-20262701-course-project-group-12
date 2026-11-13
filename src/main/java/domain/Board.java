@@ -112,6 +112,10 @@ public class Board {
         return halfMoveCount;
     }
 
+    int halfMoveCountAfter(Location from, Location to) {
+        return boardAfterMove(from, to).halfMoveCount();
+    }
+
     public boolean canBeCapturedEnPassant(Location square) {
         return pawnThatJustAdvancedTwoRanks.filter(square::isSameSquareAs).isPresent();
     }

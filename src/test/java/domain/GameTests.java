@@ -858,6 +858,26 @@ public class GameTests {
         assertFalse(canClaim);
     }
 
+    @Test
+    public void CanClaimDrawByFiftyMoveWith_MoveMakingOneHundred_ReturnsTrue() {
+        Game game = gameBeforeLastMoveOfRoundTrip(ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES);
+
+        boolean canClaim = game.canClaimDrawByFiftyMoveWith(F6, G8);
+
+        assertTrue(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByFiftyMoveWith_MoveMakingNinetyNine_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_NINETY_NINE_HALF_MOVES);
+        playMove(game, G1, F3);
+        playMove(game, G8, F6);
+
+        boolean canClaim = game.canClaimDrawByFiftyMoveWith(F6, G8);
+
+        assertFalse(canClaim);
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

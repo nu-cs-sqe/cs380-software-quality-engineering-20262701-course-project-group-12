@@ -79,7 +79,15 @@ public class Game {
     }
 
     public boolean canClaimDrawByFiftyMove() {
-        return board.halfMoveCount() >= FIFTY_MOVE_HALF_MOVES;
+        return reachesFiftyMoveClaim(board.halfMoveCount());
+    }
+
+    public boolean canClaimDrawByFiftyMoveWith(Location from, Location to) {
+        return reachesFiftyMoveClaim(board.halfMoveCountAfter(from, to));
+    }
+
+    private boolean reachesFiftyMoveClaim(int halfMoves) {
+        return halfMoves >= FIFTY_MOVE_HALF_MOVES;
     }
 
     public boolean canClaimDrawByRepetitionWith(Location from, Location to) {
