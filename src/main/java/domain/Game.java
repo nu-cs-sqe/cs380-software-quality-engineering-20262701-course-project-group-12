@@ -22,6 +22,7 @@ public class Game {
     private boolean drawnByRepetition;
     private int movesMade;
     private Optional<PieceColor> drawOfferedBy = Optional.empty();
+    private boolean drawnByAgreement;
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -112,12 +113,16 @@ public class Game {
         return drawOfferedBy.isPresent();
     }
 
+    public void acceptDrawOffer() {
+        drawnByAgreement = true;
+    }
+
     public boolean isDrawnByAgreement() {
-        return false;
+        return drawnByAgreement;
     }
 
     public boolean isOver() {
-        return winner.isPresent() || drawnByRepetition;
+        return winner.isPresent() || drawnByRepetition || drawnByAgreement;
     }
 
     public boolean isPlayerToMoveInCheck() {

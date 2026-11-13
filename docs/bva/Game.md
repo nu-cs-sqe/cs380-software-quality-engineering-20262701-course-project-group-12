@@ -628,7 +628,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.
 
-- **TC-AGREE-10 — Accepting an offer ends the game as a draw** ( :x: )
+- **TC-AGREE-10 — Accepting an offer ends the game as a draw** ( :white_check_mark: )
   - **Method(s) under test**: `acceptDrawOffer()`, `isOver()`,
     `isDrawnByAgreement()`
   - **State of the system**: As TC-AGREE-05, then `acceptDrawOffer()`.
