@@ -418,6 +418,20 @@ public class BoardTests {
     }
 
     @Test
+    public void IsStalemated_SamLoydsPosition_LeavesTheBoardUnchanged() {
+        Board board = samLoydsStalemate();
+        Piece whiteQueen = board.pieceAt(E6);
+        Piece blackKing = board.pieceAt(G6);
+        final int pieces = countPieces(board);
+
+        board.isStalemated(PieceColor.BLACK);
+
+        assertSame(whiteQueen, board.pieceAt(E6));
+        assertSame(blackKing, board.pieceAt(G6));
+        assertEquals(pieces, countPieces(board));
+    }
+
+    @Test
     public void PositionAfterMove_KnightToF3_MatchesTheBoardAfterThatMove() {
         Board board = new Board();
         Board movedBoard = new Board();
