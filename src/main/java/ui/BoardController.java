@@ -71,7 +71,7 @@ public class BoardController {
     }
 
     public boolean canOfferDraw() {
-        return false;
+        return game.canOfferDraw();
     }
 
     public void clickSquare(Location square) {
