@@ -443,6 +443,15 @@ public class BoardTests {
     }
 
     @Test
+    public void IsDeadPosition_BishopsOnTheSameColor_ReturnsTrue() {
+        Board board = boardHoldingOnly(E1, E8, C1, F8);
+
+        boolean dead = board.isDeadPosition();
+
+        assertTrue(dead);
+    }
+
+    @Test
     public void IsInCheck_NewBoard_ReturnsFalse() {
         Board board = new Board();
 
