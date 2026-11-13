@@ -855,7 +855,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
     g1 to f3 and g8 to f6, so the count is 150.
   - **Expected output**: Returns `true`.
 
-- **TC-FIFTY-13 — A started game is not drawn by the fifty-move rule** ( :x: )
+- **TC-FIFTY-13 — A started game is not drawn by the fifty-move rule** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`,
     `isDrawnByFiftyMove()`
   - **State of the system**: `start("Alice", "Bob")` has completed.

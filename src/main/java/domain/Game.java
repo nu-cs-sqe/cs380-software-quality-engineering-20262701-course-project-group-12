@@ -171,6 +171,10 @@ public class Game {
         return drawnByAgreement;
     }
 
+    public boolean isDrawnByFiftyMove() {
+        return false;
+    }
+
     public boolean isOver() {
         return winner.isPresent() || drawnByRepetition || drawnByAgreement;
     }
