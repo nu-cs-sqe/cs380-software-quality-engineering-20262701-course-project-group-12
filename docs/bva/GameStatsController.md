@@ -155,6 +155,6 @@ Step 2/3:
 TC10, TC11, and TC13 still hold: the game answers false for
 `isDrawnByAgreement()`, so a checkmate still shows the winner.
 
-- **TC15: refresh after a draw by agreement** ( :x: )
+- **TC15: refresh after a draw by agreement** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isDrawnByAgreement()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by agreement`

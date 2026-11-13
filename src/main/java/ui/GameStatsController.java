@@ -47,6 +47,9 @@ public class GameStatsController {
         if (game.isDrawnByRepetition()) {
             return Messages.text("stats.drawByRepetition");
         }
+        if (game.isDrawnByAgreement()) {
+            return Messages.text("stats.drawByAgreement");
+        }
         return Messages.format(CHECKMATE_KEYS.get(game.winnerColor()), game.winnerName());
     }
 
