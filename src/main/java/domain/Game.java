@@ -26,6 +26,7 @@ public class Game {
     private int movesMade;
     private Optional<PieceColor> drawOfferedBy = Optional.empty();
     private boolean drawnByAgreement;
+    private boolean drawnByFiftyMove;
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -171,12 +172,17 @@ public class Game {
         return drawnByAgreement;
     }
 
+    public void endByFiftyMove() {
+        drawnByFiftyMove = true;
+    }
+
     public boolean isDrawnByFiftyMove() {
-        return false;
+        return drawnByFiftyMove;
     }
 
     public boolean isOver() {
-        return winner.isPresent() || drawnByRepetition || drawnByAgreement;
+        return winner.isPresent() || drawnByRepetition || drawnByAgreement
+                || drawnByFiftyMove;
     }
 
     public boolean isPlayerToMoveInCheck() {

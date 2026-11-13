@@ -861,7 +861,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.
 
-- **TC-FIFTY-14 — A fifty-move claim ends the game as a draw** ( :x: )
+- **TC-FIFTY-14 — A fifty-move claim ends the game as a draw** ( :white_check_mark: )
   - **Method(s) under test**: `endByFiftyMove()`, `isOver()`,
     `isDrawnByFiftyMove()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then

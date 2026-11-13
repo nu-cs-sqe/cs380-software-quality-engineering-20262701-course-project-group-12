@@ -920,6 +920,17 @@ public class GameTests {
         assertFalse(drawn);
     }
 
+    @Test
+    public void EndByFiftyMove_StartedGame_DrawsTheGame() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByFiftyMove();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isDrawnByFiftyMove());
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");
