@@ -83,6 +83,10 @@ public class BoardController {
         return game.isDrawOffered();
     }
 
+    public void acceptDrawOffer() {
+        game.acceptDrawOffer();
+    }
+
     public void clickSquare(Location square) {
         if (game.isOver() || isPromotionPending() || isDrawClaimWithMovePending()) {
             return;
