@@ -4,8 +4,8 @@
 stores the two players, the starting board, and the player to move. Issue #41
 adds `passTurn`, which gives the turn to the other player after a legal move.
 Issue #48 adds `endByCheckmate`, which ends the game when the player to move
-is checkmated. The test cases below use the game's public behavior to observe
-its state.
+is checkmated. Issue #51 adds the fifty-move and seventy-five-move draws.
+The test cases below use the game's public behavior to observe its state.
 
 `start` returns nothing. It throws when a start is rejected. `passTurn`
 returns nothing. It throws when the game has not started.
@@ -741,3 +741,164 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
   - **Method(s) under test**: `endByRepetition()`, `canOfferDraw()`
   - **State of the system**: As TC-AGREE-03, then `endByRepetition()`.
   - **Expected output**: Returns `false`.
+
+### Methods under test: `canClaimDrawByFiftyMove()`, `canClaimDrawByFiftyMoveWith(Location from, Location to)`, `isSeventyFiveMoveRule()`, `endByFiftyMove()`, `isDrawnByFiftyMove()`, `endBySeventyFiveMove()`, and `isDrawnBySeventyFiveMove()`
+
+Issue #51 (GitHub US-18, docs US-19). `Game` answers from the half-move count
+since the last pawn move or capture. The count starts at 0. `Board.move`
+updates it: a non-pawn, non-capturing move adds one; a pawn move, a capture,
+an en passant capture, or a promotion resets it to 0. Castling is one
+non-capturing king move (US-19 AC 2) once issue #45 lands; until then a quiet
+knight move stands for that case. The count is not a public getter. `Game`
+observes it the way `peek` observes `MyVector`.
+
+A quiet round trip is g1 `(6, 1)` to f3 `(5, 3)`, g8 `(6, 8)` to f6 `(5, 6)`,
+f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
+
+- `canClaimDrawByFiftyMove()` is true when the count is at least 100 (both
+  players have completed 50 such moves) and the game is not over.
+- `canClaimDrawByFiftyMoveWith(from, to)` is true when that move would make
+  the count 100. The count after the move is read from a copy, so the board
+  does not change, as with `canClaimDrawByRepetitionWith`.
+- `isSeventyFiveMoveRule()` is true when the count is at least 150.
+- `endByFiftyMove()` ends the game as a draw claimed at 50 moves each.
+  `isOver()` and `isDrawnByFiftyMove()` are then true.
+- `endBySeventyFiveMove()` ends the game as a draw at 75 moves each.
+  `isOver()` and `isDrawnBySeventyFiveMove()` are then true.
+- A draw has no winner, so `winnerName()` and `winnerColor()` still throw.
+- 100 and 150 are named constants, not magic numbers (instructor Week 6).
+  `BoardController` checks checkmate before a seventy-five-move draw, so
+  `Game` only answers and records.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: half-move count | Interval at the edges 100 and 150 | 0 (a new game); 99; 100; 149; 150 |
+| Input: the move that changes the count | Cases | quiet knight (adds one; stands for castle); pawn e2 `(4, 2)` to e4 `(4, 4)`; capture a1 `(0, 1)` to a8 `(0, 8)`; pawn a2 `(0, 2)` to a8 `(0, 8)` then promote (reset) |
+| Input: the count a selected quiet move would reach | Interval at 100 | 99 then f6 to g8 (would be 100); 98 then f6 to g8 (would be 99); 99 then e2 to e4 (would reset) |
+| Input: the game's state | Cases | unstarted; started; drawn by the fifty-move rule; drawn by the seventy-five-move rule; over by checkmate |
+| Output: each answer | Boolean | true; false |
+| Output: signal for an unstarted game or a draw with no winner | Cases | `IllegalStateException` |
+
+- **TC-FIFTY-01 — A new game cannot claim a fifty-move draw** ( :x: )
+  - **Method(s) under test**: `start(String, String)`,
+    `canClaimDrawByFiftyMove()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, so the
+    count is 0.
+  - **Expected output**: Returns `false`.
+
+- **TC-FIFTY-02 — 99 quiet half-moves cannot be claimed** ( :x: )
+  - **Method(s) under test**: `canClaimDrawByFiftyMove()`
+  - **State of the system**: Started game after 24 quiet round trips, then
+    g1 to f3, g8 to f6, and f3 to g1, so the count is 99.
+  - **Expected output**: Returns `false`.
+
+- **TC-FIFTY-03 — 100 quiet half-moves can be claimed** ( :x: )
+  - **Method(s) under test**: `canClaimDrawByFiftyMove()`
+  - **State of the system**: Started game after 25 quiet round trips, so the
+    count is 100.
+  - **Expected output**: Returns `true`.
+
+- **TC-FIFTY-04 — 149 quiet half-moves can still be claimed** ( :x: )
+  - **Method(s) under test**: `canClaimDrawByFiftyMove()`
+  - **State of the system**: Started game after 37 quiet round trips, then
+    g1 to f3, so the count is 149.
+  - **Expected output**: Returns `true`.
+
+- **TC-FIFTY-05 — A pawn move after 100 resets the claim** ( :x: )
+  - **Method(s) under test**: `canClaimDrawByFiftyMove()`
+  - **State of the system**: As TC-FIFTY-03, then e2 to e4 and `passTurn()`.
+  - **Expected output**: Returns `false`.
+
+- **TC-FIFTY-06 — A capture after 100 resets the claim** ( :x: )
+  - **Method(s) under test**: `canClaimDrawByFiftyMove()`
+  - **State of the system**: As TC-FIFTY-03, then a1 to a8 and `passTurn()`.
+  - **Expected output**: Returns `false`.
+
+- **TC-FIFTY-07 — A pawn that promotes after 99 resets the claim** ( :x: )
+  - **Method(s) under test**: `canClaimDrawByFiftyMove()`
+  - **State of the system**: As TC-FIFTY-02, then a2 to a8, `promote(a8,
+    QUEEN)`, and `passTurn()`.
+  - **Expected output**: Returns `false`.
+
+- **TC-FIFTY-08 — A move that makes the count 100 can be claimed** ( :x: )
+  - **Method(s) under test**: `canClaimDrawByFiftyMoveWith(Location,
+    Location)`
+  - **State of the system**: As TC-FIFTY-02, so Black is to move; ask about
+    f6 to g8.
+  - **Expected output**: Returns `true`.
+
+- **TC-FIFTY-09 — A move that would make the count 99 cannot be claimed**
+  ( :x: )
+  - **Method(s) under test**: `canClaimDrawByFiftyMoveWith(Location,
+    Location)`
+  - **State of the system**: Started game after 24 quiet round trips, then
+    g1 to f3 and g8 to f6, so the count is 98 and Black is to move; ask
+    about f6 to g8.
+  - **Expected output**: Returns `false`.
+
+- **TC-FIFTY-10 — A pawn move that would reset cannot be claimed** ( :x: )
+  - **Method(s) under test**: `canClaimDrawByFiftyMoveWith(Location,
+    Location)`
+  - **State of the system**: As TC-FIFTY-02, so the count is 99; ask about
+    e2 to e4.
+  - **Expected output**: Returns `false`.
+
+- **TC-FIFTY-11 — 149 quiet half-moves are not the seventy-five-move rule**
+  ( :x: )
+  - **Method(s) under test**: `isSeventyFiveMoveRule()`
+  - **State of the system**: As TC-FIFTY-04, so the count is 149.
+  - **Expected output**: Returns `false`.
+
+- **TC-FIFTY-12 — 150 quiet half-moves are the seventy-five-move rule** ( :x: )
+  - **Method(s) under test**: `isSeventyFiveMoveRule()`
+  - **State of the system**: Started game after 37 quiet round trips, then
+    g1 to f3 and g8 to f6, so the count is 150.
+  - **Expected output**: Returns `true`.
+
+- **TC-FIFTY-13 — A started game is not drawn by the fifty-move rule** ( :x: )
+  - **Method(s) under test**: `start(String, String)`,
+    `isDrawnByFiftyMove()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `false`.
+
+- **TC-FIFTY-14 — A fifty-move claim ends the game as a draw** ( :x: )
+  - **Method(s) under test**: `endByFiftyMove()`, `isOver()`,
+    `isDrawnByFiftyMove()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByFiftyMove()`.
+  - **Expected output**: `isOver()` returns `true`; `isDrawnByFiftyMove()`
+    returns `true`.
+
+- **TC-FIFTY-15 — A seventy-five-move draw ends the game** ( :x: )
+  - **Method(s) under test**: `endBySeventyFiveMove()`, `isOver()`,
+    `isDrawnBySeventyFiveMove()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endBySeventyFiveMove()`.
+  - **Expected output**: `isOver()` returns `true`;
+    `isDrawnBySeventyFiveMove()` returns `true`.
+
+- **TC-FIFTY-16 — Checkmate is not a fifty-move draw** ( :x: )
+  - **Method(s) under test**: `endByCheckmate()`, `isDrawnByFiftyMove()`,
+    `isDrawnBySeventyFiveMove()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByCheckmate()`.
+  - **Expected output**: `isDrawnByFiftyMove()` returns `false`;
+    `isDrawnBySeventyFiveMove()` returns `false`.
+
+- **TC-FIFTY-17 — Reject ending by the fifty-move rule before a start** ( :x: )
+  - **Method(s) under test**: `endByFiftyMove()`
+  - **State of the system**: New game before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+- **TC-FIFTY-18 — Reject ending by the seventy-five-move rule before a start**
+  ( :x: )
+  - **Method(s) under test**: `endBySeventyFiveMove()`
+  - **State of the system**: New game before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+- **TC-FIFTY-19 — Reject reading the winner's name after a fifty-move draw**
+  ( :x: )
+  - **Method(s) under test**: `endByFiftyMove()`, `winnerName()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByFiftyMove()`.
+  - **Expected output**: Throws `IllegalStateException`.

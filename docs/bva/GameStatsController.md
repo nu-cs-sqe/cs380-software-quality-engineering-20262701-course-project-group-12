@@ -92,12 +92,14 @@ Step 1:
 Step 2/3:
 - game over -> Boolean: false, true
 - winner -> Cases: Player 1 / White, Player 2 / Black
-- result of a game that is over -> Cases: checkmate, draw by repetition (issue #59), resignation (issue #60)
+- result of a game that is over -> Cases: checkmate, draw by repetition (issue #59), resignation (issue #60), draw by the fifty-move rule (issue #51), draw by the seventy-five-move rule (issue #51)
 - output is:
   - `Current player: <name of the player to move>` while the game is not over
   - `Checkmate: <winner's name> (<winner's color>) wins` once the game is over by checkmate
   - `Draw by repetition` once the game is drawn by repetition
   - `Resignation: <winner's name> (<winner's color>) wins` once the other player has resigned
+  - `Draw by the fifty-move rule` once the game is drawn by the fifty-move rule
+  - `Draw by the seventy-five-move rule` once the game is drawn by the seventy-five-move rule
 
 - **TC9: refresh after the turn passes** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while `playerToMoveName()` was Ada. Then `playerToMoveName()` is Bo, the game is not over, and `refreshStatus()` runs.
@@ -170,3 +172,17 @@ TC10, TC11, and TC13 still hold: the game answers false for
 - **TC17: refresh after a draw by agreement** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isDrawnByAgreement()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by agreement`
+
+Issue #51 (GitHub US-18, docs US-19). After a fifty-move or seventy-five-move
+draw, the same line shows the result. A draw has no winner, so the line names
+no player. The queries are asked before `winnerName()`. The case numbers
+start at TC18, after agreement's TC17, so they do not collide with stalemate
+or dead position.
+
+- **TC18: refresh after a fifty-move draw** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByFiftyMove()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Draw by the fifty-move rule`
+
+- **TC19: refresh after a seventy-five-move draw** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByFiftyMove()` is false, `isDrawnBySeventyFiveMove()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Draw by the seventy-five-move rule`
