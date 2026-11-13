@@ -70,6 +70,7 @@ public class BoardTests {
     private static final Location H7 = new Location(7, 7);
     private static final Location H8 = new Location(7, 8);
     private static final int STARTING_PIECE_COUNT = 32;
+    private static final int TWO_KINGS = 2;
 
     @Test
     public void PieceAt_A1_ReturnsWhiteRook() {
@@ -505,6 +506,19 @@ public class BoardTests {
         boolean dead = board.isDeadPosition();
 
         assertTrue(dead);
+    }
+
+    @Test
+    public void IsDeadPosition_KingVsKing_LeavesTheBoardUnchanged() {
+        Board board = boardHoldingOnly(E1, E8);
+        Piece whiteKing = board.pieceAt(E1);
+        Piece blackKing = board.pieceAt(E8);
+
+        board.isDeadPosition();
+
+        assertSame(whiteKing, board.pieceAt(E1));
+        assertSame(blackKing, board.pieceAt(E8));
+        assertEquals(TWO_KINGS, countPieces(board));
     }
 
     @Test
