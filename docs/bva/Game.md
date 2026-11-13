@@ -598,7 +598,7 @@ case.
     `endByDeadPosition()`.
   - **Expected output**: Throws `IllegalStateException`.
 
-- **TC-DEAD-06 — Reject ending by dead position before a start** ( :x: )
+- **TC-DEAD-06 — Reject ending by dead position before a start** ( :white_check_mark: )
   - **Method(s) under test**: `endByDeadPosition()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.

@@ -519,6 +519,13 @@ public class GameTests {
         assertThrows(IllegalStateException.class, game::winnerColor);
     }
 
+    @Test
+    public void EndByDeadPosition_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::endByDeadPosition);
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");

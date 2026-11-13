@@ -83,6 +83,7 @@ public class Game {
     }
 
     public void endByDeadPosition() {
+        requireStartedTo("end the game");
         drawnByDeadPosition = true;
     }
 
