@@ -148,6 +148,6 @@ shows the result. A dead position has no winner, so the line names no player.
 reads the winner. The case number is TC16 so it does not collide with
 stalemate's TC15 on issue #49.
 
-- **TC16: refresh after a dead position** ( :x: )
+- **TC16: refresh after a dead position** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByDeadPosition()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by dead position`

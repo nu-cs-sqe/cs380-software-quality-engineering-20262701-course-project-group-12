@@ -47,6 +47,9 @@ public class GameStatsController {
         if (game.isDrawnByRepetition()) {
             return Messages.text("stats.drawByRepetition");
         }
+        if (game.isDrawnByDeadPosition()) {
+            return Messages.text("stats.drawByDeadPosition");
+        }
         return Messages.format(CHECKMATE_KEYS.get(game.winnerColor()), game.winnerName());
     }
 
