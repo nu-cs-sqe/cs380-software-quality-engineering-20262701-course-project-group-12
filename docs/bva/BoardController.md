@@ -27,6 +27,7 @@
 - `boolean isDrawOffered()` (issue #61): returns `game.isDrawOffered()`. The view shows the offer to the opponent, with Accept and Decline, only then.
 - `void acceptDrawOffer()` and `void declineDrawOffer()` (issue #61): pass the answer to `game.acceptDrawOffer()` and `game.declineDrawOffer()`. `Game` decides when an offer can be made, ends it after the opponent's move, and ends the game on an acceptance, so the controller only forwards. Once the game is drawn by agreement, `clickSquare` already refuses further moves through `game.isOver()` (US-21 AC 7).
 - `boolean canClaimDraw()`, after the game is over (issue #61): TC58 (issue #60) already returns false once `game.isOver()` is true, so after a draw by agreement a position that occurred three times cannot be claimed, and the window shows a draw by agreement, not a draw by repetition (US-21 AC 7).
+- `void clickSquare(Location square)`, the piece makes the move (issue #45 / US-12): when the board answers true for `isLegalMove` from the selected square to the clicked square, the controller calls the selected piece's `move(from, to, board)` instead of `board.move(from, to)`, so a castling king also moves its rook (`King.md`). A waiting move that the player declines to claim is made the same way. In every earlier case, "the board moves the piece" now means the selected piece's `move` is called with the controller's board.
 
 No method checks its arguments for null, and no case passes null: our code never passes null (instructor code review, Week 6). TC2, TC5, and TC8 used to pass a null board or location; they were removed with the board check.
 
@@ -162,6 +163,14 @@ A resignation can end the game while the position has occurred three times. Clai
 | Input: `offeringColor` | Cases | White (the same forwarding holds for Black) |
 | Output: `canOfferDraw()` and `isDrawOffered()` | Boolean | the game's answer |
 | Output: the game | Cases | `offerDraw` with the same color; `acceptDrawOffer`; `declineDrawOffer` |
+
+### `clickSquare(Location square)`, the piece makes the move (issue #45)
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: what the board answers for `isLegalMove` from the selected square to the clicked square | Boolean | true (a castle, e1 `(4, 1)` to g1 `(6, 1)`) |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
+| Output: who makes the move | Cases | the selected piece's `move` with the controller's board; never `board.move` directly |
 
 ## Step 4: Test cases (each-choice strategy)
 
@@ -316,3 +325,11 @@ The case numbers continue after the resignation cases (TC57 and TC58, issue #60)
 | TC63: a draw is offered | as TC62, but the game answers true | true | :white_check_mark: |
 | TC64: an acceptance is passed to the game | a controller for the mocked board and game; `acceptDrawOffer` | the game is asked to `acceptDrawOffer` | :white_check_mark: |
 | TC65: a decline is passed to the game | a controller for the mocked board and game; `declineDrawOffer` | the game is asked to `declineDrawOffer` | :white_check_mark: |
+
+### Method under test: `clickSquare(Location square)`, the piece makes the move (issue #45)
+
+The case number continues after the draw offer cases (TC59 to TC65, issue #61).
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC66: a castle is made by the selected king | a controller for the mocked board and game; White is to move; the board answers true for e1 `(4, 1)`, returns a mocked White king that does not promote on g1 `(6, 1)`, and answers true for `isLegalMove(e1, g1)`; click e1, then g1 | the king is asked once to `move` from e1 to g1 on the controller's board, so it can move its rook too; the board is not asked to `move` directly; the game passes the turn | :white_check_mark: |

@@ -250,6 +250,66 @@ public class PawnTests {
     }
 
     @Test
+    public void Attacks_EmptySquareDiagonallyForwardTowardHigherFile_ReturnsTrue() {
+        boolean attacks = whitePawn.attacks(E2, F3, board);
+
+        assertTrue(attacks);
+    }
+
+    @Test
+    public void Attacks_EmptySquareDiagonallyForwardTowardLowerFile_ReturnsTrue() {
+        boolean attacks = whitePawn.attacks(E2, D3, board);
+
+        assertTrue(attacks);
+    }
+
+    @Test
+    public void Attacks_BlackPawnDiagonallyForward_ReturnsTrue() {
+        boolean attacks = blackPawn.attacks(E7, D6, board);
+
+        assertTrue(attacks);
+    }
+
+    @Test
+    public void Attacks_SquareHoldingOpponent_ReturnsTrue() {
+        board.move(D7, D3);
+
+        boolean attacks = whitePawn.attacks(E2, D3, board);
+
+        assertTrue(attacks);
+    }
+
+    @Test
+    public void Attacks_SquareStraightAhead_ReturnsFalse() {
+        boolean attacks = whitePawn.attacks(E2, E3, board);
+
+        assertFalse(attacks);
+    }
+
+    @Test
+    public void Attacks_DiagonallyBackward_ReturnsFalse() {
+        board.move(E2, E4);
+
+        boolean attacks = whitePawn.attacks(E4, F3, board);
+
+        assertFalse(attacks);
+    }
+
+    @Test
+    public void Attacks_OneRankForwardTwoFilesOver_ReturnsFalse() {
+        boolean attacks = whitePawn.attacks(E2, G3, board);
+
+        assertFalse(attacks);
+    }
+
+    @Test
+    public void Attacks_TwoSquaresDiagonallyForward_ReturnsFalse() {
+        boolean attacks = whitePawn.attacks(E2, G4, board);
+
+        assertFalse(attacks);
+    }
+
+    @Test
     public void PromotesOn_WhitePawnOnRankEight_ReturnsTrue() {
         boolean promotes = whitePawn.promotesOn(A8);
 

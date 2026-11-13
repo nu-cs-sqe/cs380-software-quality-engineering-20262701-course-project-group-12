@@ -19,9 +19,43 @@ other destination.
 Squares use file `0` = a-file through file `7` = h-file, and rank `1`
 through `8`.
 
-Out of scope: whether the destination is attacked (US-11) and castling
-(US-12). A two-square destination is rejected as a normal king move.
-US-12 will decide when two squares along the rank is a castle.
+Out of scope: whether the destination of a one-square move is attacked
+(US-11). A two-square destination is rejected as a normal king move,
+unless it is a castle.
+
+## Castling (issue #45 / GitHub US-12)
+
+`canMove` also returns `true` for a castle: `to` is two squares along
+the rank from `from`, and all of these hold, where the rook square is
+the corner of that rank on the side of `to` (h-file for g1 or g8, a-file
+for c1 or c8):
+
+- `Board.holdsUnmovedPiece(from)`: the king has never moved. Only the
+  king placed on e1 or e8 at the start can be unmoved on its square.
+- `Board.holdsUnmovedPiece(rook square)`: that rook has never moved and
+  has not been captured.
+- The rook square holds a piece of the king's color. A pawn promoted on
+  the opponent's first rank is a new piece that has never moved, so an
+  unmoved piece on the corner is not enough by itself.
+- Every square between the king and that rook is empty.
+- `Board.isAttackedByOpponentOf` is false for the square the king stands
+  on, the square it crosses, and `to`. b1, b8, and the rook square may be
+  attacked.
+
+`attacks(Location from, Location target, Board board)` overrides
+`Piece.attacks`: a king attacks only the eight adjoining squares. A
+castle never captures, so it is not an attack.
+
+`move(Location from, Location to, Board board)` overrides `Piece.move`:
+the board moves the king, and when `to` is two squares along the rank it
+also moves that rook to the square the king crossed. `BoardController`
+calls it only after `canMove` allowed the move.
+
+Tests clear the squares between the king and a rook by moving those
+pieces straight up the board to rank 4 (White) or down to rank 5
+(Black). Opponent attackers are moved onto the square they attack from.
+Fifty-move counting (AC 8) is US-18; a castle is a king move and
+`Board` keeps no move count yet.
 
 ## Week 6 instructor review
 
@@ -114,6 +148,34 @@ US-12 will decide when two squares along the rank is a castle.
   starting board.
 - Adjacent opponent: e1 to e2 holding a black pawn.
 
+## Boundaries for castling (issue #45)
+
+- **Input: `from`, `to`**: each of the four castles is a case: white
+  kingside e1 to g1, white queenside e1 to c1, black kingside e8 to g8,
+  black queenside e8 to c8 (all-combination of 2 colors and 2 sides).
+  Not a castle: e1 to g3 `(6, 3)` (two files, not along the rank) and
+  e1 to b1 `(1, 1)` (three files along the rank).
+- **Input: history of the king**: never moved; moved to f1 and back.
+- **Input: history of the chosen rook**: never moved; moved and back;
+  gone (moved off its square). The other rook moved and back. An unmoved
+  opponent piece on the rook square (added after review found that a
+  promoted pawn counts as unmoved). Only promotion (US-13) puts one there,
+  so the case uses a partial EasyMock `Board` whose `holdsUnmovedPiece`
+  reports every piece as unmoved.
+- **Input: squares between the king and the rook**: a collection of 2
+  (kingside) or 3 (queenside) squares. All empty; the square next to the
+  rook occupied (b1, not on the king's path). The square next to the king
+  occupied is TC-KING-11.
+- **Input: attacked squares**: none; the king's square; the crossed
+  square; `to`; b1; the rook's square. Each is attacked by one black
+  knight or rook, so only that square is attacked.
+- **Output of `canMove`**: `true`; `false`.
+- **`attacks`**: an adjoining square, `true`; the castle square g1 with
+  a clear kingside, `false`.
+- **`move`**: the rook square for each of the four castles; a one-square
+  king move leaves the rook in place; the king's own square after a
+  castle (added after PIT showed that no case checked the king itself).
+
 ## Step 4: Test Cases
 
 ### Method under test: `canMove(Location from, Location to, Board board)`
@@ -196,6 +258,8 @@ US-12 will decide when two squares along the rank is a castle.
   - **Expected output**: `false`.
 
 - **TC-KING-11 — Reject two squares along the rank** ( :white_check_mark: )
+  - Since issue #45 this is also a castle refused because the f1 bishop
+    stands between the king and the h1 rook.
   - **Method(s) under test**: `canMove(Location, Location, Board)`
   - **State of the system**: White king on e1 `(4, 1)`. `to` is g1
     `(6, 1)`, two squares toward the h-file (castling distance). The
@@ -238,3 +302,136 @@ US-12 will decide when two squares along the rank is a castle.
     to e4 `(4, 4)` and `move` of the e7 pawn to e2, so e2 holds a black
     pawn.
   - **Expected output**: `true`.
+
+### Method under test: `canMove(Location from, Location to, Board board)`, castling (issue #45)
+
+- **TC-KING-17 — Castle white kingside** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king. `from` is e1 `(4, 1)`, `to` is g1 `(6, 1)`. New `Board` after `move` of f1 to f4 and g1 to g4, so f1 and g1 are empty.
+  - **Expected output**: `true`.
+
+- **TC-KING-18 — Castle white queenside** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king. `from` is e1, `to` is c1 `(2, 1)`. New `Board` after `move` of b1 to b4, c1 to c4, and d1 to d4, so b1, c1, and d1 are empty.
+  - **Expected output**: `true`.
+
+- **TC-KING-19 — Castle black kingside** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: Black king. `from` is e8 `(4, 8)`, `to` is g8 `(6, 8)`. New `Board` after `move` of f8 to f5 and g8 to g5.
+  - **Expected output**: `true`.
+
+- **TC-KING-20 — Castle black queenside** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: Black king. `from` is e8, `to` is c8 `(2, 8)`. New `Board` after `move` of b8 to b5, c8 to c5, and d8 to d5.
+  - **Expected output**: `true`.
+
+- **TC-KING-21 — Reject a castle by a king that moved and came back** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king, e1 to g1. Kingside cleared as in TC-KING-17, then `move` of the king e1 to f1 and f1 back to e1.
+  - **Expected output**: `false`.
+
+- **TC-KING-22 — Reject a castle with a rook that moved and came back** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king, e1 to g1. Kingside cleared, then `move` of the h1 rook to g1 and back to h1.
+  - **Expected output**: `false`.
+
+- **TC-KING-23 — Castle kingside after the queenside rook moved** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king, e1 to g1. Kingside cleared, then `move` of the a1 rook to a3 `(0, 3)` and back to a1.
+  - **Expected output**: `true`.
+
+- **TC-KING-24 — Reject a castle toward a rook that is gone** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king, e1 to g1. Kingside cleared, then `move` of the h1 rook to h3 `(7, 3)`, so h1 is empty.
+  - **Expected output**: `false`.
+
+- **TC-KING-25 — Reject a castle with a piece next to the rook** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king, e1 to c1. New `Board` after `move` of c1 to c4 and d1 to d4; the b1 knight stays between the king and the a1 rook.
+  - **Expected output**: `false`.
+
+- **TC-KING-26 — Reject a castle out of check** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king, e1 to g1. Kingside cleared, then `move` of the b8 knight to d3 `(3, 3)`, which attacks e1.
+  - **Expected output**: `false`.
+
+- **TC-KING-27 — Reject a castle through an attacked square** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king, e1 to g1. Kingside cleared, then `move` of the b8 knight to e3 `(4, 3)`, which attacks f1 but not e1 or g1.
+  - **Expected output**: `false`.
+
+- **TC-KING-28 — Reject a castle onto an attacked square** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king, e1 to g1. Kingside cleared, then `move` of the g8 knight to h3 `(7, 3)`, which attacks g1 but not e1 or f1.
+  - **Expected output**: `false`.
+
+- **TC-KING-29 — Castle queenside while b1 is attacked** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king, e1 to c1. Queenside cleared as in TC-KING-18, then `move` of the b8 knight to a3 `(0, 3)`, which attacks b1 only.
+  - **Expected output**: `true`.
+
+- **TC-KING-30 — Castle kingside while the rook is attacked** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king, e1 to g1. Kingside cleared, then `move` of the h2 pawn to a3 and the h7 pawn to a6 `(0, 6)`, so the h8 rook attacks h1 down the open h-file.
+  - **Expected output**: `true`.
+
+- **TC-KING-31 — Reject two files toward the rook that leave the rank** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king, e1 to g3 `(6, 3)`. Kingside cleared, so g3 is empty.
+  - **Expected output**: `false`.
+
+- **TC-KING-32 — Reject three files toward the queenside rook** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king, e1 to b1 `(1, 1)`. Queenside cleared, so b1 is empty.
+  - **Expected output**: `false`.
+
+- **TC-KING-41 — Reject a castle toward an unmoved opponent piece on the rook square** ( :white_check_mark: )
+  - **Method(s) under test**: `canMove(Location, Location, Board)`
+  - **State of the system**: White king, e1 to g1. Partial mock of a new `Board` whose `holdsUnmovedPiece` returns `true` for every square, as it does for a piece promoted onto h1. Kingside cleared, then `move` of the g8 knight to h1, which attacks none of e1, f1, and g1.
+  - **Expected output**: `false`.
+
+
+### Method under test: `attacks(Location from, Location target, Board board)` (issue #45)
+
+- **TC-KING-33 — Attack an adjoining square** ( :white_check_mark: )
+  - **Method(s) under test**: `attacks(Location, Location, Board)`
+  - **State of the system**: White king. `from` is e4 `(4, 4)`, `target` is e5 `(4, 5)`. New `Board` after `move` of the king from e1 to e4.
+  - **Expected output**: `true`.
+
+- **TC-KING-34 — Do not attack the castle square** ( :white_check_mark: )
+  - **Method(s) under test**: `attacks(Location, Location, Board)`
+  - **State of the system**: White king. `from` is e1, `target` is g1. Kingside cleared, so the king could castle there.
+  - **Expected output**: `false`.
+
+
+### Method under test: `move(Location from, Location to, Board board)` (issue #45)
+
+- **TC-KING-35 — Move the rook with a white kingside castle** ( :white_check_mark: )
+  - **Method(s) under test**: `move(Location, Location, Board)`
+  - **State of the system**: White king, e1 to g1. Kingside cleared.
+  - **Expected output**: the rook that was on h1 is on f1 `(5, 1)`.
+
+- **TC-KING-36 — Move the rook with a white queenside castle** ( :white_check_mark: )
+  - **Method(s) under test**: `move(Location, Location, Board)`
+  - **State of the system**: White king, e1 to c1. Queenside cleared.
+  - **Expected output**: the rook that was on a1 is on d1 `(3, 1)`.
+
+- **TC-KING-37 — Move the rook with a black kingside castle** ( :white_check_mark: )
+  - **Method(s) under test**: `move(Location, Location, Board)`
+  - **State of the system**: Black king, e8 to g8. Black kingside cleared as in TC-KING-19.
+  - **Expected output**: the rook that was on h8 is on f8 `(5, 8)`.
+
+- **TC-KING-38 — Move the rook with a black queenside castle** ( :white_check_mark: )
+  - **Method(s) under test**: `move(Location, Location, Board)`
+  - **State of the system**: Black king, e8 to c8. Black queenside cleared as in TC-KING-20.
+  - **Expected output**: the rook that was on a8 is on d8 `(3, 8)`.
+
+- **TC-KING-39 — Leave the rook in place on a one-square move** ( :white_check_mark: )
+  - **Method(s) under test**: `move(Location, Location, Board)`
+  - **State of the system**: White king, e1 to f1 `(5, 1)`. Kingside cleared.
+  - **Expected output**: the rook that was on h1 is still on h1.
+
+- **TC-KING-40 — Put the king on g1 with a white kingside castle** ( :white_check_mark: )
+  - **Method(s) under test**: `move(Location, Location, Board)`
+  - **State of the system**: White king, e1 to g1. Kingside cleared.
+  - **Expected output**: the king that was on e1 is on g1 `(6, 1)`.

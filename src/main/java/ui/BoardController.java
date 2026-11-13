@@ -138,7 +138,7 @@ public class BoardController {
     }
 
     private void makeMove(Piece movingPiece, Location from, Location to) {
-        board.move(from, to);
+        movingPiece.move(from, to, board);
         passTurnUnlessPromoting(movingPiece, to);
     }
 
