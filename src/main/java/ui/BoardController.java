@@ -49,6 +49,9 @@ public class BoardController {
     }
 
     public boolean canClaimDraw() {
+        if (game.isOver()) {
+            return false;
+        }
         return game.canClaimDrawByRepetition() || isDrawClaimWithMovePending();
     }
 
