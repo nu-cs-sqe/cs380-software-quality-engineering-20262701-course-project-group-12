@@ -4,6 +4,7 @@ import domain.Board;
 import domain.Game;
 import domain.Location;
 import domain.piece.Piece;
+import domain.piece.PieceColor;
 import domain.piece.PieceType;
 
 import java.util.Optional;
@@ -72,6 +73,10 @@ public class BoardController {
 
     public boolean canOfferDraw() {
         return game.canOfferDraw();
+    }
+
+    public void offerDraw(PieceColor offeringColor) {
+        game.offerDraw(offeringColor);
     }
 
     public void clickSquare(Location square) {

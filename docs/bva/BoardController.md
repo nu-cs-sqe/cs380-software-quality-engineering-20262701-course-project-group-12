@@ -290,7 +290,7 @@ The case numbers continue after the repetition cases (TC45 to TC56, issue #59).
 | --- | --- | --- | --- |
 | TC57: no draw can be offered | a controller for the mocked board and game; the game answers false for `canOfferDraw`; ask `canOfferDraw` | false | :white_check_mark: |
 | TC58: a draw can be offered | as TC57, but the game answers true | true | :white_check_mark: |
-| TC59: an offer is passed to the game | a controller for the mocked board and game; `offerDraw(WHITE)` | the game is asked to `offerDraw(WHITE)` | :x: |
+| TC59: an offer is passed to the game | a controller for the mocked board and game; `offerDraw(WHITE)` | the game is asked to `offerDraw(WHITE)` | :white_check_mark: |
 | TC60: no draw is offered | a controller for the mocked board and game; the game answers false for `isDrawOffered`; ask `isDrawOffered` | false | :x: |
 | TC61: a draw is offered | as TC60, but the game answers true | true | :x: |
 | TC62: an acceptance is passed to the game | a controller for the mocked board and game; `acceptDrawOffer` | the game is asked to `acceptDrawOffer` | :x: |

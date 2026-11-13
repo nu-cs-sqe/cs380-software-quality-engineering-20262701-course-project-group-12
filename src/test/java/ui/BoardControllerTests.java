@@ -663,6 +663,16 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void OfferDraw_White_AsksTheGameToOfferForWhite() {
+        game.offerDraw(PieceColor.WHITE);
+        BoardController controller = replayedController();
+
+        controller.offerDraw(PieceColor.WHITE);
+
+        verify(board, piece, game);
+    }
+
     private void expectMoveFromB1ToC3MakingThirdOccurrence() {
         expectPieceOnB1();
         expect(board.isLegalMove(B1, C3)).andReturn(true);
