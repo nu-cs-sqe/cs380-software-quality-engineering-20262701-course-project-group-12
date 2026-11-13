@@ -849,7 +849,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
   - **State of the system**: As TC-FIFTY-04, so the count is 149.
   - **Expected output**: Returns `false`.
 
-- **TC-FIFTY-12 — 150 quiet half-moves are the seventy-five-move rule** ( :x: )
+- **TC-FIFTY-12 — 150 quiet half-moves are the seventy-five-move rule** ( :white_check_mark: )
   - **Method(s) under test**: `isSeventyFiveMoveRule()`
   - **State of the system**: Started game after 37 quiet round trips, then
     g1 to f3 and g8 to f6, so the count is 150.

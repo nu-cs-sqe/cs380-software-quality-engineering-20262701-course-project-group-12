@@ -10,6 +10,7 @@ public class Game {
     private static final int THREEFOLD = 3;
     private static final int FIVEFOLD = 5;
     private static final int FIFTY_MOVE_HALF_MOVES = 100;
+    private static final int SEVENTY_FIVE_MOVE_HALF_MOVES = 150;
     private static final int ONE_MORE_OCCURRENCE = 1;
     private static final int MOVES_BY_BOTH_PLAYERS = 2;
 
@@ -91,7 +92,7 @@ public class Game {
     }
 
     public boolean isSeventyFiveMoveRule() {
-        return false;
+        return board.halfMoveCount() >= SEVENTY_FIVE_MOVE_HALF_MOVES;
     }
 
     public boolean canClaimDrawByRepetitionWith(Location from, Location to) {
