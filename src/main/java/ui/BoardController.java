@@ -80,7 +80,7 @@ public class BoardController {
     }
 
     public boolean isDrawOffered() {
-        return false;
+        return game.isDrawOffered();
     }
 
     public void clickSquare(Location square) {
