@@ -369,7 +369,7 @@ The case numbers start at TC105, after the positionAfterMove cases (TC103 to TC1
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC105: not in check, with legal moves | a new `Board`; ask about White | false | :x: |
+| TC105: not in check, with legal moves | a new `Board`; ask about White | false | :white_check_mark: |
 | TC106: in check with no reply | the Fool's mate position; ask about White | false | :x: |
 | TC107: in check with a reply that blocks the check | the queen check on Black; ask about Black | false | :x: |
 | TC108: not in check and no legal move | Sam Loyd's stalemate; ask about Black | true | :x: |
