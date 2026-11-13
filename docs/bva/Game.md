@@ -563,7 +563,7 @@ own endings. `BoardController` already refuses every click once `isOver()` is
 true, so further moves after a dead position are refused without a new click
 case.
 
-- **TC-DEAD-01 — A started game is not a dead-position draw** ( :x: )
+- **TC-DEAD-01 — A started game is not a dead-position draw** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `isDrawnByDeadPosition()`
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.

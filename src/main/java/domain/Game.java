@@ -81,6 +81,10 @@ public class Game {
         return drawnByRepetition;
     }
 
+    public boolean isDrawnByDeadPosition() {
+        return false;
+    }
+
     public boolean isFivefoldRepetition() {
         return occurrencesOf(currentPosition()) >= FIVEFOLD;
     }

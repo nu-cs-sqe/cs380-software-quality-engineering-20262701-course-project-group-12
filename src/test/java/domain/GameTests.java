@@ -469,6 +469,16 @@ public class GameTests {
         assertThrows(IllegalStateException.class, game::endByRepetition);
     }
 
+    @Test
+    public void IsDrawnByDeadPosition_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean drawn = game.isDrawnByDeadPosition();
+
+        assertFalse(drawn);
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");
