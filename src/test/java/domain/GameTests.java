@@ -1,6 +1,7 @@
 package domain;
 
 import domain.piece.PieceColor;
+import domain.piece.PieceType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameTests {
     private static final Location A1 = new Location(0, 1);
+    private static final Location A2 = new Location(0, 2);
     private static final Location A8 = new Location(0, 8);
     private static final Location B8 = new Location(1, 8);
     private static final Location C6 = new Location(2, 6);
@@ -835,6 +837,21 @@ public class GameTests {
     public void CanClaimDrawByFiftyMove_CaptureAfterOneHundred_ReturnsFalse() {
         Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES);
         playMove(game, A1, A8);
+
+        boolean canClaim = game.canClaimDrawByFiftyMove();
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByFiftyMove_PawnPromotesAfterNinetyNine_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_NINETY_NINE_HALF_MOVES);
+        playMove(game, G1, F3);
+        playMove(game, G8, F6);
+        playMove(game, F3, G1);
+        game.board().move(A2, A8);
+        game.board().promote(A8, PieceType.QUEEN);
+        game.passTurn();
 
         boolean canClaim = game.canClaimDrawByFiftyMove();
 

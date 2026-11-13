@@ -814,7 +814,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
   - **State of the system**: As TC-FIFTY-03, then a1 to a8 and `passTurn()`.
   - **Expected output**: Returns `false`.
 
-- **TC-FIFTY-07 — A pawn that promotes after 99 resets the claim** ( :x: )
+- **TC-FIFTY-07 — A pawn that promotes after 99 resets the claim** ( :white_check_mark: )
   - **Method(s) under test**: `canClaimDrawByFiftyMove()`
   - **State of the system**: As TC-FIFTY-02, then a2 to a8, `promote(a8,
     QUEEN)`, and `passTurn()`.
