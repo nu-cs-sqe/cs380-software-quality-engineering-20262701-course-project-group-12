@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameTests {
     private static final Location A1 = new Location(0, 1);
+    private static final Location A8 = new Location(0, 8);
     private static final Location B8 = new Location(1, 8);
     private static final Location C6 = new Location(2, 6);
     private static final Location D1 = new Location(3, 1);
@@ -824,6 +825,16 @@ public class GameTests {
     public void CanClaimDrawByFiftyMove_PawnMoveAfterOneHundred_ReturnsFalse() {
         Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES);
         playMove(game, E2, E4);
+
+        boolean canClaim = game.canClaimDrawByFiftyMove();
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByFiftyMove_CaptureAfterOneHundred_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES);
+        playMove(game, A1, A8);
 
         boolean canClaim = game.canClaimDrawByFiftyMove();
 

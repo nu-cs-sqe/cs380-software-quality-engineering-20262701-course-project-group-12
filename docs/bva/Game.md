@@ -809,7 +809,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
   - **State of the system**: As TC-FIFTY-03, then e2 to e4 and `passTurn()`.
   - **Expected output**: Returns `false`.
 
-- **TC-FIFTY-06 — A capture after 100 resets the claim** ( :x: )
+- **TC-FIFTY-06 — A capture after 100 resets the claim** ( :white_check_mark: )
   - **Method(s) under test**: `canClaimDrawByFiftyMove()`
   - **State of the system**: As TC-FIFTY-03, then a1 to a8 and `passTurn()`.
   - **Expected output**: Returns `false`.

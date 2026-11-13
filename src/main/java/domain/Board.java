@@ -94,13 +94,14 @@ public class Board {
 
     public void move(Location from, Location to) {
         Piece movingPiece = pieceAt(from);
+        final boolean isCapture = isOccupied(to);
         clear(from);
         removePawnCapturedEnPassant(movingPiece, from, to);
         place(movingPiece, to);
         pawnThatJustAdvancedTwoRanks = isPawnAdvancingTwoRanks(movingPiece, from, to)
                 ? Optional.of(to)
                 : Optional.empty();
-        if (isPawn(movingPiece)) {
+        if (isPawn(movingPiece) || isCapture) {
             halfMoveCount = 0;
         } else {
             halfMoveCount++;
