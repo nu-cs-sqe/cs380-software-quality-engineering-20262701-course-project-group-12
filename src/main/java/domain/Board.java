@@ -168,8 +168,17 @@ public class Board {
     public boolean isDeadPosition() {
         long pieces = occupiedSquares().count();
         return pieces == TWO_KINGS
-                || pieces == KING_AND_BISHOP_VS_KING
+                || isKingAndBishopVsKing(pieces)
                 || isTwoKingsAndTwoBishopsOnTheSameColor(pieces);
+    }
+
+    private boolean isKingAndBishopVsKing(long pieces) {
+        return pieces == KING_AND_BISHOP_VS_KING && remainingPieceIsNotQueen();
+    }
+
+    private boolean remainingPieceIsNotQueen() {
+        return occupiedSquares()
+                .noneMatch(square -> pieceAt(square).getType() == PieceType.QUEEN);
     }
 
     private boolean isTwoKingsAndTwoBishopsOnTheSameColor(long pieces) {

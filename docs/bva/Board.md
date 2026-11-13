@@ -394,7 +394,7 @@ Other dead positions, such as a blocked pawn wall, are outside this task.
 | TC114: bishops on the same color | the two kings, the white bishop on c1, and the black bishop on f8 remain | true | :white_check_mark: |
 | TC115: bishops on opposite colors | the two kings, the white bishop on c1, and the black bishop on c8 remain | false | :white_check_mark: |
 | TC116: king and two knights vs king | the two kings and both white knights on b1 and g1 remain | false | :white_check_mark: |
-| TC117: king and queen vs king | the two kings and the white queen on d1 remain | false | :x: |
+| TC117: king and queen vs king | the two kings and the white queen on d1 remain | false | :white_check_mark: |
 | TC118: king and rook vs king | the two kings and the white rook on a1 remain | false | :x: |
 | TC119: king and pawn vs king | the two kings and the white pawn on a2 remain | false | :x: |
 | TC120: the squares of the kings do not matter | only the white king on a1 and the black king on h8 remain | true | :x: |
