@@ -617,7 +617,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
   - **State of the system**: As TC-AGREE-05.
   - **Expected output**: `canOfferDraw()` returns `false`.
 
-- **TC-AGREE-08 — Reject offering a draw before a start** ( :x: )
+- **TC-AGREE-08 — Reject offering a draw before a start** ( :white_check_mark: )
   - **Method(s) under test**: `offerDraw(PieceColor)`
   - **State of the system**: New game before a successful `start`; then
     `offerDraw(WHITE)`.

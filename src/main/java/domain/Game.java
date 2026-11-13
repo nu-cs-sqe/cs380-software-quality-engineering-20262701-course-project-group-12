@@ -102,6 +102,7 @@ public class Game {
     }
 
     public void offerDraw(PieceColor offeringColor) {
+        requireStartedTo("offer a draw");
         if (canOfferDraw()) {
             drawOfferedBy = Optional.of(offeringColor);
         }
