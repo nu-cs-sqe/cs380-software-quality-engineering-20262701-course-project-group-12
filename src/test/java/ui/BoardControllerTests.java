@@ -705,6 +705,16 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void DeclineDrawOffer_OfferPending_AsksTheGameToDeclineIt() {
+        game.declineDrawOffer();
+        BoardController controller = replayedController();
+
+        controller.declineDrawOffer();
+
+        verify(board, piece, game);
+    }
+
     private void expectMoveFromB1ToC3MakingThirdOccurrence() {
         expectPieceOnB1();
         expect(board.isLegalMove(B1, C3)).andReturn(true);

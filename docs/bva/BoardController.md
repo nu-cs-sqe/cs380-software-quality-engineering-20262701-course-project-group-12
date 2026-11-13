@@ -294,5 +294,5 @@ The case numbers continue after the repetition cases (TC45 to TC56, issue #59).
 | TC60: no draw is offered | a controller for the mocked board and game; the game answers false for `isDrawOffered`; ask `isDrawOffered` | false | :white_check_mark: |
 | TC61: a draw is offered | as TC60, but the game answers true | true | :white_check_mark: |
 | TC62: an acceptance is passed to the game | a controller for the mocked board and game; `acceptDrawOffer` | the game is asked to `acceptDrawOffer` | :white_check_mark: |
-| TC63: a decline is passed to the game | a controller for the mocked board and game; `declineDrawOffer` | the game is asked to `declineDrawOffer` | :x: |
+| TC63: a decline is passed to the game | a controller for the mocked board and game; `declineDrawOffer` | the game is asked to `declineDrawOffer` | :white_check_mark: |
 | TC64: a draw cannot be claimed once the game is over | as TC45, but the game answers true for `isOver`, as after a draw by agreement; ask `canClaimDraw` | false | :x: |
