@@ -681,6 +681,17 @@ public class GameTests {
         assertTrue(game.isDrawOffered());
     }
 
+    @Test
+    public void IsDrawOffered_GameEndedByCheckmate_ReturnsFalse() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+        game.offerDraw(PieceColor.WHITE);
+        game.endByCheckmate();
+
+        boolean offered = game.isDrawOffered();
+
+        assertFalse(offered);
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

@@ -115,7 +115,7 @@ public class Game {
     }
 
     public boolean isDrawOffered() {
-        return drawOfferedBy.isPresent();
+        return drawOfferedBy.isPresent() && !isOver();
     }
 
     public void acceptDrawOffer() {

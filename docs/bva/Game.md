@@ -659,7 +659,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
     `offerDraw(WHITE)`, then `passTurn()` for White's move.
   - **Expected output**: Returns `true`.
 
-- **TC-AGREE-15 — An offer ends when the game ends another way** ( :x: )
+- **TC-AGREE-15 — An offer ends when the game ends another way** ( :white_check_mark: )
   - **Method(s) under test**: `endByCheckmate()`, `isDrawOffered()`
   - **State of the system**: As TC-AGREE-05, then `endByCheckmate()`.
   - **Expected output**: Returns `false`.
