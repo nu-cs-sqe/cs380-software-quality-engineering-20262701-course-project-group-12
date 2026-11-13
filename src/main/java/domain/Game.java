@@ -104,7 +104,7 @@ public class Game {
     }
 
     public boolean canOfferDraw() {
-        return movesMade >= MOVES_BY_BOTH_PLAYERS && !isDrawOffered();
+        return movesMade >= MOVES_BY_BOTH_PLAYERS && !isOver() && !isDrawOffered();
     }
 
     public void offerDraw(PieceColor offeringColor) {

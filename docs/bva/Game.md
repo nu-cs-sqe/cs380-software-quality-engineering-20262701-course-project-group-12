@@ -664,7 +664,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
   - **State of the system**: As TC-AGREE-05, then `endByCheckmate()`.
   - **Expected output**: Returns `false`.
 
-- **TC-AGREE-16 — A draw cannot be offered once the game is over** ( :x: )
+- **TC-AGREE-16 — A draw cannot be offered once the game is over** ( :white_check_mark: )
   - **Method(s) under test**: `endByRepetition()`, `canOfferDraw()`
   - **State of the system**: As TC-AGREE-03, then `endByRepetition()`.
   - **Expected output**: Returns `false`.
