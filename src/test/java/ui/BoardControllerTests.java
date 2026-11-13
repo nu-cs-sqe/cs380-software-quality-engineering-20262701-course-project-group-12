@@ -597,6 +597,20 @@ public class BoardControllerTests {
     }
 
     @Test
+    public void ClickSquare_CheckmateThatIsAlsoDeadPosition_EndsTheGameByCheckmate() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(true);
+        expect(board.isDeadPosition()).andStubReturn(true);
+        game.endByCheckmate();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
+    }
+
+    @Test
     public void ClickSquare_MoveMakingThirdOccurrence_WaitsForTheClaim() {
         expectMoveFromB1ToC3MakingThirdOccurrence();
         BoardController controller = controllerWithMoveWaitingForTheClaim();
