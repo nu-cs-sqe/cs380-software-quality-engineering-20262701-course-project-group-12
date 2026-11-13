@@ -20,6 +20,7 @@
 - `void claimDraw()` (issue #59): when `canClaimDraw()` is true, the game ends by repetition (`game.endByRepetition()`), and a waiting move is not made. Otherwise nothing happens.
 - `void clickSquare(Location square)`, repetition (issue #59): when the board answers true for `isLegalMove` from the selected square to the clicked square and `game.canClaimDrawByRepetitionWith(from, to)` is true, the board does not move yet. The move waits for the player to claim the draw or decline it (US-19 AC 4), and clicks do nothing while it waits. After a move passes the turn and is not checkmate, `game.isFivefoldRepetition()` ends the game by repetition with no claim (US-19 AC 6). Checkmate is checked first, so it still wins (US-19 AC 7).
 - `boolean isDrawClaimWithMovePending()` (issue #59): returns true while a move waits for the claim. `BoardView` uses it to ask the player whether to claim the draw.
+- `void resign(PieceColor resigningColor)` (issue #60 / GitHub US-20, docs US-20): passes the resignation to `game.resign(resigningColor)`. `Game` decides who wins and ignores a resignation after the game is over, so the controller only forwards it. Once the game is over, `clickSquare` already refuses further moves (US-20 AC 5), and `canClaimDraw` returns false, so a resignation cannot be turned into a draw (US-20 AC 4).
 - `void declineDrawClaim()` (issue #59): makes the waiting move as usual: the board moves the piece, the game passes the turn, and the checks for checkmate and fivefold repetition run.
 
 No method checks its arguments for null, and no case passes null: our code never passes null (instructor code review, Week 6). TC2, TC5, and TC8 used to pass a null board or location; they were removed with the board check.
@@ -131,6 +132,19 @@ The move cases start from TC22: White moves the piece on b1 `(1, 1)` to c3 `(2, 
 | Output: `canClaimDraw()` and `isDrawClaimWithMovePending()` | Boolean | true; false |
 | Output: the board | Cases | the piece moves from b1 to c3; unchanged |
 | Output: the game | Cases | `endByRepetition`; `passTurn`, then `endByRepetition`; `passTurn`, then `endByCheckmate`; `passTurn` only; unchanged |
+
+### `resign(PieceColor resigningColor)` and `canClaimDraw()` after the game is over
+
+`Game` is mocked with EasyMock, because the controller does not own the result. The Resign buttons are a view change after the cases.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: `resigningColor` | Cases | White (the same forwarding holds for Black) |
+| Input: whether the game is over when a draw could be claimed | Boolean | false; true, after a resignation |
+| Output: the game | Cases | `resign` with the same color |
+| Output: `canClaimDraw()` | Boolean | true; false, once the game is over |
+
+A resignation can end the game while the position has occurred three times. Claim Draw must then be refused, or the game would also end by repetition and the window would show a draw instead of the winner (US-20 AC 4). The case where the game is not over is TC45.
 
 ## Step 4: Test cases (each-choice strategy)
 
@@ -262,3 +276,12 @@ The case numbers start at TC45, after the cases that keep the king out of check 
 | TC54: claiming with a waiting move ends the game by repetition | as TC52; `claimDraw` | the game ends by repetition; the board does not move any piece | :white_check_mark: |
 | TC55: declining makes the waiting move | as TC52; `declineDrawClaim`, then ask `isDrawClaimWithMovePending` | false; the board moves the piece from b1 to c3; the game passes the turn | :white_check_mark: |
 | TC56: a click while a move waits does nothing | as TC52; click b1, then ask `isSelected` about b1 | false; the board is not asked about b1 | :white_check_mark: |
+
+### Method under test: `resign(PieceColor resigningColor)` and `canClaimDraw()` after the game is over
+
+The case number continues after the repetition cases (TC45 to TC56, issue #59).
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC57: a resignation is passed to the game | a controller for the mocked board and game; `resign(WHITE)` | the game is asked to `resign(WHITE)` | :white_check_mark: |
+| TC58: a draw cannot be claimed once the game is over | as TC45, but the game answers true for `isOver`; ask `canClaimDraw` | false | :white_check_mark: |

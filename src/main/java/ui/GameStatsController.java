@@ -9,6 +9,9 @@ public class GameStatsController {
     private static final Map<PieceColor, String> CHECKMATE_KEYS = Map.of(
             PieceColor.WHITE, "stats.checkmate.white",
             PieceColor.BLACK, "stats.checkmate.black");
+    private static final Map<PieceColor, String> RESIGNATION_KEYS = Map.of(
+            PieceColor.WHITE, "stats.resignation.white",
+            PieceColor.BLACK, "stats.resignation.black");
 
     private final Game game;
     private GameStatsView view;
@@ -47,7 +50,14 @@ public class GameStatsController {
         if (game.isDrawnByRepetition()) {
             return Messages.text("stats.drawByRepetition");
         }
-        return Messages.format(CHECKMATE_KEYS.get(game.winnerColor()), game.winnerName());
+        if (game.isWonByResignation()) {
+            return winnerLine(RESIGNATION_KEYS);
+        }
+        return winnerLine(CHECKMATE_KEYS);
+    }
+
+    private String winnerLine(Map<PieceColor, String> keysByWinnerColor) {
+        return Messages.format(keysByWinnerColor.get(game.winnerColor()), game.winnerName());
     }
 
     private String currentPlayerLine() {

@@ -535,3 +535,76 @@ starting position has occurred n + 1 times.
   - **Method(s) under test**: `endByRepetition()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
+
+### Methods under test: `resign(PieceColor resigningColor)` and `isWonByResignation()`
+
+Issue #60 (GitHub US-20, docs US-20). Either player may resign while the game
+is in progress, not only on their own turn, so `resign` takes the color of the
+player who resigns. The player of the other color wins, and the game ends at
+once: `isOver()` is true, and `winnerName()` and `winnerColor()` name the
+winner, as after checkmate. `isWonByResignation()` lets `GameStatsController`
+show that the game ended by resignation.
+
+When the game is already over, by checkmate or by a draw, the resignation is
+ignored (US-20 alternate flow 1.a): nothing changes and nothing is thrown. A
+dead position (US-17, issue #50) ends the game as a draw, so once that story
+ends the game, the same rule refuses a resignation in a dead position (US-20
+AC 3). No argument is ever null: callers pass `PieceColor.WHITE` or
+`PieceColor.BLACK`.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: `resigningColor` | Cases | White; Black |
+| Input: the player to move when the player resigns | Cases | the resigning player (White resigns at the start); the other player (Black resigns at the start) |
+| Input: the game's state | Cases | unstarted; in progress; over by checkmate; over by a draw by repetition |
+| Output: the winner's name and color | Cases | Player 2, Black, when White resigns; Player 1, White, when Black resigns; unchanged, when the game was already over |
+| Output: `isOver()` and `isWonByResignation()` | Boolean | true; false |
+| Output: signal for an unstarted game | Cases | `IllegalStateException` |
+
+- **TC-RES-01 — Player 2 wins when White resigns** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `resign(PieceColor)`,
+    `winnerName()`, `winnerColor()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, so White
+    is to move, then `resign(WHITE)`.
+  - **Expected output**: `winnerName()` returns `Bob`; `winnerColor()`
+    returns `BLACK`.
+
+- **TC-RES-02 — Player 1 wins when Black resigns on White's turn** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `resign(PieceColor)`,
+    `winnerName()`, `winnerColor()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, so White
+    is to move, then `resign(BLACK)`.
+  - **Expected output**: `winnerName()` returns `Alice`; `winnerColor()`
+    returns `WHITE`.
+
+- **TC-RES-03 — A resignation ends the game** ( :white_check_mark: )
+  - **Method(s) under test**: `resign(PieceColor)`, `isOver()`,
+    `isWonByResignation()`
+  - **State of the system**: As TC-RES-01.
+  - **Expected output**: `isOver()` returns `true`; `isWonByResignation()`
+    returns `true`.
+
+- **TC-RES-04 — A started game is not won by resignation** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `isWonByResignation()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `false`.
+
+- **TC-RES-05 — A resignation after checkmate is ignored** ( :white_check_mark: )
+  - **Method(s) under test**: `endByCheckmate()`, `resign(PieceColor)`,
+    `winnerName()`, `isWonByResignation()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByCheckmate()`, so Bob wins, then `resign(BLACK)`.
+  - **Expected output**: `winnerName()` still returns `Bob`;
+    `isWonByResignation()` returns `false`.
+
+- **TC-RES-06 — A resignation after a draw by repetition is ignored** ( :white_check_mark: )
+  - **Method(s) under test**: `endByRepetition()`, `resign(PieceColor)`,
+    `isWonByResignation()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByRepetition()`, then `resign(WHITE)`.
+  - **Expected output**: `isWonByResignation()` returns `false`.
+
+- **TC-RES-07 — Reject resigning before a start** ( :white_check_mark: )
+  - **Method(s) under test**: `resign(PieceColor)`
+  - **State of the system**: New game before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.

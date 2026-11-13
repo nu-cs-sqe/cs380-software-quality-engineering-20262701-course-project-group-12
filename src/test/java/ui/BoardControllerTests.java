@@ -641,6 +641,28 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void Resign_White_AsksTheGameToResignWhite() {
+        game.resign(PieceColor.WHITE);
+        BoardController controller = replayedController();
+
+        controller.resign(PieceColor.WHITE);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void CanClaimDraw_GameOver_ReturnsFalse() {
+        expect(game.isOver()).andReturn(true);
+        expect(game.canClaimDrawByRepetition()).andStubReturn(true);
+        BoardController controller = replayedController();
+
+        boolean canClaim = controller.canClaimDraw();
+
+        assertFalse(canClaim);
+        verify(board, piece, game);
+    }
+
     private void expectMoveFromB1ToC3MakingThirdOccurrence() {
         expectPieceOnB1();
         expect(board.isLegalMove(B1, C3)).andReturn(true);

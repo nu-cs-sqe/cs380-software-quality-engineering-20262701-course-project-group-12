@@ -19,6 +19,7 @@ public class Game {
     private Board board;
     private Optional<Player> winner = Optional.empty();
     private boolean drawnByRepetition;
+    private boolean wonByResignation;
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -91,6 +92,26 @@ public class Game {
 
     private long occurrencesOf(Position position) {
         return positions.stream().filter(position::isSameAs).count();
+    }
+
+    public void resign(PieceColor resigningColor) {
+        requireStartedTo("resign");
+        if (isOver()) {
+            return;
+        }
+        winner = Optional.of(playerOtherThan(resigningColor));
+        wonByResignation = true;
+    }
+
+    private Player playerOtherThan(PieceColor color) {
+        if (playerOne.getColor() == color) {
+            return playerTwo;
+        }
+        return playerOne;
+    }
+
+    public boolean isWonByResignation() {
+        return wonByResignation;
     }
 
     public boolean isOver() {
