@@ -673,6 +673,17 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void IsDrawOffered_NoOfferPending_ReturnsFalse() {
+        expect(game.isDrawOffered()).andStubReturn(false);
+        BoardController controller = replayedController();
+
+        boolean offered = controller.isDrawOffered();
+
+        assertFalse(offered);
+        verify(board, piece, game);
+    }
+
     private void expectMoveFromB1ToC3MakingThirdOccurrence() {
         expectPieceOnB1();
         expect(board.isLegalMove(B1, C3)).andReturn(true);

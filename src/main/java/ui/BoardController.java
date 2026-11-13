@@ -79,6 +79,10 @@ public class BoardController {
         game.offerDraw(offeringColor);
     }
 
+    public boolean isDrawOffered() {
+        return false;
+    }
+
     public void clickSquare(Location square) {
         if (game.isOver() || isPromotionPending() || isDrawClaimWithMovePending()) {
             return;
