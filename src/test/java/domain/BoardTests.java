@@ -404,6 +404,15 @@ public class BoardTests {
     }
 
     @Test
+    public void IsDeadPosition_NewBoard_ReturnsFalse() {
+        Board board = new Board();
+
+        boolean dead = board.isDeadPosition();
+
+        assertFalse(dead);
+    }
+
+    @Test
     public void IsInCheck_NewBoard_ReturnsFalse() {
         Board board = new Board();
 

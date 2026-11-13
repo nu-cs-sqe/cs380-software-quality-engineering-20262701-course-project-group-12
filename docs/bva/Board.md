@@ -387,7 +387,7 @@ Other dead positions, such as a blocked pawn wall, are outside this task.
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC110: a starting position is not dead | a new `Board` | false | :x: |
+| TC110: a starting position is not dead | a new `Board` | false | :white_check_mark: |
 | TC111: king vs king | only the white king on e1 and the black king on e8 remain | true | :x: |
 | TC112: king and bishop vs king | the two kings and the white bishop on c1 remain | true | :x: |
 | TC113: king and knight vs king | the two kings and the white knight on b1 remain | true | :x: |

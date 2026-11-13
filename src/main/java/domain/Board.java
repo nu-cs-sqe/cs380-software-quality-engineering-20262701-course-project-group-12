@@ -160,6 +160,10 @@ public class Board {
         return isInCheck(color) && !hasLegalMove(color);
     }
 
+    public boolean isDeadPosition() {
+        return false;
+    }
+
     private boolean hasLegalMove(PieceColor color) {
         return occupiedSquares()
                 .filter(from -> pieceAt(from).getColor() == color)
