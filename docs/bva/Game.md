@@ -576,7 +576,7 @@ case.
   - **Expected output**: `isOver()` returns `true`; `isDrawnByDeadPosition()`
     returns `true`.
 
-- **TC-DEAD-03 — Checkmate is not a dead-position draw** ( :x: )
+- **TC-DEAD-03 — Checkmate is not a dead-position draw** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `endByCheckmate()`,
     `isDrawnByDeadPosition()`, `isOver()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then

@@ -490,6 +490,17 @@ public class GameTests {
         assertTrue(game.isDrawnByDeadPosition());
     }
 
+    @Test
+    public void EndByCheckmate_StartedGame_IsNotDeadPosition() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByCheckmate();
+
+        assertTrue(game.isOver());
+        assertFalse(game.isDrawnByDeadPosition());
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");
