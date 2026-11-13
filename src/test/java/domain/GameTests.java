@@ -400,6 +400,15 @@ public class GameTests {
     }
 
     @Test
+    public void WinnerColor_AfterStalemate_ThrowsIllegalStateException() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByStalemate();
+
+        assertThrows(IllegalStateException.class, game::winnerColor);
+    }
+
+    @Test
     public void CanClaimDrawByRepetition_NewGame_ReturnsFalse() {
         Game game = new Game();
         game.start("Alice", "Bob");

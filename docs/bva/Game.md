@@ -423,7 +423,7 @@ without a new click case.
     `endByStalemate()`.
   - **Expected output**: Throws `IllegalStateException`.
 
-- **TC-END-12 — Reject reading the winner's color after a stalemate** ( :x: )
+- **TC-END-12 — Reject reading the winner's color after a stalemate** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `endByStalemate()`,
     `winnerColor()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then
