@@ -100,7 +100,11 @@ public class Board {
         pawnThatJustAdvancedTwoRanks = isPawnAdvancingTwoRanks(movingPiece, from, to)
                 ? Optional.of(to)
                 : Optional.empty();
-        halfMoveCount++;
+        if (isPawn(movingPiece)) {
+            halfMoveCount = 0;
+        } else {
+            halfMoveCount++;
+        }
     }
 
     int halfMoveCount() {

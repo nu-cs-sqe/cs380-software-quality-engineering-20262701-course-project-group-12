@@ -820,6 +820,16 @@ public class GameTests {
         assertTrue(canClaim);
     }
 
+    @Test
+    public void CanClaimDrawByFiftyMove_PawnMoveAfterOneHundred_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES);
+        playMove(game, E2, E4);
+
+        boolean canClaim = game.canClaimDrawByFiftyMove();
+
+        assertFalse(canClaim);
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");
