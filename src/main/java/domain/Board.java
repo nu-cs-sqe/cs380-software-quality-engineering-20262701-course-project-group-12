@@ -173,12 +173,16 @@ public class Board {
     }
 
     private boolean isKingAndBishopVsKing(long pieces) {
-        return pieces == KING_AND_BISHOP_VS_KING && remainingPieceIsNotQueen();
+        return pieces == KING_AND_BISHOP_VS_KING && remainingPieceIsNotQueenOrRook();
     }
 
-    private boolean remainingPieceIsNotQueen() {
+    private boolean remainingPieceIsNotQueenOrRook() {
         return occupiedSquares()
-                .noneMatch(square -> pieceAt(square).getType() == PieceType.QUEEN);
+                .noneMatch(square -> isQueenOrRook(pieceAt(square).getType()));
+    }
+
+    private boolean isQueenOrRook(PieceType type) {
+        return type == PieceType.QUEEN || type == PieceType.ROOK;
     }
 
     private boolean isTwoKingsAndTwoBishopsOnTheSameColor(long pieces) {
