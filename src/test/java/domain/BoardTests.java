@@ -434,6 +434,15 @@ public class BoardTests {
     }
 
     @Test
+    public void IsDeadPosition_KingAndKnightVsKing_ReturnsTrue() {
+        Board board = boardHoldingOnly(E1, E8, B1);
+
+        boolean dead = board.isDeadPosition();
+
+        assertTrue(dead);
+    }
+
+    @Test
     public void IsInCheck_NewBoard_ReturnsFalse() {
         Board board = new Board();
 

@@ -390,7 +390,7 @@ Other dead positions, such as a blocked pawn wall, are outside this task.
 | TC110: a starting position is not dead | a new `Board` | false | :white_check_mark: |
 | TC111: king vs king | only the white king on e1 and the black king on e8 remain | true | :white_check_mark: |
 | TC112: king and bishop vs king | the two kings and the white bishop on c1 remain | true | :white_check_mark: |
-| TC113: king and knight vs king | the two kings and the white knight on b1 remain | true | :x: |
+| TC113: king and knight vs king | the two kings and the white knight on b1 remain | true | :white_check_mark: |
 | TC114: bishops on the same color | the two kings, the white bishop on c1, and the black bishop on f8 remain | true | :x: |
 | TC115: bishops on opposite colors | the two kings, the white bishop on c1, and the black bishop on c8 remain | false | :x: |
 | TC116: king and two knights vs king | the two kings and both white knights on b1 and g1 remain | false | :x: |
