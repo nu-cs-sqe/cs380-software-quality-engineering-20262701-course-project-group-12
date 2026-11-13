@@ -30,6 +30,7 @@ public class Board {
     private static final int BLACK_PAWN_RANK = 7;
     private static final int BLACK_BACK_RANK = Location.MAX_RANK;
     private static final int TWO_RANKS = 2;
+    private static final int ADJACENT_FILE_DISTANCE = 1;
     private static final List<Function<PieceColor, Piece>> BACK_RANK_PIECE_MAKERS = List.of(
             Rook::new,
             Knight::new,
@@ -59,6 +60,7 @@ public class Board {
     private Board(Board original) {
         allSquares().forEach(square ->
                 rankOf(square).set(square.getFile(), original.occupantOf(square)));
+        pawnThatJustAdvancedTwoRanks = original.pawnThatJustAdvancedTwoRanks;
     }
 
     private static List<List<Optional<Piece>>> emptySquares() {
@@ -140,7 +142,8 @@ public class Board {
         return occupiedSquares()
                 .filter(square -> isKingOf(color, pieceAt(square)))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalStateException(
+                        "Cannot look for check: the board has no " + color + " king"));
     }
 
     private boolean isKingOf(PieceColor color, Piece piece) {
@@ -158,18 +161,49 @@ public class Board {
     }
 
     public boolean isCheckmated(PieceColor color) {
-        return isInCheck(color) && !hasMoveOutOfCheck(color);
+        return isInCheck(color) && !hasLegalMove(color);
     }
 
-    private boolean hasMoveOutOfCheck(PieceColor color) {
+    private boolean hasLegalMove(PieceColor color) {
         return occupiedSquares()
                 .filter(from -> pieceAt(from).getColor() == color)
-                .anyMatch(from -> hasMoveOutOfCheckFrom(from, color));
+                .anyMatch(this::hasLegalMoveFrom);
     }
 
-    private boolean hasMoveOutOfCheckFrom(Location from, PieceColor color) {
-        return allSquares().anyMatch(to -> pieceAt(from).canMove(from, to, this)
-                && !boardAfterMove(from, to).isInCheck(color));
+    private boolean hasLegalMoveFrom(Location from) {
+        return allSquares().anyMatch(to -> isLegalMove(from, to));
+    }
+
+    public boolean isLegalMove(Location from, Location to) {
+        Piece movingPiece = pieceAt(from);
+        return movingPiece.canMove(from, to, this)
+                && !boardAfterMove(from, to).isInCheck(movingPiece.getColor());
+    }
+
+    public Position position(PieceColor colorToMove) {
+        return new Position(colorToMove,
+                allSquares().map(this::occupantOf).collect(Collectors.toUnmodifiableList()),
+                isEnPassantCaptureAvailableTo(colorToMove));
+    }
+
+    public Position positionAfterMove(Location from, Location to, PieceColor colorToMove) {
+        return boardAfterMove(from, to).position(colorToMove);
+    }
+
+    private boolean isEnPassantCaptureAvailableTo(PieceColor color) {
+        return pawnThatJustAdvancedTwoRanks
+                .filter(square -> hasPieceOfColorBeside(color, square))
+                .isPresent();
+    }
+
+    private boolean hasPieceOfColorBeside(PieceColor color, Location square) {
+        return occupiedSquares().anyMatch(other ->
+                isBeside(other, square) && pieceAt(other).getColor() == color);
+    }
+
+    private static boolean isBeside(Location square, Location other) {
+        return square.getRank() == other.getRank()
+                && square.fileDistanceTo(other) == ADJACENT_FILE_DISTANCE;
     }
 
     private Board boardAfterMove(Location from, Location to) {

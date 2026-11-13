@@ -80,8 +80,6 @@ public class BoardControllerTests {
     private static final Location A7 = new Location(0, 7);
     private static final Location A8 = new Location(0, Location.MAX_RANK);
     private static final Piece BLACK_PAWN = new Piece(PieceType.PAWN, PieceColor.BLACK);
-    private static final Piece BLACK_KING = new Piece(PieceType.KING, PieceColor.BLACK);
-    private static final Piece BLACK_KNIGHT = new Piece(PieceType.KNIGHT, PieceColor.BLACK);
 
     private Board board;
     private Game game;
@@ -94,6 +92,9 @@ public class BoardControllerTests {
         piece = mock(Piece.class);
         expect(game.isOver()).andStubReturn(false);
         expect(board.isCheckmated(anyObject(PieceColor.class))).andStubReturn(false);
+        expect(game.isFivefoldRepetition()).andStubReturn(false);
+        expect(game.canClaimDrawByRepetitionWith(
+                anyObject(Location.class), anyObject(Location.class))).andStubReturn(false);
     }
 
     @Test
@@ -136,8 +137,7 @@ public class BoardControllerTests {
     @Test
     public void ClickSquare_PieceThenSquareItCanReach_MovesPiece() {
         expectPieceOnB1();
-        expect(piece.canMove(B1, C3, board)).andReturn(true);
-        expect(board.isOccupied(C3)).andReturn(false);
+        expect(board.isLegalMove(B1, C3)).andReturn(true);
         piece.move(B1, C3, board);
         expect(piece.promotesOn(C3)).andReturn(false);
         game.passTurn();
@@ -152,8 +152,7 @@ public class BoardControllerTests {
     @Test
     public void ClickSquare_LegalMove_PassesTheTurn() {
         expectPieceOnB1();
-        expect(piece.canMove(B1, C3, board)).andReturn(true);
-        expect(board.isOccupied(C3)).andReturn(false);
+        expect(board.isLegalMove(B1, C3)).andReturn(true);
         piece.move(B1, C3, board);
         expect(piece.promotesOn(C3)).andReturn(false);
         game.passTurn();
@@ -167,8 +166,8 @@ public class BoardControllerTests {
 
     @Test
     public void ClickSquare_PieceThenSquareItCannotReach_LeavesBoardUnchanged() {
-        expectPieceOnB1();
-        expect(piece.canMove(B1, B3, board)).andReturn(false);
+        expectSelectableWhitePiece(B1);
+        expect(board.isLegalMove(B1, B3)).andReturn(false);
         expect(board.isOccupied(B3)).andReturn(false);
         BoardController controller = replayedController();
 
@@ -176,6 +175,19 @@ public class BoardControllerTests {
         controller.clickSquare(B3);
 
         verify(board, piece);
+    }
+
+    @Test
+    public void ClickSquare_MoveTheBoardRefuses_LeavesBoardUnchanged() {
+        expectSelectableWhitePiece(B1);
+        expect(board.isLegalMove(B1, C3)).andReturn(false);
+        expect(board.isOccupied(C3)).andReturn(false);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
     }
 
     @Test
@@ -193,8 +205,7 @@ public class BoardControllerTests {
     @Test
     public void ClickSquare_AfterMove_SelectsNothing() {
         expectPieceOnB1();
-        expect(piece.canMove(B1, C3, board)).andReturn(true);
-        expect(board.isOccupied(C3)).andReturn(false);
+        expect(board.isLegalMove(B1, C3)).andReturn(true);
         piece.move(B1, C3, board);
         expect(piece.promotesOn(C3)).andReturn(false);
         game.passTurn();
@@ -210,8 +221,8 @@ public class BoardControllerTests {
 
     @Test
     public void ClickSquare_RefusedMoveOntoEmptySquare_KeepsSelection() {
-        expectPieceOnB1();
-        expect(piece.canMove(B1, B3, board)).andReturn(false);
+        expectSelectableWhitePiece(B1);
+        expect(board.isLegalMove(B1, B3)).andReturn(false);
         expect(board.isOccupied(B3)).andReturn(false);
         BoardController controller = replayedController();
         controller.clickSquare(B1);
@@ -224,8 +235,8 @@ public class BoardControllerTests {
 
     @Test
     public void ClickSquare_RefusedMoveOntoEmptySquare_DoesNotPassTheTurn() {
-        expectPieceOnB1();
-        expect(piece.canMove(B1, B3, board)).andReturn(false);
+        expectSelectableWhitePiece(B1);
+        expect(board.isLegalMove(B1, B3)).andReturn(false);
         expect(board.isOccupied(B3)).andReturn(false);
         BoardController controller = replayedController();
 
@@ -237,8 +248,8 @@ public class BoardControllerTests {
 
     @Test
     public void ClickSquare_PieceTheSelectedOneCannotReach_SelectsThatPiece() {
-        expectPieceOnB1();
-        expect(piece.canMove(B1, D2, board)).andReturn(false);
+        expectSelectableWhitePiece(B1);
+        expect(board.isLegalMove(B1, D2)).andReturn(false);
         expectSelectableWhitePiece(D2);
         BoardController controller = replayedController();
         controller.clickSquare(B1);
@@ -252,7 +263,7 @@ public class BoardControllerTests {
     @Test
     public void ClickSquare_OpponentPieceTheSelectedOneCanReach_CapturesIt() {
         expectPieceOnB1();
-        expect(piece.canMove(B1, C3, board)).andReturn(true);
+        expect(board.isLegalMove(B1, C3)).andReturn(true);
         givenOnC3(BLACK_PAWN);
         piece.move(B1, C3, board);
         expect(piece.promotesOn(C3)).andReturn(false);
@@ -262,33 +273,6 @@ public class BoardControllerTests {
         controller.clickSquare(B1);
         controller.clickSquare(C3);
 
-        verify(board, piece, game);
-    }
-
-    @Test
-    public void ClickSquare_KingTheSelectedPieceCanReach_LeavesBoardUnchanged() {
-        expectPieceOnB1();
-        expect(piece.canMove(B1, C3, board)).andReturn(true);
-        givenOnC3(BLACK_KING);
-        BoardController controller = replayedController();
-
-        controller.clickSquare(B1);
-        controller.clickSquare(C3);
-
-        verify(board, piece, game);
-    }
-
-    @Test
-    public void ClickSquare_RefusedKingCapture_KeepsSelection() {
-        expectPieceOnB1();
-        expect(piece.canMove(B1, C3, board)).andReturn(true);
-        givenOnC3(BLACK_KING);
-        BoardController controller = replayedController();
-        controller.clickSquare(B1);
-
-        controller.clickSquare(C3);
-
-        assertTrue(controller.isSelected(B1));
         verify(board, piece, game);
     }
 
@@ -348,8 +332,8 @@ public class BoardControllerTests {
 
     @Test
     public void ClickSquare_UnreachableOpponent_KeepsSelection() {
-        expectPieceOnB1();
-        expect(piece.canMove(B1, B8, board)).andReturn(false);
+        expectSelectableWhitePiece(B1);
+        expect(board.isLegalMove(B1, B8)).andReturn(false);
         Piece opponent = mock(Piece.class);
         expect(board.isOccupied(B8)).andReturn(true);
         expect(board.pieceAt(B8)).andReturn(opponent);
@@ -381,8 +365,7 @@ public class BoardControllerTests {
     @Test
     public void ClickSquare_MoveThatIsNotPromotion_LeavesNothingPending() {
         expectPieceOnB1();
-        expect(piece.canMove(B1, C3, board)).andReturn(true);
-        expect(board.isOccupied(C3)).andReturn(false);
+        expect(board.isLegalMove(B1, C3)).andReturn(true);
         piece.move(B1, C3, board);
         expect(piece.promotesOn(C3)).andReturn(false);
         game.passTurn();
@@ -431,6 +414,20 @@ public class BoardControllerTests {
     }
 
     @Test
+    public void ClickSquare_RefusedMoveOntoLastRank_LeavesNothingPending() {
+        expectSelectableWhitePiece(A7);
+        expect(board.isLegalMove(A7, A8)).andReturn(false);
+        expect(board.isOccupied(A8)).andReturn(false);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(A7);
+        controller.clickSquare(A8);
+
+        assertFalse(controller.isPromotionPending());
+        verify(board, piece, game);
+    }
+
+    @Test
     public void ClickSquare_GameOver_SelectsNothing() {
         expect(game.isOver()).andReturn(true);
         BoardController controller = replayedController();
@@ -445,9 +442,7 @@ public class BoardControllerTests {
     public void ClickSquare_CaptureOntoLastRank_LeavesPromotionPending() {
         expectSelectableWhitePiece(A7);
         expect(board.pieceAt(A7)).andReturn(piece);
-        expect(piece.canMove(A7, B8, board)).andReturn(true);
-        expect(board.isOccupied(B8)).andReturn(true);
-        expect(board.pieceAt(B8)).andReturn(BLACK_KNIGHT);
+        expect(board.isLegalMove(A7, B8)).andReturn(true);
         piece.move(A7, B8, board);
         expect(piece.promotesOn(B8)).andReturn(true);
         BoardController controller = replayedController();
@@ -504,14 +499,266 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void CanClaimDraw_PlayerToMoveCanClaimRepetition_ReturnsTrue() {
+        expect(game.canClaimDrawByRepetition()).andReturn(true);
+        BoardController controller = replayedController();
+
+        boolean canClaim = controller.canClaimDraw();
+
+        assertTrue(canClaim);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void CanClaimDraw_PlayerToMoveCannotClaimAndNoMoveWaits_ReturnsFalse() {
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        BoardController controller = replayedController();
+
+        boolean canClaim = controller.canClaimDraw();
+
+        assertFalse(canClaim);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClaimDraw_ClaimIsCorrect_EndsTheGameByRepetition() {
+        expect(game.canClaimDrawByRepetition()).andStubReturn(true);
+        game.endByRepetition();
+        BoardController controller = replayedController();
+
+        controller.claimDraw();
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClaimDraw_ClaimIsIncorrect_DoesNotEndTheGame() {
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        BoardController controller = replayedController();
+
+        controller.claimDraw();
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_MoveMakingFivefoldRepetition_EndsTheGameByRepetition() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(false);
+        expect(game.isFivefoldRepetition()).andReturn(true);
+        game.endByRepetition();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_MoveNotMakingFivefoldRepetition_DoesNotEndTheGame() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(false);
+        expect(game.isFivefoldRepetition()).andReturn(false);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_CheckmateThatIsAlsoFivefoldRepetition_EndsTheGameByCheckmate() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(true);
+        expect(game.isFivefoldRepetition()).andStubReturn(true);
+        game.endByCheckmate();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_MoveMakingThirdOccurrence_WaitsForTheClaim() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        boolean waiting = controller.isDrawClaimWithMovePending();
+
+        assertTrue(waiting);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void CanClaimDraw_MoveWaitsForTheClaim_ReturnsTrue() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        boolean canClaim = controller.canClaimDraw();
+
+        assertTrue(canClaim);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClaimDraw_MoveWaitsForTheClaim_EndsTheGameByRepetition() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        game.endByRepetition();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        controller.claimDraw();
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void DeclineDrawClaim_MoveWaitsForTheClaim_MakesTheMove() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        piece.move(B1, C3, board);
+        expect(piece.promotesOn(C3)).andReturn(false);
+        game.passTurn();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        controller.declineDrawClaim();
+
+        assertFalse(controller.isDrawClaimWithMovePending());
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_WhileMoveWaitsForTheClaim_DoesNothing() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        controller.clickSquare(B1);
+
+        assertFalse(controller.isSelected(B1));
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void Resign_White_AsksTheGameToResignWhite() {
+        game.resign(PieceColor.WHITE);
+        BoardController controller = replayedController();
+
+        controller.resign(PieceColor.WHITE);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void CanOfferDraw_GameRefusesAnOffer_ReturnsFalse() {
+        expect(game.canOfferDraw()).andStubReturn(false);
+        BoardController controller = replayedController();
+
+        boolean canOffer = controller.canOfferDraw();
+
+        assertFalse(canOffer);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void CanOfferDraw_GameAllowsAnOffer_ReturnsTrue() {
+        expect(game.canOfferDraw()).andReturn(true);
+        BoardController controller = replayedController();
+
+        boolean canOffer = controller.canOfferDraw();
+
+        assertTrue(canOffer);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void OfferDraw_White_AsksTheGameToOfferForWhite() {
+        game.offerDraw(PieceColor.WHITE);
+        BoardController controller = replayedController();
+
+        controller.offerDraw(PieceColor.WHITE);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void IsDrawOffered_NoOfferPending_ReturnsFalse() {
+        expect(game.isDrawOffered()).andStubReturn(false);
+        BoardController controller = replayedController();
+
+        boolean offered = controller.isDrawOffered();
+
+        assertFalse(offered);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void IsDrawOffered_OfferPending_ReturnsTrue() {
+        expect(game.isDrawOffered()).andReturn(true);
+        BoardController controller = replayedController();
+
+        boolean offered = controller.isDrawOffered();
+
+        assertTrue(offered);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void AcceptDrawOffer_OfferPending_AsksTheGameToAcceptIt() {
+        game.acceptDrawOffer();
+        BoardController controller = replayedController();
+
+        controller.acceptDrawOffer();
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void DeclineDrawOffer_OfferPending_AsksTheGameToDeclineIt() {
+        game.declineDrawOffer();
+        BoardController controller = replayedController();
+
+        controller.declineDrawOffer();
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void CanClaimDraw_GameOver_ReturnsFalse() {
+        expect(game.isOver()).andReturn(true);
+        expect(game.canClaimDrawByRepetition()).andStubReturn(true);
+        BoardController controller = replayedController();
+
+        boolean canClaim = controller.canClaimDraw();
+
+        assertFalse(canClaim);
+        verify(board, piece, game);
+    }
+
+    private void expectMoveFromB1ToC3MakingThirdOccurrence() {
+        expectPieceOnB1();
+        expect(board.isLegalMove(B1, C3)).andReturn(true);
+        expect(game.canClaimDrawByRepetitionWith(B1, C3)).andReturn(true);
+    }
+
+    private BoardController controllerWithMoveWaitingForTheClaim() {
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+        return controller;
+    }
+
     private void expectWhiteMoveFromB1ToC3ThenBlackToMove() {
         expect(board.isOccupied(B1)).andReturn(true);
         expect(board.pieceAt(B1)).andReturn(piece);
         expect(piece.getColor()).andReturn(PieceColor.WHITE);
         expect(game.colorToMove()).andReturn(PieceColor.WHITE);
         expect(board.pieceAt(B1)).andReturn(piece);
-        expect(piece.canMove(B1, C3, board)).andReturn(true);
-        expect(board.isOccupied(C3)).andReturn(false);
+        expect(board.isLegalMove(B1, C3)).andReturn(true);
         piece.move(B1, C3, board);
         expect(piece.promotesOn(C3)).andReturn(false);
         game.passTurn();
@@ -544,11 +791,47 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void ChoosePromotion_PromotionThatCheckmates_EndsTheGame() {
+        expectWhitePromotionToQueenOnA8ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(true);
+        game.endByCheckmate();
+        BoardController controller = controllerWithPromotionPendingOnA8();
+
+        controller.choosePromotion(PieceType.QUEEN);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ChoosePromotion_PromotionThatDoesNotCheckmate_DoesNotEndTheGame() {
+        expectWhitePromotionToQueenOnA8ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(false);
+        BoardController controller = controllerWithPromotionPendingOnA8();
+
+        controller.choosePromotion(PieceType.QUEEN);
+
+        verify(board, piece, game);
+    }
+
     private BoardController controllerWithPromotionPendingOnA8() {
         BoardController controller = replayedController();
         controller.clickSquare(A7);
         controller.clickSquare(A8);
         return controller;
+    }
+
+    private void expectWhitePromotionToQueenOnA8ThenBlackToMove() {
+        expect(board.isOccupied(A7)).andReturn(true);
+        expect(board.pieceAt(A7)).andReturn(piece).times(2);
+        expect(piece.getColor()).andReturn(PieceColor.WHITE);
+        expect(game.colorToMove()).andReturn(PieceColor.WHITE);
+        expect(board.isLegalMove(A7, A8)).andReturn(true);
+        piece.move(A7, A8, board);
+        expect(piece.promotesOn(A8)).andReturn(true);
+        board.promote(A8, PieceType.QUEEN);
+        game.passTurn();
+        expect(game.colorToMove()).andReturn(PieceColor.BLACK);
     }
 
     private void expectQueenPromotionOnA8() {
@@ -564,8 +847,7 @@ public class BoardControllerTests {
     private void expectPawnMoveFromA7ToA8() {
         expectSelectableWhitePiece(A7);
         expect(board.pieceAt(A7)).andReturn(piece);
-        expect(piece.canMove(A7, A8, board)).andReturn(true);
-        expect(board.isOccupied(A8)).andReturn(false);
+        expect(board.isLegalMove(A7, A8)).andReturn(true);
         piece.move(A7, A8, board);
         expect(piece.promotesOn(A8)).andReturn(true);
     }
@@ -574,8 +856,7 @@ public class BoardControllerTests {
     public void ClickSquare_KingThenCastleSquare_KingMakesTheMove() {
         expectSelectableWhitePiece(E1);
         expect(board.pieceAt(E1)).andReturn(piece);
-        expect(piece.canMove(E1, G1, board)).andReturn(true);
-        expect(board.isOccupied(G1)).andReturn(false);
+        expect(board.isLegalMove(E1, G1)).andReturn(true);
         piece.move(E1, G1, board);
         expect(piece.promotesOn(G1)).andReturn(false);
         game.passTurn();

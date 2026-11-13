@@ -92,9 +92,12 @@ Step 1:
 Step 2/3:
 - game over -> Boolean: false, true
 - winner -> Cases: Player 1 / White, Player 2 / Black
+- result of a game that is over -> Cases: checkmate, draw by repetition (issue #59), resignation (issue #60)
 - output is:
   - `Current player: <name of the player to move>` while the game is not over
-  - `Checkmate: <winner's name> (<winner's color>) wins` once the game is over
+  - `Checkmate: <winner's name> (<winner's color>) wins` once the game is over by checkmate
+  - `Draw by repetition` once the game is drawn by repetition
+  - `Resignation: <winner's name> (<winner's color>) wins` once the other player has resigned
 
 - **TC9: refresh after the turn passes** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while `playerToMoveName()` was Ada. Then `playerToMoveName()` is Bo, the game is not over, and `refreshStatus()` runs.
@@ -107,3 +110,63 @@ Step 2/3:
 - **TC11: refresh after Player 1 checkmates Player 2** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `winnerName()` is Ada, `winnerColor()` is `WHITE`, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Checkmate: Ada (White) wins`
+
+Issue #44 (GitHub US-11 AC 6). While the game is not over and the player to
+move is in check, the status line says so next to the player's name. A
+checkmated player is also in check, but the checkmate line wins, so the check
+is only asked about while the game is not over.
+
+Step 1:
+- input (added): whether the player to move is in check (`isPlayerToMoveInCheck()`)
+
+Step 2/3:
+- in check -> Boolean: false, true
+- output (added): `Current player: <name of the player to move> (in check)`
+  while the game is not over and the player to move is in check
+
+TC9 still holds: the player to move is not in check, so the line is unchanged.
+
+- **TC12: refresh while the player to move is in check** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then `playerToMoveName()` is Bo, the game is not over, `isPlayerToMoveInCheck()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Current player: Bo (in check)`
+
+- **TC13: refresh after checkmate shows the result, not the check** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isPlayerToMoveInCheck()` is true, `winnerName()` is Bo, `winnerColor()` is `BLACK`, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Checkmate: Bo (Black) wins`
+
+Issue #59 (GitHub US-19, docs US-18). After a draw by repetition, the same line
+shows the result instead of the player to move (US-19 AC 8). A draw has no
+winner, so the line names no player.
+
+- **TC14: refresh after a draw by repetition** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Draw by repetition`
+
+Issue #60 (GitHub US-20, docs US-20). After a resignation, the same line shows
+the opponent's name and color as the winner by resignation (US-20 AC 4).
+
+- **TC15: refresh after Player 1 resigns** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isWonByResignation()` is true, `winnerName()` is Bo, `winnerColor()` is `BLACK`, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Resignation: Bo (Black) wins`
+
+- **TC16: refresh after Player 2 resigns** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isWonByResignation()` is true, `winnerName()` is Ada, `winnerColor()` is `WHITE`, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Resignation: Ada (White) wins`
+
+Issue #61 (GitHub US-21, docs US-21). After the opponent accepts a draw offer,
+the same line shows a draw by agreement instead of the player to move (US-21
+AC 7). A draw has no winner, so the line names no player.
+
+Step 1:
+- input (added): whether the game is drawn by agreement (`isDrawnByAgreement()`)
+
+Step 2/3:
+- result of a game that is over -> Cases (added): draw by agreement
+- output (added): `Draw by agreement` once the game is drawn by agreement
+
+TC10, TC11, and TC13 still hold: the game answers false for
+`isDrawnByAgreement()`, so a checkmate still shows the winner.
+
+- **TC17: refresh after a draw by agreement** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isDrawnByAgreement()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Draw by agreement`

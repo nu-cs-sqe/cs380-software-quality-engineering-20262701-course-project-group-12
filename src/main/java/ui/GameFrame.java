@@ -5,6 +5,7 @@ import domain.Game;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class GameFrame extends JFrame {
     public GameFrame(Game game) {
@@ -12,15 +13,33 @@ public class GameFrame extends JFrame {
     }
 
     private GameFrame(Game game, GameStatsController stats) {
+        this(stats, new BoardController(game.board(), game));
+    }
+
+    private GameFrame(GameStatsController stats, BoardController boardController) {
+        this(stats, boardController, new DrawClaimView(boardController, stats::refreshStatus));
+    }
+
+    private GameFrame(
+            GameStatsController stats, BoardController boardController, DrawClaimView drawClaim) {
         this(
                 stats.createView(),
-                new BoardView(
-                        new BoardController(game.board(), game),
-                        stats::refreshStatus));
+                new BoardView(boardController, statusRefresh(stats, drawClaim)));
+        JPanel endGameControls = new JPanel();
+        endGameControls.add(drawClaim);
+        endGameControls.add(new ResignView(boardController, statusRefresh(stats, drawClaim)));
+        getContentPane().add(endGameControls, BorderLayout.SOUTH);
         setTitle(Messages.text("game.window.title"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
+    }
+
+    private static Runnable statusRefresh(GameStatsController stats, DrawClaimView drawClaim) {
+        return () -> {
+            stats.refreshStatus();
+            drawClaim.refresh();
+        };
     }
 
     public GameFrame(GameStatsView statsView, BoardView boardView) {

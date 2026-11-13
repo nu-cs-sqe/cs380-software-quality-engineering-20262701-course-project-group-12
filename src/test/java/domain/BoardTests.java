@@ -383,6 +383,28 @@ public class BoardTests {
     }
 
     @Test
+    public void PositionAfterMove_KnightToF3_MatchesTheBoardAfterThatMove() {
+        Board board = new Board();
+        Board movedBoard = new Board();
+        movedBoard.move(G1, F3);
+
+        Position position = board.positionAfterMove(G1, F3, PieceColor.BLACK);
+
+        assertTrue(position.isSameAs(movedBoard.position(PieceColor.BLACK)));
+    }
+
+    @Test
+    public void PositionAfterMove_KnightToF3_LeavesTheBoardUnchanged() {
+        Board board = new Board();
+        Piece whiteKnight = board.pieceAt(G1);
+
+        board.positionAfterMove(G1, F3, PieceColor.BLACK);
+
+        assertSame(whiteKnight, board.pieceAt(G1));
+        assertFalse(board.isOccupied(F3));
+    }
+
+    @Test
     public void IsInCheck_NewBoard_ReturnsFalse() {
         Board board = new Board();
 
@@ -416,6 +438,14 @@ public class BoardTests {
         boolean inCheck = board.isInCheck(PieceColor.BLACK);
 
         assertTrue(inCheck);
+    }
+
+    @Test
+    public void IsInCheck_NoKingOfThatColor_ThrowsIllegalStateException() {
+        Board board = new Board();
+        board.move(D8, E1);
+
+        assertThrows(IllegalStateException.class, () -> board.isInCheck(PieceColor.WHITE));
     }
 
     @Test

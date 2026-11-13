@@ -11,6 +11,29 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameTests {
     private static final Location A1 = new Location(0, 1);
+    private static final Location B8 = new Location(1, 8);
+    private static final Location C6 = new Location(2, 6);
+    private static final Location D1 = new Location(3, 1);
+    private static final Location D8 = new Location(3, 8);
+    private static final Location E2 = new Location(4, 2);
+    private static final Location E4 = new Location(4, 4);
+    private static final Location E5 = new Location(4, 5);
+    private static final Location E7 = new Location(4, 7);
+    private static final Location F2 = new Location(5, 2);
+    private static final Location F3 = new Location(5, 3);
+    private static final Location F6 = new Location(5, 6);
+    private static final Location F7 = new Location(5, 7);
+    private static final Location G1 = new Location(6, 1);
+    private static final Location G2 = new Location(6, 2);
+    private static final Location G4 = new Location(6, 4);
+    private static final Location G8 = new Location(6, 8);
+    private static final Location H4 = new Location(7, 4);
+    private static final Location H5 = new Location(7, 5);
+    private static final int ROUND_TRIPS_FOR_SECOND_OCCURRENCE = 1;
+    private static final int ROUND_TRIPS_FOR_THIRD_OCCURRENCE = 2;
+    private static final int ROUND_TRIPS_FOR_FOURTH_OCCURRENCE = 3;
+    private static final int ROUND_TRIPS_FOR_FIFTH_OCCURRENCE = 4;
+    private static final int MOVES_BY_BOTH_PLAYERS = 2;
 
     @Test
     public void IsStarted_NewGame_ReturnsFalse() {
@@ -334,5 +357,430 @@ public class GameTests {
         Game game = new Game();
 
         assertThrows(IllegalStateException.class, game::endByCheckmate);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetition_NewGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean canClaim = game.canClaimDrawByRepetition();
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetition_PositionSeenTwice_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_SECOND_OCCURRENCE);
+
+        boolean canClaim = game.canClaimDrawByRepetition();
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetition_PositionSeenThreeTimes_ReturnsTrue() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_THIRD_OCCURRENCE);
+
+        boolean canClaim = game.canClaimDrawByRepetition();
+
+        assertTrue(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetition_NewPositionAfterRepetition_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_THIRD_OCCURRENCE);
+        playMove(game, E2, E4);
+
+        boolean canClaim = game.canClaimDrawByRepetition();
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetitionWith_MoveMakingThirdOccurrence_ReturnsTrue() {
+        Game game = gameBeforeLastMoveOfRoundTrip(ROUND_TRIPS_FOR_THIRD_OCCURRENCE);
+
+        boolean canClaim = game.canClaimDrawByRepetitionWith(F6, G8);
+
+        assertTrue(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetitionWith_MoveMakingSecondOccurrence_ReturnsFalse() {
+        Game game = gameBeforeLastMoveOfRoundTrip(ROUND_TRIPS_FOR_SECOND_OCCURRENCE);
+
+        boolean canClaim = game.canClaimDrawByRepetitionWith(F6, G8);
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByRepetitionWith_MoveToNewPosition_ReturnsFalse() {
+        Game game = gameBeforeLastMoveOfRoundTrip(ROUND_TRIPS_FOR_THIRD_OCCURRENCE);
+
+        boolean canClaim = game.canClaimDrawByRepetitionWith(B8, C6);
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void IsFivefoldRepetition_PositionSeenFourTimes_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_FOURTH_OCCURRENCE);
+
+        boolean fivefold = game.isFivefoldRepetition();
+
+        assertFalse(fivefold);
+    }
+
+    @Test
+    public void IsFivefoldRepetition_PositionSeenFiveTimes_ReturnsTrue() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_FIFTH_OCCURRENCE);
+
+        boolean fivefold = game.isFivefoldRepetition();
+
+        assertTrue(fivefold);
+    }
+
+    @Test
+    public void IsDrawnByRepetition_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean drawn = game.isDrawnByRepetition();
+
+        assertFalse(drawn);
+    }
+
+    @Test
+    public void EndByRepetition_StartedGame_DrawsTheGame() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByRepetition();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isDrawnByRepetition());
+    }
+
+    @Test
+    public void EndByRepetition_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::endByRepetition);
+    }
+
+    @Test
+    public void Resign_WhiteResigns_MakesPlayerTwoTheWinner() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.resign(PieceColor.WHITE);
+
+        assertEquals("Bob", game.winnerName());
+        assertEquals(PieceColor.BLACK, game.winnerColor());
+    }
+
+    @Test
+    public void Resign_BlackResignsOnWhitesTurn_MakesPlayerOneTheWinner() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.resign(PieceColor.BLACK);
+
+        assertEquals("Alice", game.winnerName());
+        assertEquals(PieceColor.WHITE, game.winnerColor());
+    }
+
+    @Test
+    public void Resign_StartedGame_EndsTheGameByResignation() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.resign(PieceColor.WHITE);
+
+        assertTrue(game.isOver());
+        assertTrue(game.isWonByResignation());
+    }
+
+    @Test
+    public void Resign_AfterCheckmate_KeepsTheCheckmateWinner() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByCheckmate();
+
+        game.resign(PieceColor.BLACK);
+
+        assertEquals("Bob", game.winnerName());
+        assertFalse(game.isWonByResignation());
+    }
+
+    @Test
+    public void Resign_AfterDrawByRepetition_IsIgnored() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByRepetition();
+
+        game.resign(PieceColor.WHITE);
+
+        assertFalse(game.isWonByResignation());
+    }
+
+    @Test
+    public void Resign_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, () -> game.resign(PieceColor.WHITE));
+    }
+
+    @Test
+    public void IsWonByResignation_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean wonByResignation = game.isWonByResignation();
+
+        assertFalse(wonByResignation);
+    }
+
+    private static Game gameAfterKnightRoundTrips(int roundTrips) {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        for (int roundTrip = 0; roundTrip < roundTrips; roundTrip++) {
+            playMove(game, G1, F3);
+            playMove(game, G8, F6);
+            playMove(game, F3, G1);
+            playMove(game, F6, G8);
+        }
+        return game;
+    }
+
+    private static Game gameBeforeLastMoveOfRoundTrip(int roundTrips) {
+        Game game = gameAfterKnightRoundTrips(roundTrips - 1);
+        playMove(game, G1, F3);
+        playMove(game, G8, F6);
+        playMove(game, F3, G1);
+        return game;
+    }
+
+    private static void playMove(Game game, Location from, Location to) {
+        game.board().move(from, to);
+        game.passTurn();
+    }
+
+    @Test
+    public void IsPlayerToMoveInCheck_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean inCheck = game.isPlayerToMoveInCheck();
+
+        assertFalse(inCheck);
+    }
+
+    @Test
+    public void IsPlayerToMoveInCheck_WhiteToMoveInCheck_ReturnsTrue() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        playFoolsMate(game);
+
+        boolean inCheck = game.isPlayerToMoveInCheck();
+
+        assertTrue(inCheck);
+    }
+
+    @Test
+    public void IsPlayerToMoveInCheck_BlackToMoveInCheck_ReturnsTrue() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        playQueenCheckOnBlack(game);
+
+        boolean inCheck = game.isPlayerToMoveInCheck();
+
+        assertTrue(inCheck);
+    }
+
+    @Test
+    public void IsPlayerToMoveInCheck_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::isPlayerToMoveInCheck);
+    }
+
+    private void playFoolsMate(Game game) {
+        playMove(game, F2, F3);
+        playMove(game, E7, E5);
+        playMove(game, G2, G4);
+        playMove(game, D8, H4);
+    }
+
+    private void playQueenCheckOnBlack(Game game) {
+        playMove(game, E2, E4);
+        playMove(game, F7, F6);
+        playMove(game, D1, H5);
+    }
+
+    @Test
+    public void CanOfferDraw_NewGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean canOffer = game.canOfferDraw();
+
+        assertFalse(canOffer);
+    }
+
+    @Test
+    public void CanOfferDraw_AfterOneMove_ReturnsFalse() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS - 1);
+
+        boolean canOffer = game.canOfferDraw();
+
+        assertFalse(canOffer);
+    }
+
+    @Test
+    public void CanOfferDraw_AfterBothPlayersMoved_ReturnsTrue() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+
+        boolean canOffer = game.canOfferDraw();
+
+        assertTrue(canOffer);
+    }
+
+    @Test
+    public void IsDrawOffered_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean offered = game.isDrawOffered();
+
+        assertFalse(offered);
+    }
+
+    @Test
+    public void OfferDraw_AfterBothPlayersMoved_MakesTheOfferPending() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+
+        game.offerDraw(PieceColor.WHITE);
+
+        assertTrue(game.isDrawOffered());
+    }
+
+    @Test
+    public void OfferDraw_AfterOneMove_IsRefused() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS - 1);
+
+        game.offerDraw(PieceColor.BLACK);
+
+        assertFalse(game.isDrawOffered());
+    }
+
+    @Test
+    public void CanOfferDraw_OfferPending_ReturnsFalse() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+        game.offerDraw(PieceColor.WHITE);
+
+        boolean canOffer = game.canOfferDraw();
+
+        assertFalse(canOffer);
+    }
+
+    @Test
+    public void OfferDraw_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, () -> game.offerDraw(PieceColor.WHITE));
+    }
+
+    @Test
+    public void IsDrawnByAgreement_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean drawn = game.isDrawnByAgreement();
+
+        assertFalse(drawn);
+    }
+
+    @Test
+    public void AcceptDrawOffer_OfferPending_DrawsTheGame() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+        game.offerDraw(PieceColor.WHITE);
+
+        game.acceptDrawOffer();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isDrawnByAgreement());
+    }
+
+    @Test
+    public void AcceptDrawOffer_NoOffer_DoesNothing() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+
+        game.acceptDrawOffer();
+
+        assertFalse(game.isOver());
+    }
+
+    @Test
+    public void DeclineDrawOffer_OfferPending_EndsTheOffer() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+        game.offerDraw(PieceColor.WHITE);
+
+        game.declineDrawOffer();
+
+        assertFalse(game.isDrawOffered());
+        assertFalse(game.isOver());
+    }
+
+    @Test
+    public void PassTurn_OpponentOfTheOfferingPlayerMoves_EndsTheOffer() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+        game.offerDraw(PieceColor.BLACK);
+
+        game.passTurn();
+
+        assertFalse(game.isDrawOffered());
+    }
+
+    @Test
+    public void PassTurn_OfferingPlayerMoves_KeepsTheOffer() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+        game.offerDraw(PieceColor.WHITE);
+
+        game.passTurn();
+
+        assertTrue(game.isDrawOffered());
+    }
+
+    @Test
+    public void IsDrawOffered_GameEndedByCheckmate_ReturnsFalse() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+        game.offerDraw(PieceColor.WHITE);
+        game.endByCheckmate();
+
+        boolean offered = game.isDrawOffered();
+
+        assertFalse(offered);
+    }
+
+    @Test
+    public void CanOfferDraw_GameOver_ReturnsFalse() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+        game.endByRepetition();
+
+        boolean canOffer = game.canOfferDraw();
+
+        assertFalse(canOffer);
+    }
+
+    private static Game gameAfterMoves(int moves) {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        for (int move = 0; move < moves; move++) {
+            game.passTurn();
+        }
+        return game;
     }
 }
