@@ -584,7 +584,7 @@ case.
   - **Expected output**: `isOver()` returns `true`; `isDrawnByDeadPosition()`
     returns `false`.
 
-- **TC-DEAD-04 — Reject reading the winner's name after a dead position** ( :x: )
+- **TC-DEAD-04 — Reject reading the winner's name after a dead position** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `endByDeadPosition()`,
     `winnerName()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then

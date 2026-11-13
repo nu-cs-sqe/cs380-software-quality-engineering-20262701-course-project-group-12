@@ -501,6 +501,15 @@ public class GameTests {
         assertFalse(game.isDrawnByDeadPosition());
     }
 
+    @Test
+    public void WinnerName_AfterDeadPosition_ThrowsIllegalStateException() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByDeadPosition();
+
+        assertThrows(IllegalStateException.class, game::winnerName);
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");
