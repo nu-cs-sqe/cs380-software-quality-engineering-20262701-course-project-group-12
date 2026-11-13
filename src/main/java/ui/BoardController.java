@@ -70,6 +70,10 @@ public class BoardController {
         }
     }
 
+    public boolean canOfferDraw() {
+        return false;
+    }
+
     public void clickSquare(Location square) {
         if (game.isOver() || isPromotionPending() || isDrawClaimWithMovePending()) {
             return;
