@@ -74,6 +74,10 @@ public class BoardController {
         }
     }
 
+    public void resign(PieceColor resigningColor) {
+        game.resign(resigningColor);
+    }
+
     public boolean canOfferDraw() {
         return game.canOfferDraw();
     }

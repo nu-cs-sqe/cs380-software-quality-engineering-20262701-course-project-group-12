@@ -642,6 +642,16 @@ public class BoardControllerTests {
     }
 
     @Test
+    public void Resign_White_AsksTheGameToResignWhite() {
+        game.resign(PieceColor.WHITE);
+        BoardController controller = replayedController();
+
+        controller.resign(PieceColor.WHITE);
+
+        verify(board, piece, game);
+    }
+
+    @Test
     public void CanOfferDraw_GameRefusesAnOffer_ReturnsFalse() {
         expect(game.canOfferDraw()).andStubReturn(false);
         BoardController controller = replayedController();

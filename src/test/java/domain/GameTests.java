@@ -470,6 +470,79 @@ public class GameTests {
         assertThrows(IllegalStateException.class, game::endByRepetition);
     }
 
+    @Test
+    public void Resign_WhiteResigns_MakesPlayerTwoTheWinner() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.resign(PieceColor.WHITE);
+
+        assertEquals("Bob", game.winnerName());
+        assertEquals(PieceColor.BLACK, game.winnerColor());
+    }
+
+    @Test
+    public void Resign_BlackResignsOnWhitesTurn_MakesPlayerOneTheWinner() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.resign(PieceColor.BLACK);
+
+        assertEquals("Alice", game.winnerName());
+        assertEquals(PieceColor.WHITE, game.winnerColor());
+    }
+
+    @Test
+    public void Resign_StartedGame_EndsTheGameByResignation() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.resign(PieceColor.WHITE);
+
+        assertTrue(game.isOver());
+        assertTrue(game.isWonByResignation());
+    }
+
+    @Test
+    public void Resign_AfterCheckmate_KeepsTheCheckmateWinner() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByCheckmate();
+
+        game.resign(PieceColor.BLACK);
+
+        assertEquals("Bob", game.winnerName());
+        assertFalse(game.isWonByResignation());
+    }
+
+    @Test
+    public void Resign_AfterDrawByRepetition_IsIgnored() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByRepetition();
+
+        game.resign(PieceColor.WHITE);
+
+        assertFalse(game.isWonByResignation());
+    }
+
+    @Test
+    public void Resign_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, () -> game.resign(PieceColor.WHITE));
+    }
+
+    @Test
+    public void IsWonByResignation_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean wonByResignation = game.isWonByResignation();
+
+        assertFalse(wonByResignation);
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");
