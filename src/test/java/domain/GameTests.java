@@ -671,6 +671,16 @@ public class GameTests {
         assertFalse(game.isDrawOffered());
     }
 
+    @Test
+    public void PassTurn_OfferingPlayerMoves_KeepsTheOffer() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+        game.offerDraw(PieceColor.WHITE);
+
+        game.passTurn();
+
+        assertTrue(game.isDrawOffered());
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

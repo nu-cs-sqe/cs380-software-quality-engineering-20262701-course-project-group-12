@@ -653,7 +653,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
     `offerDraw(BLACK)`, then `passTurn()` for White's move.
   - **Expected output**: Returns `false`.
 
-- **TC-AGREE-14 — The offering player's own move keeps the offer** ( :x: )
+- **TC-AGREE-14 — The offering player's own move keeps the offer** ( :white_check_mark: )
   - **Method(s) under test**: `passTurn()`, `isDrawOffered()`
   - **State of the system**: As TC-AGREE-03, so White is to move, then
     `offerDraw(WHITE)`, then `passTurn()` for White's move.

@@ -42,10 +42,14 @@ public class Game {
 
     public void passTurn() {
         requireStartedTo("pass the turn");
-        drawOfferedBy = Optional.empty();
+        keepDrawOfferOnlyIfMadeBy(playerToMove.getColor());
         playerToMove = playerWaiting();
         movesMade++;
         recordPosition();
+    }
+
+    private void keepDrawOfferOnlyIfMadeBy(PieceColor movingColor) {
+        drawOfferedBy = drawOfferedBy.filter(movingColor::equals);
     }
 
     private void recordPosition() {
