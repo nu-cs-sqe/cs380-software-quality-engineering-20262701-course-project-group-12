@@ -775,6 +775,16 @@ public class GameTests {
         assertFalse(canOffer);
     }
 
+    @Test
+    public void CanClaimDrawByFiftyMove_NewGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean canClaim = game.canClaimDrawByFiftyMove();
+
+        assertFalse(canClaim);
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

@@ -779,7 +779,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
 | Output: each answer | Boolean | true; false |
 | Output: signal for an unstarted game or a draw with no winner | Cases | `IllegalStateException` |
 
-- **TC-FIFTY-01 — A new game cannot claim a fifty-move draw** ( :x: )
+- **TC-FIFTY-01 — A new game cannot claim a fifty-move draw** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`,
     `canClaimDrawByFiftyMove()`
   - **State of the system**: `start("Alice", "Bob")` has completed, so the

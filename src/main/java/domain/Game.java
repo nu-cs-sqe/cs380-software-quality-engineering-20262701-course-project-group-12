@@ -77,6 +77,10 @@ public class Game {
         return occurrencesOf(currentPosition()) >= THREEFOLD;
     }
 
+    public boolean canClaimDrawByFiftyMove() {
+        return false;
+    }
+
     public boolean canClaimDrawByRepetitionWith(Location from, Location to) {
         Position positionAfterMove =
                 board.positionAfterMove(from, to, playerWaiting().getColor());
