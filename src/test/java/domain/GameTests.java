@@ -878,6 +878,15 @@ public class GameTests {
         assertFalse(canClaim);
     }
 
+    @Test
+    public void CanClaimDrawByFiftyMoveWith_PawnMoveWouldReset_ReturnsFalse() {
+        Game game = gameBeforeLastMoveOfRoundTrip(ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES);
+
+        boolean canClaim = game.canClaimDrawByFiftyMoveWith(E2, E4);
+
+        assertFalse(canClaim);
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

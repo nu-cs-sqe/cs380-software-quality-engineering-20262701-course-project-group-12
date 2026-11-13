@@ -836,7 +836,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
     about f6 to g8.
   - **Expected output**: Returns `false`.
 
-- **TC-FIFTY-10 — A pawn move that would reset cannot be claimed** ( :x: )
+- **TC-FIFTY-10 — A pawn move that would reset cannot be claimed** ( :white_check_mark: )
   - **Method(s) under test**: `canClaimDrawByFiftyMoveWith(Location,
     Location)`
   - **State of the system**: As TC-FIFTY-02, so the count is 99; ask about
