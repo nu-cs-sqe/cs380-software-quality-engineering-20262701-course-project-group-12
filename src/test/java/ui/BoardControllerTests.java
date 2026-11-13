@@ -90,6 +90,7 @@ public class BoardControllerTests {
         piece = mock(Piece.class);
         expect(game.isOver()).andStubReturn(false);
         expect(board.isCheckmated(anyObject(PieceColor.class))).andStubReturn(false);
+        expect(board.isDeadPosition()).andStubReturn(false);
         expect(game.isFivefoldRepetition()).andStubReturn(false);
         expect(game.canClaimDrawByRepetitionWith(
                 anyObject(Location.class), anyObject(Location.class))).andStubReturn(false);
@@ -572,6 +573,34 @@ public class BoardControllerTests {
         expectWhiteMoveFromB1ToC3ThenBlackToMove();
         expect(board.isCheckmated(PieceColor.BLACK)).andReturn(true);
         expect(game.isFivefoldRepetition()).andStubReturn(true);
+        game.endByCheckmate();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_MoveThatReachesDeadPosition_EndsTheGameAsDraw() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(false);
+        expect(board.isDeadPosition()).andReturn(true);
+        game.endByDeadPosition();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_CheckmateThatIsAlsoDeadPosition_EndsTheGameByCheckmate() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(true);
+        expect(board.isDeadPosition()).andStubReturn(true);
         game.endByCheckmate();
         BoardController controller = replayedController();
 

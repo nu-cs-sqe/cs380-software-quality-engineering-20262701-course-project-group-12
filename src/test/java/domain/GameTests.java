@@ -469,6 +469,63 @@ public class GameTests {
         assertThrows(IllegalStateException.class, game::endByRepetition);
     }
 
+    @Test
+    public void IsDrawnByDeadPosition_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean drawn = game.isDrawnByDeadPosition();
+
+        assertFalse(drawn);
+    }
+
+    @Test
+    public void EndByDeadPosition_StartedGame_DrawsTheGame() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByDeadPosition();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isDrawnByDeadPosition());
+    }
+
+    @Test
+    public void EndByCheckmate_StartedGame_IsNotDeadPosition() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByCheckmate();
+
+        assertTrue(game.isOver());
+        assertFalse(game.isDrawnByDeadPosition());
+    }
+
+    @Test
+    public void WinnerName_AfterDeadPosition_ThrowsIllegalStateException() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByDeadPosition();
+
+        assertThrows(IllegalStateException.class, game::winnerName);
+    }
+
+    @Test
+    public void WinnerColor_AfterDeadPosition_ThrowsIllegalStateException() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByDeadPosition();
+
+        assertThrows(IllegalStateException.class, game::winnerColor);
+    }
+
+    @Test
+    public void EndByDeadPosition_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::endByDeadPosition);
+    }
+
     private static Game gameAfterKnightRoundTrips(int roundTrips) {
         Game game = new Game();
         game.start("Alice", "Bob");

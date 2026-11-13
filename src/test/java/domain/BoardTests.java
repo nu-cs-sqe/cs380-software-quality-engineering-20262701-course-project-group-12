@@ -11,6 +11,9 @@ import domain.piece.Queen;
 import domain.piece.Rook;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -67,6 +70,7 @@ public class BoardTests {
     private static final Location H7 = new Location(7, 7);
     private static final Location H8 = new Location(7, 8);
     private static final int STARTING_PIECE_COUNT = 32;
+    private static final int TWO_KINGS = 2;
 
     @Test
     public void PieceAt_A1_ReturnsWhiteRook() {
@@ -404,6 +408,120 @@ public class BoardTests {
     }
 
     @Test
+    public void IsDeadPosition_NewBoard_ReturnsFalse() {
+        Board board = new Board();
+
+        boolean dead = board.isDeadPosition();
+
+        assertFalse(dead);
+    }
+
+    @Test
+    public void IsDeadPosition_KingVsKing_ReturnsTrue() {
+        Board board = boardHoldingOnly(E1, E8);
+
+        boolean dead = board.isDeadPosition();
+
+        assertTrue(dead);
+    }
+
+    @Test
+    public void IsDeadPosition_KingAndBishopVsKing_ReturnsTrue() {
+        Board board = boardHoldingOnly(E1, E8, C1);
+
+        boolean dead = board.isDeadPosition();
+
+        assertTrue(dead);
+    }
+
+    @Test
+    public void IsDeadPosition_KingAndKnightVsKing_ReturnsTrue() {
+        Board board = boardHoldingOnly(E1, E8, B1);
+
+        boolean dead = board.isDeadPosition();
+
+        assertTrue(dead);
+    }
+
+    @Test
+    public void IsDeadPosition_BishopsOnTheSameColor_ReturnsTrue() {
+        Board board = boardHoldingOnly(E1, E8, C1, F8);
+
+        boolean dead = board.isDeadPosition();
+
+        assertTrue(dead);
+    }
+
+    @Test
+    public void IsDeadPosition_BishopsOnOppositeColors_ReturnsFalse() {
+        Board board = boardHoldingOnly(E1, E8, C1, C8);
+
+        boolean dead = board.isDeadPosition();
+
+        assertFalse(dead);
+    }
+
+    @Test
+    public void IsDeadPosition_KingAndTwoKnightsVsKing_ReturnsFalse() {
+        Board board = boardHoldingOnly(E1, E8, B1, G1);
+
+        boolean dead = board.isDeadPosition();
+
+        assertFalse(dead);
+    }
+
+    @Test
+    public void IsDeadPosition_KingAndQueenVsKing_ReturnsFalse() {
+        Board board = boardHoldingOnly(E1, E8, D1);
+
+        boolean dead = board.isDeadPosition();
+
+        assertFalse(dead);
+    }
+
+    @Test
+    public void IsDeadPosition_KingAndRookVsKing_ReturnsFalse() {
+        Board board = boardHoldingOnly(E1, E8, A1);
+
+        boolean dead = board.isDeadPosition();
+
+        assertFalse(dead);
+    }
+
+    @Test
+    public void IsDeadPosition_KingAndPawnVsKing_ReturnsFalse() {
+        Board board = boardHoldingOnly(E1, E8, A2);
+
+        boolean dead = board.isDeadPosition();
+
+        assertFalse(dead);
+    }
+
+    @Test
+    public void IsDeadPosition_KingsOnCornerSquares_ReturnsTrue() {
+        Board board = boardHoldingOnly(E1, E8);
+        board.move(E1, A1);
+        board.move(E8, H8);
+
+        boolean dead = board.isDeadPosition();
+
+        assertTrue(dead);
+    }
+
+    @Test
+    public void IsDeadPosition_KingVsKing_LeavesTheBoardUnchanged() {
+        Board board = boardHoldingOnly(E1, E8);
+        Piece whiteKing = board.pieceAt(E1);
+        Piece blackKing = board.pieceAt(E8);
+
+        board.isDeadPosition();
+
+        assertSame(whiteKing, board.pieceAt(E1));
+        assertSame(blackKing, board.pieceAt(E8));
+        assertEquals(TWO_KINGS, countPieces(board));
+    }
+
+    @Test
     public void IsInCheck_NewBoard_ReturnsFalse() {
         Board board = new Board();
 
@@ -736,6 +854,42 @@ public class BoardTests {
         board.move(F7, G6);
         board.move(C8, E6);
         return board;
+    }
+
+    private Board boardHoldingOnly(Location... kept) {
+        Board board = new Board();
+        List<Location> extras = extrasOn(board, kept);
+        Location capturer = extras.get(0);
+        for (int i = 1; i < extras.size(); i++) {
+            Location target = extras.get(i);
+            board.move(capturer, target);
+            capturer = target;
+        }
+        board.move(E1, capturer);
+        board.move(capturer, E1);
+        return board;
+    }
+
+    private List<Location> extrasOn(Board board, Location[] kept) {
+        List<Location> extras = new ArrayList<>();
+        for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
+            for (int rank = Location.MIN_RANK; rank <= Location.MAX_RANK; rank++) {
+                Location square = new Location(file, rank);
+                if (board.isOccupied(square) && !isKept(square, kept)) {
+                    extras.add(square);
+                }
+            }
+        }
+        return extras;
+    }
+
+    private boolean isKept(Location square, Location[] kept) {
+        for (Location keep : kept) {
+            if (square.isSameSquareAs(keep)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private int countPieces(Board board) {

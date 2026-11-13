@@ -28,6 +28,11 @@ public class Board {
     private static final int BLACK_PAWN_RANK = 7;
     private static final int BLACK_BACK_RANK = Location.MAX_RANK;
     private static final int TWO_RANKS = 2;
+    private static final int TWO_KINGS = 2;
+    private static final int KING_AND_BISHOP_VS_KING = 3;
+    private static final int TWO_KINGS_AND_TWO_BISHOPS = 4;
+    private static final int ONE_SQUARE_COLOR = 1;
+    private static final int SQUARE_COLORS = 2;
     private static final int ADJACENT_FILE_DISTANCE = 1;
     private static final List<Function<PieceColor, Piece>> BACK_RANK_PIECE_MAKERS = List.of(
             Rook::new,
@@ -158,6 +163,44 @@ public class Board {
 
     public boolean isCheckmated(PieceColor color) {
         return isInCheck(color) && !hasLegalMove(color);
+    }
+
+    public boolean isDeadPosition() {
+        long pieces = occupiedSquares().count();
+        return pieces == TWO_KINGS
+                || isKingAndBishopVsKing(pieces)
+                || isTwoKingsAndTwoBishopsOnTheSameColor(pieces);
+    }
+
+    private boolean isKingAndBishopVsKing(long pieces) {
+        return pieces == KING_AND_BISHOP_VS_KING && remainingPieceIsNotQueenRookOrPawn();
+    }
+
+    private boolean remainingPieceIsNotQueenRookOrPawn() {
+        return occupiedSquares()
+                .noneMatch(square -> isQueenRookOrPawn(pieceAt(square).getType()));
+    }
+
+    private boolean isQueenRookOrPawn(PieceType type) {
+        return type == PieceType.QUEEN
+                || type == PieceType.ROOK
+                || type == PieceType.PAWN;
+    }
+
+    private boolean isTwoKingsAndTwoBishopsOnTheSameColor(long pieces) {
+        return pieces == TWO_KINGS_AND_TWO_BISHOPS && bishopsShareSquareColor();
+    }
+
+    private boolean bishopsShareSquareColor() {
+        return occupiedSquares()
+                .filter(square -> pieceAt(square).getType() != PieceType.KING)
+                .mapToInt(this::squareColor)
+                .distinct()
+                .count() == ONE_SQUARE_COLOR;
+    }
+
+    private int squareColor(Location square) {
+        return (square.getFile() + square.getRank()) % SQUARE_COLORS;
     }
 
     private boolean hasLegalMove(PieceColor color) {
