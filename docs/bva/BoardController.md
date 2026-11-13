@@ -283,5 +283,5 @@ A click after a dead position is already TC40, because `isOver()` is true.
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC58: a move that reaches a dead position ends the game as a draw | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)` and true for `isDeadPosition()` | the board moves the piece from b1 to c3; the game passes the turn, then ends by dead position; the game does not end by checkmate | :x: |
+| TC58: a move that reaches a dead position ends the game as a draw | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)` and true for `isDeadPosition()` | the board moves the piece from b1 to c3; the game passes the turn, then ends by dead position; the game does not end by checkmate | :white_check_mark: |
 | TC59: checkmate wins over a dead position | as TC58, but the board answers true for `isCheckmated(BLACK)` | the game passes the turn, then ends by checkmate, not by dead position | :x: |
