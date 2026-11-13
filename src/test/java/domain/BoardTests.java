@@ -497,6 +497,17 @@ public class BoardTests {
     }
 
     @Test
+    public void IsDeadPosition_KingsOnCornerSquares_ReturnsTrue() {
+        Board board = boardHoldingOnly(E1, E8);
+        board.move(E1, A1);
+        board.move(E8, H8);
+
+        boolean dead = board.isDeadPosition();
+
+        assertTrue(dead);
+    }
+
+    @Test
     public void IsInCheck_NewBoard_ReturnsFalse() {
         Board board = new Board();
 
