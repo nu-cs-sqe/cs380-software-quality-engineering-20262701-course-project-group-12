@@ -432,5 +432,168 @@ without a new click case.
 
 - **TC-END-13 — Reject ending by stalemate before a start** ( :x: )
   - **Method(s) under test**: `endByStalemate()`
+
+### Method under test: `isPlayerToMoveInCheck()`
+
+Issue #44 (GitHub US-11 AC 6). `GameStatsController` shows that the player to
+move is in check. `Game` owns the board and knows who is to move, so it asks
+`board().isInCheck(colorToMove())` and the controller does not reach through
+`board()`. The positions are played with `board().move` on the game's own
+board, and the game passes the turn after each move, as `BoardController`
+does. Fool's mate: f2 to f3, e7 to e5, g2 to g4, d8 to h4, so the black queen
+checks the white king and White is to move. Queen check on Black: e2 to e4,
+f7 to f6, d1 to h5, so the white queen checks the black king and Black is to
+move. The method takes no arguments, so there is no null case.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the game's state | Cases | unstarted; started |
+| Input: the color to move | Cases | White; Black |
+| Input: whether that player's king is in check | Boolean | no (the starting board); yes (Fool's mate for White; queen check on Black) |
+| Output: the answer | Boolean | true; false |
+| Output: signal for an unstarted game | Cases | `IllegalStateException` |
+
+- **TC-CHECK-01 — The player to move is not in check at the start** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `isPlayerToMoveInCheck()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `false`.
+
+- **TC-CHECK-02 — White to move is in check** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `passTurn()`,
+    `isPlayerToMoveInCheck()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    Fool's mate is played on `board()` with `passTurn()` after each of the
+    four moves, so White is to move.
+  - **Expected output**: Returns `true`.
+
+- **TC-CHECK-03 — Black to move is in check** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `passTurn()`,
+    `isPlayerToMoveInCheck()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then the
+    queen check on Black is played on `board()` with `passTurn()` after each
+    of the three moves, so Black is to move.
+  - **Expected output**: Returns `true`.
+
+- **TC-CHECK-04 — Reject looking for check before a start** ( :white_check_mark: )
+  - **Method(s) under test**: `isPlayerToMoveInCheck()`
+  - **State of the system**: New game before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+### Methods under test: `canClaimDrawByRepetition()`, `canClaimDrawByRepetitionWith(Location from, Location to)`, `isFivefoldRepetition()`, `endByRepetition()`, and `isDrawnByRepetition()`
+
+Issue #59 (GitHub US-19, docs US-18). `Game` keeps the position after `start`
+and after every `passTurn`, from `board().position(colorToMove())`. The last
+one kept is the current position. Two positions are the same when
+`Position.isSameAs` says so.
+
+- `canClaimDrawByRepetition()` is true when the current position has occurred
+  at least three times, counting the current one.
+- `canClaimDrawByRepetitionWith(from, to)` is true when the position after
+  that move, with the other player to move, has already occurred at least
+  twice, so the move would make it occur a third time. The position comes from
+  `board().positionAfterMove(from, to, ...)`, so the board does not change.
+- `isFivefoldRepetition()` is true when the current position has occurred at
+  least five times.
+- `endByRepetition()` ends the game as a draw. `isOver()` is then true and
+  `isDrawnByRepetition()` is true. A draw has no winner, so `winnerName()` and
+  `winnerColor()` still throw instead of returning null.
+
+The three and five occurrences are named constants, not magic numbers
+(instructor code review, Week 6). `BoardController` decides when a claim is
+made and checks checkmate before a fivefold repetition, so `Game` only answers
+and records.
+
+Every case repeats the starting position with the knights. One round trip is
+g1 `(6, 1)` to f3 `(5, 3)`, g8 `(6, 8)` to f6 `(5, 6)`, f3 to g1, and f6 to
+g8, each made with `board().move` and followed by `passTurn()`. It brings
+back the starting position with White to move, so after n round trips the
+starting position has occurred n + 1 times.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: occurrences of the current position, counting itself | Interval at the edges 3 and 5 | 1 (a new game); 2 (one round trip); 3 (two); 4 (three); 5 (four) |
+| Input: the current position after a repetition | Cases | the repeated position; a new position after one more move (e2 `(4, 2)` to e4 `(4, 4)`) |
+| Input: occurrences the position after a selected move would have | Cases | the second (one round trip less its last move, then f6 to g8); the third (two round trips less the last move, then f6 to g8); a new position (two round trips less the last move, then b8 `(1, 8)` to c6 `(2, 6)`) |
+| Input: the game's state | Cases | unstarted; started; drawn by repetition |
+| Output: each answer | Boolean | true; false |
+| Output: signal for an unstarted game | Cases | `IllegalStateException` |
+
+- **TC-REP-01 — A new game cannot claim a repetition** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`,
+    `canClaimDrawByRepetition()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, so the
+    starting position has occurred once.
+  - **Expected output**: Returns `false`.
+
+- **TC-REP-02 — A position seen twice cannot be claimed** ( :white_check_mark: )
+  - **Method(s) under test**: `canClaimDrawByRepetition()`
+  - **State of the system**: Started game after one round trip, so the
+    starting position has occurred twice.
+  - **Expected output**: Returns `false`.
+
+- **TC-REP-03 — A position seen three times can be claimed** ( :white_check_mark: )
+  - **Method(s) under test**: `canClaimDrawByRepetition()`
+  - **State of the system**: Started game after two round trips, so the
+    starting position has occurred three times.
+  - **Expected output**: Returns `true`.
+
+- **TC-REP-04 — A new position after a repetition cannot be claimed** ( :white_check_mark: )
+  - **Method(s) under test**: `canClaimDrawByRepetition()`
+  - **State of the system**: Started game after two round trips, then e2 to
+    e4 and `passTurn()`.
+  - **Expected output**: Returns `false`.
+
+- **TC-REP-05 — A move that makes the third occurrence can be claimed**
+  ( :white_check_mark: )
+  - **Method(s) under test**: `canClaimDrawByRepetitionWith(Location,
+    Location)`
+  - **State of the system**: Started game after two round trips less the
+    last move, so Black is to move; ask about f6 to g8.
+  - **Expected output**: Returns `true`.
+
+- **TC-REP-06 — A move that makes the second occurrence cannot be claimed**
+  ( :white_check_mark: )
+  - **Method(s) under test**: `canClaimDrawByRepetitionWith(Location,
+    Location)`
+  - **State of the system**: Started game after one round trip less the last
+    move, so Black is to move; ask about f6 to g8.
+  - **Expected output**: Returns `false`.
+
+- **TC-REP-07 — A move to a new position cannot be claimed** ( :white_check_mark: )
+  - **Method(s) under test**: `canClaimDrawByRepetitionWith(Location,
+    Location)`
+  - **State of the system**: Started game after two round trips less the
+    last move, so Black is to move; ask about b8 to c6.
+  - **Expected output**: Returns `false`.
+
+- **TC-REP-08 — A position seen four times is not a fivefold repetition**
+  ( :white_check_mark: )
+  - **Method(s) under test**: `isFivefoldRepetition()`
+  - **State of the system**: Started game after three round trips, so the
+    starting position has occurred four times.
+  - **Expected output**: Returns `false`.
+
+- **TC-REP-09 — A position seen five times is a fivefold repetition** ( :white_check_mark: )
+  - **Method(s) under test**: `isFivefoldRepetition()`
+  - **State of the system**: Started game after four round trips, so the
+    starting position has occurred five times.
+  - **Expected output**: Returns `true`.
+
+- **TC-REP-10 — A started game is not drawn by repetition** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`,
+    `isDrawnByRepetition()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `false`.
+
+- **TC-REP-11 — A repetition ends the game as a draw** ( :white_check_mark: )
+  - **Method(s) under test**: `endByRepetition()`, `isOver()`,
+    `isDrawnByRepetition()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByRepetition()`.
+  - **Expected output**: `isOver()` returns `true`; `isDrawnByRepetition()`
+    returns `true`.
+
+- **TC-REP-12 — Reject ending the game by repetition before a start** ( :white_check_mark: )
+  - **Method(s) under test**: `endByRepetition()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
