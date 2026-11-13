@@ -400,6 +400,15 @@ public class BoardTests {
     }
 
     @Test
+    public void IsStalemated_InCheckWithReplyThatBlocks_ReturnsFalse() {
+        Board board = queenCheckOnBlack();
+
+        boolean stalemated = board.isStalemated(PieceColor.BLACK);
+
+        assertFalse(stalemated);
+    }
+
+    @Test
     public void PositionAfterMove_KnightToF3_MatchesTheBoardAfterThatMove() {
         Board board = new Board();
         Board movedBoard = new Board();
