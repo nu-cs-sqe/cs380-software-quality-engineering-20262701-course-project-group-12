@@ -90,6 +90,7 @@ public class BoardControllerTests {
         piece = mock(Piece.class);
         expect(game.isOver()).andStubReturn(false);
         expect(board.isCheckmated(anyObject(PieceColor.class))).andStubReturn(false);
+        expect(board.isStalemated(anyObject(PieceColor.class))).andStubReturn(false);
         expect(game.isFivefoldRepetition()).andStubReturn(false);
         expect(game.canClaimDrawByRepetitionWith(
                 anyObject(Location.class), anyObject(Location.class))).andStubReturn(false);
@@ -638,6 +639,20 @@ public class BoardControllerTests {
         controller.clickSquare(B1);
 
         assertFalse(controller.isSelected(B1));
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_MoveThatStalemates_EndsTheGameAsDraw() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(false);
+        expect(board.isStalemated(PieceColor.BLACK)).andReturn(true);
+        game.endByStalemate();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
         verify(board, piece, game);
     }
 

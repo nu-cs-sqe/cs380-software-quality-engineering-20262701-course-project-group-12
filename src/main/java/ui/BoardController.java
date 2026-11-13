@@ -4,6 +4,7 @@ import domain.Board;
 import domain.Game;
 import domain.Location;
 import domain.piece.Piece;
+import domain.piece.PieceColor;
 import domain.piece.PieceType;
 
 import java.util.Optional;
@@ -124,8 +125,11 @@ public class BoardController {
     }
 
     private void endGameIfOver() {
-        if (board.isCheckmated(game.colorToMove())) {
+        PieceColor colorToMove = game.colorToMove();
+        if (board.isCheckmated(colorToMove)) {
             game.endByCheckmate();
+        } else if (board.isStalemated(colorToMove)) {
+            game.endByStalemate();
         } else if (game.isFivefoldRepetition()) {
             game.endByRepetition();
         }

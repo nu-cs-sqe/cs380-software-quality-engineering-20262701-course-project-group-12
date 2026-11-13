@@ -285,4 +285,4 @@ The case numbers start at TC57, after the repetition cases (TC45 to TC56, issue 
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC57: a move that stalemates ends the game as a draw | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)` and true for `isStalemated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn, then ends by stalemate; the game does not end by checkmate | :x: |
+| TC57: a move that stalemates ends the game as a draw | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)` and true for `isStalemated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn, then ends by stalemate; the game does not end by checkmate | :white_check_mark: |
