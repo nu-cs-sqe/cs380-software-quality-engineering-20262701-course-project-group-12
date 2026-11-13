@@ -42,6 +42,7 @@ public class Game {
 
     public void passTurn() {
         requireStartedTo("pass the turn");
+        drawOfferedBy = Optional.empty();
         playerToMove = playerWaiting();
         movesMade++;
         recordPosition();
