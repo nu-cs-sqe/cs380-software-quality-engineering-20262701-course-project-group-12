@@ -591,7 +591,7 @@ case.
     `endByDeadPosition()`.
   - **Expected output**: Throws `IllegalStateException`.
 
-- **TC-DEAD-05 — Reject reading the winner's color after a dead position** ( :x: )
+- **TC-DEAD-05 — Reject reading the winner's color after a dead position** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `endByDeadPosition()`,
     `winnerColor()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then
