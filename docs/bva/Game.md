@@ -4,8 +4,9 @@
 stores the two players, the starting board, and the player to move. Issue #41
 adds `passTurn`, which gives the turn to the other player after a legal move.
 Issue #48 adds `endByCheckmate`, which ends the game when the player to move
-is checkmated. The test cases below use the game's public behavior to observe
-its state.
+is checkmated. Issue #50 adds `endByDeadPosition`, which ends the game as a
+draw when neither king can be checkmated. The test cases below use the game's
+public behavior to observe its state.
 
 `start` returns nothing. It throws when a start is rejected. `passTurn`
 returns nothing. It throws when the game has not started.
@@ -533,5 +534,71 @@ starting position has occurred n + 1 times.
 
 - **TC-REP-12 — Reject ending the game by repetition before a start** ( :white_check_mark: )
   - **Method(s) under test**: `endByRepetition()`
+  - **State of the system**: New game before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+### Methods under test: `endByDeadPosition()`, `isOver()`, `isDrawnByDeadPosition()`, `winnerName()`, and `winnerColor()`
+
+Issue #50 (GitHub US-17, docs US-17). A dead position is one where neither
+king can be checkmated by any series of legal moves. `BoardController` calls
+`endByDeadPosition` after `passTurn` when `Board.isDeadPosition()` is true.
+The game ends as a draw: `isOver()` is true, `isDrawnByDeadPosition()` is
+true, and there is no winner. `winnerName()` and `winnerColor()` still throw,
+because a draw has no winner; they must not return null. Checkmate is not a
+dead-position draw: `endByCheckmate` leaves `isDrawnByDeadPosition()` false.
+Callers never pass arguments, so there is no null case.
+
+The IDs are `TC-DEAD-*` so they do not collide with stalemate's `TC-END-08`
+through `TC-END-13` on issue #49.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the game's state | Cases | unstarted; started and still in play; over by checkmate; over by dead position |
+| Output: `isOver()` | Boolean | false; true (checkmate or dead position) |
+| Output: `isDrawnByDeadPosition()` | Boolean | false; true |
+| Output: signal for an unstarted game, a game that is not over, or a draw | Cases | `IllegalStateException` from `winnerName()` and `winnerColor()` |
+
+Out of scope: other draws (stalemate, fifty-move). Those stories add their
+own endings. `BoardController` already refuses every click once `isOver()` is
+true, so further moves after a dead position are refused without a new click
+case.
+
+- **TC-DEAD-01 — A started game is not a dead-position draw** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `isDrawnByDeadPosition()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `false`.
+
+- **TC-DEAD-02 — A dead position ends the game as a draw** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `endByDeadPosition()`,
+    `isOver()`, `isDrawnByDeadPosition()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByDeadPosition()`.
+  - **Expected output**: `isOver()` returns `true`; `isDrawnByDeadPosition()`
+    returns `true`.
+
+- **TC-DEAD-03 — Checkmate is not a dead-position draw** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `endByCheckmate()`,
+    `isDrawnByDeadPosition()`, `isOver()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByCheckmate()`.
+  - **Expected output**: `isOver()` returns `true`; `isDrawnByDeadPosition()`
+    returns `false`.
+
+- **TC-DEAD-04 — Reject reading the winner's name after a dead position** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `endByDeadPosition()`,
+    `winnerName()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByDeadPosition()`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+- **TC-DEAD-05 — Reject reading the winner's color after a dead position** ( :x: )
+  - **Method(s) under test**: `start(String, String)`, `endByDeadPosition()`,
+    `winnerColor()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByDeadPosition()`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+- **TC-DEAD-06 — Reject ending by dead position before a start** ( :x: )
+  - **Method(s) under test**: `endByDeadPosition()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
