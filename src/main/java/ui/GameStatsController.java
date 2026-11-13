@@ -50,6 +50,9 @@ public class GameStatsController {
         if (game.isDrawnByRepetition()) {
             return Messages.text("stats.drawByRepetition");
         }
+        if (game.isDrawnByAgreement()) {
+            return Messages.text("stats.drawByAgreement");
+        }
         if (game.isWonByResignation()) {
             return winnerLine(RESIGNATION_KEYS);
         }

@@ -78,6 +78,26 @@ public class BoardController {
         game.resign(resigningColor);
     }
 
+    public boolean canOfferDraw() {
+        return game.canOfferDraw();
+    }
+
+    public void offerDraw(PieceColor offeringColor) {
+        game.offerDraw(offeringColor);
+    }
+
+    public boolean isDrawOffered() {
+        return game.isDrawOffered();
+    }
+
+    public void acceptDrawOffer() {
+        game.acceptDrawOffer();
+    }
+
+    public void declineDrawOffer() {
+        game.declineDrawOffer();
+    }
+
     public void clickSquare(Location square) {
         if (game.isOver() || isPromotionPending() || isDrawClaimWithMovePending()) {
             return;

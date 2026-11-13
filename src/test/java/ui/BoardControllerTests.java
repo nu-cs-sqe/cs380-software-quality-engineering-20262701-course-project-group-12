@@ -652,6 +652,80 @@ public class BoardControllerTests {
     }
 
     @Test
+    public void CanOfferDraw_GameRefusesAnOffer_ReturnsFalse() {
+        expect(game.canOfferDraw()).andStubReturn(false);
+        BoardController controller = replayedController();
+
+        boolean canOffer = controller.canOfferDraw();
+
+        assertFalse(canOffer);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void CanOfferDraw_GameAllowsAnOffer_ReturnsTrue() {
+        expect(game.canOfferDraw()).andReturn(true);
+        BoardController controller = replayedController();
+
+        boolean canOffer = controller.canOfferDraw();
+
+        assertTrue(canOffer);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void OfferDraw_White_AsksTheGameToOfferForWhite() {
+        game.offerDraw(PieceColor.WHITE);
+        BoardController controller = replayedController();
+
+        controller.offerDraw(PieceColor.WHITE);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void IsDrawOffered_NoOfferPending_ReturnsFalse() {
+        expect(game.isDrawOffered()).andStubReturn(false);
+        BoardController controller = replayedController();
+
+        boolean offered = controller.isDrawOffered();
+
+        assertFalse(offered);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void IsDrawOffered_OfferPending_ReturnsTrue() {
+        expect(game.isDrawOffered()).andReturn(true);
+        BoardController controller = replayedController();
+
+        boolean offered = controller.isDrawOffered();
+
+        assertTrue(offered);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void AcceptDrawOffer_OfferPending_AsksTheGameToAcceptIt() {
+        game.acceptDrawOffer();
+        BoardController controller = replayedController();
+
+        controller.acceptDrawOffer();
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void DeclineDrawOffer_OfferPending_AsksTheGameToDeclineIt() {
+        game.declineDrawOffer();
+        BoardController controller = replayedController();
+
+        controller.declineDrawOffer();
+
+        verify(board, piece, game);
+    }
+
+    @Test
     public void CanClaimDraw_GameOver_ReturnsFalse() {
         expect(game.isOver()).andReturn(true);
         expect(game.canClaimDrawByRepetition()).andStubReturn(true);

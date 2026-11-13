@@ -152,3 +152,21 @@ the opponent's name and color as the winner by resignation (US-20 AC 4).
 - **TC16: refresh after Player 2 resigns** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isWonByResignation()` is true, `winnerName()` is Ada, `winnerColor()` is `WHITE`, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Resignation: Ada (White) wins`
+
+Issue #61 (GitHub US-21, docs US-21). After the opponent accepts a draw offer,
+the same line shows a draw by agreement instead of the player to move (US-21
+AC 7). A draw has no winner, so the line names no player.
+
+Step 1:
+- input (added): whether the game is drawn by agreement (`isDrawnByAgreement()`)
+
+Step 2/3:
+- result of a game that is over -> Cases (added): draw by agreement
+- output (added): `Draw by agreement` once the game is drawn by agreement
+
+TC10, TC11, and TC13 still hold: the game answers false for
+`isDrawnByAgreement()`, so a checkmate still shows the winner.
+
+- **TC17: refresh after a draw by agreement** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isDrawnByAgreement()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Draw by agreement`
