@@ -650,6 +650,17 @@ public class GameTests {
         assertFalse(game.isOver());
     }
 
+    @Test
+    public void DeclineDrawOffer_OfferPending_EndsTheOffer() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+        game.offerDraw(PieceColor.WHITE);
+
+        game.declineDrawOffer();
+
+        assertFalse(game.isDrawOffered());
+        assertFalse(game.isOver());
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

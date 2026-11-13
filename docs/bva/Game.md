@@ -640,7 +640,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
   - **State of the system**: As TC-AGREE-03, then `acceptDrawOffer()`.
   - **Expected output**: `isOver()` returns `false`.
 
-- **TC-AGREE-12 — Declining ends the offer** ( :x: )
+- **TC-AGREE-12 — Declining ends the offer** ( :white_check_mark: )
   - **Method(s) under test**: `declineDrawOffer()`, `isDrawOffered()`,
     `isOver()`
   - **State of the system**: As TC-AGREE-05, then `declineDrawOffer()`.

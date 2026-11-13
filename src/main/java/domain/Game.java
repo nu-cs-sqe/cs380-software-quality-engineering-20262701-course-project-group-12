@@ -119,6 +119,10 @@ public class Game {
         }
     }
 
+    public void declineDrawOffer() {
+        drawOfferedBy = Optional.empty();
+    }
+
     public boolean isDrawnByAgreement() {
         return drawnByAgreement;
     }
