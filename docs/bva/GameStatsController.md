@@ -151,6 +151,6 @@ Issue #49 (GitHub US-16, docs US-16). After a stalemate, the same line shows
 the result. A stalemate has no winner, so the line names no player.
 `isStalemate()` is asked before `winnerName()`, so a draw never reads the winner.
 
-- **TC15: refresh after a stalemate** ( :x: )
+- **TC15: refresh after a stalemate** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isStalemate()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by stalemate`
