@@ -114,7 +114,9 @@ public class Game {
     }
 
     public void acceptDrawOffer() {
-        drawnByAgreement = true;
+        if (isDrawOffered()) {
+            drawnByAgreement = true;
+        }
     }
 
     public boolean isDrawnByAgreement() {

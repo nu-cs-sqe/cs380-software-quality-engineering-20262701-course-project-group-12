@@ -635,7 +635,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
   - **Expected output**: `isOver()` returns `true`; `isDrawnByAgreement()`
     returns `true`.
 
-- **TC-AGREE-11 — Accepting with no offer does nothing** ( :x: )
+- **TC-AGREE-11 — Accepting with no offer does nothing** ( :white_check_mark: )
   - **Method(s) under test**: `acceptDrawOffer()`, `isOver()`
   - **State of the system**: As TC-AGREE-03, then `acceptDrawOffer()`.
   - **Expected output**: `isOver()` returns `false`.

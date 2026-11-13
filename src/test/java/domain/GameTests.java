@@ -641,6 +641,15 @@ public class GameTests {
         assertTrue(game.isDrawnByAgreement());
     }
 
+    @Test
+    public void AcceptDrawOffer_NoOffer_DoesNothing() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS);
+
+        game.acceptDrawOffer();
+
+        assertFalse(game.isOver());
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");
