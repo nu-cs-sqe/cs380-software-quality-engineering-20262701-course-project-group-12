@@ -28,6 +28,7 @@ public class Board {
     private static final int BLACK_PAWN_RANK = 7;
     private static final int BLACK_BACK_RANK = Location.MAX_RANK;
     private static final int TWO_RANKS = 2;
+    private static final int TWO_KINGS = 2;
     private static final int ADJACENT_FILE_DISTANCE = 1;
     private static final List<Function<PieceColor, Piece>> BACK_RANK_PIECE_MAKERS = List.of(
             Rook::new,
@@ -161,7 +162,7 @@ public class Board {
     }
 
     public boolean isDeadPosition() {
-        return false;
+        return occupiedSquares().count() == TWO_KINGS;
     }
 
     private boolean hasLegalMove(PieceColor color) {

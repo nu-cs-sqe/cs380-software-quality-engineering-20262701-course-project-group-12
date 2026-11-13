@@ -11,6 +11,9 @@ import domain.piece.Queen;
 import domain.piece.Rook;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -413,6 +416,15 @@ public class BoardTests {
     }
 
     @Test
+    public void IsDeadPosition_KingVsKing_ReturnsTrue() {
+        Board board = boardHoldingOnly(E1, E8);
+
+        boolean dead = board.isDeadPosition();
+
+        assertTrue(dead);
+    }
+
+    @Test
     public void IsInCheck_NewBoard_ReturnsFalse() {
         Board board = new Board();
 
@@ -745,6 +757,42 @@ public class BoardTests {
         board.move(F7, G6);
         board.move(C8, E6);
         return board;
+    }
+
+    private Board boardHoldingOnly(Location... kept) {
+        Board board = new Board();
+        List<Location> extras = extrasOn(board, kept);
+        Location capturer = extras.get(0);
+        for (int i = 1; i < extras.size(); i++) {
+            Location target = extras.get(i);
+            board.move(capturer, target);
+            capturer = target;
+        }
+        board.move(E1, capturer);
+        board.move(capturer, E1);
+        return board;
+    }
+
+    private List<Location> extrasOn(Board board, Location[] kept) {
+        List<Location> extras = new ArrayList<>();
+        for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
+            for (int rank = Location.MIN_RANK; rank <= Location.MAX_RANK; rank++) {
+                Location square = new Location(file, rank);
+                if (board.isOccupied(square) && !isKept(square, kept)) {
+                    extras.add(square);
+                }
+            }
+        }
+        return extras;
+    }
+
+    private boolean isKept(Location square, Location[] kept) {
+        for (Location keep : kept) {
+            if (square.isSameSquareAs(keep)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private int countPieces(Board board) {
