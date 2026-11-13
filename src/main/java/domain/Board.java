@@ -161,7 +161,7 @@ public class Board {
     }
 
     public boolean isStalemated(PieceColor color) {
-        return false;
+        return !isInCheck(color) && !hasLegalMove(color);
     }
 
     private boolean hasLegalMove(PieceColor color) {

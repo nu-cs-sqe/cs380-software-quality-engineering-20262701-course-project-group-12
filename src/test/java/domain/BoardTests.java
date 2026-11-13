@@ -409,6 +409,15 @@ public class BoardTests {
     }
 
     @Test
+    public void IsStalemated_NotInCheckWithNoLegalMove_ReturnsTrue() {
+        Board board = samLoydsStalemate();
+
+        boolean stalemated = board.isStalemated(PieceColor.BLACK);
+
+        assertTrue(stalemated);
+    }
+
+    @Test
     public void PositionAfterMove_KnightToF3_MatchesTheBoardAfterThatMove() {
         Board board = new Board();
         Board movedBoard = new Board();
