@@ -844,7 +844,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
   - **Expected output**: Returns `false`.
 
 - **TC-FIFTY-11 — 149 quiet half-moves are not the seventy-five-move rule**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `isSeventyFiveMoveRule()`
   - **State of the system**: As TC-FIFTY-04, so the count is 149.
   - **Expected output**: Returns `false`.

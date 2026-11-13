@@ -90,6 +90,10 @@ public class Game {
         return halfMoves >= FIFTY_MOVE_HALF_MOVES;
     }
 
+    public boolean isSeventyFiveMoveRule() {
+        return false;
+    }
+
     public boolean canClaimDrawByRepetitionWith(Location from, Location to) {
         Position positionAfterMove =
                 board.positionAfterMove(from, to, playerWaiting().getColor());

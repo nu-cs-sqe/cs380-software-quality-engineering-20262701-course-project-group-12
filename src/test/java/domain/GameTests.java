@@ -887,6 +887,17 @@ public class GameTests {
         assertFalse(canClaim);
     }
 
+    @Test
+    public void IsSeventyFiveMoveRule_OneHundredFortyNineQuietHalfMoves_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(
+                ROUND_TRIPS_FOR_ONE_HUNDRED_FORTY_NINE_HALF_MOVES);
+        playMove(game, G1, F3);
+
+        boolean seventyFive = game.isSeventyFiveMoveRule();
+
+        assertFalse(seventyFive);
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");
