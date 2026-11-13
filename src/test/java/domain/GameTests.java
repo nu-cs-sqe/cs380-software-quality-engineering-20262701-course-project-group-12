@@ -594,6 +594,15 @@ public class GameTests {
         assertTrue(game.isDrawOffered());
     }
 
+    @Test
+    public void OfferDraw_AfterOneMove_IsRefused() {
+        Game game = gameAfterMoves(MOVES_BY_BOTH_PLAYERS - 1);
+
+        game.offerDraw(PieceColor.BLACK);
+
+        assertFalse(game.isDrawOffered());
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

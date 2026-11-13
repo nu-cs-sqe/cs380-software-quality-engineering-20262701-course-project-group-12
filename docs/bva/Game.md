@@ -606,7 +606,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
   - **State of the system**: As TC-AGREE-03, then `offerDraw(WHITE)`.
   - **Expected output**: Returns `true`.
 
-- **TC-AGREE-06 — An offer before both players have moved is refused** ( :x: )
+- **TC-AGREE-06 — An offer before both players have moved is refused** ( :white_check_mark: )
   - **Method(s) under test**: `offerDraw(PieceColor)`, `isDrawOffered()`
   - **State of the system**: As TC-AGREE-02, so Black is to move, then
     `offerDraw(BLACK)`.

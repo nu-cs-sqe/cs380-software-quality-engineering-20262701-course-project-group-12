@@ -102,7 +102,9 @@ public class Game {
     }
 
     public void offerDraw(PieceColor offeringColor) {
-        drawOfferedBy = Optional.of(offeringColor);
+        if (canOfferDraw()) {
+            drawOfferedBy = Optional.of(offeringColor);
+        }
     }
 
     public boolean isDrawOffered() {
