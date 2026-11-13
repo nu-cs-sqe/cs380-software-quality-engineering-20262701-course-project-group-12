@@ -623,7 +623,7 @@ through `isOver()`, as checkmate does in TC-AGREE-15.
     `offerDraw(WHITE)`.
   - **Expected output**: Throws `IllegalStateException`.
 
-- **TC-AGREE-09 — A started game is not drawn by agreement** ( :x: )
+- **TC-AGREE-09 — A started game is not drawn by agreement** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `isDrawnByAgreement()`
   - **State of the system**: `start("Alice", "Bob")` has completed.
   - **Expected output**: Returns `false`.

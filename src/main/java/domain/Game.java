@@ -112,6 +112,10 @@ public class Game {
         return drawOfferedBy.isPresent();
     }
 
+    public boolean isDrawnByAgreement() {
+        return false;
+    }
+
     public boolean isOver() {
         return winner.isPresent() || drawnByRepetition;
     }

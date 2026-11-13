@@ -620,6 +620,16 @@ public class GameTests {
         assertThrows(IllegalStateException.class, () -> game.offerDraw(PieceColor.WHITE));
     }
 
+    @Test
+    public void IsDrawnByAgreement_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean drawn = game.isDrawnByAgreement();
+
+        assertFalse(drawn);
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");
