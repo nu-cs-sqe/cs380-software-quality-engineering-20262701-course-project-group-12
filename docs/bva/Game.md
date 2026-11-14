@@ -597,3 +597,209 @@ starting position has occurred n + 1 times.
   - **Method(s) under test**: `endByRepetition()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
+
+### Methods under test: `resign(PieceColor resigningColor)` and `isWonByResignation()`
+
+Issue #60 (GitHub US-20, docs US-20). Either player may resign while the game
+is in progress, not only on their own turn, so `resign` takes the color of the
+player who resigns. The player of the other color wins, and the game ends at
+once: `isOver()` is true, and `winnerName()` and `winnerColor()` name the
+winner, as after checkmate. `isWonByResignation()` lets `GameStatsController`
+show that the game ended by resignation.
+
+When the game is already over, by checkmate or by a draw, the resignation is
+ignored (US-20 alternate flow 1.a): nothing changes and nothing is thrown. A
+dead position (US-17, issue #50) ends the game as a draw, so once that story
+ends the game, the same rule refuses a resignation in a dead position (US-20
+AC 3). No argument is ever null: callers pass `PieceColor.WHITE` or
+`PieceColor.BLACK`.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: `resigningColor` | Cases | White; Black |
+| Input: the player to move when the player resigns | Cases | the resigning player (White resigns at the start); the other player (Black resigns at the start) |
+| Input: the game's state | Cases | unstarted; in progress; over by checkmate; over by a draw by repetition |
+| Output: the winner's name and color | Cases | Player 2, Black, when White resigns; Player 1, White, when Black resigns; unchanged, when the game was already over |
+| Output: `isOver()` and `isWonByResignation()` | Boolean | true; false |
+| Output: signal for an unstarted game | Cases | `IllegalStateException` |
+
+- **TC-RES-01 — Player 2 wins when White resigns** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `resign(PieceColor)`,
+    `winnerName()`, `winnerColor()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, so White
+    is to move, then `resign(WHITE)`.
+  - **Expected output**: `winnerName()` returns `Bob`; `winnerColor()`
+    returns `BLACK`.
+
+- **TC-RES-02 — Player 1 wins when Black resigns on White's turn** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `resign(PieceColor)`,
+    `winnerName()`, `winnerColor()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, so White
+    is to move, then `resign(BLACK)`.
+  - **Expected output**: `winnerName()` returns `Alice`; `winnerColor()`
+    returns `WHITE`.
+
+- **TC-RES-03 — A resignation ends the game** ( :white_check_mark: )
+  - **Method(s) under test**: `resign(PieceColor)`, `isOver()`,
+    `isWonByResignation()`
+  - **State of the system**: As TC-RES-01.
+  - **Expected output**: `isOver()` returns `true`; `isWonByResignation()`
+    returns `true`.
+
+- **TC-RES-04 — A started game is not won by resignation** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `isWonByResignation()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `false`.
+
+- **TC-RES-05 — A resignation after checkmate is ignored** ( :white_check_mark: )
+  - **Method(s) under test**: `endByCheckmate()`, `resign(PieceColor)`,
+    `winnerName()`, `isWonByResignation()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByCheckmate()`, so Bob wins, then `resign(BLACK)`.
+  - **Expected output**: `winnerName()` still returns `Bob`;
+    `isWonByResignation()` returns `false`.
+
+- **TC-RES-06 — A resignation after a draw by repetition is ignored** ( :white_check_mark: )
+  - **Method(s) under test**: `endByRepetition()`, `resign(PieceColor)`,
+    `isWonByResignation()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByRepetition()`, then `resign(WHITE)`.
+  - **Expected output**: `isWonByResignation()` returns `false`.
+
+- **TC-RES-07 — Reject resigning before a start** ( :white_check_mark: )
+  - **Method(s) under test**: `resign(PieceColor)`
+  - **State of the system**: New game before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+### Methods under test: `canOfferDraw()`, `offerDraw(PieceColor offeringColor)`, `isDrawOffered()`, `acceptDrawOffer()`, `declineDrawOffer()`, `isDrawnByAgreement()`, and `passTurn()` with an offer
+
+Issue #61 (GitHub US-21, docs US-21). `Game` keeps at most one draw offer and
+the color of the player who made it.
+
+- `canOfferDraw()` is true when both players have made at least one move, the
+  game is not over, and no offer is pending (US-21 AC 1 and AC 6). A move is a
+  `passTurn()`, so both players have moved after two. The two moves are a
+  named constant, not a magic number (instructor code review, Week 6).
+- `offerDraw(offeringColor)` makes an offer from that player when
+  `canOfferDraw()` is true. Otherwise it is refused and nothing changes
+  (alternate flow 1.a). Either color may offer, whoever is to move (AC 2).
+- `isDrawOffered()` is true while an offer is pending. An offer ends when the
+  game ends for another reason, so it is false once the game is over (AC 3).
+- `acceptDrawOffer()` ends the game as a draw when an offer is pending.
+  `isOver()` and `isDrawnByAgreement()` are then true (AC 4). With no offer,
+  it does nothing.
+- `declineDrawOffer()` ends the offer, and the game continues (AC 5).
+- `passTurn()` ends the offer when the player who moved is the opponent of
+  the player who offered (AC 3 and AC 5). The offering player's own move
+  keeps it.
+
+An offer cannot be withdrawn, so there is no method for that (AC 3). A draw
+has no winner, so `winnerName()` and `winnerColor()` still throw instead of
+returning null. In the hot-seat window, the opponent answers with Accept or
+Decline, so `Game` does not ask who accepts. `offerDraw` throws before a
+start, like the other actions; the queries need no started-game check,
+because a new `Game` has no moves and no offer.
+
+Each move below is a `passTurn()`, because the offer depends on who moved,
+not on which piece. Every other way the game ends also ends the offer,
+through `isOver()`, as checkmate does in TC-AGREE-15.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: moves made, as `passTurn()` calls | Interval at the edge 2 | 0 (a new game); 1 (White has moved); 2 (both have moved) |
+| Input: `offeringColor` | Cases | White; Black |
+| Input: the player who moves while an offer is pending | Cases | the opponent of the offering player; the offering player |
+| Input: the game's state | Cases | unstarted; started; offer pending; drawn by agreement; over by checkmate; drawn by repetition |
+| Output: each answer | Boolean | true; false |
+| Output: signal for an unstarted game | Cases | `IllegalStateException` |
+
+- **TC-AGREE-01 — A new game cannot offer a draw** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `canOfferDraw()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, so no
+    move has been made.
+  - **Expected output**: Returns `false`.
+
+- **TC-AGREE-02 — A draw cannot be offered after one move** ( :white_check_mark: )
+  - **Method(s) under test**: `passTurn()`, `canOfferDraw()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `passTurn()` once, so only White has moved.
+  - **Expected output**: Returns `false`.
+
+- **TC-AGREE-03 — A draw can be offered after both players have moved** ( :white_check_mark: )
+  - **Method(s) under test**: `passTurn()`, `canOfferDraw()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `passTurn()` twice, so both players have moved.
+  - **Expected output**: Returns `true`.
+
+- **TC-AGREE-04 — A started game has no draw offer** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `isDrawOffered()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `false`.
+
+- **TC-AGREE-05 — An offer after both players have moved is pending** ( :white_check_mark: )
+  - **Method(s) under test**: `offerDraw(PieceColor)`, `isDrawOffered()`
+  - **State of the system**: As TC-AGREE-03, then `offerDraw(WHITE)`.
+  - **Expected output**: Returns `true`.
+
+- **TC-AGREE-06 — An offer before both players have moved is refused** ( :white_check_mark: )
+  - **Method(s) under test**: `offerDraw(PieceColor)`, `isDrawOffered()`
+  - **State of the system**: As TC-AGREE-02, so Black is to move, then
+    `offerDraw(BLACK)`.
+  - **Expected output**: Returns `false`.
+
+- **TC-AGREE-07 — A second offer cannot be made while one is pending** ( :white_check_mark: )
+  - **Method(s) under test**: `offerDraw(PieceColor)`, `canOfferDraw()`
+  - **State of the system**: As TC-AGREE-05.
+  - **Expected output**: `canOfferDraw()` returns `false`.
+
+- **TC-AGREE-08 — Reject offering a draw before a start** ( :white_check_mark: )
+  - **Method(s) under test**: `offerDraw(PieceColor)`
+  - **State of the system**: New game before a successful `start`; then
+    `offerDraw(WHITE)`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+- **TC-AGREE-09 — A started game is not drawn by agreement** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `isDrawnByAgreement()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `false`.
+
+- **TC-AGREE-10 — Accepting an offer ends the game as a draw** ( :white_check_mark: )
+  - **Method(s) under test**: `acceptDrawOffer()`, `isOver()`,
+    `isDrawnByAgreement()`
+  - **State of the system**: As TC-AGREE-05, then `acceptDrawOffer()`.
+  - **Expected output**: `isOver()` returns `true`; `isDrawnByAgreement()`
+    returns `true`.
+
+- **TC-AGREE-11 — Accepting with no offer does nothing** ( :white_check_mark: )
+  - **Method(s) under test**: `acceptDrawOffer()`, `isOver()`
+  - **State of the system**: As TC-AGREE-03, then `acceptDrawOffer()`.
+  - **Expected output**: `isOver()` returns `false`.
+
+- **TC-AGREE-12 — Declining ends the offer** ( :white_check_mark: )
+  - **Method(s) under test**: `declineDrawOffer()`, `isDrawOffered()`,
+    `isOver()`
+  - **State of the system**: As TC-AGREE-05, then `declineDrawOffer()`.
+  - **Expected output**: `isDrawOffered()` returns `false`; `isOver()`
+    returns `false`.
+
+- **TC-AGREE-13 — The opponent's move ends the offer** ( :white_check_mark: )
+  - **Method(s) under test**: `passTurn()`, `isDrawOffered()`
+  - **State of the system**: As TC-AGREE-03, so White is to move, then
+    `offerDraw(BLACK)`, then `passTurn()` for White's move.
+  - **Expected output**: Returns `false`.
+
+- **TC-AGREE-14 — The offering player's own move keeps the offer** ( :white_check_mark: )
+  - **Method(s) under test**: `passTurn()`, `isDrawOffered()`
+  - **State of the system**: As TC-AGREE-03, so White is to move, then
+    `offerDraw(WHITE)`, then `passTurn()` for White's move.
+  - **Expected output**: Returns `true`.
+
+- **TC-AGREE-15 — An offer ends when the game ends another way** ( :white_check_mark: )
+  - **Method(s) under test**: `endByCheckmate()`, `isDrawOffered()`
+  - **State of the system**: As TC-AGREE-05, then `endByCheckmate()`.
+  - **Expected output**: Returns `false`.
+
+- **TC-AGREE-16 — A draw cannot be offered once the game is over** ( :white_check_mark: )
+  - **Method(s) under test**: `endByRepetition()`, `canOfferDraw()`
+  - **State of the system**: As TC-AGREE-03, then `endByRepetition()`.
+  - **Expected output**: Returns `false`.

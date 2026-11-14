@@ -97,12 +97,13 @@ Step 2/3:
 - game over -> Boolean: false, true
 - stalemate -> Boolean: false, true
 - winner -> Cases: Player 1 / White, Player 2 / Black
-- result of a game that is over -> Cases: checkmate, draw by repetition (issue #59)
+- result of a game that is over -> Cases: checkmate, draw by repetition (issue #59), resignation (issue #60)
 - output is:
   - `Current player: <name of the player to move>` while the game is not over
   - `Checkmate: <winner's name> (<winner's color>) wins` once the game is over by checkmate
   - `Draw by stalemate` once the game is over by stalemate
   - `Draw by repetition` once the game is drawn by repetition
+  - `Resignation: <winner's name> (<winner's color>) wins` once the other player has resigned
 
 - **TC9: refresh after the turn passes** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while `playerToMoveName()` was Ada. Then `playerToMoveName()` is Bo, the game is not over, and `refreshStatus()` runs.
@@ -147,10 +148,42 @@ winner, so the line names no player.
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by repetition`
 
+Issue #60 (GitHub US-20, docs US-20). After a resignation, the same line shows
+the opponent's name and color as the winner by resignation (US-20 AC 4).
+
+- **TC15: refresh after Player 1 resigns** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isWonByResignation()` is true, `winnerName()` is Bo, `winnerColor()` is `BLACK`, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Resignation: Bo (Black) wins`
+
+- **TC16: refresh after Player 2 resigns** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isWonByResignation()` is true, `winnerName()` is Ada, `winnerColor()` is `WHITE`, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Resignation: Ada (White) wins`
+
+Issue #61 (GitHub US-21, docs US-21). After the opponent accepts a draw offer,
+the same line shows a draw by agreement instead of the player to move (US-21
+AC 7). A draw has no winner, so the line names no player.
+
+Step 1:
+- input (added): whether the game is drawn by agreement (`isDrawnByAgreement()`)
+
+Step 2/3:
+- result of a game that is over -> Cases (added): draw by agreement
+- output (added): `Draw by agreement` once the game is drawn by agreement
+
+TC10, TC11, and TC13 still hold: the game answers false for
+`isDrawnByAgreement()`, so a checkmate still shows the winner.
+
+- **TC17: refresh after a draw by agreement** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isDrawnByAgreement()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Draw by agreement`
+
 Issue #49 (GitHub US-16, docs US-16). After a stalemate, the same line shows
 the result. A stalemate has no winner, so the line names no player.
 `isStalemate()` is asked before `winnerName()`, so a draw never reads the winner.
 
-- **TC15: refresh after a stalemate** ( :white_check_mark: )
-    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isStalemate()` is true, and `refreshStatus()` runs.
+TC10, TC11, and TC13 still hold: the game answers false for
+`isStalemate()`, so a checkmate still shows the winner.
+
+- **TC18: refresh after a stalemate** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isDrawnByAgreement()` is false, `isStalemate()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by stalemate`
