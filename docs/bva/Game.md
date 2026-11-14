@@ -897,7 +897,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
   - **Expected output**: Throws `IllegalStateException`.
 
 - **TC-FIFTY-19 — Reject reading the winner's name after a fifty-move draw**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `endByFiftyMove()`, `winnerName()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then
     `endByFiftyMove()`.

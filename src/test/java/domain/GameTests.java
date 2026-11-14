@@ -967,6 +967,15 @@ public class GameTests {
         assertThrows(IllegalStateException.class, game::endBySeventyFiveMove);
     }
 
+    @Test
+    public void WinnerName_DrawnByFiftyMove_ThrowsIllegalStateException() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByFiftyMove();
+
+        assertThrows(IllegalStateException.class, game::winnerName);
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");
