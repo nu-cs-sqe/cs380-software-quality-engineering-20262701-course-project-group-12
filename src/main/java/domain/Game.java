@@ -174,6 +174,7 @@ public class Game {
     }
 
     public void endByFiftyMove() {
+        requireStartedTo("end the game");
         drawnByFiftyMove = true;
     }
 

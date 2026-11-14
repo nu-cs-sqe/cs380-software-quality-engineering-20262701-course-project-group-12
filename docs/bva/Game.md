@@ -885,7 +885,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
   - **Expected output**: `isDrawnByFiftyMove()` returns `false`;
     `isDrawnBySeventyFiveMove()` returns `false`.
 
-- **TC-FIFTY-17 — Reject ending by the fifty-move rule before a start** ( :x: )
+- **TC-FIFTY-17 — Reject ending by the fifty-move rule before a start** ( :white_check_mark: )
   - **Method(s) under test**: `endByFiftyMove()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
