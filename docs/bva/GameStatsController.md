@@ -179,7 +179,7 @@ no player. The queries are asked before `winnerName()`. The case numbers
 start at TC18, after agreement's TC17, so they do not collide with stalemate
 or dead position.
 
-- **TC18: refresh after a fifty-move draw** ( :x: )
+- **TC18: refresh after a fifty-move draw** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByFiftyMove()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by the fifty-move rule`
 

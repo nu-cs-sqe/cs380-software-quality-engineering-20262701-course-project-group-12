@@ -53,6 +53,9 @@ public class GameStatsController {
         if (game.isDrawnByAgreement()) {
             return Messages.text("stats.drawByAgreement");
         }
+        if (game.isDrawnByFiftyMove()) {
+            return Messages.text("stats.drawByFiftyMove");
+        }
         if (game.isWonByResignation()) {
             return winnerLine(RESIGNATION_KEYS);
         }
