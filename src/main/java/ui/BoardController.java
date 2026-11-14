@@ -52,7 +52,9 @@ public class BoardController {
         if (game.isOver()) {
             return false;
         }
-        return game.canClaimDrawByRepetition() || isDrawClaimWithMovePending();
+        return game.canClaimDrawByRepetition()
+                || game.canClaimDrawByFiftyMove()
+                || isDrawClaimWithMovePending();
     }
 
     public boolean isDrawClaimWithMovePending() {

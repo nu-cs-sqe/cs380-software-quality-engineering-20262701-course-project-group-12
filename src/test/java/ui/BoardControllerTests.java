@@ -95,6 +95,7 @@ public class BoardControllerTests {
         expect(game.isFivefoldRepetition()).andStubReturn(false);
         expect(game.canClaimDrawByRepetitionWith(
                 anyObject(Location.class), anyObject(Location.class))).andStubReturn(false);
+        expect(game.canClaimDrawByFiftyMove()).andStubReturn(false);
     }
 
     @Test
@@ -865,6 +866,18 @@ public class BoardControllerTests {
         controller.clickSquare(E1);
         controller.clickSquare(G1);
 
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void CanClaimDraw_PlayerToMoveCanClaimFiftyMove_ReturnsTrue() {
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        expect(game.canClaimDrawByFiftyMove()).andReturn(true);
+        BoardController controller = replayedController();
+
+        boolean canClaim = controller.canClaimDraw();
+
+        assertTrue(canClaim);
         verify(board, piece, game);
     }
 
