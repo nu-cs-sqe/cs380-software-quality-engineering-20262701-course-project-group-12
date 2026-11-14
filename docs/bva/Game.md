@@ -869,7 +869,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
   - **Expected output**: `isOver()` returns `true`; `isDrawnByFiftyMove()`
     returns `true`.
 
-- **TC-FIFTY-15 — A seventy-five-move draw ends the game** ( :x: )
+- **TC-FIFTY-15 — A seventy-five-move draw ends the game** ( :white_check_mark: )
   - **Method(s) under test**: `endBySeventyFiveMove()`, `isOver()`,
     `isDrawnBySeventyFiveMove()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then
@@ -877,7 +877,7 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
   - **Expected output**: `isOver()` returns `true`;
     `isDrawnBySeventyFiveMove()` returns `true`.
 
-- **TC-FIFTY-16 — Checkmate is not a fifty-move draw** ( :x: )
+- **TC-FIFTY-16 — Checkmate is not a fifty-move draw** ( :white_check_mark: )
   - **Method(s) under test**: `endByCheckmate()`, `isDrawnByFiftyMove()`,
     `isDrawnBySeventyFiveMove()`
   - **State of the system**: `start("Alice", "Bob")` has completed, then

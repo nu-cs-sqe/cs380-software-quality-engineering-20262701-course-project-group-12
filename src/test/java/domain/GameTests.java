@@ -931,6 +931,28 @@ public class GameTests {
         assertTrue(game.isDrawnByFiftyMove());
     }
 
+    @Test
+    public void EndBySeventyFiveMove_StartedGame_DrawsTheGame() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endBySeventyFiveMove();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isDrawnBySeventyFiveMove());
+    }
+
+    @Test
+    public void EndByCheckmate_StartedGame_IsNotDrawnByFiftyMove() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByCheckmate();
+
+        assertFalse(game.isDrawnByFiftyMove());
+        assertFalse(game.isDrawnBySeventyFiveMove());
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");
