@@ -881,6 +881,18 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void CanClaimDraw_PlayerToMoveCannotClaimFiftyMoveAndNoMoveWaits_ReturnsFalse() {
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        expect(game.canClaimDrawByFiftyMove()).andReturn(false);
+        BoardController controller = replayedController();
+
+        boolean canClaim = controller.canClaimDraw();
+
+        assertFalse(canClaim);
+        verify(board, piece, game);
+    }
+
     private void expectPieceOnB1() {
         expectSelectableWhitePiece(B1);
         expect(board.pieceAt(B1)).andReturn(piece);
