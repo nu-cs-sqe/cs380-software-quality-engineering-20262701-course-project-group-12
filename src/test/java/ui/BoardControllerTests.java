@@ -982,6 +982,20 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void ClaimDraw_WaitingFiftyMove_EndsTheGameByFiftyMove() {
+        expectMoveFromB1ToC3MakingFiftyMoveClaim();
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        expect(game.canClaimDrawByFiftyMove()).andStubReturn(false);
+        expect(game.canClaimDrawByFiftyMoveWith(B1, C3)).andReturn(true);
+        game.endByFiftyMove();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        controller.claimDraw();
+
+        verify(board, piece, game);
+    }
+
     private void expectPieceOnB1() {
         expectSelectableWhitePiece(B1);
         expect(board.pieceAt(B1)).andReturn(piece);

@@ -77,11 +77,19 @@ public class BoardController {
     }
 
     private void endByClaimedDraw() {
-        if (game.canClaimDrawByFiftyMove()) {
+        if (game.canClaimDrawByFiftyMove() || waitingMoveWouldClaimFiftyMove()) {
             game.endByFiftyMove();
         } else {
             game.endByRepetition();
         }
+    }
+
+    private boolean waitingMoveWouldClaimFiftyMove() {
+        if (moveWaitingForClaim.isEmpty()) {
+            return false;
+        }
+        WaitingMove waitingMove = moveWaitingForClaim.get();
+        return game.canClaimDrawByFiftyMoveWith(waitingMove.from, waitingMove.to);
     }
 
     public void resign(PieceColor resigningColor) {
