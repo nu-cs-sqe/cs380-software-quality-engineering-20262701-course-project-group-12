@@ -164,6 +164,10 @@ public class Board {
         return isInCheck(color) && !hasLegalMove(color);
     }
 
+    public boolean isStalemated(PieceColor color) {
+        return !isInCheck(color) && !hasLegalMove(color);
+    }
+
     private boolean hasLegalMove(PieceColor color) {
         return occupiedSquares()
                 .filter(from -> pieceAt(from).getColor() == color)

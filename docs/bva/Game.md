@@ -4,8 +4,9 @@
 stores the two players, the starting board, and the player to move. Issue #41
 adds `passTurn`, which gives the turn to the other player after a legal move.
 Issue #48 adds `endByCheckmate`, which ends the game when the player to move
-is checkmated. The test cases below use the game's public behavior to observe
-its state.
+is checkmated. Issue #49 adds `endByStalemate`, which ends the game as a draw
+when the player to move is not in check and has no legal move. The test cases
+below use the game's public behavior to observe its state.
 
 `start` returns nothing. It throws when a start is rejected. `passTurn`
 returns nothing. It throws when the game has not started.
@@ -370,6 +371,67 @@ comes with those stories.
   - **Method(s) under test**: `endByCheckmate()`
   - **State of the system**: New game before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
+
+### Methods under test: `endByStalemate()`, `isOver()`, `isStalemate()`, `winnerName()`, and `winnerColor()`
+
+Issue #49 (GitHub US-16, docs US-16). Stalemate occurs when the player to move
+is not in check and has no legal move, so `BoardController` calls
+`endByStalemate` after `passTurn` when `Board.isStalemated(colorToMove())` is
+true. The game ends as a draw: `isOver()` is true, `isStalemate()` is true, and
+there is no winner. `winnerName()` and `winnerColor()` still throw, because a
+draw has no winner; they must not return null. Checkmate is not stalemate:
+`endByCheckmate` leaves `isStalemate()` false. Callers never pass arguments, so
+there is no null case.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the game's state | Cases | unstarted; started and still in play; over by checkmate; over by stalemate |
+| Output: `isOver()` | Boolean | false; true (checkmate or stalemate) |
+| Output: `isStalemate()` | Boolean | false; true |
+| Output: signal for an unstarted game, a game that is not over, or a draw | Cases | `IllegalStateException` from `winnerName()` and `winnerColor()` |
+
+Out of scope: other draws (dead position, repetition, fifty-move). Those
+stories will add their own endings. `BoardController` already refuses every
+click once `isOver()` is true, so further moves after stalemate are refused
+without a new click case.
+
+- **TC-END-08 — A started game is not a stalemate** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `isStalemate()`
+  - **State of the system**: `start("Alice", "Bob")` has completed.
+  - **Expected output**: Returns `false`.
+
+- **TC-END-09 — Stalemate ends the game as a draw** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `endByStalemate()`,
+    `isOver()`, `isStalemate()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByStalemate()`.
+  - **Expected output**: `isOver()` returns `true`; `isStalemate()` returns
+    `true`.
+
+- **TC-END-10 — Checkmate is not a stalemate** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `endByCheckmate()`,
+    `isStalemate()`, `isOver()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByCheckmate()`.
+  - **Expected output**: `isOver()` returns `true`; `isStalemate()` returns
+    `false`.
+
+- **TC-END-11 — Reject reading the winner's name after a stalemate** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `endByStalemate()`,
+    `winnerName()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByStalemate()`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+- **TC-END-12 — Reject reading the winner's color after a stalemate** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `endByStalemate()`,
+    `winnerColor()`
+  - **State of the system**: `start("Alice", "Bob")` has completed, then
+    `endByStalemate()`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+- **TC-END-13 — Reject ending by stalemate before a start** ( :white_check_mark: )
+  - **Method(s) under test**: `endByStalemate()`
 
 ### Method under test: `isPlayerToMoveInCheck()`
 

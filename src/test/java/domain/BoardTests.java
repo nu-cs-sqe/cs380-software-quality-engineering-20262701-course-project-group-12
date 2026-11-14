@@ -383,6 +383,56 @@ public class BoardTests {
     }
 
     @Test
+    public void IsStalemated_NewBoard_ReturnsFalse() {
+        Board board = new Board();
+
+        boolean stalemated = board.isStalemated(PieceColor.WHITE);
+
+        assertFalse(stalemated);
+    }
+
+    @Test
+    public void IsStalemated_InCheckWithNoReply_ReturnsFalse() {
+        Board board = foolsMate();
+
+        boolean stalemated = board.isStalemated(PieceColor.WHITE);
+
+        assertFalse(stalemated);
+    }
+
+    @Test
+    public void IsStalemated_InCheckWithReplyThatBlocks_ReturnsFalse() {
+        Board board = queenCheckOnBlack();
+
+        boolean stalemated = board.isStalemated(PieceColor.BLACK);
+
+        assertFalse(stalemated);
+    }
+
+    @Test
+    public void IsStalemated_NotInCheckWithNoLegalMove_ReturnsTrue() {
+        Board board = samLoydsStalemate();
+
+        boolean stalemated = board.isStalemated(PieceColor.BLACK);
+
+        assertTrue(stalemated);
+    }
+
+    @Test
+    public void IsStalemated_SamLoydsPosition_LeavesTheBoardUnchanged() {
+        Board board = samLoydsStalemate();
+        Piece whiteQueen = board.pieceAt(E6);
+        Piece blackKing = board.pieceAt(G6);
+        final int pieces = countPieces(board);
+
+        board.isStalemated(PieceColor.BLACK);
+
+        assertSame(whiteQueen, board.pieceAt(E6));
+        assertSame(blackKing, board.pieceAt(G6));
+        assertEquals(pieces, countPieces(board));
+    }
+
+    @Test
     public void PositionAfterMove_KnightToF3_MatchesTheBoardAfterThatMove() {
         Board board = new Board();
         Board movedBoard = new Board();

@@ -19,6 +19,7 @@ public class Game {
     private Player playerToMove;
     private Board board;
     private Optional<Player> winner = Optional.empty();
+    private boolean stalemate;
     private boolean drawnByRepetition;
     private boolean wonByResignation;
     private int movesMade;
@@ -64,6 +65,11 @@ public class Game {
     public void endByCheckmate() {
         requireStartedTo("end the game");
         winner = Optional.of(playerWaiting());
+    }
+
+    public void endByStalemate() {
+        requireStartedTo("end by stalemate");
+        stalemate = true;
     }
 
     private Player playerWaiting() {
@@ -154,7 +160,11 @@ public class Game {
     }
 
     public boolean isOver() {
-        return winner.isPresent() || drawnByRepetition || drawnByAgreement;
+        return winner.isPresent() || stalemate || drawnByRepetition || drawnByAgreement;
+    }
+
+    public boolean isStalemate() {
+        return stalemate;
     }
 
     public boolean isPlayerToMoveInCheck() {

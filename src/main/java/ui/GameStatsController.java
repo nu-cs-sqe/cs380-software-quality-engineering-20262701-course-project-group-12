@@ -53,6 +53,9 @@ public class GameStatsController {
         if (game.isDrawnByAgreement()) {
             return Messages.text("stats.drawByAgreement");
         }
+        if (game.isStalemate()) {
+            return Messages.text("stats.drawByStalemate");
+        }
         if (game.isWonByResignation()) {
             return winnerLine(RESIGNATION_KEYS);
         }

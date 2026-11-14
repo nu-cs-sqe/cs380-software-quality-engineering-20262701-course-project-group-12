@@ -360,6 +360,63 @@ public class GameTests {
     }
 
     @Test
+    public void IsStalemate_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean stalemate = game.isStalemate();
+
+        assertFalse(stalemate);
+    }
+
+    @Test
+    public void EndByStalemate_StartedGame_EndsTheGame() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByStalemate();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isStalemate());
+    }
+
+    @Test
+    public void EndByCheckmate_StartedGame_IsNotStalemate() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByCheckmate();
+
+        assertTrue(game.isOver());
+        assertFalse(game.isStalemate());
+    }
+
+    @Test
+    public void WinnerName_AfterStalemate_ThrowsIllegalStateException() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByStalemate();
+
+        assertThrows(IllegalStateException.class, game::winnerName);
+    }
+
+    @Test
+    public void WinnerColor_AfterStalemate_ThrowsIllegalStateException() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByStalemate();
+
+        assertThrows(IllegalStateException.class, game::winnerColor);
+    }
+
+    @Test
+    public void EndByStalemate_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::endByStalemate);
+    }
+
+    @Test
     public void CanClaimDrawByRepetition_NewGame_ReturnsFalse() {
         Game game = new Game();
         game.start("Alice", "Bob");
