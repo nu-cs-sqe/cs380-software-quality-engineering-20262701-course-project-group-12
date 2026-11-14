@@ -140,7 +140,8 @@ public class BoardController {
     }
 
     private void moveUnlessItCanBeClaimed(Piece movingPiece, Location from, Location to) {
-        if (game.canClaimDrawByRepetitionWith(from, to)) {
+        if (game.canClaimDrawByRepetitionWith(from, to)
+                || game.canClaimDrawByFiftyMoveWith(from, to)) {
             moveWaitingForClaim = Optional.of(new WaitingMove(movingPiece, from, to));
         } else {
             makeMove(movingPiece, from, to);

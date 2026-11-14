@@ -97,6 +97,8 @@ public class BoardControllerTests {
         expect(game.canClaimDrawByRepetitionWith(
                 anyObject(Location.class), anyObject(Location.class))).andStubReturn(false);
         expect(game.canClaimDrawByFiftyMove()).andStubReturn(false);
+        expect(game.canClaimDrawByFiftyMoveWith(
+                anyObject(Location.class), anyObject(Location.class))).andStubReturn(false);
     }
 
     @Test
@@ -747,6 +749,13 @@ public class BoardControllerTests {
         expect(game.canClaimDrawByRepetitionWith(B1, C3)).andReturn(true);
     }
 
+    private void expectMoveFromB1ToC3MakingFiftyMoveClaim() {
+        expectPieceOnB1();
+        expect(board.isLegalMove(B1, C3)).andReturn(true);
+        expect(game.canClaimDrawByRepetitionWith(B1, C3)).andReturn(false);
+        expect(game.canClaimDrawByFiftyMoveWith(B1, C3)).andReturn(true);
+    }
+
     private BoardController controllerWithMoveWaitingForTheClaim() {
         BoardController controller = replayedController();
         controller.clickSquare(B1);
@@ -946,6 +955,17 @@ public class BoardControllerTests {
         controller.clickSquare(B1);
         controller.clickSquare(C3);
 
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_MoveMakingFiftyMoveClaim_WaitsForTheClaim() {
+        expectMoveFromB1ToC3MakingFiftyMoveClaim();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        boolean waiting = controller.isDrawClaimWithMovePending();
+
+        assertTrue(waiting);
         verify(board, piece, game);
     }
 
