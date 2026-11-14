@@ -183,6 +183,7 @@ public class Game {
     }
 
     public void endBySeventyFiveMove() {
+        requireStartedTo("end the game");
         drawnBySeventyFiveMove = true;
     }
 
