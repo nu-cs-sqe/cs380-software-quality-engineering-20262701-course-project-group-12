@@ -52,7 +52,9 @@ public class BoardController {
         if (game.isOver()) {
             return false;
         }
-        return game.canClaimDrawByRepetition() || isDrawClaimWithMovePending();
+        return game.canClaimDrawByRepetition()
+                || game.canClaimDrawByFiftyMove()
+                || isDrawClaimWithMovePending();
     }
 
     public boolean isDrawClaimWithMovePending() {
@@ -70,8 +72,24 @@ public class BoardController {
 
     public void claimDraw() {
         if (canClaimDraw()) {
+            endByClaimedDraw();
+        }
+    }
+
+    private void endByClaimedDraw() {
+        if (game.canClaimDrawByFiftyMove() || waitingMoveWouldClaimFiftyMove()) {
+            game.endByFiftyMove();
+        } else {
             game.endByRepetition();
         }
+    }
+
+    private boolean waitingMoveWouldClaimFiftyMove() {
+        if (moveWaitingForClaim.isEmpty()) {
+            return false;
+        }
+        WaitingMove waitingMove = moveWaitingForClaim.get();
+        return game.canClaimDrawByFiftyMoveWith(waitingMove.from, waitingMove.to);
     }
 
     public void resign(PieceColor resigningColor) {
@@ -130,7 +148,8 @@ public class BoardController {
     }
 
     private void moveUnlessItCanBeClaimed(Piece movingPiece, Location from, Location to) {
-        if (game.canClaimDrawByRepetitionWith(from, to)) {
+        if (game.canClaimDrawByRepetitionWith(from, to)
+                || game.canClaimDrawByFiftyMoveWith(from, to)) {
             moveWaitingForClaim = Optional.of(new WaitingMove(movingPiece, from, to));
         } else {
             makeMove(movingPiece, from, to);
@@ -154,6 +173,8 @@ public class BoardController {
     private void endGameIfOver() {
         if (board.isCheckmated(game.colorToMove())) {
             game.endByCheckmate();
+        } else if (game.isSeventyFiveMoveRule()) {
+            game.endBySeventyFiveMove();
         } else if (game.isFivefoldRepetition()) {
             game.endByRepetition();
         }

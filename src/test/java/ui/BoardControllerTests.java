@@ -93,7 +93,11 @@ public class BoardControllerTests {
         expect(game.isOver()).andStubReturn(false);
         expect(board.isCheckmated(anyObject(PieceColor.class))).andStubReturn(false);
         expect(game.isFivefoldRepetition()).andStubReturn(false);
+        expect(game.isSeventyFiveMoveRule()).andStubReturn(false);
         expect(game.canClaimDrawByRepetitionWith(
+                anyObject(Location.class), anyObject(Location.class))).andStubReturn(false);
+        expect(game.canClaimDrawByFiftyMove()).andStubReturn(false);
+        expect(game.canClaimDrawByFiftyMoveWith(
                 anyObject(Location.class), anyObject(Location.class))).andStubReturn(false);
     }
 
@@ -745,6 +749,13 @@ public class BoardControllerTests {
         expect(game.canClaimDrawByRepetitionWith(B1, C3)).andReturn(true);
     }
 
+    private void expectMoveFromB1ToC3MakingFiftyMoveClaim() {
+        expectPieceOnB1();
+        expect(board.isLegalMove(B1, C3)).andReturn(true);
+        expect(game.canClaimDrawByRepetitionWith(B1, C3)).andReturn(false);
+        expect(game.canClaimDrawByFiftyMoveWith(B1, C3)).andReturn(true);
+    }
+
     private BoardController controllerWithMoveWaitingForTheClaim() {
         BoardController controller = replayedController();
         controller.clickSquare(B1);
@@ -864,6 +875,123 @@ public class BoardControllerTests {
 
         controller.clickSquare(E1);
         controller.clickSquare(G1);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void CanClaimDraw_PlayerToMoveCanClaimFiftyMove_ReturnsTrue() {
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        expect(game.canClaimDrawByFiftyMove()).andReturn(true);
+        BoardController controller = replayedController();
+
+        boolean canClaim = controller.canClaimDraw();
+
+        assertTrue(canClaim);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void CanClaimDraw_PlayerToMoveCannotClaimFiftyMoveAndNoMoveWaits_ReturnsFalse() {
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        expect(game.canClaimDrawByFiftyMove()).andReturn(false);
+        BoardController controller = replayedController();
+
+        boolean canClaim = controller.canClaimDraw();
+
+        assertFalse(canClaim);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClaimDraw_FiftyMoveClaimIsCorrect_EndsTheGameByFiftyMove() {
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        expect(game.canClaimDrawByFiftyMove()).andReturn(true).times(2);
+        game.endByFiftyMove();
+        BoardController controller = replayedController();
+
+        controller.claimDraw();
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_MoveMakingSeventyFiveMoveRule_EndsTheGameBySeventyFiveMove() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(false);
+        expect(game.isFivefoldRepetition()).andStubReturn(false);
+        expect(game.isSeventyFiveMoveRule()).andReturn(true);
+        game.endBySeventyFiveMove();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_MoveNotMakingSeventyFiveMoveRule_DoesNotEndTheGame() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(false);
+        expect(game.isFivefoldRepetition()).andStubReturn(false);
+        expect(game.isSeventyFiveMoveRule()).andReturn(false);
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_CheckmateThatIsAlsoSeventyFiveMoveRule_EndsTheGameByCheckmate() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(true);
+        expect(game.isSeventyFiveMoveRule()).andStubReturn(true);
+        game.endByCheckmate();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_MoveMakingFiftyMoveClaim_WaitsForTheClaim() {
+        expectMoveFromB1ToC3MakingFiftyMoveClaim();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        boolean waiting = controller.isDrawClaimWithMovePending();
+
+        assertTrue(waiting);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void CanClaimDraw_WaitingFiftyMove_ReturnsTrue() {
+        expectMoveFromB1ToC3MakingFiftyMoveClaim();
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        expect(game.canClaimDrawByFiftyMove()).andStubReturn(false);
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        boolean canClaim = controller.canClaimDraw();
+
+        assertTrue(canClaim);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClaimDraw_WaitingFiftyMove_EndsTheGameByFiftyMove() {
+        expectMoveFromB1ToC3MakingFiftyMoveClaim();
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        expect(game.canClaimDrawByFiftyMove()).andStubReturn(false);
+        expect(game.canClaimDrawByFiftyMoveWith(B1, C3)).andReturn(true);
+        game.endByFiftyMove();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        controller.claimDraw();
 
         verify(board, piece, game);
     }

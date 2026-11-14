@@ -50,6 +50,7 @@ public class Board {
     private final List<List<Optional<Piece>>> squares = emptySquares();
     private final Set<Piece> movedPieces = Collections.newSetFromMap(new IdentityHashMap<>());
     private Optional<Location> pawnThatJustAdvancedTwoRanks = Optional.empty();
+    private int halfMoveCount;
 
     public Board() {
         for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
@@ -61,6 +62,7 @@ public class Board {
         allSquares().forEach(square ->
                 rankOf(square).set(square.getFile(), original.occupantOf(square)));
         pawnThatJustAdvancedTwoRanks = original.pawnThatJustAdvancedTwoRanks;
+        halfMoveCount = original.halfMoveCount;
     }
 
     private static List<List<Optional<Piece>>> emptySquares() {
@@ -95,6 +97,7 @@ public class Board {
 
     public void move(Location from, Location to) {
         Piece movingPiece = pieceAt(from);
+        final boolean isCapture = isOccupied(to);
         clear(from);
         removePawnCapturedEnPassant(movingPiece, from, to);
         place(movingPiece, to);
@@ -102,6 +105,19 @@ public class Board {
         pawnThatJustAdvancedTwoRanks = isPawnAdvancingTwoRanks(movingPiece, from, to)
                 ? Optional.of(to)
                 : Optional.empty();
+        if (isPawn(movingPiece) || isCapture) {
+            halfMoveCount = 0;
+        } else {
+            halfMoveCount++;
+        }
+    }
+
+    int halfMoveCount() {
+        return halfMoveCount;
+    }
+
+    int halfMoveCountAfter(Location from, Location to) {
+        return boardAfterMove(from, to).halfMoveCount();
     }
 
     public boolean canBeCapturedEnPassant(Location square) {

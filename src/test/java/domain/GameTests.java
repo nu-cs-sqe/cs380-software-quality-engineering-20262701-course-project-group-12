@@ -1,6 +1,7 @@
 package domain;
 
 import domain.piece.PieceColor;
+import domain.piece.PieceType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameTests {
     private static final Location A1 = new Location(0, 1);
+    private static final Location A2 = new Location(0, 2);
+    private static final Location A8 = new Location(0, 8);
     private static final Location B8 = new Location(1, 8);
     private static final Location C6 = new Location(2, 6);
     private static final Location D1 = new Location(3, 1);
@@ -33,6 +36,9 @@ public class GameTests {
     private static final int ROUND_TRIPS_FOR_THIRD_OCCURRENCE = 2;
     private static final int ROUND_TRIPS_FOR_FOURTH_OCCURRENCE = 3;
     private static final int ROUND_TRIPS_FOR_FIFTH_OCCURRENCE = 4;
+    private static final int ROUND_TRIPS_FOR_NINETY_NINE_HALF_MOVES = 24;
+    private static final int ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES = 25;
+    private static final int ROUND_TRIPS_FOR_ONE_HUNDRED_FORTY_NINE_HALF_MOVES = 37;
     private static final int MOVES_BY_BOTH_PLAYERS = 2;
 
     @Test
@@ -773,6 +779,201 @@ public class GameTests {
         boolean canOffer = game.canOfferDraw();
 
         assertFalse(canOffer);
+    }
+
+    @Test
+    public void CanClaimDrawByFiftyMove_NewGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean canClaim = game.canClaimDrawByFiftyMove();
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByFiftyMove_NinetyNineQuietHalfMoves_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_NINETY_NINE_HALF_MOVES);
+        playMove(game, G1, F3);
+        playMove(game, G8, F6);
+        playMove(game, F3, G1);
+
+        boolean canClaim = game.canClaimDrawByFiftyMove();
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByFiftyMove_OneHundredQuietHalfMoves_ReturnsTrue() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES);
+
+        boolean canClaim = game.canClaimDrawByFiftyMove();
+
+        assertTrue(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByFiftyMove_OneHundredFortyNineQuietHalfMoves_ReturnsTrue() {
+        Game game = gameAfterKnightRoundTrips(
+                ROUND_TRIPS_FOR_ONE_HUNDRED_FORTY_NINE_HALF_MOVES);
+        playMove(game, G1, F3);
+
+        boolean canClaim = game.canClaimDrawByFiftyMove();
+
+        assertTrue(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByFiftyMove_PawnMoveAfterOneHundred_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES);
+        playMove(game, E2, E4);
+
+        boolean canClaim = game.canClaimDrawByFiftyMove();
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByFiftyMove_CaptureAfterOneHundred_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES);
+        playMove(game, A1, A8);
+
+        boolean canClaim = game.canClaimDrawByFiftyMove();
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByFiftyMove_PawnPromotesAfterNinetyNine_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_NINETY_NINE_HALF_MOVES);
+        playMove(game, G1, F3);
+        playMove(game, G8, F6);
+        playMove(game, F3, G1);
+        game.board().move(A2, A8);
+        game.board().promote(A8, PieceType.QUEEN);
+        game.passTurn();
+
+        boolean canClaim = game.canClaimDrawByFiftyMove();
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByFiftyMoveWith_MoveMakingOneHundred_ReturnsTrue() {
+        Game game = gameBeforeLastMoveOfRoundTrip(ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES);
+
+        boolean canClaim = game.canClaimDrawByFiftyMoveWith(F6, G8);
+
+        assertTrue(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByFiftyMoveWith_MoveMakingNinetyNine_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(ROUND_TRIPS_FOR_NINETY_NINE_HALF_MOVES);
+        playMove(game, G1, F3);
+        playMove(game, G8, F6);
+
+        boolean canClaim = game.canClaimDrawByFiftyMoveWith(F6, G8);
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void CanClaimDrawByFiftyMoveWith_PawnMoveWouldReset_ReturnsFalse() {
+        Game game = gameBeforeLastMoveOfRoundTrip(ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES);
+
+        boolean canClaim = game.canClaimDrawByFiftyMoveWith(E2, E4);
+
+        assertFalse(canClaim);
+    }
+
+    @Test
+    public void IsSeventyFiveMoveRule_OneHundredFortyNineQuietHalfMoves_ReturnsFalse() {
+        Game game = gameAfterKnightRoundTrips(
+                ROUND_TRIPS_FOR_ONE_HUNDRED_FORTY_NINE_HALF_MOVES);
+        playMove(game, G1, F3);
+
+        boolean seventyFive = game.isSeventyFiveMoveRule();
+
+        assertFalse(seventyFive);
+    }
+
+    @Test
+    public void IsSeventyFiveMoveRule_OneHundredFiftyQuietHalfMoves_ReturnsTrue() {
+        Game game = gameAfterKnightRoundTrips(
+                ROUND_TRIPS_FOR_ONE_HUNDRED_FORTY_NINE_HALF_MOVES);
+        playMove(game, G1, F3);
+        playMove(game, G8, F6);
+
+        boolean seventyFive = game.isSeventyFiveMoveRule();
+
+        assertTrue(seventyFive);
+    }
+
+    @Test
+    public void IsDrawnByFiftyMove_StartedGame_ReturnsFalse() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        boolean drawn = game.isDrawnByFiftyMove();
+
+        assertFalse(drawn);
+    }
+
+    @Test
+    public void EndByFiftyMove_StartedGame_DrawsTheGame() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByFiftyMove();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isDrawnByFiftyMove());
+    }
+
+    @Test
+    public void EndBySeventyFiveMove_StartedGame_DrawsTheGame() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endBySeventyFiveMove();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isDrawnBySeventyFiveMove());
+    }
+
+    @Test
+    public void EndByCheckmate_StartedGame_IsNotDrawnByFiftyMove() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+
+        game.endByCheckmate();
+
+        assertFalse(game.isDrawnByFiftyMove());
+        assertFalse(game.isDrawnBySeventyFiveMove());
+    }
+
+    @Test
+    public void EndByFiftyMove_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::endByFiftyMove);
+    }
+
+    @Test
+    public void EndBySeventyFiveMove_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::endBySeventyFiveMove);
+    }
+
+    @Test
+    public void WinnerName_DrawnByFiftyMove_ThrowsIllegalStateException() {
+        Game game = new Game();
+        game.start("Alice", "Bob");
+        game.endByFiftyMove();
+
+        assertThrows(IllegalStateException.class, game::winnerName);
     }
 
     private static Game gameAfterMoves(int moves) {

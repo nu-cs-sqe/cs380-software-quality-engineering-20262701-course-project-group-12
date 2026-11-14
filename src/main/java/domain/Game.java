@@ -9,6 +9,8 @@ import java.util.Optional;
 public class Game {
     private static final int THREEFOLD = 3;
     private static final int FIVEFOLD = 5;
+    private static final int FIFTY_MOVE_HALF_MOVES = 100;
+    private static final int SEVENTY_FIVE_MOVE_HALF_MOVES = 150;
     private static final int ONE_MORE_OCCURRENCE = 1;
     private static final int MOVES_BY_BOTH_PLAYERS = 2;
 
@@ -24,6 +26,8 @@ public class Game {
     private int movesMade;
     private Optional<PieceColor> drawOfferedBy = Optional.empty();
     private boolean drawnByAgreement;
+    private boolean drawnByFiftyMove;
+    private boolean drawnBySeventyFiveMove;
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -75,6 +79,22 @@ public class Game {
 
     public boolean canClaimDrawByRepetition() {
         return occurrencesOf(currentPosition()) >= THREEFOLD;
+    }
+
+    public boolean canClaimDrawByFiftyMove() {
+        return reachesFiftyMoveClaim(board.halfMoveCount());
+    }
+
+    public boolean canClaimDrawByFiftyMoveWith(Location from, Location to) {
+        return reachesFiftyMoveClaim(board.halfMoveCountAfter(from, to));
+    }
+
+    private boolean reachesFiftyMoveClaim(int halfMoves) {
+        return halfMoves >= FIFTY_MOVE_HALF_MOVES;
+    }
+
+    public boolean isSeventyFiveMoveRule() {
+        return board.halfMoveCount() >= SEVENTY_FIVE_MOVE_HALF_MOVES;
     }
 
     public boolean canClaimDrawByRepetitionWith(Location from, Location to) {
@@ -153,8 +173,27 @@ public class Game {
         return drawnByAgreement;
     }
 
+    public void endByFiftyMove() {
+        requireStartedTo("end the game");
+        drawnByFiftyMove = true;
+    }
+
+    public boolean isDrawnByFiftyMove() {
+        return drawnByFiftyMove;
+    }
+
+    public void endBySeventyFiveMove() {
+        requireStartedTo("end the game");
+        drawnBySeventyFiveMove = true;
+    }
+
+    public boolean isDrawnBySeventyFiveMove() {
+        return drawnBySeventyFiveMove;
+    }
+
     public boolean isOver() {
-        return winner.isPresent() || drawnByRepetition || drawnByAgreement;
+        return winner.isPresent() || drawnByRepetition || drawnByAgreement
+                || drawnByFiftyMove || drawnBySeventyFiveMove;
     }
 
     public boolean isPlayerToMoveInCheck() {
