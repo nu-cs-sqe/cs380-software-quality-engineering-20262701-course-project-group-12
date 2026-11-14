@@ -93,6 +93,7 @@ public class BoardControllerTests {
         expect(game.isOver()).andStubReturn(false);
         expect(board.isCheckmated(anyObject(PieceColor.class))).andStubReturn(false);
         expect(game.isFivefoldRepetition()).andStubReturn(false);
+        expect(game.isSeventyFiveMoveRule()).andStubReturn(false);
         expect(game.canClaimDrawByRepetitionWith(
                 anyObject(Location.class), anyObject(Location.class))).andStubReturn(false);
         expect(game.canClaimDrawByFiftyMove()).andStubReturn(false);
@@ -901,6 +902,21 @@ public class BoardControllerTests {
         BoardController controller = replayedController();
 
         controller.claimDraw();
+
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void ClickSquare_MoveMakingSeventyFiveMoveRule_EndsTheGameBySeventyFiveMove() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        expect(board.isCheckmated(PieceColor.BLACK)).andReturn(false);
+        expect(game.isFivefoldRepetition()).andStubReturn(false);
+        expect(game.isSeventyFiveMoveRule()).andReturn(true);
+        game.endBySeventyFiveMove();
+        BoardController controller = replayedController();
+
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
 
         verify(board, piece, game);
     }

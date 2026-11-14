@@ -164,6 +164,8 @@ public class BoardController {
     private void endGameIfOver() {
         if (board.isCheckmated(game.colorToMove())) {
             game.endByCheckmate();
+        } else if (game.isSeventyFiveMoveRule()) {
+            game.endBySeventyFiveMove();
         } else if (game.isFivefoldRepetition()) {
             game.endByRepetition();
         }
