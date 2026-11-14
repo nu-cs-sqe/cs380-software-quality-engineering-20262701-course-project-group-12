@@ -40,6 +40,12 @@ by `BoardController` and `Board`.
 A diagonal move onto an empty square is rejected unless it captures en
 passant.
 
+`attacks(Location from, Location target, Board board)` (issue #45 /
+US-12) overrides `Piece.attacks`. A pawn attacks the two squares one
+square diagonally forward, whether they are empty or hold an opponent,
+so a pawn can stop the king from castling across an empty square. A
+straight move is never an attack. The board is not consulted.
+
 ## Week 6 instructor review
 
 - **No null checks.** This is a standalone Java application, so the code
@@ -187,6 +193,25 @@ passant.
   after the black d7 pawn moves to d6 and then d5.
 - Beside a pawn of the pawn's color: white f4 to e5 right after the white
   e2 pawn moves to e4.
+
+## Boundaries for `attacks` (issue #45)
+
+- **Input: `from`**: white e2 `(4, 2)` and e4 `(4, 4)`; black e7
+  `(4, 7)`.
+- **Input: `target`**: one square diagonally forward toward a higher
+  file and toward a lower file; one square straight forward; one square
+  diagonally backward; one rank forward and two files over; two squares
+  diagonally forward.
+- **Input: occupant of `target`**: empty; an opponent's piece. Callers
+  never ask about a square that holds the pawn's own color.
+- **Input: pawn color**: white; black.
+- **Output**: `true`; `false`.
+
+The file distance of an attack is an interval `[1, 1]`: `0` (straight
+ahead), `1`, and `2`. The rank change is an interval `[1, 1]` in the
+pawn's forward direction: `-1` (backward), `1`, and `2`. The values are
+the same squares as the `canMove` capture cases, without the opponent
+that a capture needs.
 
 ## Step 4: Test Cases
 
@@ -408,6 +433,61 @@ The en passant cases start at TC-PAWN-29, after the promotion cases
     e5 `(4, 5)`. New `Board` after `move` of the f2 pawn to f4 and the e2
     pawn to e4, so e5 is empty and e4 holds a white pawn that just moved
     two ranks.
+  - **Expected output**: `false`.
+
+### Method under test: `attacks(Location from, Location target, Board board)` (issue #45)
+
+- **TC-PAWN-34 — Attack an empty square diagonally forward toward a
+  higher file** ( :white_check_mark: )
+  - **Method(s) under test**: `attacks(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
+    `target` is f3 `(5, 3)`. New `Board`, so f3 is empty.
+  - **Expected output**: `true`.
+
+- **TC-PAWN-35 — Attack an empty square diagonally forward toward a
+  lower file** ( :white_check_mark: )
+  - **Method(s) under test**: `attacks(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
+    `target` is d3 `(3, 3)`. New `Board`, so d3 is empty.
+  - **Expected output**: `true`.
+
+- **TC-PAWN-36 — Attack with a black pawn** ( :white_check_mark: )
+  - **Method(s) under test**: `attacks(Location, Location, Board)`
+  - **State of the system**: Black pawn. `from` is e7 `(4, 7)`.
+    `target` is d6 `(3, 6)`. New `Board`, so d6 is empty.
+  - **Expected output**: `true`.
+
+- **TC-PAWN-37 — Attack a square that holds an opponent** ( :white_check_mark: )
+  - **Method(s) under test**: `attacks(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
+    `target` is d3 `(3, 3)`. New `Board` after `move` of the d7 pawn to
+    d3, so d3 holds a black pawn.
+  - **Expected output**: `true`.
+
+- **TC-PAWN-38 — Do not attack the square straight ahead** ( :white_check_mark: )
+  - **Method(s) under test**: `attacks(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
+    `target` is e3 `(4, 3)`. New `Board`, so e3 is empty.
+  - **Expected output**: `false`.
+
+- **TC-PAWN-39 — Do not attack diagonally backward** ( :white_check_mark: )
+  - **Method(s) under test**: `attacks(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is e4 `(4, 4)`.
+    `target` is f3 `(5, 3)`. New `Board` after `move` of the e2 pawn to
+    e4, so f3 is empty.
+  - **Expected output**: `false`.
+
+- **TC-PAWN-40 — Do not attack one rank forward and two files over**
+  ( :white_check_mark: )
+  - **Method(s) under test**: `attacks(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
+    `target` is g3 `(6, 3)`. New `Board`, so g3 is empty.
+  - **Expected output**: `false`.
+
+- **TC-PAWN-41 — Do not attack two squares diagonally forward** ( :white_check_mark: )
+  - **Method(s) under test**: `attacks(Location, Location, Board)`
+  - **State of the system**: White pawn. `from` is e2 `(4, 2)`.
+    `target` is g4 `(6, 4)`. New `Board`, so g4 is empty.
   - **Expected output**: `false`.
 
 ## Boundaries Considered for `promotesOn(Location square)`

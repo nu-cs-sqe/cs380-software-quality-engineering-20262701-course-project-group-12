@@ -4,6 +4,7 @@ import domain.Board;
 import domain.Game;
 import domain.Location;
 import domain.piece.Piece;
+import domain.piece.PieceColor;
 import domain.piece.PieceType;
 
 import java.util.Optional;
@@ -48,6 +49,9 @@ public class BoardController {
     }
 
     public boolean canClaimDraw() {
+        if (game.isOver()) {
+            return false;
+        }
         return game.canClaimDrawByRepetition() || isDrawClaimWithMovePending();
     }
 
@@ -68,6 +72,30 @@ public class BoardController {
         if (canClaimDraw()) {
             game.endByRepetition();
         }
+    }
+
+    public void resign(PieceColor resigningColor) {
+        game.resign(resigningColor);
+    }
+
+    public boolean canOfferDraw() {
+        return game.canOfferDraw();
+    }
+
+    public void offerDraw(PieceColor offeringColor) {
+        game.offerDraw(offeringColor);
+    }
+
+    public boolean isDrawOffered() {
+        return game.isDrawOffered();
+    }
+
+    public void acceptDrawOffer() {
+        game.acceptDrawOffer();
+    }
+
+    public void declineDrawOffer() {
+        game.declineDrawOffer();
     }
 
     public void clickSquare(Location square) {
@@ -110,7 +138,7 @@ public class BoardController {
     }
 
     private void makeMove(Piece movingPiece, Location from, Location to) {
-        board.move(from, to);
+        movingPiece.move(from, to, board);
         passTurnUnlessPromoting(movingPiece, to);
     }
 
@@ -124,8 +152,11 @@ public class BoardController {
     }
 
     private void endGameIfOver() {
-        if (board.isCheckmated(game.colorToMove())) {
+        PieceColor colorToMove = game.colorToMove();
+        if (board.isCheckmated(colorToMove)) {
             game.endByCheckmate();
+        } else if (board.isStalemated(colorToMove)) {
+            game.endByStalemate();
         } else if (board.isDeadPosition()) {
             game.endByDeadPosition();
         } else if (game.isFivefoldRepetition()) {

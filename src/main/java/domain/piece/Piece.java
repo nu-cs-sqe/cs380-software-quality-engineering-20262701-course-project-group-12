@@ -28,6 +28,14 @@ public class Piece {
         return false;
     }
 
+    public boolean attacks(Location from, Location target, Board board) {
+        return canMove(from, target, board);
+    }
+
+    public void move(Location from, Location to, Board board) {
+        board.move(from, to);
+    }
+
     public boolean promotesOn(Location square) {
         return false;
     }

@@ -43,6 +43,12 @@ public class Pawn extends Piece {
     }
 
     @Override
+    public boolean attacks(Location from, Location target, Board board) {
+        return rankChange(from, target) == oneSquareForward
+                && from.fileDistanceTo(target) == CAPTURE_FILE_DISTANCE;
+    }
+
+    @Override
     public boolean promotesOn(Location square) {
         return square.getRank() == lastRank;
     }
@@ -59,8 +65,7 @@ public class Pawn extends Piece {
     }
 
     private boolean canCapture(Location from, Location to, Board board) {
-        return rankChange(from, to) == oneSquareForward
-                && from.fileDistanceTo(to) == CAPTURE_FILE_DISTANCE
+        return attacks(from, to, board)
                 && (holdsOpponent(to, board) || canCaptureEnPassant(from, to, board));
     }
 

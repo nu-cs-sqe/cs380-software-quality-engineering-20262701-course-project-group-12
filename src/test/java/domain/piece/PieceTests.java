@@ -88,6 +88,30 @@ public class PieceTests {
     }
 
     @Test
+    public void Attacks_PieceWithoutMovementRules_ReturnsFalse() {
+        Piece whiteQueen = new Piece(PieceType.QUEEN, PieceColor.WHITE);
+        Board board = mock(Board.class);
+        replay(board);
+
+        boolean attacks = whiteQueen.attacks(D1, D3, board);
+
+        assertFalse(attacks);
+        verify(board);
+    }
+
+    @Test
+    public void Move_PlainPiece_AsksTheBoardToMoveIt() {
+        Piece whiteQueen = new Piece(PieceType.QUEEN, PieceColor.WHITE);
+        Board board = mock(Board.class);
+        board.move(D1, D3);
+        replay(board);
+
+        whiteQueen.move(D1, D3, board);
+
+        verify(board);
+    }
+
+    @Test
     public void PromotesOn_PieceOtherThanPawn_ReturnsFalse() {
         Piece whiteQueen = new Piece(PieceType.QUEEN, PieceColor.WHITE);
 

@@ -16,12 +16,20 @@
 - `void clickSquare(Location square)`, keeping the king out of check (issue #44 / GitHub US-11): the controller asks `board.isLegalMove(from, to)` instead of asking the selected piece `canMove`. The board answers false for a move the piece cannot make and for a move that leaves the mover's own king in check, so both are refused the same way (US-10): the board is unchanged, the turn does not pass, and the selection follows the rules above. A pawn move onto the last rank is checked the same way before any promotion is pending. Because no legal move leaves a king in check, no move can capture a king (US-11 AC 5), so the controller no longer refuses a king capture itself.
 - `void choosePromotion(PieceType type)`, checkmate (issue #44, US-11 AC 8): after the promotion passes the turn, the controller asks `board.isCheckmated(game.colorToMove())`, as after any other move, and calls `game.endByCheckmate()` when the player now to move is checkmated.
 - `void clickSquare(Location square)`, checkmate (issue #48 / GitHub US-15, docs US-15): after a move passes the turn, the controller asks `board.isCheckmated(game.colorToMove())`. When the player now to move is checkmated, it calls `game.endByCheckmate()`, so the player who made the move wins. Once `game.isOver()` is true, every click does nothing: no square is selected and no piece moves (US-15 AC 3).
+- `void clickSquare(Location square)`, stalemate (issue #49 / GitHub US-16, docs US-16): after a move passes the turn, if the player now to move is not checkmated, the controller asks `board.isStalemated(game.colorToMove())`. When that player is stalemated, it calls `game.endByStalemate()`, so the game is a draw. Checkmate is asked first: a position in check with no reply is never ended as a stalemate. A click after the game is over is already TC40.
 - `boolean canClaimDraw()` (issue #59 / GitHub US-19, docs US-18): returns true when the player to move can claim a draw by repetition now (`game.canClaimDrawByRepetition()`), or while a move that would make a position occur the third time is waiting for the claim. `BoardView` offers Claim Draw only then, so the claim is offered only when it is correct (US-19 AC 5).
 - `void claimDraw()` (issue #59): when `canClaimDraw()` is true, the game ends by repetition (`game.endByRepetition()`), and a waiting move is not made. Otherwise nothing happens.
 - `void clickSquare(Location square)`, repetition (issue #59): when the board answers true for `isLegalMove` from the selected square to the clicked square and `game.canClaimDrawByRepetitionWith(from, to)` is true, the board does not move yet. The move waits for the player to claim the draw or decline it (US-19 AC 4), and clicks do nothing while it waits. After a move passes the turn and is not checkmate, `game.isFivefoldRepetition()` ends the game by repetition with no claim (US-19 AC 6). Checkmate is checked first, so it still wins (US-19 AC 7).
 - `boolean isDrawClaimWithMovePending()` (issue #59): returns true while a move waits for the claim. `BoardView` uses it to ask the player whether to claim the draw.
+- `void resign(PieceColor resigningColor)` (issue #60 / GitHub US-20, docs US-20): passes the resignation to `game.resign(resigningColor)`. `Game` decides who wins and ignores a resignation after the game is over, so the controller only forwards it. Once the game is over, `clickSquare` already refuses further moves (US-20 AC 5), and `canClaimDraw` returns false, so a resignation cannot be turned into a draw (US-20 AC 4).
 - `void declineDrawClaim()` (issue #59): makes the waiting move as usual: the board moves the piece, the game passes the turn, and the checks for checkmate and fivefold repetition run.
-- `void clickSquare(Location square)`, dead position (issue #50 / GitHub US-17, docs US-17): after a move passes the turn, if the player now to move is not checkmated, the controller asks `board.isDeadPosition()`. When the position is dead, it calls `game.endByDeadPosition()`, so the game is a draw. Checkmate is asked first. A click after the game is over is already TC40.
+- `boolean canOfferDraw()` (issue #61 / GitHub US-21, docs US-21): returns `game.canOfferDraw()`. The view offers Offer Draw only then.
+- `void offerDraw(PieceColor offeringColor)` (issue #61): passes the offer to `game.offerDraw(offeringColor)`.
+- `boolean isDrawOffered()` (issue #61): returns `game.isDrawOffered()`. The view shows the offer to the opponent, with Accept and Decline, only then.
+- `void acceptDrawOffer()` and `void declineDrawOffer()` (issue #61): pass the answer to `game.acceptDrawOffer()` and `game.declineDrawOffer()`. `Game` decides when an offer can be made, ends it after the opponent's move, and ends the game on an acceptance, so the controller only forwards. Once the game is drawn by agreement, `clickSquare` already refuses further moves through `game.isOver()` (US-21 AC 7).
+- `boolean canClaimDraw()`, after the game is over (issue #61): TC58 (issue #60) already returns false once `game.isOver()` is true, so after a draw by agreement a position that occurred three times cannot be claimed, and the window shows a draw by agreement, not a draw by repetition (US-21 AC 7).
+- `void clickSquare(Location square)`, the piece makes the move (issue #45 / US-12): when the board answers true for `isLegalMove` from the selected square to the clicked square, the controller calls the selected piece's `move(from, to, board)` instead of `board.move(from, to)`, so a castling king also moves its rook (`King.md`). A waiting move that the player declines to claim is made the same way. In every earlier case, "the board moves the piece" now means the selected piece's `move` is called with the controller's board.
+- `void clickSquare(Location square)`, dead position (issue #50 / GitHub US-17, docs US-17): after a move passes the turn, if the player now to move is not checkmated and not stalemated, the controller asks `board.isDeadPosition()`. When the position is dead, it calls `game.endByDeadPosition()`, so the game is a draw. Checkmate and stalemate are asked first. A click after the game is over is already TC40.
 
 No method checks its arguments for null, and no case passes null: our code never passes null (instructor code review, Week 6). TC2, TC5, and TC8 used to pass a null board or location; they were removed with the board check.
 
@@ -117,6 +125,21 @@ The checkmate cases start from TC22: White moves the piece on b1 `(1, 1)` to c3 
 | Output: the game | Cases | `passTurn`, then `endByCheckmate`; `passTurn` only; unchanged |
 | Output: the selection after a click on a piece of the player to move | Cases | the clicked square; none, when the game is over |
 
+### `clickSquare(Location square)`, stalemate
+
+The stalemate cases start from the same move as the checkmate cases: White
+moves the piece on b1 `(1, 1)` to c3 `(2, 3)`, and the game passes the turn,
+so Black is to move. Checkmate is asked first. `Board` and `Game` are mocked
+with EasyMock, because the controller owns neither stalemate detection nor the
+result.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: what the board answers for `isCheckmated` of the player to move after the move | Boolean | true; false |
+| Input: what the board answers for `isStalemated` of the player to move after the move | Boolean | true (only when not checkmated); false |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
+| Output: the game | Cases | `passTurn`, then `endByCheckmate`; `passTurn`, then `endByStalemate`; `passTurn` only |
+
 ### `canClaimDraw()`, `claimDraw()`, `clickSquare(Location square)`, repetition, `isDrawClaimWithMovePending()`, and `declineDrawClaim()`
 
 The move cases start from TC22: White moves the piece on b1 `(1, 1)` to c3 `(2, 3)`, and the game passes the turn, so Black is to move. `Board` and `Game` are mocked with EasyMock, because the controller owns neither the position history nor the result. In every earlier case the game answers false for `canClaimDrawByRepetitionWith` and for `isFivefoldRepetition`, so those cases still check what they did. Asking the player whether to claim with a waiting move, and the Claim Draw button, are `BoardView` changes after the cases.
@@ -132,6 +155,39 @@ The move cases start from TC22: White moves the piece on b1 `(1, 1)` to c3 `(2, 
 | Output: `canClaimDraw()` and `isDrawClaimWithMovePending()` | Boolean | true; false |
 | Output: the board | Cases | the piece moves from b1 to c3; unchanged |
 | Output: the game | Cases | `endByRepetition`; `passTurn`, then `endByRepetition`; `passTurn`, then `endByCheckmate`; `passTurn` only; unchanged |
+
+### `resign(PieceColor resigningColor)` and `canClaimDraw()` after the game is over
+
+`Game` is mocked with EasyMock, because the controller does not own the result. The Resign buttons are a view change after the cases.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: `resigningColor` | Cases | White (the same forwarding holds for Black) |
+| Input: whether the game is over when a draw could be claimed | Boolean | false; true, after a resignation |
+| Output: the game | Cases | `resign` with the same color |
+| Output: `canClaimDraw()` | Boolean | true; false, once the game is over |
+
+A resignation can end the game while the position has occurred three times. Claim Draw must then be refused, or the game would also end by repetition and the window would show a draw instead of the winner (US-20 AC 4). The case where the game is not over is TC45.
+
+### `canOfferDraw()`, `offerDraw(PieceColor offeringColor)`, `isDrawOffered()`, `acceptDrawOffer()`, and `declineDrawOffer()`
+
+`Game` is mocked with EasyMock, because the controller does not own the offer or the result. Each boolean answer is checked both ways, so a controller that always answered the same would fail. The Offer Draw, Accept, and Decline buttons are a view change after the cases. A draw claim after a draw by agreement is refused by TC58, which covers any game that is over.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: what the game answers for `canOfferDraw` | Boolean | false; true |
+| Input: what the game answers for `isDrawOffered` | Boolean | false; true |
+| Input: `offeringColor` | Cases | White (the same forwarding holds for Black) |
+| Output: `canOfferDraw()` and `isDrawOffered()` | Boolean | the game's answer |
+| Output: the game | Cases | `offerDraw` with the same color; `acceptDrawOffer`; `declineDrawOffer` |
+
+### `clickSquare(Location square)`, the piece makes the move (issue #45)
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: what the board answers for `isLegalMove` from the selected square to the clicked square | Boolean | true (a castle, e1 `(4, 1)` to g1 `(6, 1)`) |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
+| Output: who makes the move | Cases | the selected piece's `move` with the controller's board; never `board.move` directly |
 
 ## Step 4: Test cases (each-choice strategy)
 
@@ -218,8 +274,8 @@ The case numbers start at TC38, after the promotion cases (TC28 to TC37, issue #
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC38: a move that checkmates ends the game | as TC22; after the move, Black is to move, and the board answers true for `isCheckmated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn, then ends by checkmate | :white_check_mark: |
-| TC39: a move that does not checkmate does not end the game | as TC22; after the move, Black is to move, and the board answers false for `isCheckmated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn and does not end | :white_check_mark: |
+| TC38: a move that checkmates ends the game | as TC22; after the move, Black is to move, and the board answers true for `isCheckmated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn, then ends by checkmate; the board is not asked `isStalemated` | :white_check_mark: |
+| TC39: a move that does not checkmate does not end the game | as TC22; after the move, Black is to move, and the board answers false for `isCheckmated(BLACK)` and false for `isStalemated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn and does not end | :white_check_mark: |
 | TC40: a click after the game is over selects nothing | a controller for the mocked board and game; the game is over; White is to move, and b1 holds a White piece; click b1, then ask `isSelected` about b1 | false; the board is not asked about b1 | :white_check_mark: |
 
 ### Method under test: `clickSquare(Location square)` and `choosePromotion(PieceType type)`, keeping the king out of check
@@ -264,11 +320,48 @@ The case numbers start at TC45, after the cases that keep the king out of check 
 | TC55: declining makes the waiting move | as TC52; `declineDrawClaim`, then ask `isDrawClaimWithMovePending` | false; the board moves the piece from b1 to c3; the game passes the turn | :white_check_mark: |
 | TC56: a click while a move waits does nothing | as TC52; click b1, then ask `isSelected` about b1 | false; the board is not asked about b1 | :white_check_mark: |
 
+### Method under test: `resign(PieceColor resigningColor)` and `canClaimDraw()` after the game is over
+
+The case number continues after the repetition cases (TC45 to TC56, issue #59).
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC57: a resignation is passed to the game | a controller for the mocked board and game; `resign(WHITE)` | the game is asked to `resign(WHITE)` | :white_check_mark: |
+| TC58: a draw cannot be claimed once the game is over | as TC45, but the game answers true for `isOver`; ask `canClaimDraw` | false | :white_check_mark: |
+
+### Method under test: `canOfferDraw()`, `offerDraw(PieceColor offeringColor)`, `isDrawOffered()`, `acceptDrawOffer()`, and `declineDrawOffer()`
+
+The case numbers continue after the resignation cases (TC57 and TC58, issue #60).
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC59: no draw can be offered | a controller for the mocked board and game; the game answers false for `canOfferDraw`; ask `canOfferDraw` | false | :white_check_mark: |
+| TC60: a draw can be offered | as TC59, but the game answers true | true | :white_check_mark: |
+| TC61: an offer is passed to the game | a controller for the mocked board and game; `offerDraw(WHITE)` | the game is asked to `offerDraw(WHITE)` | :white_check_mark: |
+| TC62: no draw is offered | a controller for the mocked board and game; the game answers false for `isDrawOffered`; ask `isDrawOffered` | false | :white_check_mark: |
+| TC63: a draw is offered | as TC62, but the game answers true | true | :white_check_mark: |
+| TC64: an acceptance is passed to the game | a controller for the mocked board and game; `acceptDrawOffer` | the game is asked to `acceptDrawOffer` | :white_check_mark: |
+| TC65: a decline is passed to the game | a controller for the mocked board and game; `declineDrawOffer` | the game is asked to `declineDrawOffer` | :white_check_mark: |
+
+### Method under test: `clickSquare(Location square)`, the piece makes the move (issue #45)
+
+The case number continues after the draw offer cases (TC59 to TC65, issue #61).
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC66: a castle is made by the selected king | a controller for the mocked board and game; White is to move; the board answers true for e1 `(4, 1)`, returns a mocked White king that does not promote on g1 `(6, 1)`, and answers true for `isLegalMove(e1, g1)`; click e1, then g1 | the king is asked once to `move` from e1 to g1 on the controller's board, so it can move its rook too; the board is not asked to `move` directly; the game passes the turn | :white_check_mark: |
+
+### Method under test: `clickSquare(Location square)`, stalemate
+
+The case numbers start at TC67, after the castle case (TC66, issue #45). A click after stalemate is already TC40, because `isOver()` is true.
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC67: a move that stalemates ends the game as a draw | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)` and true for `isStalemated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn, then ends by stalemate; the game does not end by checkmate | :white_check_mark: |
+
 ### Method under test: `clickSquare(Location square)`, dead position
 
-Issue #50 (GitHub US-17, docs US-17). The case numbers start at TC58, after
-the repetition cases (TC45 to TC56, issue #59). TC57 is the stalemate move
-case on issue #49. The move is the same as TC22: White moves the piece on b1
+Issue #50 (GitHub US-17, docs US-17). The case numbers start at TC68, after the stalemate case (TC67, issue #49). The move is the same as TC22: White moves the piece on b1
 `(1, 1)` to c3 `(2, 3)`, and the game passes the turn, so Black is to move.
 `Board` and `Game` are mocked with EasyMock, because the controller owns
 neither dead-position detection nor the result.
@@ -283,5 +376,5 @@ A click after a dead position is already TC40, because `isOver()` is true.
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC58: a move that reaches a dead position ends the game as a draw | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)` and true for `isDeadPosition()` | the board moves the piece from b1 to c3; the game passes the turn, then ends by dead position; the game does not end by checkmate | :white_check_mark: |
-| TC59: checkmate wins over a dead position | as TC58, but the board answers true for `isCheckmated(BLACK)` | the game passes the turn, then ends by checkmate, not by dead position | :white_check_mark: |
+| TC68: a move that reaches a dead position ends the game as a draw | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)` and true for `isDeadPosition()` | the board moves the piece from b1 to c3; the game passes the turn, then ends by dead position; the game does not end by checkmate | :white_check_mark: |
+| TC69: checkmate wins over a dead position | as TC68, but the board answers true for `isCheckmated(BLACK)` | the game passes the turn, then ends by checkmate, not by dead position | :white_check_mark: |

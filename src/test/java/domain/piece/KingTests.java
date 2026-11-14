@@ -177,4 +177,13 @@ public class KingTests {
 
         assertTrue(canMove);
     }
+
+    @Test
+    public void Attacks_AdjoiningSquare_ReturnsTrue() {
+        board.move(E1, E4);
+
+        boolean attacks = WHITE_KING.attacks(E4, E5, board);
+
+        assertTrue(attacks);
+    }
 }

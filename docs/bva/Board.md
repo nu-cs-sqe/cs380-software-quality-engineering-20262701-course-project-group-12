@@ -15,6 +15,9 @@
 - `isInCheck(PieceColor color)` throws `IllegalStateException` when the board holds no king of `color` (issue #44). In play the king is never captured, but `move` does not check legality, so a board without a king can be built.
 - `Position position(PieceColor colorToMove)` (issue #59 / GitHub US-19, docs US-18): returns the position on the board, with `colorToMove` to move, for the repetition rules. Its cases are in `Position.md`, which checks the positions it builds.
 - `Position positionAfterMove(Location from, Location to, PieceColor colorToMove)` (issue #59): returns the position the board would have after `move(from, to)`, with `colorToMove` to move. The move is made on a copy, so the board does not change.
+- `boolean holdsUnmovedPiece(Location square)` (issue #45 / US-12): true when a piece stands on `square` and that piece has never been moved by `move`. A piece that moved and came back has moved. Castling uses it to ask whether the king and the rook are on their original squares and have never moved: only the piece placed there at the start can be unmoved on a square.
+- `boolean isAttackedByOpponentOf(PieceColor color, Location square)` (issue #45 / US-12): true when at least one piece of the other color `attacks` `square` (see `Piece.md`). Castling uses it for the squares the king stands on, crosses, and lands on.
+- `boolean isStalemated(PieceColor color)` (issue #49 / GitHub US-16, docs US-16): returns true when the king of `color` is not in check and no move by a piece of `color` leaves that king out of check. That is the same "no legal move" check as checkmate, without the check. A position in check with no reply is checkmate, not stalemate. The query uses a copy, so the board itself does not change.
 - `boolean isDeadPosition()` (issue #50 / GitHub US-17, docs US-17): returns true when neither king can be checkmated by any series of legal moves, for the material balances this task covers. The squares of the pieces do not matter, except that two bishops must stand on the same color for king and bishop against king and bishop. The query does not change the board.
 
 No method returns null. The project rules forbid it, so an empty square is reported by `isOccupied` instead of a null from `pieceAt`. Callers ask `isOccupied` before `pieceAt`. TC9 through TC12 used to expect null from `pieceAt` on the empty ranks; they now check those squares with `isOccupied`.
@@ -27,7 +30,7 @@ File 0 is the a-file and file 7 is the h-file. The squares are private, so the c
 
 `BoardView` is a view, and `PieceType` and `PieceColor` are enums, so they have no BVA file.
 
-The `isInCheck` and `isCheckmated` cases use the real pieces that issue #53 puts on the starting board, so each piece's own `canMove` decides what it attacks. Issue #44 adds `isLegalMove`, which refuses a move that leaves the mover's own king in check. Showing that a king is in check belongs to `Game` and `GameStatsController`. Out of scope: stalemate (issue #49). Dead position is issue #50 below.
+The `isInCheck`, `isCheckmated`, and `isStalemated` cases use the real pieces that issue #53 puts on the starting board, so each piece's own `canMove` decides what it attacks. Issue #44 adds `isLegalMove`, which refuses a move that leaves the mover's own king in check. Showing that a king is in check belongs to `Game` and `GameStatsController`.
 
 ## Steps 1-3: Characteristics and partitions
 
@@ -123,7 +126,7 @@ A white pawn is put on e5 `(4, 5)` with two moves, e2 to e4 and e4 to e5. The bl
 | Output: d5 after the move | Boolean, through `isOccupied` | false, the captured pawn is removed; true, nothing is removed |
 | Output: d6 after the move | Pointer | the same white pawn that moved from e5 |
 
-### `isInCheck(PieceColor color)` and `isCheckmated(PieceColor color)`
+### `isInCheck(PieceColor color)`, `isCheckmated(PieceColor color)`, and `isStalemated(PieceColor color)`
 
 Each position is set up with `move` from a new `Board`, using real games, so every position can happen in play. `move` does not check legality, so the moves are written as squares.
 
@@ -139,7 +142,8 @@ Each position is set up with `move` from a new `Board`, using real games, so eve
 | Input: a move that `canMove` allows but that leaves the king in check | Cases | a reply that does not answer the check (Fool's mate); a pinned piece (the f6 pawn in Sam Loyd's stalemate) |
 | Output: `isInCheck` | Boolean | true; false |
 | Output: `isCheckmated` | Boolean | true only when the king is in check and no move leaves it out of check; false otherwise |
-| Output: the board after `isCheckmated` | Collection | unchanged; the king stays on its square |
+| Output: `isStalemated` | Boolean | true only when the king is not in check and no move leaves it out of check; false otherwise |
+| Output: the board after `isCheckmated` or `isStalemated` | Collection | unchanged; the king stays on its square |
 
 ### `isLegalMove(Location from, Location to)`
 
@@ -184,6 +188,30 @@ The move is the white knight from g1 `(6, 1)` to f3 `(5, 3)`, with Black to move
 | Input: `colorToMove` | Cases | Black, the player to move after a White move |
 | Output: the position | Cases | the same as the board's position after `move(g1, f3)` |
 | Output: the board after the call | Collection | unchanged: g1 still holds the knight, and f3 is empty |
+
+### `holdsUnmovedPiece(Location square)` (issue #45)
+
+`move` records each piece it moves. The occupant of the square is a set of cases: the piece placed there at the start that has never moved, no piece because it moved away, and the same piece after it moved away and came back. The square comes from the starting position, so the pair of intervals is already covered by `pieceAt`; e1 and g1 are the squares castling cares about.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the board | Collection of 64 squares | a new `Board`, and that board after some `move` calls |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
+| Input: occupant of `square` | Cases | the starting piece, never moved, the white king on e1 `(4, 1)`; empty, after the g1 knight moved to f3 `(5, 3)`; the g1 knight after it moved to f3 and back to g1 `(6, 1)` |
+| Output: the answer | Boolean | true; false |
+
+### `isAttackedByOpponentOf(PieceColor color, Location square)` (issue #45)
+
+The pieces are a collection of up to 64 squares. The method looks at every square, so the attackers on the first square, a1, and the last square, h8, are the edges of that collection. The kind of attack is a case: a pawn attacks diagonally even when the square is empty, and a rook attacks along an open file. The attacker's color is a case too: only the other color counts.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the board | Collection of 64 squares | a new `Board`, and that board after some `move` calls |
+| Input: `color` | Cases | `WHITE`; `BLACK` |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
+| Input: pieces that attack `square` | Collection | none, e4 `(4, 4)` for White on a new board; white pawns only, e3 `(4, 3)` on a new board; one rook on the last square h8 `(7, 8)`; one rook on the first square a1 `(0, 1)` |
+| Input: color of the attackers | Cases | the other color; the same color as `color` |
+| Output: the answer | Boolean | true; false |
 
 ## Step 4: Test cases (each-choice strategy)
 
@@ -362,11 +390,41 @@ The case numbers continue after the check cases (TC85 to TC101, issue #44).
 | TC103: the position after a move | a new `Board`; `positionAfterMove(g1, f3, BLACK)`, compared with a second new `Board` after `move(g1, f3)` and `position(BLACK)` | `isSameAs` returns true | :white_check_mark: |
 | TC104: the board does not change | a new `Board`; `positionAfterMove(g1, f3, BLACK)` | `pieceAt(g1)` is still the white knight; `isOccupied(f3)` is false | :white_check_mark: |
 
+### Method under test: `holdsUnmovedPiece(Location square)` (issue #45)
+
+The case numbers start at TC105, after the `positionAfterMove` cases (TC103 and TC104, issue #59).
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC105: the starting piece that has never moved | a new `Board`; ask about e1 `(4, 1)` | true | :white_check_mark: |
+| TC106: a square the piece moved away from | a new `Board`; move g1 `(6, 1)` to f3 `(5, 3)`; ask about g1 | false | :white_check_mark: |
+| TC107: a piece that moved and came back | a new `Board`; move g1 `(6, 1)` to f3 `(5, 3)`, then f3 back to g1; ask about g1 | false | :white_check_mark: |
+
+### Method under test: `isAttackedByOpponentOf(PieceColor color, Location square)` (issue #45)
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC108: no opponent piece attacks the square | a new `Board`; ask whether Black attacks e4 `(4, 4)`, with `color = WHITE` | false | :white_check_mark: |
+| TC109: opponent pawns attack an empty square diagonally | a new `Board`; `color = BLACK`, square e3 `(4, 3)`; the white pawns on d2 and f2 attack it | true | :white_check_mark: |
+| TC110: only pieces of the same color attack the square | a new `Board`; `color = WHITE`, square e3 `(4, 3)` | false | :white_check_mark: |
+| TC111: an opponent rook on the last square, h8 | a new `Board`; move the h7 pawn `(7, 7)` to a6 `(0, 6)`; `color = WHITE`, square h3 `(7, 3)`; the h-file from h7 to h4 is empty | true | :white_check_mark: |
+| TC112: an opponent rook on the first square, a1 | a new `Board`; move the a2 pawn `(0, 2)` to h3 `(7, 3)`; `color = BLACK`, square a6 `(0, 6)`; the a-file from a2 to a5 is empty | true | :white_check_mark: |
+
+### Method under test: `isStalemated(PieceColor color)`
+
+The case numbers start at TC113, after the castle query cases (TC105 to TC112, issue #45).
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC113: not in check, with legal moves | a new `Board`; ask about White | false | :white_check_mark: |
+| TC114: in check with no reply | the Fool's mate position; ask about White | false | :white_check_mark: |
+| TC115: in check with a reply that blocks the check | the queen check on Black; ask about Black | false | :white_check_mark: |
+| TC116: not in check and no legal move | Sam Loyd's stalemate; ask about Black | true | :white_check_mark: |
+| TC117: the query leaves the board unchanged | Sam Loyd's stalemate; ask about Black | `pieceAt(e6)` is still the white queen that moved from c8, `pieceAt(g6)` is still the black king, and the occupied squares are unchanged | :white_check_mark: |
+
 ### Method under test: `isDeadPosition()`
 
-Issue #50 (GitHub US-17, docs US-17). The case numbers start at TC110, after
-the positionAfterMove cases (TC103 to TC104, issue #59). Numbers TC105 to
-TC109 are the stalemate cases on issue #49.
+Issue #50 (GitHub US-17, docs US-17). The case numbers start at TC118, after the stalemate cases (TC113 to TC117, issue #49).
 
 Each position is built from a new `Board` with `move`. `move` does not check
 legality, so a test empties every square it does not need by capturing those
@@ -387,15 +445,15 @@ Other dead positions, such as a blocked pawn wall, are outside this task.
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC110: a starting position is not dead | a new `Board` | false | :white_check_mark: |
-| TC111: king vs king | only the white king on e1 and the black king on e8 remain | true | :white_check_mark: |
-| TC112: king and bishop vs king | the two kings and the white bishop on c1 remain | true | :white_check_mark: |
-| TC113: king and knight vs king | the two kings and the white knight on b1 remain | true | :white_check_mark: |
-| TC114: bishops on the same color | the two kings, the white bishop on c1, and the black bishop on f8 remain | true | :white_check_mark: |
-| TC115: bishops on opposite colors | the two kings, the white bishop on c1, and the black bishop on c8 remain | false | :white_check_mark: |
-| TC116: king and two knights vs king | the two kings and both white knights on b1 and g1 remain | false | :white_check_mark: |
-| TC117: king and queen vs king | the two kings and the white queen on d1 remain | false | :white_check_mark: |
-| TC118: king and rook vs king | the two kings and the white rook on a1 remain | false | :white_check_mark: |
-| TC119: king and pawn vs king | the two kings and the white pawn on a2 remain | false | :white_check_mark: |
-| TC120: the squares of the kings do not matter | only the white king on a1 and the black king on h8 remain | true | :white_check_mark: |
-| TC121: the query leaves the board unchanged | king vs king on e1 and e8 | `pieceAt(e1)` is still the white king, `pieceAt(e8)` is still the black king, and two squares are occupied | :white_check_mark: |
+| TC118: a starting position is not dead | a new `Board` | false | :white_check_mark: |
+| TC119: king vs king | only the white king on e1 and the black king on e8 remain | true | :white_check_mark: |
+| TC120: king and bishop vs king | the two kings and the white bishop on c1 remain | true | :white_check_mark: |
+| TC121: king and knight vs king | the two kings and the white knight on b1 remain | true | :white_check_mark: |
+| TC122: bishops on the same color | the two kings, the white bishop on c1, and the black bishop on f8 remain | true | :white_check_mark: |
+| TC123: bishops on opposite colors | the two kings, the white bishop on c1, and the black bishop on c8 remain | false | :white_check_mark: |
+| TC124: king and two knights vs king | the two kings and both white knights on b1 and g1 remain | false | :white_check_mark: |
+| TC125: king and queen vs king | the two kings and the white queen on d1 remain | false | :white_check_mark: |
+| TC126: king and rook vs king | the two kings and the white rook on a1 remain | false | :white_check_mark: |
+| TC127: king and pawn vs king | the two kings and the white pawn on a2 remain | false | :white_check_mark: |
+| TC128: the squares of the kings do not matter | only the white king on a1 and the black king on h8 remain | true | :white_check_mark: |
+| TC129: the query leaves the board unchanged | king vs king on e1 and e8 | `pieceAt(e1)` is still the white king, `pieceAt(e8)` is still the black king, and two squares are occupied | :white_check_mark: |
