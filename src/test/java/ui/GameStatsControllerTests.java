@@ -114,6 +114,7 @@ public class GameStatsControllerTests {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isDrawnByRepetition()).andStubReturn(false);
         expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
@@ -138,6 +139,7 @@ public class GameStatsControllerTests {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isDrawnByRepetition()).andStubReturn(false);
         expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
@@ -171,6 +173,26 @@ public class GameStatsControllerTests {
     }
 
     @Test
+    void RefreshStatus_DrawByStalemate_ShowsTheDraw() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(false);
+        expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(true);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("Draw by stalemate", view.currentPlayerLine());
+    }
+
+    @Test
     void RefreshStatus_DrawByAgreement_ShowsTheDraw() {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);
@@ -199,6 +221,7 @@ public class GameStatsControllerTests {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isDrawnByRepetition()).andStubReturn(false);
         expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(true);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
@@ -219,6 +242,7 @@ public class GameStatsControllerTests {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isDrawnByRepetition()).andStubReturn(false);
         expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(true);
         replay(game);
@@ -259,6 +283,7 @@ public class GameStatsControllerTests {
         expect(game.isPlayerToMoveInCheck()).andStubReturn(true);
         expect(game.isDrawnByRepetition()).andStubReturn(false);
         expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
@@ -304,6 +329,7 @@ public class GameStatsControllerTests {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isDrawnByRepetition()).andStubReturn(false);
         expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(true);

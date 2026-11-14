@@ -171,8 +171,11 @@ public class BoardController {
     }
 
     private void endGameIfOver() {
-        if (board.isCheckmated(game.colorToMove())) {
+        PieceColor colorToMove = game.colorToMove();
+        if (board.isCheckmated(colorToMove)) {
             game.endByCheckmate();
+        } else if (board.isStalemated(colorToMove)) {
+            game.endByStalemate();
         } else if (game.isSeventyFiveMoveRule()) {
             game.endBySeventyFiveMove();
         } else if (game.isFivefoldRepetition()) {

@@ -85,17 +85,23 @@ Issue #48 (GitHub US-15, docs US-15) renames `refreshCurrentPlayer()` to
 result instead of the player to move: the winner's name and color, and that
 the result is checkmate (US-15 AC 4).
 
+Issue #49 (GitHub US-16, docs US-16): when the game is a stalemate, that line
+shows that the game is a draw by stalemate. Checkmate still uses the winner.
+`isStalemate()` is asked before the winner, so a draw never reads `winnerName()`.
+
 Step 1:
-- input: whether the game is over; the player to move; the winner's name and color
+- input: whether the game is over; whether it is a stalemate; the player to move; the winner's name and color
 - output: the status line on the view
 
 Step 2/3:
 - game over -> Boolean: false, true
+- stalemate -> Boolean: false, true
 - winner -> Cases: Player 1 / White, Player 2 / Black
 - result of a game that is over -> Cases: checkmate, draw by repetition (issue #59), resignation (issue #60), draw by the fifty-move rule (issue #51), draw by the seventy-five-move rule (issue #51)
 - output is:
   - `Current player: <name of the player to move>` while the game is not over
   - `Checkmate: <winner's name> (<winner's color>) wins` once the game is over by checkmate
+  - `Draw by stalemate` once the game is over by stalemate
   - `Draw by repetition` once the game is drawn by repetition
   - `Resignation: <winner's name> (<winner's color>) wins` once the other player has resigned
   - `Draw by the fifty-move rule` once the game is drawn by the fifty-move rule
@@ -106,11 +112,11 @@ Step 2/3:
     - **Expected output**: the view shows `Current player: Bo`
 
 - **TC10: refresh after Player 2 checkmates Player 1** ( :white_check_mark: )
-    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `winnerName()` is Bo, `winnerColor()` is `BLACK`, and `refreshStatus()` runs.
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isStalemate()` is false, `winnerName()` is Bo, `winnerColor()` is `BLACK`, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Checkmate: Bo (Black) wins`
 
 - **TC11: refresh after Player 1 checkmates Player 2** ( :white_check_mark: )
-    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `winnerName()` is Ada, `winnerColor()` is `WHITE`, and `refreshStatus()` runs.
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isStalemate()` is false, `winnerName()` is Ada, `winnerColor()` is `WHITE`, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Checkmate: Ada (White) wins`
 
 Issue #44 (GitHub US-11 AC 6). While the game is not over and the player to
@@ -173,16 +179,26 @@ TC10, TC11, and TC13 still hold: the game answers false for
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isDrawnByAgreement()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by agreement`
 
+Issue #49 (GitHub US-16, docs US-16). After a stalemate, the same line shows
+the result. A stalemate has no winner, so the line names no player.
+`isStalemate()` is asked before `winnerName()`, so a draw never reads the winner.
+
+TC10, TC11, and TC13 still hold: the game answers false for
+`isStalemate()`, so a checkmate still shows the winner.
+
+- **TC18: refresh after a stalemate** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isDrawnByAgreement()` is false, `isStalemate()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Draw by stalemate`
+
 Issue #51 (GitHub US-18, docs US-19). After a fifty-move or seventy-five-move
 draw, the same line shows the result. A draw has no winner, so the line names
 no player. The queries are asked before `winnerName()`. The case numbers
-start at TC18, after agreement's TC17, so they do not collide with stalemate
-or dead position.
+start at TC19, after stalemate's TC18.
 
-- **TC18: refresh after a fifty-move draw** ( :white_check_mark: )
-    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByFiftyMove()` is true, and `refreshStatus()` runs.
+- **TC19: refresh after a fifty-move draw** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isDrawnByAgreement()` is false, `isStalemate()` is false, `isDrawnByFiftyMove()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by the fifty-move rule`
 
-- **TC19: refresh after a seventy-five-move draw** ( :white_check_mark: )
+- **TC20: refresh after a seventy-five-move draw** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByFiftyMove()` is false, `isDrawnBySeventyFiveMove()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by the seventy-five-move rule`
