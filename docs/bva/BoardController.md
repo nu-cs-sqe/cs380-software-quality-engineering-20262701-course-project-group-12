@@ -353,5 +353,5 @@ TC55 and TC56.
 | TC71: a move that does not reach 150 does not end the game | as TC70, but the game answers false for `isSeventyFiveMoveRule` | the board moves the piece from b1 to c3; the game passes the turn and does not end | :white_check_mark: |
 | TC72: checkmate wins over the seventy-five-move rule | as TC70, but the board answers true for `isCheckmated(BLACK)` | the game passes the turn, then ends by checkmate, not by seventy-five-move | :white_check_mark: |
 | TC73: a move that would make the count 100 waits for the claim | as TC22, but the game answers false for `canClaimDrawByRepetitionWith(b1, c3)` and true for `canClaimDrawByFiftyMoveWith(b1, c3)`; click b1, then c3; ask `isDrawClaimWithMovePending` | true; the board does not move any piece; the game does not pass the turn | :white_check_mark: |
-| TC74: a waiting fifty-move can be claimed | as TC73, and the game answers false for `canClaimDrawByRepetition` and for `canClaimDrawByFiftyMove`; ask `canClaimDraw` | true | :x: |
+| TC74: a waiting fifty-move can be claimed | as TC73, and the game answers false for `canClaimDrawByRepetition` and for `canClaimDrawByFiftyMove`; ask `canClaimDraw` | true | :white_check_mark: |
 | TC75: claiming with a waiting fifty-move ends that draw | as TC73; `claimDraw` | the game ends by fifty-move; the board does not move any piece | :x: |
