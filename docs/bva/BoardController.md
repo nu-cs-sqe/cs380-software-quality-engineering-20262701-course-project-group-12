@@ -348,7 +348,7 @@ TC55 and TC56.
 | --- | --- | --- | --- |
 | TC67: the player to move can claim a fifty-move draw | a controller for the mocked board and game; the game answers false for `isOver` and for `canClaimDrawByRepetition`, and true for `canClaimDrawByFiftyMove`; ask `canClaimDraw` | true | :white_check_mark: |
 | TC68: the player to move cannot claim a fifty-move draw, and no move waits | as TC67, but the game answers false for `canClaimDrawByFiftyMove`; ask `canClaimDraw` | false | :white_check_mark: |
-| TC69: a correct fifty-move claim ends the game as that draw | as TC67; `claimDraw` | the game ends by fifty-move; the game does not end by repetition | :x: |
+| TC69: a correct fifty-move claim ends the game as that draw | as TC67; `claimDraw` | the game ends by fifty-move; the game does not end by repetition | :white_check_mark: |
 | TC70: a move that reaches 150 ends the game by the seventy-five-move rule | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)`, the game answers false for `isFivefoldRepetition` and true for `isSeventyFiveMoveRule` | the board moves the piece from b1 to c3; the game passes the turn, then ends by seventy-five-move | :x: |
 | TC71: a move that does not reach 150 does not end the game | as TC70, but the game answers false for `isSeventyFiveMoveRule` | the board moves the piece from b1 to c3; the game passes the turn and does not end | :x: |
 | TC72: checkmate wins over the seventy-five-move rule | as TC70, but the board answers true for `isCheckmated(BLACK)` | the game passes the turn, then ends by checkmate, not by seventy-five-move | :x: |

@@ -72,6 +72,14 @@ public class BoardController {
 
     public void claimDraw() {
         if (canClaimDraw()) {
+            endByClaimedDraw();
+        }
+    }
+
+    private void endByClaimedDraw() {
+        if (game.canClaimDrawByFiftyMove()) {
+            game.endByFiftyMove();
+        } else {
             game.endByRepetition();
         }
     }
