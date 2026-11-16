@@ -21,6 +21,7 @@ public class Game {
     private Optional<Player> winner = Optional.empty();
     private boolean stalemate;
     private boolean drawnByRepetition;
+    private boolean drawnByDeadPosition;
     private boolean wonByResignation;
     private int movesMade;
     private Optional<PieceColor> drawOfferedBy = Optional.empty();
@@ -98,6 +99,15 @@ public class Game {
         return drawnByRepetition;
     }
 
+    public void endByDeadPosition() {
+        requireStartedTo("end the game");
+        drawnByDeadPosition = true;
+    }
+
+    public boolean isDrawnByDeadPosition() {
+        return drawnByDeadPosition;
+    }
+
     public boolean isFivefoldRepetition() {
         return occurrencesOf(currentPosition()) >= FIVEFOLD;
     }
@@ -160,7 +170,8 @@ public class Game {
     }
 
     public boolean isOver() {
-        return winner.isPresent() || stalemate || drawnByRepetition || drawnByAgreement;
+        return winner.isPresent() || stalemate || drawnByRepetition
+                || drawnByDeadPosition || drawnByAgreement;
     }
 
     public boolean isStalemate() {

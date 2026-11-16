@@ -115,6 +115,7 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByRepetition()).andStubReturn(false);
         expect(game.isDrawnByAgreement()).andStubReturn(false);
         expect(game.isStalemate()).andStubReturn(false);
+        expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Bo");
         expect(game.winnerColor()).andStubReturn(PieceColor.BLACK);
@@ -138,6 +139,7 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByRepetition()).andStubReturn(false);
         expect(game.isDrawnByAgreement()).andStubReturn(false);
         expect(game.isStalemate()).andStubReturn(false);
+        expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Ada");
         expect(game.winnerColor()).andStubReturn(PieceColor.WHITE);
@@ -237,6 +239,7 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByRepetition()).andStubReturn(false);
         expect(game.isDrawnByAgreement()).andStubReturn(false);
         expect(game.isStalemate()).andStubReturn(false);
+        expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Bo");
         expect(game.winnerColor()).andStubReturn(PieceColor.BLACK);
@@ -271,6 +274,27 @@ public class GameStatsControllerTests {
         assertEquals("Resignation: Ada (White) wins", view.currentPlayerLine());
     }
 
+    @Test
+    void RefreshStatus_DrawByDeadPosition_ShowsTheDraw() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(false);
+        expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
+        expect(game.isDrawnByDeadPosition()).andStubReturn(true);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("Draw by dead position", view.currentPlayerLine());
+    }
+
     private static Game gameWonByResignation(String winnerName, PieceColor winnerColor) {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);
@@ -281,6 +305,7 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByRepetition()).andStubReturn(false);
         expect(game.isDrawnByAgreement()).andStubReturn(false);
         expect(game.isStalemate()).andStubReturn(false);
+        expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(true);
         expect(game.winnerName()).andStubReturn(winnerName);
         expect(game.winnerColor()).andStubReturn(winnerColor);

@@ -56,6 +56,9 @@ public class GameStatsController {
         if (game.isStalemate()) {
             return Messages.text("stats.drawByStalemate");
         }
+        if (game.isDrawnByDeadPosition()) {
+            return Messages.text("stats.drawByDeadPosition");
+        }
         if (game.isWonByResignation()) {
             return winnerLine(RESIGNATION_KEYS);
         }
