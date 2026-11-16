@@ -30,6 +30,7 @@
 - `void acceptDrawOffer()` and `void declineDrawOffer()` (issue #61): pass the answer to `game.acceptDrawOffer()` and `game.declineDrawOffer()`. `Game` decides when an offer can be made, ends it after the opponent's move, and ends the game on an acceptance, so the controller only forwards. Once the game is drawn by agreement, `clickSquare` already refuses further moves through `game.isOver()` (US-21 AC 7).
 - `boolean canClaimDraw()`, after the game is over (issue #61): TC58 (issue #60) already returns false once `game.isOver()` is true, so after a draw by agreement a position that occurred three times cannot be claimed, and the window shows a draw by agreement, not a draw by repetition (US-21 AC 7).
 - `void clickSquare(Location square)`, the piece makes the move (issue #45 / US-12): when the board answers true for `isLegalMove` from the selected square to the clicked square, the controller calls the selected piece's `move(from, to, board)` instead of `board.move(from, to)`, so a castling king also moves its rook (`King.md`). A waiting move that the player declines to claim is made the same way. In every earlier case, "the board moves the piece" now means the selected piece's `move` is called with the controller's board.
+- `void clickSquare(Location square)`, dead position (issue #50 / GitHub US-17, docs US-17): after a move passes the turn, if the player now to move is not checkmated and not stalemated, the controller asks `board.isDeadPosition()`. When the position is dead, it calls `game.endByDeadPosition()`, so the game is a draw. Checkmate and stalemate are asked first. A click after the game is over is already TC40.
 
 No method checks its arguments for null, and no case passes null: our code never passes null (instructor code review, Week 6). TC2, TC5, and TC8 used to pass a null board or location; they were removed with the board check.
 
@@ -359,22 +360,42 @@ The case numbers start at TC67, after the castle case (TC66, issue #45). A click
 | --- | --- | --- | --- |
 | TC67: a move that stalemates ends the game as a draw | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)` and true for `isStalemated(BLACK)` | the board moves the piece from b1 to c3; the game passes the turn, then ends by stalemate; the game does not end by checkmate | :white_check_mark: |
 
-### Method under test: `canClaimDraw()`, `claimDraw()`, `clickSquare(Location square)`, fifty-move rule
+### Method under test: `clickSquare(Location square)`, dead position
 
-Issue #51 (GitHub US-18, docs US-19). The case numbers start at TC68, after
-the stalemate case (TC67, issue #49). `Board` and `Game` are mocked. Checkmate
-is asked first, then stalemate, then the seventy-five-move rule, then fivefold
-repetition. A click after the game is over is already TC40. A waiting move
-already uses TC55 and TC56.
+Issue #50 (GitHub US-17, docs US-17). The case numbers start at TC68, after the stalemate case (TC67, issue #49). The move is the same as TC22: White moves the piece on b1
+`(1, 1)` to c3 `(2, 3)`, and the game passes the turn, so Black is to move.
+`Board` and `Game` are mocked with EasyMock, because the controller owns
+neither dead-position detection nor the result.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: what the board answers for `isCheckmated` of the player to move after the move | Boolean | true; false |
+| Input: what the board answers for `isDeadPosition` after the move | Boolean | true (only when not checkmated); false |
+| Output: the game | Cases | `passTurn`, then `endByCheckmate`; `passTurn`, then `endByDeadPosition`; `passTurn` only |
+
+A click after a dead position is already TC40, because `isOver()` is true.
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC68: the player to move can claim a fifty-move draw | a controller for the mocked board and game; the game answers false for `isOver` and for `canClaimDrawByRepetition`, and true for `canClaimDrawByFiftyMove`; ask `canClaimDraw` | true | :white_check_mark: |
-| TC69: the player to move cannot claim a fifty-move draw, and no move waits | as TC68, but the game answers false for `canClaimDrawByFiftyMove`; ask `canClaimDraw` | false | :white_check_mark: |
-| TC70: a correct fifty-move claim ends the game as that draw | as TC68; `claimDraw` | the game ends by fifty-move; the game does not end by repetition | :white_check_mark: |
-| TC71: a move that reaches 150 ends the game by the seventy-five-move rule | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)`, the game answers false for `isFivefoldRepetition` and true for `isSeventyFiveMoveRule` | the board moves the piece from b1 to c3; the game passes the turn, then ends by seventy-five-move | :white_check_mark: |
-| TC72: a move that does not reach 150 does not end the game | as TC71, but the game answers false for `isSeventyFiveMoveRule` | the board moves the piece from b1 to c3; the game passes the turn and does not end | :white_check_mark: |
-| TC73: checkmate wins over the seventy-five-move rule | as TC71, but the board answers true for `isCheckmated(BLACK)` | the game passes the turn, then ends by checkmate, not by seventy-five-move | :white_check_mark: |
-| TC74: a move that would make the count 100 waits for the claim | as TC22, but the game answers false for `canClaimDrawByRepetitionWith(b1, c3)` and true for `canClaimDrawByFiftyMoveWith(b1, c3)`; click b1, then c3; ask `isDrawClaimWithMovePending` | true; the board does not move any piece; the game does not pass the turn | :white_check_mark: |
-| TC75: a waiting fifty-move can be claimed | as TC74, and the game answers false for `canClaimDrawByRepetition` and for `canClaimDrawByFiftyMove`; ask `canClaimDraw` | true | :white_check_mark: |
-| TC76: claiming with a waiting fifty-move ends that draw | as TC74; `claimDraw` | the game ends by fifty-move; the board does not move any piece | :white_check_mark: |
+| TC68: a move that reaches a dead position ends the game as a draw | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)` and true for `isDeadPosition()` | the board moves the piece from b1 to c3; the game passes the turn, then ends by dead position; the game does not end by checkmate | :white_check_mark: |
+| TC69: checkmate wins over a dead position | as TC68, but the board answers true for `isCheckmated(BLACK)` | the game passes the turn, then ends by checkmate, not by dead position | :white_check_mark: |
+
+### Method under test: `canClaimDraw()`, `claimDraw()`, `clickSquare(Location square)`, fifty-move rule
+
+Issue #51 (GitHub US-18, docs US-19). The case numbers start at TC70, after
+the dead-position cases (TC68 and TC69, issue #50). `Board` and `Game` are
+mocked. Checkmate is asked first, then stalemate, then dead position, then
+the seventy-five-move rule, then fivefold repetition. A click after the game
+is over is already TC40. A waiting move already uses TC55 and TC56.
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC70: the player to move can claim a fifty-move draw | a controller for the mocked board and game; the game answers false for `isOver` and for `canClaimDrawByRepetition`, and true for `canClaimDrawByFiftyMove`; ask `canClaimDraw` | true | :white_check_mark: |
+| TC71: the player to move cannot claim a fifty-move draw, and no move waits | as TC70, but the game answers false for `canClaimDrawByFiftyMove`; ask `canClaimDraw` | false | :white_check_mark: |
+| TC72: a correct fifty-move claim ends the game as that draw | as TC70; `claimDraw` | the game ends by fifty-move; the game does not end by repetition | :white_check_mark: |
+| TC73: a move that reaches 150 ends the game by the seventy-five-move rule | as TC22; after the move, Black is to move, the board answers false for `isCheckmated(BLACK)`, the game answers false for `isFivefoldRepetition` and true for `isSeventyFiveMoveRule` | the board moves the piece from b1 to c3; the game passes the turn, then ends by seventy-five-move | :white_check_mark: |
+| TC74: a move that does not reach 150 does not end the game | as TC73, but the game answers false for `isSeventyFiveMoveRule` | the board moves the piece from b1 to c3; the game passes the turn and does not end | :white_check_mark: |
+| TC75: checkmate wins over the seventy-five-move rule | as TC73, but the board answers true for `isCheckmated(BLACK)` | the game passes the turn, then ends by checkmate, not by seventy-five-move | :white_check_mark: |
+| TC76: a move that would make the count 100 waits for the claim | as TC22, but the game answers false for `canClaimDrawByRepetitionWith(b1, c3)` and true for `canClaimDrawByFiftyMoveWith(b1, c3)`; click b1, then c3; ask `isDrawClaimWithMovePending` | true; the board does not move any piece; the game does not pass the turn | :white_check_mark: |
+| TC77: a waiting fifty-move can be claimed | as TC76, and the game answers false for `canClaimDrawByRepetition` and for `canClaimDrawByFiftyMove`; ask `canClaimDraw` | true | :white_check_mark: |
+| TC78: claiming with a waiting fifty-move ends that draw | as TC76; `claimDraw` | the game ends by fifty-move; the board does not move any piece | :white_check_mark: |

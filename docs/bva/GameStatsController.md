@@ -97,12 +97,13 @@ Step 2/3:
 - game over -> Boolean: false, true
 - stalemate -> Boolean: false, true
 - winner -> Cases: Player 1 / White, Player 2 / Black
-- result of a game that is over -> Cases: checkmate, draw by repetition (issue #59), resignation (issue #60), draw by the fifty-move rule (issue #51), draw by the seventy-five-move rule (issue #51)
+- result of a game that is over -> Cases: checkmate, draw by repetition (issue #59), resignation (issue #60), draw by dead position (issue #50), draw by the fifty-move rule (issue #51), draw by the seventy-five-move rule (issue #51)
 - output is:
   - `Current player: <name of the player to move>` while the game is not over
   - `Checkmate: <winner's name> (<winner's color>) wins` once the game is over by checkmate
   - `Draw by stalemate` once the game is over by stalemate
   - `Draw by repetition` once the game is drawn by repetition
+  - `Draw by dead position` once the game is over by dead position
   - `Resignation: <winner's name> (<winner's color>) wins` once the other player has resigned
   - `Draw by the fifty-move rule` once the game is drawn by the fifty-move rule
   - `Draw by the seventy-five-move rule` once the game is drawn by the seventy-five-move rule
@@ -190,15 +191,25 @@ TC10, TC11, and TC13 still hold: the game answers false for
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isDrawnByAgreement()` is false, `isStalemate()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by stalemate`
 
+Issue #50 (GitHub US-17, docs US-17). After a dead position, the same line
+shows the result. A dead position has no winner, so the line names no player.
+`isDrawnByDeadPosition()` is asked before `winnerName()`, so a draw never
+reads the winner. The case number is TC19 so it does not collide with
+stalemate's TC18 on issue #49.
+
+- **TC19: refresh after a dead position** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByDeadPosition()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Draw by dead position`
+
 Issue #51 (GitHub US-18, docs US-19). After a fifty-move or seventy-five-move
 draw, the same line shows the result. A draw has no winner, so the line names
 no player. The queries are asked before `winnerName()`. The case numbers
-start at TC19, after stalemate's TC18.
+start at TC20, after dead position's TC19.
 
-- **TC19: refresh after a fifty-move draw** ( :white_check_mark: )
-    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isDrawnByAgreement()` is false, `isStalemate()` is false, `isDrawnByFiftyMove()` is true, and `refreshStatus()` runs.
+- **TC20: refresh after a fifty-move draw** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is false, `isDrawnByAgreement()` is false, `isStalemate()` is false, `isDrawnByDeadPosition()` is false, `isDrawnByFiftyMove()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by the fifty-move rule`
 
-- **TC20: refresh after a seventy-five-move draw** ( :white_check_mark: )
+- **TC21: refresh after a seventy-five-move draw** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByFiftyMove()` is false, `isDrawnBySeventyFiveMove()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by the seventy-five-move rule`

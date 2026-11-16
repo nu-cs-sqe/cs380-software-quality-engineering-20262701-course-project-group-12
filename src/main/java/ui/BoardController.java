@@ -176,6 +176,8 @@ public class BoardController {
             game.endByCheckmate();
         } else if (board.isStalemated(colorToMove)) {
             game.endByStalemate();
+        } else if (board.isDeadPosition()) {
+            game.endByDeadPosition();
         } else if (game.isSeventyFiveMoveRule()) {
             game.endBySeventyFiveMove();
         } else if (game.isFivefoldRepetition()) {
