@@ -32,6 +32,30 @@ We assigned the piece movement issues.
 14. [Done] Vanessa: US-08: Capture an opponent's piece ([#40](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/40))
 15. [Done] Team: Add the week 6 instructor code review feedback ([#29](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/29))
 
+# Week 7 (11/09/2026-11/15/2026)
+**Planning and Progress Tracking**:
+1. [Done] Souvenir: Move every piece on the board ([#54](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/54))
+2. [Done] Souvenir: US-10: Reject an illegal move ([#43](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/43))
+3. [Done] Souvenir: US-11: Keep the king out of check ([#65](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/65))
+4. [Done] Souvenir: US-12: Castle ([#55](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/55))
+5. [Done] Jay: US-16: Draw by stalemate ([#64](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/64))
+6. [Done] Jay: US-17: Draw by dead position ([#69](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/69))
+7. [Done] Jay: US-18: Draw by the fifty-move rule ([#70](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/70))
+8. [Done] Vanessa: US-13: Promote a pawn ([#56](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/56))
+9. [Done] Vanessa: US-14: Capture en passant ([#57](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/57))
+10. [Done] Vanessa: US-15: Win by checkmate ([#62](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/62))
+11. [Done] Vanessa: US-19: Draw by repetition ([#63](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/63))
+12. [Done] Vanessa: US-20: Resign ([#66](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/66))
+13. [Done] Vanessa: US-21: Agree to a draw ([#67](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/67))
+14. [Not started] Souvenir: Size the welcome window like the game window ([#74](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/74))
+15. [Not started] Souvenir: Show a game-over dialog with New Game and Close ([#75](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/75))
+16. [Not started] Souvenir: Style the player panel and controls around the board ([#76](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/76))
+17. [Not started] Jay: US-22: Internationalize the user interface ([#71](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/71))
+18. [Not started] Jay: Highlight the last move, legal squares, and a king in check ([#77](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/77))
+19. [Not started] Vanessa: US-23: Game timer ([#72](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/72))
+20. [Not started] Vanessa: Offer a draw from the game window ([#78](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/78))
+21. [Not started] Unassigned: Polish the user interface ([#73](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/73))
+
 # One section per week until the last week of class (the week before the Finals week)
 
 
