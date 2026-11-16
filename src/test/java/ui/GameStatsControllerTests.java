@@ -116,6 +116,8 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByAgreement()).andStubReturn(false);
         expect(game.isStalemate()).andStubReturn(false);
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
+        expect(game.isDrawnByFiftyMove()).andStubReturn(false);
+        expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Bo");
         expect(game.winnerColor()).andStubReturn(PieceColor.BLACK);
@@ -140,6 +142,8 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByAgreement()).andStubReturn(false);
         expect(game.isStalemate()).andStubReturn(false);
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
+        expect(game.isDrawnByFiftyMove()).andStubReturn(false);
+        expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Ada");
         expect(game.winnerColor()).andStubReturn(PieceColor.WHITE);
@@ -210,6 +214,51 @@ public class GameStatsControllerTests {
     }
 
     @Test
+    void RefreshStatus_DrawByFiftyMove_ShowsTheDraw() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(false);
+        expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
+        expect(game.isDrawnByDeadPosition()).andStubReturn(false);
+        expect(game.isDrawnByFiftyMove()).andStubReturn(true);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("Draw by the fifty-move rule", view.currentPlayerLine());
+    }
+
+    @Test
+    void RefreshStatus_DrawBySeventyFiveMove_ShowsTheDraw() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(false);
+        expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
+        expect(game.isDrawnByDeadPosition()).andStubReturn(false);
+        expect(game.isDrawnByFiftyMove()).andStubReturn(false);
+        expect(game.isDrawnBySeventyFiveMove()).andStubReturn(true);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("Draw by the seventy-five-move rule", view.currentPlayerLine());
+    }
+
+    @Test
     public void RefreshStatus_PlayerToMoveInCheck_ShowsTheCheck() {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);
@@ -240,6 +289,8 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByAgreement()).andStubReturn(false);
         expect(game.isStalemate()).andStubReturn(false);
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
+        expect(game.isDrawnByFiftyMove()).andStubReturn(false);
+        expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Bo");
         expect(game.winnerColor()).andStubReturn(PieceColor.BLACK);
@@ -306,6 +357,8 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByAgreement()).andStubReturn(false);
         expect(game.isStalemate()).andStubReturn(false);
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
+        expect(game.isDrawnByFiftyMove()).andStubReturn(false);
+        expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(true);
         expect(game.winnerName()).andStubReturn(winnerName);
         expect(game.winnerColor()).andStubReturn(winnerColor);
