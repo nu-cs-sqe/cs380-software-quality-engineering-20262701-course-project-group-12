@@ -9,41 +9,28 @@ import javax.swing.JPanel;
 
 public class GameFrame extends JFrame {
     public GameFrame(Game game) {
-        this(game, new GameStatsController(game));
-    }
-
-    private GameFrame(Game game, GameStatsController stats) {
-        this(stats, new BoardController(game.board(), game));
-    }
-
-    private GameFrame(GameStatsController stats, BoardController boardController) {
-        this(stats, boardController, new DrawClaimView(boardController, stats::refreshStatus));
-    }
-
-    private GameFrame(
-            GameStatsController stats, BoardController boardController, DrawClaimView drawClaim) {
-        this(
-                stats.createView(),
-                new BoardView(boardController, statusRefresh(stats, drawClaim)));
+        GameStatsController stats = new GameStatsController(game);
+        BoardController boardController = new BoardController(game.board(), game);
+        GameOverController gameOver =
+                new GameOverController(game, stats, new GameOverView(this));
+        DrawClaimView drawClaim = new DrawClaimView(boardController, () -> {
+            stats.refreshStatus();
+            gameOver.showIfOver();
+        });
+        Runnable afterAction = () -> {
+            stats.refreshStatus();
+            drawClaim.refresh();
+            gameOver.showIfOver();
+        };
+        arrange(getContentPane(), stats.createView(), new BoardView(boardController, afterAction));
         JPanel endGameControls = new JPanel();
         endGameControls.add(drawClaim);
-        endGameControls.add(new ResignView(boardController, statusRefresh(stats, drawClaim)));
+        endGameControls.add(new ResignView(boardController, afterAction));
         getContentPane().add(endGameControls, BorderLayout.SOUTH);
         setTitle(Messages.text("game.window.title"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-    }
-
-    private static Runnable statusRefresh(GameStatsController stats, DrawClaimView drawClaim) {
-        return () -> {
-            stats.refreshStatus();
-            drawClaim.refresh();
-        };
-    }
-
-    public GameFrame(GameStatsView statsView, BoardView boardView) {
-        arrange(getContentPane(), statsView, boardView);
     }
 
     static void arrange(Container container, GameStatsView statsView, BoardView boardView) {

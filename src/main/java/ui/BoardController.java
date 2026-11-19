@@ -73,6 +73,7 @@ public class BoardController {
     public void claimDraw() {
         if (canClaimDraw()) {
             endByClaimedDraw();
+            moveWaitingForClaim = Optional.empty();
         }
     }
 

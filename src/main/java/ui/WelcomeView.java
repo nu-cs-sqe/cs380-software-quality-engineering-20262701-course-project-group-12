@@ -34,6 +34,11 @@ public class WelcomeView extends JPanel {
                 controller.startGame(playerOneField.getText(), playerTwoField.getText()));
     }
 
+    public void fillNames(String playerOneName, String playerTwoName) {
+        playerOneField.setText(playerOneName);
+        playerTwoField.setText(playerTwoName);
+    }
+
     public void showNamesRequired() {
         errorLabel.setText(Messages.text("welcome.namesRequired"));
     }

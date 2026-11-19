@@ -213,3 +213,14 @@ start at TC20, after dead position's TC19.
 - **TC21: refresh after a seventy-five-move draw** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByFiftyMove()` is false, `isDrawnBySeventyFiveMove()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by the seventy-five-move rule`
+
+### Method under test: `resultLine()`
+
+Issue #75. The game-over dialog shows the same text as the status line, so
+`resultLine()` is public and `GameOverController` asks it for the dialog's
+text. It is the line `refreshStatus()` shows once the game is over, so its
+cases are the game-over cases above.
+
+- **TC22: the result of a game that is over** ( implemented in TC10, TC11, TC13 to TC21 )
+    - **State of the system**: the game is over, as in each of those cases.
+    - **Expected output**: the same line those cases show
