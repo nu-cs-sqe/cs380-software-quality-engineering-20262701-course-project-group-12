@@ -59,6 +59,20 @@ public class GameOverControllerTests {
     }
 
 
+    @Test
+    void ShowIfOver_WhiteWinsByResignation_ShowsTheWinner() {
+        gameWonBy("Ada", PieceColor.WHITE);
+        expect(game.isWonByResignation()).andStubReturn(true);
+        expect(view.askNextStep("Resignation: Ada (White) wins"))
+                .andReturn(GameOverChoice.KEEP_VIEWING);
+        GameOverController controller = controller();
+
+        controller.showIfOver();
+
+        verify(view);
+    }
+
+
     private void gameWonBy(String winnerName, PieceColor winnerColor) {
         expect(game.isOver()).andStubReturn(true);
         expect(game.winnerName()).andStubReturn(winnerName);
