@@ -87,6 +87,46 @@ public class WelcomeControllerTests {
     }
 
     @Test
+    public void WelcomeView_NoError_HidesErrorMessage() {
+        WelcomeView welcomeView = new WelcomeView(controllerThatIsNeverCalled(), NO_WINDOW);
+
+        assertFalse(welcomeView.isErrorShown());
+    }
+
+    @Test
+    public void WelcomeView_ShowDuplicateNames_ShowsErrorMessage() {
+        WelcomeView welcomeView = new WelcomeView(controllerThatIsNeverCalled(), NO_WINDOW);
+
+        welcomeView.showDuplicateNames();
+
+        assertTrue(welcomeView.isErrorShown());
+    }
+
+    @Test
+    public void WelcomeView_EnterInPlayerOneField_StartsGame() {
+        WelcomeController controller = controllerExpectingStart("Alice", "Bob");
+        WelcomeView welcomeView = new WelcomeView(controller, NO_WINDOW);
+        welcomeView.playerOneField().setText("Alice");
+        welcomeView.playerTwoField().setText("Bob");
+
+        welcomeView.playerOneField().postActionEvent();
+
+        verify(controller);
+    }
+
+    @Test
+    public void WelcomeView_EnterInPlayerTwoField_StartsGame() {
+        WelcomeController controller = controllerExpectingStart("Alice", "Bob");
+        WelcomeView welcomeView = new WelcomeView(controller, NO_WINDOW);
+        welcomeView.playerOneField().setText("Alice");
+        welcomeView.playerTwoField().setText("Bob");
+
+        welcomeView.playerTwoField().postActionEvent();
+
+        verify(controller);
+    }
+
+    @Test
     public void StartGame_WithDuplicateNames_ShowsDuplicateNames() {
         Game game = new Game();
         view.showDuplicateNames();
@@ -152,6 +192,13 @@ public class WelcomeControllerTests {
 
     private static WelcomeController controllerThatIsNeverCalled() {
         WelcomeController controller = mock(WelcomeController.class);
+        replay(controller);
+        return controller;
+    }
+
+    private static WelcomeController controllerExpectingStart(String player1, String player2) {
+        WelcomeController controller = mock(WelcomeController.class);
+        controller.startGame(player1, player2);
         replay(controller);
         return controller;
     }
