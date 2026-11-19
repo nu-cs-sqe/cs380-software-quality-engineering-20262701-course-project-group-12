@@ -15,15 +15,19 @@ public class GameOverController {
     }
 
     public void showIfOver() {
-        if (game.isOver() && !dialogOpened) {
-            dialogOpened = true;
-            GameOverChoice choice = view.askNextStep(stats.resultLine());
-            if (choice == GameOverChoice.NEW_GAME) {
-                view.returnToWelcome(game.playerOneName(), game.playerTwoName());
-            }
-            if (choice == GameOverChoice.CLOSE) {
-                view.exitApplication();
-            }
+        if (!game.isOver() || dialogOpened) {
+            return;
+        }
+        dialogOpened = true;
+        actOn(view.askNextStep(stats.resultLine()));
+    }
+
+    private void actOn(GameOverChoice choice) {
+        if (choice == GameOverChoice.NEW_GAME) {
+            view.returnToWelcome(game.playerOneName(), game.playerTwoName());
+        }
+        if (choice == GameOverChoice.CLOSE) {
+            view.exitApplication();
         }
     }
 }
