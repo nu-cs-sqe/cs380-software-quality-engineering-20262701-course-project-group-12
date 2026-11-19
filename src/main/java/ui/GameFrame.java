@@ -4,10 +4,13 @@ import domain.Game;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class GameFrame extends JFrame {
+    private static final int PANELS_HEIGHT = 100;
+
     public GameFrame(Game game) {
         this(game, new GameStatsController(game));
     }
@@ -31,8 +34,14 @@ public class GameFrame extends JFrame {
         getContentPane().add(endGameControls, BorderLayout.SOUTH);
         setTitle(Messages.text("game.window.title"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
+        fitToGameWindow(this);
         setLocationRelativeTo(null);
+    }
+
+    static void fitToGameWindow(JFrame window) {
+        window.getContentPane().setPreferredSize(
+                new Dimension(BoardView.SIDE_LENGTH, BoardView.SIDE_LENGTH + PANELS_HEIGHT));
+        window.pack();
     }
 
     private static Runnable statusRefresh(GameStatsController stats, DrawClaimView drawClaim) {

@@ -33,6 +33,7 @@ public class BoardView extends JPanel {
     private static final Color DARK_SQUARE = new Color(181, 136, 99);
     private static final Color SELECTED_SQUARE = new Color(186, 202, 68);
     private static final int LABEL_MARGIN = TILE_SIZE / 2;
+    static final int SIDE_LENGTH = BOARD_LENGTH + LABEL_MARGIN;
     private static final char FIRST_FILE_LETTER = 'a';
     private static final Color LABEL_INK = Color.DARK_GRAY;
     private static final Font LABEL_FONT = new Font(Font.SANS_SERIF, Font.BOLD, TILE_SIZE / 5);
@@ -51,8 +52,7 @@ public class BoardView extends JPanel {
     public BoardView(BoardController boardController, Runnable afterClick) {
         this.boardController = boardController;
         this.afterClick = afterClick;
-        int sideLength = BOARD_LENGTH + LABEL_MARGIN;
-        setPreferredSize(new Dimension(sideLength, sideLength));
+        setPreferredSize(new Dimension(SIDE_LENGTH, SIDE_LENGTH));
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent event) {

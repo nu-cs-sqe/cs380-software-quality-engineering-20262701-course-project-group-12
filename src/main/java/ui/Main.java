@@ -14,10 +14,11 @@ public class Main {
             WelcomeView view = createWelcomeView(controller, window::dispose);
             controller.setView(view);
             window.add(view);
-            window.pack();
+            GameFrame.fitToGameWindow(window);
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             window.setLocationRelativeTo(null);
             window.setVisible(true);
+            view.playerOneField().requestFocusInWindow();
         });
     }
 
