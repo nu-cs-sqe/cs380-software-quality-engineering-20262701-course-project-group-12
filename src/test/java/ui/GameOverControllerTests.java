@@ -179,6 +179,20 @@ public class GameOverControllerTests {
     }
 
 
+    @Test
+    void ShowIfOver_PlayersChooseNewGame_ReturnsToWelcomeWithNames() {
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isStalemate()).andStubReturn(true);
+        expect(view.askNextStep("Draw by stalemate")).andReturn(GameOverChoice.NEW_GAME);
+        view.returnToWelcome("Ada", "Bo");
+        GameOverController controller = controller();
+
+        controller.showIfOver();
+
+        verify(view);
+    }
+
+
     private void gameWonBy(String winnerName, PieceColor winnerColor) {
         expect(game.isOver()).andStubReturn(true);
         expect(game.winnerName()).andStubReturn(winnerName);

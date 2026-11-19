@@ -91,7 +91,7 @@ only the dialog's text is checked.
     - **State of the system**: the game is over by stalemate. `showIfOver()` already ran once and the players closed the dialog with the window's close button. `showIfOver()` runs again.
     - **Expected output**: the dialog opened only the first time
 
-- **TC13: the players choose New Game** ( :x: )
+- **TC13: the players choose New Game** ( :white_check_mark: )
     - **State of the system**: the game is over by stalemate. Player 1 Ada, Player 2 Bo. The players choose New Game.
     - **Expected output**: the welcome window opens with Ada as Player 1 and Bo as Player 2
 

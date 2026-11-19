@@ -33,4 +33,9 @@ public class GameOverView {
         }
         return GameOverChoice.KEEP_VIEWING;
     }
+
+    public void returnToWelcome(String playerOneName, String playerTwoName) {
+        gameWindow.dispose();
+        Main.openWelcomeWindow(playerOneName, playerTwoName);
+    }
 }

@@ -17,7 +17,10 @@ public class GameOverController {
     public void showIfOver() {
         if (game.isOver() && !dialogOpened) {
             dialogOpened = true;
-            view.askNextStep(stats.resultLine());
+            GameOverChoice choice = view.askNextStep(stats.resultLine());
+            if (choice == GameOverChoice.NEW_GAME) {
+                view.returnToWelcome(game.playerOneName(), game.playerTwoName());
+            }
         }
     }
 }
