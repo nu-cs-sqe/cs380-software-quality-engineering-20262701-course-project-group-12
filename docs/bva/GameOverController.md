@@ -43,7 +43,7 @@ Step 2/3:
 In TC2 to TC12 the players close the dialog with the window's close button, so
 only the dialog's text is checked.
 
-- **TC1: game in progress** ( :x: )
+- **TC1: game in progress** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. The game is not over.
     - **Expected output**: no dialog opens
 

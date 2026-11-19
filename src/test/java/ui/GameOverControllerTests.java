@@ -1,0 +1,40 @@
+package ui;
+
+import domain.Game;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+
+public class GameOverControllerTests {
+    private Game game;
+    private GameOverView view;
+
+    @BeforeEach
+    void createMocks() {
+        game = createNiceMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        view = mock(GameOverView.class);
+    }
+
+    @Test
+    void ShowIfOver_GameInProgress_OpensNoDialog() {
+        expect(game.isOver()).andStubReturn(false);
+        GameOverController controller = controller();
+
+        controller.showIfOver();
+
+        verify(view);
+    }
+
+    private GameOverController controller() {
+        replay(game, view);
+        return new GameOverController(game, new GameStatsController(game), view);
+    }
+}
