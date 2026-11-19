@@ -409,4 +409,4 @@ made the move.
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC79: claiming with a waiting move leaves no move waiting | as TC54; `claimDraw`, then ask `isDrawClaimWithMovePending` | false; the game ends by repetition; the board does not move any piece | :x: |
+| TC79: claiming with a waiting move leaves no move waiting | as TC54; `claimDraw`, then ask `isDrawClaimWithMovePending` | false; the game ends by repetition; the board does not move any piece | :white_check_mark: |
