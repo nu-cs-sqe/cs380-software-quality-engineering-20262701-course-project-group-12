@@ -83,7 +83,7 @@ only the dialog's text is checked.
     - **State of the system**: the game is over, `isDrawnBySeventyFiveMove()` is true.
     - **Expected output**: the dialog shows `Draw by the seventy-five-move rule`
 
-- **TC11: draw by agreement** ( :x: )
+- **TC11: draw by agreement** ( :white_check_mark: )
     - **State of the system**: the game is over, `isDrawnByAgreement()` is true.
     - **Expected output**: the dialog shows `Draw by agreement`
 
