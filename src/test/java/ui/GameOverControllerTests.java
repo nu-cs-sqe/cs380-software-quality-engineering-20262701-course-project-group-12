@@ -87,6 +87,19 @@ public class GameOverControllerTests {
     }
 
 
+    @Test
+    void ShowIfOver_DrawByStalemate_ShowsTheDraw() {
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isStalemate()).andStubReturn(true);
+        expect(view.askNextStep("Draw by stalemate")).andReturn(GameOverChoice.KEEP_VIEWING);
+        GameOverController controller = controller();
+
+        controller.showIfOver();
+
+        verify(view);
+    }
+
+
     private void gameWonBy(String winnerName, PieceColor winnerColor) {
         expect(game.isOver()).andStubReturn(true);
         expect(game.winnerName()).andStubReturn(winnerName);

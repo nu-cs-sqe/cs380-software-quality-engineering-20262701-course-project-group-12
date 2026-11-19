@@ -63,7 +63,7 @@ only the dialog's text is checked.
     - **State of the system**: the game is over, `isWonByResignation()` is true, `winnerName()` is Bo, `winnerColor()` is `BLACK`.
     - **Expected output**: the dialog shows `Resignation: Bo (Black) wins`
 
-- **TC6: draw by stalemate** ( :x: )
+- **TC6: draw by stalemate** ( :white_check_mark: )
     - **State of the system**: the game is over, `isStalemate()` is true.
     - **Expected output**: the dialog shows `Draw by stalemate`
 
