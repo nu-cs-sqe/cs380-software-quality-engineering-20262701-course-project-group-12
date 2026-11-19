@@ -46,6 +46,19 @@ public class GameOverControllerTests {
         verify(view);
     }
 
+    @Test
+    void ShowIfOver_BlackWinsByCheckmate_ShowsTheWinner() {
+        gameWonBy("Bo", PieceColor.BLACK);
+        expect(view.askNextStep("Checkmate: Bo (Black) wins"))
+                .andReturn(GameOverChoice.KEEP_VIEWING);
+        GameOverController controller = controller();
+
+        controller.showIfOver();
+
+        verify(view);
+    }
+
+
     private void gameWonBy(String winnerName, PieceColor winnerColor) {
         expect(game.isOver()).andStubReturn(true);
         expect(game.winnerName()).andStubReturn(winnerName);

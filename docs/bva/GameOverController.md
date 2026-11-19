@@ -51,7 +51,7 @@ only the dialog's text is checked.
     - **State of the system**: the game is over by checkmate. `winnerName()` is Ada, `winnerColor()` is `WHITE`.
     - **Expected output**: the dialog shows `Checkmate: Ada (White) wins`
 
-- **TC3: Black wins by checkmate** ( :x: )
+- **TC3: Black wins by checkmate** ( :white_check_mark: )
     - **State of the system**: the game is over by checkmate. `winnerName()` is Bo, `winnerColor()` is `BLACK`.
     - **Expected output**: the dialog shows `Checkmate: Bo (Black) wins`
 
