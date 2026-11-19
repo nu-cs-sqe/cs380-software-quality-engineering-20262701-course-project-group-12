@@ -71,7 +71,7 @@ only the dialog's text is checked.
     - **State of the system**: the game is over, `isDrawnByDeadPosition()` is true.
     - **Expected output**: the dialog shows `Draw by dead position`
 
-- **TC8: draw by repetition** ( :x: )
+- **TC8: draw by repetition** ( :white_check_mark: )
     - **State of the system**: the game is over, `isDrawnByRepetition()` is true.
     - **Expected output**: the dialog shows `Draw by repetition`
 
