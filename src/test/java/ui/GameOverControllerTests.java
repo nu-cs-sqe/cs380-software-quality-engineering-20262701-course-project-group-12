@@ -91,7 +91,8 @@ public class GameOverControllerTests {
     void ShowIfOver_DrawByStalemate_ShowsTheDraw() {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isStalemate()).andStubReturn(true);
-        expect(view.askNextStep("Draw by stalemate")).andReturn(GameOverChoice.KEEP_VIEWING);
+        expect(view.askNextStep("Draw by stalemate"))
+                .andReturn(GameOverChoice.KEEP_VIEWING);
         GameOverController controller = controller();
 
         controller.showIfOver();
@@ -104,7 +105,8 @@ public class GameOverControllerTests {
     void ShowIfOver_DrawByDeadPosition_ShowsTheDraw() {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isDrawnByDeadPosition()).andStubReturn(true);
-        expect(view.askNextStep("Draw by dead position")).andReturn(GameOverChoice.KEEP_VIEWING);
+        expect(view.askNextStep("Draw by dead position"))
+                .andReturn(GameOverChoice.KEEP_VIEWING);
         GameOverController controller = controller();
 
         controller.showIfOver();
@@ -117,7 +119,8 @@ public class GameOverControllerTests {
     void ShowIfOver_DrawByRepetition_ShowsTheDraw() {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isDrawnByRepetition()).andStubReturn(true);
-        expect(view.askNextStep("Draw by repetition")).andReturn(GameOverChoice.KEEP_VIEWING);
+        expect(view.askNextStep("Draw by repetition"))
+                .andReturn(GameOverChoice.KEEP_VIEWING);
         GameOverController controller = controller();
 
         controller.showIfOver();
@@ -130,7 +133,8 @@ public class GameOverControllerTests {
     void ShowIfOver_DrawByFiftyMove_ShowsTheDraw() {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isDrawnByFiftyMove()).andStubReturn(true);
-        expect(view.askNextStep("Draw by the fifty-move rule")).andReturn(GameOverChoice.KEEP_VIEWING);
+        expect(view.askNextStep("Draw by the fifty-move rule"))
+                .andReturn(GameOverChoice.KEEP_VIEWING);
         GameOverController controller = controller();
 
         controller.showIfOver();
@@ -143,7 +147,8 @@ public class GameOverControllerTests {
     void ShowIfOver_DrawBySeventyFiveMove_ShowsTheDraw() {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(true);
-        expect(view.askNextStep("Draw by the seventy-five-move rule")).andReturn(GameOverChoice.KEEP_VIEWING);
+        expect(view.askNextStep("Draw by the seventy-five-move rule"))
+                .andReturn(GameOverChoice.KEEP_VIEWING);
         GameOverController controller = controller();
 
         controller.showIfOver();
@@ -156,7 +161,8 @@ public class GameOverControllerTests {
     void ShowIfOver_DrawByAgreement_ShowsTheDraw() {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isDrawnByAgreement()).andStubReturn(true);
-        expect(view.askNextStep("Draw by agreement")).andReturn(GameOverChoice.KEEP_VIEWING);
+        expect(view.askNextStep("Draw by agreement"))
+                .andReturn(GameOverChoice.KEEP_VIEWING);
         GameOverController controller = controller();
 
         controller.showIfOver();
@@ -169,7 +175,8 @@ public class GameOverControllerTests {
     void ShowIfOver_DialogAlreadyOpened_OpensNoSecondDialog() {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isStalemate()).andStubReturn(true);
-        expect(view.askNextStep("Draw by stalemate")).andReturn(GameOverChoice.KEEP_VIEWING);
+        expect(view.askNextStep("Draw by stalemate"))
+                .andReturn(GameOverChoice.KEEP_VIEWING);
         GameOverController controller = controller();
         controller.showIfOver();
 
@@ -183,7 +190,8 @@ public class GameOverControllerTests {
     void ShowIfOver_PlayersChooseNewGame_ReturnsToWelcomeWithNames() {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isStalemate()).andStubReturn(true);
-        expect(view.askNextStep("Draw by stalemate")).andReturn(GameOverChoice.NEW_GAME);
+        expect(view.askNextStep("Draw by stalemate"))
+                .andReturn(GameOverChoice.NEW_GAME);
         view.returnToWelcome("Ada", "Bo");
         GameOverController controller = controller();
 
@@ -197,7 +205,8 @@ public class GameOverControllerTests {
     void ShowIfOver_PlayersChooseClose_ExitsTheApplication() {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isStalemate()).andStubReturn(true);
-        expect(view.askNextStep("Draw by stalemate")).andReturn(GameOverChoice.CLOSE);
+        expect(view.askNextStep("Draw by stalemate"))
+                .andReturn(GameOverChoice.CLOSE);
         view.exitApplication();
         GameOverController controller = controller();
 
