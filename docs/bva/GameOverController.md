@@ -87,7 +87,7 @@ only the dialog's text is checked.
     - **State of the system**: the game is over, `isDrawnByAgreement()` is true.
     - **Expected output**: the dialog shows `Draw by agreement`
 
-- **TC12: the dialog already opened for this game** ( :x: )
+- **TC12: the dialog already opened for this game** ( :white_check_mark: )
     - **State of the system**: the game is over by stalemate. `showIfOver()` already ran once and the players closed the dialog with the window's close button. `showIfOver()` runs again.
     - **Expected output**: the dialog opened only the first time
 
