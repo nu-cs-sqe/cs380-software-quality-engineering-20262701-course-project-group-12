@@ -100,6 +100,19 @@ public class GameOverControllerTests {
     }
 
 
+    @Test
+    void ShowIfOver_DrawByDeadPosition_ShowsTheDraw() {
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isDrawnByDeadPosition()).andStubReturn(true);
+        expect(view.askNextStep("Draw by dead position")).andReturn(GameOverChoice.KEEP_VIEWING);
+        GameOverController controller = controller();
+
+        controller.showIfOver();
+
+        verify(view);
+    }
+
+
     private void gameWonBy(String winnerName, PieceColor winnerColor) {
         expect(game.isOver()).andStubReturn(true);
         expect(game.winnerName()).andStubReturn(winnerName);

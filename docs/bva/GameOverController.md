@@ -67,7 +67,7 @@ only the dialog's text is checked.
     - **State of the system**: the game is over, `isStalemate()` is true.
     - **Expected output**: the dialog shows `Draw by stalemate`
 
-- **TC7: draw by dead position** ( :x: )
+- **TC7: draw by dead position** ( :white_check_mark: )
     - **State of the system**: the game is over, `isDrawnByDeadPosition()` is true.
     - **Expected output**: the dialog shows `Draw by dead position`
 
