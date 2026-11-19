@@ -3,12 +3,8 @@ package ui;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 
 public class GameOverView {
-    private static final int NEW_GAME_BUTTON = 0;
-    private static final int CLOSE_BUTTON = 1;
-
     private final JFrame gameWindow;
 
     public GameOverView(JFrame gameWindow) {
@@ -16,20 +12,16 @@ public class GameOverView {
     }
 
     public GameOverChoice askNextStep(String resultLine) {
-        Object[] buttons = {Messages.text("gameOver.newGame"), Messages.text("gameOver.close")};
-        int chosen = JOptionPane.showOptionDialog(
-                gameWindow,
-                resultLine,
-                Messages.text("gameOver.title"),
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                UIManager.getIcon("OptionPane.informationIcon"),
-                buttons,
-                buttons[NEW_GAME_BUTTON]);
-        if (chosen == NEW_GAME_BUTTON) {
+        String newGame = Messages.text("gameOver.newGame");
+        String close = Messages.text("gameOver.close");
+        JOptionPane pane = new JOptionPane(resultLine, JOptionPane.PLAIN_MESSAGE);
+        pane.setOptions(new Object[] {newGame, close});
+        pane.setInitialValue(newGame);
+        pane.createDialog(gameWindow, Messages.text("gameOver.title")).setVisible(true);
+        if (newGame.equals(pane.getValue())) {
             return GameOverChoice.NEW_GAME;
         }
-        if (chosen == CLOSE_BUTTON) {
+        if (close.equals(pane.getValue())) {
             return GameOverChoice.CLOSE;
         }
         return GameOverChoice.KEEP_VIEWING;
