@@ -46,7 +46,7 @@ public class GameStatsController {
         return currentPlayerLine();
     }
 
-    private String resultLine() {
+    public String resultLine() {
         if (game.isDrawnByRepetition()) {
             return Messages.text("stats.drawByRepetition");
         }

@@ -14,5 +14,8 @@ public class GameOverController {
     }
 
     public void showIfOver() {
+        if (game.isOver()) {
+            view.askNextStep(stats.resultLine());
+        }
     }
 }
