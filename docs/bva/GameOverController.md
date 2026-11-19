@@ -75,7 +75,7 @@ only the dialog's text is checked.
     - **State of the system**: the game is over, `isDrawnByRepetition()` is true.
     - **Expected output**: the dialog shows `Draw by repetition`
 
-- **TC9: draw by the fifty-move rule** ( :x: )
+- **TC9: draw by the fifty-move rule** ( :white_check_mark: )
     - **State of the system**: the game is over, `isDrawnByFiftyMove()` is true.
     - **Expected output**: the dialog shows `Draw by the fifty-move rule`
 
