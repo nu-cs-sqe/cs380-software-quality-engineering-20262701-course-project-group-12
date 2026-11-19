@@ -95,6 +95,6 @@ only the dialog's text is checked.
     - **State of the system**: the game is over by stalemate. Player 1 Ada, Player 2 Bo. The players choose New Game.
     - **Expected output**: the welcome window opens with Ada as Player 1 and Bo as Player 2
 
-- **TC14: the players choose Close** ( :x: )
+- **TC14: the players choose Close** ( :white_check_mark: )
     - **State of the system**: the game is over by stalemate. The players choose Close.
     - **Expected output**: the application exits

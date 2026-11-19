@@ -21,6 +21,9 @@ public class GameOverController {
             if (choice == GameOverChoice.NEW_GAME) {
                 view.returnToWelcome(game.playerOneName(), game.playerTwoName());
             }
+            if (choice == GameOverChoice.CLOSE) {
+                view.exitApplication();
+            }
         }
     }
 }

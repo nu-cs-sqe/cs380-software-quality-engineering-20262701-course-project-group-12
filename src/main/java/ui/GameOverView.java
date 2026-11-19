@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -37,5 +38,9 @@ public class GameOverView {
     public void returnToWelcome(String playerOneName, String playerTwoName) {
         gameWindow.dispose();
         Main.openWelcomeWindow(playerOneName, playerTwoName);
+    }
+
+    public void exitApplication() {
+        gameWindow.dispatchEvent(new WindowEvent(gameWindow, WindowEvent.WINDOW_CLOSING));
     }
 }
