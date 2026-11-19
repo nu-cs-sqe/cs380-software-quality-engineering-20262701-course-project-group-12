@@ -59,7 +59,7 @@ only the dialog's text is checked.
     - **State of the system**: the game is over, `isWonByResignation()` is true, `winnerName()` is Ada, `winnerColor()` is `WHITE`.
     - **Expected output**: the dialog shows `Resignation: Ada (White) wins`
 
-- **TC5: Black wins by resignation** ( :x: )
+- **TC5: Black wins by resignation** ( :white_check_mark: )
     - **State of the system**: the game is over, `isWonByResignation()` is true, `winnerName()` is Bo, `winnerColor()` is `BLACK`.
     - **Expected output**: the dialog shows `Resignation: Bo (Black) wins`
 
