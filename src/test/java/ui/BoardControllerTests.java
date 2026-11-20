@@ -1053,6 +1053,16 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void IsLegalDestination_NothingSelected_ReturnsFalse() {
+        BoardController controller = replayedController();
+
+        boolean legal = controller.isLegalDestination(C3);
+
+        assertFalse(legal);
+        verify(board, piece);
+    }
+
     private void expectPieceOnB1() {
         expectSelectableWhitePiece(B1);
         expect(board.pieceAt(B1)).andReturn(piece);
