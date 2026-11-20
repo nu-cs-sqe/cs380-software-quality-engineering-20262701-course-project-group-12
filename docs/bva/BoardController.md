@@ -431,7 +431,7 @@ Issue #77. The case numbers start at TC79, after the fifty-move cases (TC70 to T
 | TC81: a selected piece does not mark a square it cannot reach | as TC80, but the board answers false for `isLegalMove(b1, b3)`; ask about b3 `(1, 3)` | false | :white_check_mark: |
 | TC82: a selected piece with no legal moves marks nothing | as TC80, but the board answers false for `isLegalMove(b1, c3)`; ask about c3 | false | :white_check_mark: |
 | TC83: a pinned piece marks no destination off the pin | White is to move; c6 `(2, 6)` holds a White piece; click c6; the board answers false for `isLegalMove(c6, d4)`; ask about d4 `(3, 4)` | false | :white_check_mark: |
-| TC84: before any move, no square is a last-move square | a controller for the mocked board, no clicks yet; ask about b1 | false | :x: |
+| TC84: before any move, no square is a last-move square | a controller for the mocked board, no clicks yet; ask about b1 | false | :white_check_mark: |
 | TC85: after a move, the from square is a last-move square | as TC22; click b1, then c3; ask about b1 | true | :x: |
 | TC86: after a move, the to square is a last-move square | as TC85; ask about c3 | true | :x: |
 | TC87: after a move, another square is not a last-move square | as TC85; ask about a3 `(0, 3)` | false | :x: |

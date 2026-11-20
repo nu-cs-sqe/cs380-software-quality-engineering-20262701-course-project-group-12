@@ -1104,6 +1104,16 @@ public class BoardControllerTests {
         verify(board, piece);
     }
 
+    @Test
+    public void IsLastMoveSquare_BeforeAnyMove_ReturnsFalse() {
+        BoardController controller = replayedController();
+
+        boolean lastMove = controller.isLastMoveSquare(B1);
+
+        assertFalse(lastMove);
+        verify(board, piece);
+    }
+
     private void expectPieceOnB1() {
         expectSelectableWhitePiece(B1);
         expect(board.pieceAt(B1)).andReturn(piece);

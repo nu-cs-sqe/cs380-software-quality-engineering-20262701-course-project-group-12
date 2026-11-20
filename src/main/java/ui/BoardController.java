@@ -39,6 +39,10 @@ public class BoardController {
                 .orElse(false);
     }
 
+    public boolean isLastMoveSquare(Location square) {
+        return false;
+    }
+
     public boolean isPromotionPending() {
         return promotionSquare.isPresent();
     }
