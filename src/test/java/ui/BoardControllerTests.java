@@ -1063,6 +1063,32 @@ public class BoardControllerTests {
         verify(board, piece);
     }
 
+    @Test
+    public void IsLegalDestination_SelectedPieceCanReachSquare_ReturnsTrue() {
+        expectSelectableWhitePiece(B1);
+        expect(board.isLegalMove(B1, C3)).andReturn(true);
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+
+        boolean legal = controller.isLegalDestination(C3);
+
+        assertTrue(legal);
+        verify(board, piece);
+    }
+
+    @Test
+    public void IsLegalDestination_SelectedPieceCannotReachSquare_ReturnsFalse() {
+        expectSelectableWhitePiece(B1);
+        expect(board.isLegalMove(B1, B3)).andReturn(false);
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+
+        boolean legal = controller.isLegalDestination(B3);
+
+        assertFalse(legal);
+        verify(board, piece);
+    }
+
     private void expectPieceOnB1() {
         expectSelectableWhitePiece(B1);
         expect(board.pieceAt(B1)).andReturn(piece);
