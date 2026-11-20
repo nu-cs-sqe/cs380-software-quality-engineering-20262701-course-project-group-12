@@ -1166,6 +1166,33 @@ public class BoardControllerTests {
         verify(board, piece, game);
     }
 
+    @Test
+    public void IsLastMoveSquare_AfterLaterMove_PreviousFromSquareReturnsFalse() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        Piece blackPiece = mock(Piece.class);
+        expect(board.isOccupied(B8)).andReturn(true);
+        expect(board.pieceAt(B8)).andReturn(blackPiece);
+        expect(blackPiece.getColor()).andReturn(PieceColor.BLACK);
+        expect(game.colorToMove()).andReturn(PieceColor.BLACK);
+        expect(board.pieceAt(B8)).andReturn(blackPiece);
+        expect(board.isLegalMove(B8, C6)).andReturn(true);
+        blackPiece.move(B8, C6, board);
+        expect(blackPiece.promotesOn(C6)).andReturn(false);
+        game.passTurn();
+        expect(game.colorToMove()).andReturn(PieceColor.WHITE);
+        replay(board, piece, game, blackPiece);
+        BoardController controller = new BoardController(board, game);
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+        controller.clickSquare(B8);
+        controller.clickSquare(C6);
+
+        boolean lastMove = controller.isLastMoveSquare(B1);
+
+        assertFalse(lastMove);
+        verify(board, piece, game, blackPiece);
+    }
+
     private void expectPieceOnB1() {
         expectSelectableWhitePiece(B1);
         expect(board.pieceAt(B1)).andReturn(piece);
