@@ -72,7 +72,9 @@ public class BoardControllerTests {
     private static final Location B1 = new Location(1, 1);
     private static final Location B3 = new Location(1, 3);
     private static final Location C3 = new Location(2, 3);
+    private static final Location C6 = new Location(2, 6);
     private static final Location D2 = new Location(3, 2);
+    private static final Location D4 = new Location(3, 4);
     private static final Location E1 = new Location(4, 1);
     private static final Location G1 = new Location(6, 1);
     private static final Location B8 = new Location(1, Location.MAX_RANK);
@@ -1084,6 +1086,19 @@ public class BoardControllerTests {
         controller.clickSquare(B1);
 
         boolean legal = controller.isLegalDestination(C3);
+
+        assertFalse(legal);
+        verify(board, piece);
+    }
+
+    @Test
+    public void IsLegalDestination_PinnedPieceOffThePin_ReturnsFalse() {
+        expectSelectableWhitePiece(C6);
+        expect(board.isLegalMove(C6, D4)).andReturn(false);
+        BoardController controller = replayedController();
+        controller.clickSquare(C6);
+
+        boolean legal = controller.isLegalDestination(D4);
 
         assertFalse(legal);
         verify(board, piece);
