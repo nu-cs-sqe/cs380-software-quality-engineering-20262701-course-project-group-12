@@ -33,6 +33,10 @@ public class BoardController {
         return selectedSquare.filter(square::isSameSquareAs).isPresent();
     }
 
+    public boolean isLegalDestination(Location square) {
+        return false;
+    }
+
     public boolean isPromotionPending() {
         return promotionSquare.isPresent();
     }
