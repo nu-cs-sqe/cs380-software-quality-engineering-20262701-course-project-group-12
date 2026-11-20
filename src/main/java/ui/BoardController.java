@@ -34,7 +34,9 @@ public class BoardController {
     }
 
     public boolean isLegalDestination(Location square) {
-        return false;
+        return selectedSquare
+                .map(from -> board.isLegalMove(from, square))
+                .orElse(false);
     }
 
     public boolean isPromotionPending() {

@@ -427,8 +427,8 @@ Issue #77. The case numbers start at TC79, after the fifty-move cases (TC70 to T
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC79: nothing selected is not a legal destination | a controller for the mocked board, no clicks yet; ask about c3 `(2, 3)` | false; the board is not asked `isLegalMove` | :white_check_mark: |
-| TC80: a selected piece with several legal squares marks a destination | White is to move; b1 `(1, 1)` holds a White piece; click b1; the board answers true for `isLegalMove(b1, c3)`; ask about c3 | true | :x: |
-| TC81: a selected piece does not mark a square it cannot reach | as TC80, but the board answers false for `isLegalMove(b1, b3)`; ask about b3 `(1, 3)` | false | :x: |
+| TC80: a selected piece with several legal squares marks a destination | White is to move; b1 `(1, 1)` holds a White piece; click b1; the board answers true for `isLegalMove(b1, c3)`; ask about c3 | true | :white_check_mark: |
+| TC81: a selected piece does not mark a square it cannot reach | as TC80, but the board answers false for `isLegalMove(b1, b3)`; ask about b3 `(1, 3)` | false | :white_check_mark: |
 | TC82: a selected piece with no legal moves marks nothing | as TC80, but the board answers false for `isLegalMove(b1, c3)`; ask about c3 | false | :x: |
 | TC83: a pinned piece marks no destination off the pin | White is to move; c6 `(2, 6)` holds a White piece; click c6; the board answers false for `isLegalMove(c6, d4)`; ask about d4 `(3, 4)` | false | :x: |
 | TC84: before any move, no square is a last-move square | a controller for the mocked board, no clicks yet; ask about b1 | false | :x: |
