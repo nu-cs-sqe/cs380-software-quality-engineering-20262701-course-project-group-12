@@ -1127,6 +1127,32 @@ public class BoardControllerTests {
         verify(board, piece);
     }
 
+    @Test
+    public void IsLastMoveSquare_AfterMove_FromSquareReturnsTrue() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        boolean lastMove = controller.isLastMoveSquare(B1);
+
+        assertTrue(lastMove);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void IsLastMoveSquare_AfterMove_OtherSquareReturnsFalse() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        boolean lastMove = controller.isLastMoveSquare(A3);
+
+        assertFalse(lastMove);
+        verify(board, piece, game);
+    }
+
     private void expectPieceOnB1() {
         expectSelectableWhitePiece(B1);
         expect(board.pieceAt(B1)).andReturn(piece);

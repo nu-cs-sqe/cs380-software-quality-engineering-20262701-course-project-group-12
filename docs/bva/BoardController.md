@@ -443,9 +443,9 @@ Issue #77. The case numbers start at TC79, after the fifty-move cases (TC70 to T
 | TC82: a selected piece with no legal moves marks nothing | as TC80, but the board answers false for `isLegalMove(b1, c3)`; ask about c3 | false | :white_check_mark: |
 | TC83: a pinned piece marks no destination off the pin | White is to move; c6 `(2, 6)` holds a White piece; click c6; the board answers false for `isLegalMove(c6, d4)`; ask about d4 `(3, 4)` | false | :white_check_mark: |
 | TC84: before any move, no square is a last-move square | a controller for the mocked board, no clicks yet; ask about b1 | false | :white_check_mark: |
-| TC85: after a move, the from square is a last-move square | as TC22; click b1, then c3; ask about b1 | true | :x: |
+| TC85: after a move, the from square is a last-move square | as TC22; click b1, then c3; ask about b1 | true | :white_check_mark: |
 | TC86: after a move, the to square is a last-move square | as TC85; ask about c3 | true | :x: |
-| TC87: after a move, another square is not a last-move square | as TC85; ask about a3 `(0, 3)` | false | :x: |
+| TC87: after a move, another square is not a last-move square | as TC85; ask about a3 `(0, 3)` | false | :white_check_mark: |
 | TC88: a later move replaces the last-move squares | as TC85, then Black moves b8 `(1, 8)` to c6; ask about b1 | false | :x: |
 | TC89: a waiting draw-claim is not yet a last move | as TC52; click b1, then c3; ask about c3 | false | :x: |
 | TC90: when the player to move is not in check, no square is the king in check | the game answers false for `isPlayerToMoveInCheck`; ask about e1 `(4, 1)` | false; the board is not asked about e1 | :x: |

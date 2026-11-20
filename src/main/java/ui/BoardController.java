@@ -13,6 +13,7 @@ public class BoardController {
     private final Board board;
     private final Game game;
     private Optional<Location> selectedSquare = Optional.empty();
+    private Optional<Location> lastMoveFrom = Optional.empty();
     private Optional<Location> promotionSquare = Optional.empty();
     private Optional<WaitingMove> moveWaitingForClaim = Optional.empty();
 
@@ -40,7 +41,7 @@ public class BoardController {
     }
 
     public boolean isLastMoveSquare(Location square) {
-        return false;
+        return lastMoveFrom.filter(square::isSameSquareAs).isPresent();
     }
 
     public boolean isPromotionPending() {
@@ -168,6 +169,7 @@ public class BoardController {
     }
 
     private void makeMove(Piece movingPiece, Location from, Location to) {
+        lastMoveFrom = Optional.of(from);
         movingPiece.move(from, to, board);
         passTurnUnlessPromoting(movingPiece, to);
     }
