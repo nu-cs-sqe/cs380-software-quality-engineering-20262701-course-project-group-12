@@ -1141,6 +1141,19 @@ public class BoardControllerTests {
     }
 
     @Test
+    public void IsLastMoveSquare_AfterMove_ToSquareReturnsTrue() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        boolean lastMove = controller.isLastMoveSquare(C3);
+
+        assertTrue(lastMove);
+        verify(board, piece, game);
+    }
+
+    @Test
     public void IsLastMoveSquare_AfterMove_OtherSquareReturnsFalse() {
         expectWhiteMoveFromB1ToC3ThenBlackToMove();
         BoardController controller = replayedController();
