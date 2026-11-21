@@ -48,6 +48,7 @@ public class BoardController {
 
     public boolean isKingInCheck(Location square) {
         return game.isPlayerToMoveInCheck()
+                && board.isOccupied(square)
                 && board.pieceAt(square).getType() == PieceType.KING;
     }
 
