@@ -17,6 +17,7 @@ public class MessagesTests {
     private static final String PLAYER_ONE_ENGLISH = "Player 1: " + PLAYER_NAME + " (White)";
     private static final String PLAYER_ONE_FRENCH = "Joueur 1 : " + PLAYER_NAME + " (Blancs)";
     private static final String CHECK_ENGLISH = "Current player: " + PLAYER_NAME + " (in check)";
+    private static final String CHECK_FRENCH = PLAYER_NAME + " est en échec";
 
     @AfterEach
     public void restoreEnglish() {
@@ -82,5 +83,14 @@ public class MessagesTests {
         String text = Messages.format(CHECK_KEY, PLAYER_NAME);
 
         assertEquals(CHECK_ENGLISH, text);
+    }
+
+    @Test
+    public void format_FrenchLocale_PutsNameFirst() {
+        Messages.useLocale(Locale.FRENCH);
+
+        String text = Messages.format(CHECK_KEY, PLAYER_NAME);
+
+        assertEquals(CHECK_FRENCH, text);
     }
 }

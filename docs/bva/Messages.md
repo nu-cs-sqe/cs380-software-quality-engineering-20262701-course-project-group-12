@@ -58,4 +58,4 @@ setter case of its own.
 | TC5: English fills a name placeholder | `useLocale(Locale.ENGLISH)`; ask `format("stats.playerOne", "Ada")` | `Player 1: Ada (White)` | :white_check_mark: |
 | TC6: French fills a name placeholder | `useLocale(Locale.FRENCH)`; ask `format("stats.playerOne", "Ada")` | `Joueur 1 : Ada (Blancs)` | :white_check_mark: |
 | TC7: English keeps the name after the label | `useLocale(Locale.ENGLISH)`; ask `format("stats.check", "Ada")` | `Current player: Ada (in check)` | :white_check_mark: |
-| TC8: French can put the name first | `useLocale(Locale.FRENCH)`; ask `format("stats.check", "Ada")` | `Ada est en échec` | :x: |
+| TC8: French can put the name first | `useLocale(Locale.FRENCH)`; ask `format("stats.check", "Ada")` | `Ada est en échec` | :white_check_mark: |
