@@ -46,6 +46,10 @@ public class BoardController {
                 || lastMoveTo.filter(square::isSameSquareAs).isPresent();
     }
 
+    public boolean isKingInCheck(Location square) {
+        return game.isPlayerToMoveInCheck();
+    }
+
     public boolean isPromotionPending() {
         return promotionSquare.isPresent();
     }
