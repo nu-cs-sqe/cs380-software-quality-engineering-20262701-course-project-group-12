@@ -14,6 +14,7 @@ public class MessagesTests {
     private static final String START_GAME_ENGLISH = "Start Game";
     private static final String START_GAME_FRENCH = "Démarrer la partie";
     private static final String PLAYER_ONE_ENGLISH = "Player 1: " + PLAYER_NAME + " (White)";
+    private static final String PLAYER_ONE_FRENCH = "Joueur 1 : " + PLAYER_NAME + " (Blancs)";
 
     @AfterEach
     public void restoreEnglish() {
@@ -61,5 +62,14 @@ public class MessagesTests {
         String text = Messages.format(PLAYER_ONE_KEY, PLAYER_NAME);
 
         assertEquals(PLAYER_ONE_ENGLISH, text);
+    }
+
+    @Test
+    public void format_FrenchLocale_FillsNamePlaceholder() {
+        Messages.useLocale(Locale.FRENCH);
+
+        String text = Messages.format(PLAYER_ONE_KEY, PLAYER_NAME);
+
+        assertEquals(PLAYER_ONE_FRENCH, text);
     }
 }
