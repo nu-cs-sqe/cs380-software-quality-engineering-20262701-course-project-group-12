@@ -1,16 +1,21 @@
 package ui;
 
 import java.text.MessageFormat;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 final class Messages {
-    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("messages");
+    private static ResourceBundle bundle = ResourceBundle.getBundle("messages");
 
     private Messages() {
     }
 
+    static void useLocale(Locale locale) {
+        bundle = ResourceBundle.getBundle("messages", locale);
+    }
+
     static String text(String key) {
-        return BUNDLE.getString(key);
+        return bundle.getString(key);
     }
 
     static String format(String key, Object... arguments) {
