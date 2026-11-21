@@ -1205,6 +1205,7 @@ public class BoardControllerTests {
     @Test
     public void IsKingInCheck_SquareHoldsKingToMoveInCheck_ReturnsTrue() {
         expect(game.isPlayerToMoveInCheck()).andReturn(true);
+        expect(board.isOccupied(E1)).andReturn(true);
         expect(board.pieceAt(E1)).andReturn(new Piece(PieceType.KING, PieceColor.WHITE));
         BoardController controller = replayedController();
 
@@ -1217,10 +1218,23 @@ public class BoardControllerTests {
     @Test
     public void IsKingInCheck_OtherSquareWhileKingIsInCheck_ReturnsFalse() {
         expect(game.isPlayerToMoveInCheck()).andReturn(true);
+        expect(board.isOccupied(B1)).andReturn(true);
         expect(board.pieceAt(B1)).andReturn(new Piece(PieceType.PAWN, PieceColor.WHITE));
         BoardController controller = replayedController();
 
         boolean inCheck = controller.isKingInCheck(B1);
+
+        assertFalse(inCheck);
+        verify(board, game);
+    }
+
+    @Test
+    public void IsKingInCheck_EmptySquareWhileKingIsInCheck_ReturnsFalse() {
+        expect(game.isPlayerToMoveInCheck()).andReturn(true);
+        expect(board.isOccupied(A3)).andReturn(false);
+        BoardController controller = replayedController();
+
+        boolean inCheck = controller.isKingInCheck(A3);
 
         assertFalse(inCheck);
         verify(board, game);
