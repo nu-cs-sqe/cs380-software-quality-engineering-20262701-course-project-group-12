@@ -41,4 +41,13 @@ public class MessagesTests {
 
         assertEquals(START_GAME_FRENCH, text);
     }
+
+    @Test
+    public void text_FranceLocale_UsesFrench() {
+        Messages.useLocale(Locale.FRANCE);
+
+        String text = Messages.text(WELCOME_START_KEY);
+
+        assertEquals(START_GAME_FRENCH, text);
+    }
 }
