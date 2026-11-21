@@ -43,7 +43,7 @@ The language picker is a view/`Main` change after the cases.
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC1: no locale chosen uses English | `useLocale` has not been called; ask `text("welcome.start")` | `Start Game` | :x: |
+| TC1: no locale chosen uses English | `useLocale` has not been called; ask `text("welcome.start")` | `Start Game` | :white_check_mark: |
 | TC2: English after `useLocale` | `useLocale(Locale.ENGLISH)`; ask `text("welcome.start")` | `Start Game` | :x: |
 | TC3: French after `useLocale` | `useLocale(Locale.FRENCH)`; ask `text("welcome.start")` | `Démarrer la partie` | :x: |
 | TC4: `fr_FR` matches the French bundle | `useLocale(Locale.FRANCE)`; ask `text("welcome.start")` | `Démarrer la partie` | :x: |
