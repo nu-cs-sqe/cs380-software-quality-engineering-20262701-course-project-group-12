@@ -1180,6 +1180,17 @@ public class BoardControllerTests {
         verify(board, piece, game, blackPiece);
     }
 
+    @Test
+    public void IsLastMoveSquare_WaitingDrawClaim_ReturnsFalse() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        boolean lastMove = controller.isLastMoveSquare(C3);
+
+        assertFalse(lastMove);
+        verify(board, piece, game);
+    }
+
     private void expectPieceOnB1() {
         expectSelectableWhitePiece(B1);
         expect(board.pieceAt(B1)).andReturn(piece);
