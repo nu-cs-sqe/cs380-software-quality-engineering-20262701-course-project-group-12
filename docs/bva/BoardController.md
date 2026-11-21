@@ -31,6 +31,9 @@
 - `boolean canClaimDraw()`, after the game is over (issue #61): TC58 (issue #60) already returns false once `game.isOver()` is true, so after a draw by agreement a position that occurred three times cannot be claimed, and the window shows a draw by agreement, not a draw by repetition (US-21 AC 7).
 - `void clickSquare(Location square)`, the piece makes the move (issue #45 / US-12): when the board answers true for `isLegalMove` from the selected square to the clicked square, the controller calls the selected piece's `move(from, to, board)` instead of `board.move(from, to)`, so a castling king also moves its rook (`King.md`). A waiting move that the player declines to claim is made the same way. In every earlier case, "the board moves the piece" now means the selected piece's `move` is called with the controller's board.
 - `void clickSquare(Location square)`, dead position (issue #50 / GitHub US-17, docs US-17): after a move passes the turn, if the player now to move is not checkmated and not stalemated, the controller asks `board.isDeadPosition()`. When the position is dead, it calls `game.endByDeadPosition()`, so the game is a draw. Checkmate and stalemate are asked first. A click after the game is over is already TC40.
+- `boolean isLegalDestination(Location square)` (issue #77): returns true when a piece is selected and `board.isLegalMove` from that square to `square` is true. Legal means the same moves the game accepts: castling, en passant, and moves that keep the king out of check. With nothing selected, every square is false. A piece with no legal moves, including a piece pinned to its king, answers false for every destination. `BoardView` uses it to mark empty destinations with a dot and occupied ones with a ring. It does not change the selection or the board.
+- `boolean isLastMoveSquare(Location square)` (issue #77): returns true when `square` is the from or to square of the last move the controller actually made. Before any move, every square is false. A waiting draw-claim has not moved yet, so those squares stay false until the player declines and the move is made. After a later move, only the latest from and to are true. `BoardView` tints those squares until the next move.
+- `boolean isKingInCheck(Location square)` (issue #77): returns true when the player to move is in check (`game.isPlayerToMoveInCheck()`) and `square` holds that player's king. A square that is not the king, or a king whose player is not in check, is false. `BoardView` tints that square red. It does not change whose turn it is.
 
 No method checks its arguments for null, and no case passes null: our code never passes null (instructor code review, Week 6). TC2, TC5, and TC8 used to pass a null board or location; they were removed with the board check.
 
@@ -399,3 +402,43 @@ is over is already TC40. A waiting move already uses TC55 and TC56.
 | TC76: a move that would make the count 100 waits for the claim | as TC22, but the game answers false for `canClaimDrawByRepetitionWith(b1, c3)` and true for `canClaimDrawByFiftyMoveWith(b1, c3)`; click b1, then c3; ask `isDrawClaimWithMovePending` | true; the board does not move any piece; the game does not pass the turn | :white_check_mark: |
 | TC77: a waiting fifty-move can be claimed | as TC76, and the game answers false for `canClaimDrawByRepetition` and for `canClaimDrawByFiftyMove`; ask `canClaimDraw` | true | :white_check_mark: |
 | TC78: claiming with a waiting fifty-move ends that draw | as TC76; `claimDraw` | the game ends by fifty-move; the board does not move any piece | :white_check_mark: |
+
+### `isLegalDestination(Location square)`, `isLastMoveSquare(Location square)`, and `isKingInCheck(Location square)`
+
+Issue #77. The case numbers start at TC79, after the fifty-move cases (TC70 to TC78, issue #51). `Board` and `Game` are mocked with EasyMock, because the controller owns neither legality nor check. The markers and tints are a `BoardView` change after the cases. Clicking is unchanged: these queries only answer what to draw.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: the selection when asking `isLegalDestination` | Cases | none; a square (b1 `(1, 1)`; a pinned knight on c6 `(2, 6)`) |
+| Input: what the board answers for `isLegalMove` from the selection to the asked square | Boolean | true (c3 `(2, 3)`); false (b3 `(1, 3)`; d4 `(3, 4)` off a pin) |
+| Input: whether a move has been made when asking `isLastMoveSquare` | Cases | none; b1 to c3 made; a later move made; a b1 to c3 claim waiting |
+| Input: the asked square compared with the last move | Cases | the from square; the to square; another square (a3 `(0, 3)`) |
+| Input: what the game answers for `isPlayerToMoveInCheck` | Boolean | false; true |
+| Input: the occupant of the asked square when the player to move is in check | Cases | that player's king (e1 `(4, 1)`); another piece (b1) |
+| Input: `square` | Pointer | a location (no null: callers never pass one) |
+| Output: `isLegalDestination` | Boolean | true; false |
+| Output: `isLastMoveSquare` | Boolean | true; false |
+| Output: `isKingInCheck` | Boolean | true; false |
+
+## Step 4: Test cases (each-choice strategy)
+
+### Method under test: `isLegalDestination(Location square)`, `isLastMoveSquare(Location square)`, and `isKingInCheck(Location square)`
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC79: nothing selected is not a legal destination | a controller for the mocked board, no clicks yet; ask about c3 `(2, 3)` | false; the board is not asked `isLegalMove` | :white_check_mark: |
+| TC80: a selected piece with several legal squares marks a destination | White is to move; b1 `(1, 1)` holds a White piece; click b1; the board answers true for `isLegalMove(b1, c3)`; ask about c3 | true | :white_check_mark: |
+| TC81: a selected piece does not mark a square it cannot reach | as TC80, but the board answers false for `isLegalMove(b1, b3)`; ask about b3 `(1, 3)` | false | :white_check_mark: |
+| TC82: a selected piece with no legal moves marks nothing | as TC80, but the board answers false for `isLegalMove(b1, c3)`; ask about c3 | false | :white_check_mark: |
+| TC83: a pinned piece marks no destination off the pin | White is to move; c6 `(2, 6)` holds a White piece; click c6; the board answers false for `isLegalMove(c6, d4)`; ask about d4 `(3, 4)` | false | :white_check_mark: |
+| TC84: before any move, no square is a last-move square | a controller for the mocked board, no clicks yet; ask about b1 | false | :white_check_mark: |
+| TC85: after a move, the from square is a last-move square | as TC22; click b1, then c3; ask about b1 | true | :white_check_mark: |
+| TC86: after a move, the to square is a last-move square | as TC85; ask about c3 | true | :white_check_mark: |
+| TC87: after a move, another square is not a last-move square | as TC85; ask about a3 `(0, 3)` | false | :white_check_mark: |
+| TC88: a later move replaces the last-move squares | as TC85, then Black moves b8 `(1, 8)` to c6; ask about b1 | false | :white_check_mark: |
+| TC89: a waiting draw-claim is not yet a last move | as TC52; click b1, then c3; ask about c3 | false | :white_check_mark: |
+| TC90: when the player to move is not in check, no square is the king in check | the game answers false for `isPlayerToMoveInCheck`; ask about e1 `(4, 1)` | false; the board is not asked about e1 | :white_check_mark: |
+| TC91: the king of the player to move in check | the game answers true for `isPlayerToMoveInCheck`; e1 holds the White king; White is to move; ask about e1 | true | :white_check_mark: |
+| TC92: another square while the king is in check | as TC91, but b1 holds a White piece that is not the king; ask about b1 | false | :white_check_mark: |
+| TC93: an empty square while the king is in check | the game answers true for `isPlayerToMoveInCheck`; a3 is empty; ask about a3 | false | :white_check_mark: |
+| TC94: the opponent's king while the player to move is in check | as TC91, but e1 holds the Black king | false | :white_check_mark: |
