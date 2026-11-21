@@ -448,8 +448,8 @@ Issue #77. The case numbers start at TC79, after the fifty-move cases (TC70 to T
 | TC87: after a move, another square is not a last-move square | as TC85; ask about a3 `(0, 3)` | false | :white_check_mark: |
 | TC88: a later move replaces the last-move squares | as TC85, then Black moves b8 `(1, 8)` to c6; ask about b1 | false | :white_check_mark: |
 | TC89: a waiting draw-claim is not yet a last move | as TC52; click b1, then c3; ask about c3 | false | :white_check_mark: |
-| TC90: when the player to move is not in check, no square is the king in check | the game answers false for `isPlayerToMoveInCheck`; ask about e1 `(4, 1)` | false; the board is not asked about e1 | :x: |
-| TC91: the king of the player to move in check | the game answers true for `isPlayerToMoveInCheck`; e1 holds the White king; White is to move; ask about e1 | true | :x: |
+| TC90: when the player to move is not in check, no square is the king in check | the game answers false for `isPlayerToMoveInCheck`; ask about e1 `(4, 1)` | false; the board is not asked about e1 | :white_check_mark: |
+| TC91: the king of the player to move in check | the game answers true for `isPlayerToMoveInCheck`; e1 holds the White king; White is to move; ask about e1 | true | :white_check_mark: |
 | TC92: another square while the king is in check | as TC91, but b1 holds a White piece that is not the king; ask about b1 | false | :x: |
 | TC93: an empty square while the king is in check | the game answers true for `isPlayerToMoveInCheck`; a3 is empty; ask about a3 | false | :x: |
 | TC94: the opponent's king while the player to move is in check | as TC91, but e1 holds the Black king | false | :x: |
