@@ -47,9 +47,16 @@ public class BoardController {
     }
 
     public boolean isKingInCheck(Location square) {
-        return game.isPlayerToMoveInCheck()
-                && board.isOccupied(square)
-                && board.pieceAt(square).getType() == PieceType.KING;
+        return game.isPlayerToMoveInCheck() && holdsKingToMove(square);
+    }
+
+    private boolean holdsKingToMove(Location square) {
+        if (!board.isOccupied(square)) {
+            return false;
+        }
+        Piece occupant = board.pieceAt(square);
+        return occupant.getType() == PieceType.KING
+                && occupant.getColor() == game.colorToMove();
     }
 
     public boolean isPromotionPending() {

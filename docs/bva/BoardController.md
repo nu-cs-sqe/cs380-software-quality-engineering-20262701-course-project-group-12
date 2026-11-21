@@ -441,4 +441,4 @@ Issue #77. The case numbers start at TC79, after the fifty-move cases (TC70 to T
 | TC91: the king of the player to move in check | the game answers true for `isPlayerToMoveInCheck`; e1 holds the White king; White is to move; ask about e1 | true | :white_check_mark: |
 | TC92: another square while the king is in check | as TC91, but b1 holds a White piece that is not the king; ask about b1 | false | :white_check_mark: |
 | TC93: an empty square while the king is in check | the game answers true for `isPlayerToMoveInCheck`; a3 is empty; ask about a3 | false | :white_check_mark: |
-| TC94: the opponent's king while the player to move is in check | as TC91, but e1 holds the Black king | false | :x: |
+| TC94: the opponent's king while the player to move is in check | as TC91, but e1 holds the Black king | false | :white_check_mark: |
