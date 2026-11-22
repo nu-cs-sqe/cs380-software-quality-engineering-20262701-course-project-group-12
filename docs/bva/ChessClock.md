@@ -33,7 +33,7 @@ cases are checked.
 
 ### Method under test: `ChessClock(Clock timeSource)`, `remaining(PieceColor color)`, `switchTurn()`, and `stop()`
 
-- **TC-CLOCK-01 — Both clocks start at ten minutes** ( :x: )
+- **TC-CLOCK-01 — Both clocks start at ten minutes** ( :white_check_mark: )
   - **Method(s) under test**: `ChessClock(Clock)`, `remaining(PieceColor)`
   - **State of the system**: A fixed clock at instant `T0`; then
     `new ChessClock(thatClock)`.
