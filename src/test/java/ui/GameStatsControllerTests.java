@@ -375,6 +375,32 @@ public class GameStatsControllerTests {
         assertEquals("On time: Bo (Black) wins", view.currentPlayerLine());
     }
 
+    @Test
+    void RefreshStatus_PlayerTwoLosesOnTime_ShowsPlayerOneWinsOnTime() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(false);
+        expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
+        expect(game.isDrawnByDeadPosition()).andStubReturn(false);
+        expect(game.isDrawnByFiftyMove()).andStubReturn(false);
+        expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isWonOnTime()).andStubReturn(true);
+        expect(game.winnerName()).andStubReturn("Ada");
+        expect(game.winnerColor()).andStubReturn(PieceColor.WHITE);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("On time: Ada (White) wins", view.currentPlayerLine());
+    }
+
     private static Game gameWonByResignation(String winnerName, PieceColor winnerColor) {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);
