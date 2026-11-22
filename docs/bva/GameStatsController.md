@@ -246,6 +246,6 @@ winner.
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnOnTime()` is false, `isWonOnTime()` is true, `winnerName()` is Ada, `winnerColor()` is `WHITE`, and `refreshStatus()` runs.
     - **Expected output**: the view shows `On time: Ada (White) wins`
 
-- **TC24: refresh after a draw on time** ( :x: )
+- **TC24: refresh after a draw on time** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnOnTime()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw on time`

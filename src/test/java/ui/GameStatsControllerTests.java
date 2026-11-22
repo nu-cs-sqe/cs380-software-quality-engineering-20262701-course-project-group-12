@@ -118,6 +118,7 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(false);
         expect(game.isWonOnTime()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Bo");
@@ -145,6 +146,7 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(false);
         expect(game.isWonOnTime()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Ada");
@@ -293,6 +295,7 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(false);
         expect(game.isWonOnTime()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Bo");
@@ -363,6 +366,7 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(false);
         expect(game.isWonOnTime()).andStubReturn(true);
         expect(game.winnerName()).andStubReturn("Bo");
         expect(game.winnerColor()).andStubReturn(PieceColor.BLACK);
@@ -389,6 +393,7 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(false);
         expect(game.isWonOnTime()).andStubReturn(true);
         expect(game.winnerName()).andStubReturn("Ada");
         expect(game.winnerColor()).andStubReturn(PieceColor.WHITE);
@@ -399,6 +404,30 @@ public class GameStatsControllerTests {
         controller.refreshStatus();
 
         assertEquals("On time: Ada (White) wins", view.currentPlayerLine());
+    }
+
+    @Test
+    void RefreshStatus_DrawOnTime_ShowsTheDraw() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(false);
+        expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
+        expect(game.isDrawnByDeadPosition()).andStubReturn(false);
+        expect(game.isDrawnByFiftyMove()).andStubReturn(false);
+        expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(true);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("Draw on time", view.currentPlayerLine());
     }
 
     private static Game gameWonByResignation(String winnerName, PieceColor winnerColor) {
@@ -414,6 +443,7 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(false);
         expect(game.isWonOnTime()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(true);
         expect(game.winnerName()).andStubReturn(winnerName);

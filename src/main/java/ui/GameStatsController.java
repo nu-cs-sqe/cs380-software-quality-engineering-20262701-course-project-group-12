@@ -68,6 +68,9 @@ public class GameStatsController {
         if (game.isDrawnBySeventyFiveMove()) {
             return Messages.text("stats.drawBySeventyFiveMove");
         }
+        if (game.isDrawnOnTime()) {
+            return Messages.text("stats.drawOnTime");
+        }
         if (game.isWonOnTime()) {
             return winnerLine(ON_TIME_KEYS);
         }
