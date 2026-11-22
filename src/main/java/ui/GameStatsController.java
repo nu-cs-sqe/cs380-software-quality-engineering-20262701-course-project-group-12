@@ -12,6 +12,9 @@ public class GameStatsController {
     private static final Map<PieceColor, String> RESIGNATION_KEYS = Map.of(
             PieceColor.WHITE, "stats.resignation.white",
             PieceColor.BLACK, "stats.resignation.black");
+    private static final Map<PieceColor, String> ON_TIME_KEYS = Map.of(
+            PieceColor.WHITE, "stats.onTime.white",
+            PieceColor.BLACK, "stats.onTime.black");
 
     private final Game game;
     private GameStatsView view;
@@ -64,6 +67,9 @@ public class GameStatsController {
         }
         if (game.isDrawnBySeventyFiveMove()) {
             return Messages.text("stats.drawBySeventyFiveMove");
+        }
+        if (game.isWonOnTime()) {
+            return winnerLine(ON_TIME_KEYS);
         }
         if (game.isWonByResignation()) {
             return winnerLine(RESIGNATION_KEYS);

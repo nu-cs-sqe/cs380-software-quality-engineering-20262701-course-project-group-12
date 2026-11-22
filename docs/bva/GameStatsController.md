@@ -238,7 +238,7 @@ TC10, TC11, and TC13 still hold: the game answers false for
 `isWonOnTime()` and `isDrawnOnTime()`, so a checkmate still shows the
 winner.
 
-- **TC22: refresh after Player 1 loses on time** ( :x: )
+- **TC22: refresh after Player 1 loses on time** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnOnTime()` is false, `isWonOnTime()` is true, `winnerName()` is Bo, `winnerColor()` is `BLACK`, and `refreshStatus()` runs.
     - **Expected output**: the view shows `On time: Bo (Black) wins`
 
