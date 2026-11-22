@@ -618,6 +618,19 @@ public class BoardTests {
     }
 
     @Test
+    public void HasOnlyKing_WhiteBareKing_LeavesTheBoardUnchanged() {
+        Board board = boardHoldingOnly(E1, E8);
+        Piece whiteKing = board.pieceAt(E1);
+        Piece blackKing = board.pieceAt(E8);
+
+        board.hasOnlyKing(PieceColor.WHITE);
+
+        assertSame(whiteKing, board.pieceAt(E1));
+        assertSame(blackKing, board.pieceAt(E8));
+        assertEquals(TWO_KINGS, countPieces(board));
+    }
+
+    @Test
     public void IsInCheck_NewBoard_ReturnsFalse() {
         Board board = new Board();
 
