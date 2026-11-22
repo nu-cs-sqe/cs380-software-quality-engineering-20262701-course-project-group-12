@@ -1147,6 +1147,21 @@ public class GameTests {
         assertFalse(game.isDrawnOnTime());
     }
 
+    @Test
+    public void CheckTime_WhiteOutOfTimeWithBlackMatingMaterial_BobWinsOnTime() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        clock.advance(ChessClock.STARTING_TIME);
+
+        game.checkTime();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isWonOnTime());
+        assertEquals("Bob", game.winnerName());
+        assertEquals(PieceColor.BLACK, game.winnerColor());
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

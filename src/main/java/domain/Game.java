@@ -34,6 +34,7 @@ public class Game {
     private boolean drawnByAgreement;
     private boolean drawnByFiftyMove;
     private boolean drawnBySeventyFiveMove;
+    private boolean wonOnTime;
 
     public Game() {
         this(Clock.systemUTC());
@@ -64,8 +65,13 @@ public class Game {
         return chessClock.remaining(color);
     }
 
+    public void checkTime() {
+        winner = Optional.of(playerWaiting());
+        wonOnTime = true;
+    }
+
     public boolean isWonOnTime() {
-        return false;
+        return wonOnTime;
     }
 
     public boolean isDrawnOnTime() {

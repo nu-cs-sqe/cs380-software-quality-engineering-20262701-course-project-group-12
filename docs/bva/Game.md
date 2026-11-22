@@ -1109,7 +1109,7 @@ onward); the game asks the real board after a start.
     `isDrawnOnTime()` returns `false`.
 
 - **TC-TIME-05 — White loses on time when Black has mating material**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `checkTime()`, `isOver()`, `isWonOnTime()`,
     `winnerName()`, `winnerColor()`
   - **State of the system**: As TC-TIME-01, so White is to move and the
