@@ -1191,7 +1191,7 @@ onward); the game asks the real board after a start.
   - **State of the system**: New `Game` before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.
 
-- **TC-TIME-15 — Reject checking time before a start** ( :x: )
+- **TC-TIME-15 — Reject checking time before a start** ( :white_check_mark: )
   - **Method(s) under test**: `checkTime()`
   - **State of the system**: New `Game` before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.

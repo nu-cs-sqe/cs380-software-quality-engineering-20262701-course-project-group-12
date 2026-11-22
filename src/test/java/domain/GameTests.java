@@ -1294,6 +1294,13 @@ public class GameTests {
                 () -> game.remainingTime(PieceColor.WHITE));
     }
 
+    @Test
+    public void CheckTime_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::checkTime);
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");
