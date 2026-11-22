@@ -591,6 +591,15 @@ public class BoardTests {
     }
 
     @Test
+    public void HasOnlyKing_WhiteWithKingAndQueen_ReturnsFalse() {
+        Board board = boardHoldingOnly(E1, E8, D1);
+
+        boolean onlyKing = board.hasOnlyKing(PieceColor.WHITE);
+
+        assertFalse(onlyKing);
+    }
+
+    @Test
     public void IsInCheck_NewBoard_ReturnsFalse() {
         Board board = new Board();
 
