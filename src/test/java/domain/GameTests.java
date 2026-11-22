@@ -1162,6 +1162,21 @@ public class GameTests {
         assertEquals(PieceColor.BLACK, game.winnerColor());
     }
 
+    @Test
+    public void CheckTime_BlackOutOfTimeWithWhiteMatingMaterial_AliceWinsOnTime() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        game.passTurn();
+        clock.advance(ChessClock.STARTING_TIME);
+
+        game.checkTime();
+
+        assertTrue(game.isWonOnTime());
+        assertEquals("Alice", game.winnerName());
+        assertEquals(PieceColor.WHITE, game.winnerColor());
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

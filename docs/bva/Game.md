@@ -1119,7 +1119,7 @@ onward); the game asks the real board after a start.
     `true`; `winnerName()` returns `Bob`; `winnerColor()` returns `BLACK`.
 
 - **TC-TIME-06 — Black loses on time when White has mating material**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `passTurn()`, `checkTime()`, `isWonOnTime()`,
     `winnerName()`, `winnerColor()`
   - **State of the system**: As TC-TIME-01, then `passTurn()` so Black is to
