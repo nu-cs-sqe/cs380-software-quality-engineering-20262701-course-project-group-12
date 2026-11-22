@@ -1080,7 +1080,7 @@ onward); the game asks the real board after a start.
 | Output: the winner after a loss on time | Cases | Player 2 / Black when White times out; Player 1 / White when Black times out; none when drawn on time |
 | Output: signal for an unstarted game | Cases | `IllegalStateException` |
 
-- **TC-TIME-01 — Both clocks start at ten minutes** ( :x: )
+- **TC-TIME-01 — Both clocks start at ten minutes** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`,
     `remainingTime(PieceColor)`
   - **State of the system**: `Game` with a fixed clock at `T0`;

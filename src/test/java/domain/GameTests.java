@@ -4,6 +4,12 @@ import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import org.junit.jupiter.api.Test;
 
+import java.time.Clock;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -40,6 +46,8 @@ public class GameTests {
     private static final int ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES = 25;
     private static final int ROUND_TRIPS_FOR_ONE_HUNDRED_FORTY_NINE_HALF_MOVES = 37;
     private static final int MOVES_BY_BOTH_PLAYERS = 2;
+    private static final Instant CLOCK_START = Instant.parse("2026-01-01T00:00:00Z");
+    private static final Duration ONE_MILLISECOND = Duration.ofMillis(1);
 
     @Test
     public void IsStarted_NewGame_ReturnsFalse() {
@@ -1090,6 +1098,16 @@ public class GameTests {
         assertThrows(IllegalStateException.class, game::winnerName);
     }
 
+    @Test
+    public void RemainingTime_AtStart_IsStartingTimeForBothPlayers() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+
+        assertEquals(ChessClock.STARTING_TIME, game.remainingTime(PieceColor.WHITE));
+        assertEquals(ChessClock.STARTING_TIME, game.remainingTime(PieceColor.BLACK));
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");
@@ -1097,5 +1115,32 @@ public class GameTests {
             game.passTurn();
         }
         return game;
+    }
+
+    private static final class ControllableClock extends Clock {
+        private Instant instant;
+
+        private ControllableClock(Instant start) {
+            instant = start;
+        }
+
+        private void advance(Duration amount) {
+            instant = instant.plus(amount);
+        }
+
+        @Override
+        public ZoneOffset getZone() {
+            return ZoneOffset.UTC;
+        }
+
+        @Override
+        public Clock withZone(ZoneId zone) {
+            return Clock.fixed(instant, zone);
+        }
+
+        @Override
+        public Instant instant() {
+            return instant;
+        }
     }
 }

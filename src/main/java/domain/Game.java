@@ -2,6 +2,8 @@ package domain;
 
 import domain.piece.PieceColor;
 
+import java.time.Clock;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,12 +16,14 @@ public class Game {
     private static final int ONE_MORE_OCCURRENCE = 1;
     private static final int MOVES_BY_BOTH_PLAYERS = 2;
 
+    private final Clock timeSource;
     private final List<Position> positions = new ArrayList<>();
     private boolean started;
     private Player playerOne;
     private Player playerTwo;
     private Player playerToMove;
     private Board board;
+    private ChessClock chessClock;
     private Optional<Player> winner = Optional.empty();
     private boolean stalemate;
     private boolean drawnByRepetition;
@@ -30,6 +34,14 @@ public class Game {
     private boolean drawnByAgreement;
     private boolean drawnByFiftyMove;
     private boolean drawnBySeventyFiveMove;
+
+    public Game() {
+        this(Clock.systemUTC());
+    }
+
+    public Game(Clock timeSource) {
+        this.timeSource = timeSource;
+    }
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -43,8 +55,13 @@ public class Game {
         playerTwo = new Player(player2Name, PieceColor.BLACK);
         playerToMove = playerOne;
         board = new Board();
+        chessClock = new ChessClock(timeSource);
         started = true;
         recordPosition();
+    }
+
+    public Duration remainingTime(PieceColor color) {
+        return chessClock.remaining(color);
     }
 
     public void passTurn() {
