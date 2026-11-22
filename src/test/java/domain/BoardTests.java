@@ -600,6 +600,15 @@ public class BoardTests {
     }
 
     @Test
+    public void HasOnlyKing_StartingPosition_ReturnsFalse() {
+        Board board = new Board();
+
+        boolean onlyKing = board.hasOnlyKing(PieceColor.WHITE);
+
+        assertFalse(onlyKing);
+    }
+
+    @Test
     public void IsInCheck_NewBoard_ReturnsFalse() {
         Board board = new Board();
 
