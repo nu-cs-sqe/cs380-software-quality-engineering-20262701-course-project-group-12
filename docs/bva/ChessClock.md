@@ -80,7 +80,7 @@ cases are checked.
   - **Expected output**: `remaining(BLACK)` stays at the starting time minus
     1 ms; `remaining(WHITE)` is the starting time minus 2 ms.
 
-- **TC-CLOCK-08 — Stopping freezes both remaining times** ( :x: )
+- **TC-CLOCK-08 — Stopping freezes both remaining times** ( :white_check_mark: )
   - **Method(s) under test**: `stop()`, `remaining(PieceColor)`
   - **State of the system**: As TC-CLOCK-02, then `stop()`, then the clock
     advances by the starting time.

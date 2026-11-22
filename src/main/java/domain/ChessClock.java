@@ -14,6 +14,7 @@ public class ChessClock {
     private Duration blackRemaining = STARTING_TIME;
     private PieceColor active = PieceColor.WHITE;
     private Instant segmentStartedAt;
+    private boolean stopped;
 
     public ChessClock(Clock timeSource) {
         this.timeSource = timeSource;
@@ -21,7 +22,7 @@ public class ChessClock {
     }
 
     public Duration remaining(PieceColor color) {
-        if (color == active) {
+        if (!stopped && color == active) {
             return remainingAfter(banked(color), elapsed());
         }
         return banked(color);
@@ -31,6 +32,11 @@ public class ChessClock {
         settleActive();
         active = other(active);
         segmentStartedAt = timeSource.instant();
+    }
+
+    public void stop() {
+        settleActive();
+        stopped = true;
     }
 
     private void settleActive() {

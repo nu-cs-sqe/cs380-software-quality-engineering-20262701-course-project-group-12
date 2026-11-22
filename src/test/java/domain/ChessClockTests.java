@@ -102,6 +102,20 @@ public class ChessClockTests {
                 chessClock.remaining(PieceColor.WHITE));
     }
 
+    @Test
+    public void Stop_AfterWhiteUsedOneMillisecond_FreezesBothRemainingTimes() {
+        ControllableClock clock = new ControllableClock(START);
+        ChessClock chessClock = new ChessClock(clock);
+        clock.advance(ONE_MILLISECOND);
+
+        chessClock.stop();
+        clock.advance(ChessClock.STARTING_TIME);
+
+        assertEquals(ChessClock.STARTING_TIME.minus(ONE_MILLISECOND),
+                chessClock.remaining(PieceColor.WHITE));
+        assertEquals(ChessClock.STARTING_TIME, chessClock.remaining(PieceColor.BLACK));
+    }
+
     private static final class ControllableClock extends Clock {
         private Instant instant;
 
