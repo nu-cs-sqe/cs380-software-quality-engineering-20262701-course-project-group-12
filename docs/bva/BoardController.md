@@ -24,6 +24,7 @@
 - `void resign(PieceColor resigningColor)` (issue #60 / GitHub US-20, docs US-20): passes the resignation to `game.resign(resigningColor)`. `Game` decides who wins and ignores a resignation after the game is over, so the controller only forwards it. Once the game is over, `clickSquare` already refuses further moves (US-20 AC 5), and `canClaimDraw` returns false, so a resignation cannot be turned into a draw (US-20 AC 4).
 - `void declineDrawClaim()` (issue #59): makes the waiting move as usual: the board moves the piece, the game passes the turn, and the checks for checkmate and fivefold repetition run. Issue #51 also checks `game.isSeventyFiveMoveRule()` after checkmate and stalemate and before fivefold repetition, and calls `game.endBySeventyFiveMove()` when the count has reached 150.
 - `void clickSquare(Location square)`, fifty-move (issue #51 / GitHub US-18, docs US-19): when the board answers true for `isLegalMove` and `game.canClaimDrawByFiftyMoveWith(from, to)` is true, and the move is not also a threefold claim, the board does not move yet. The move waits the same way as a threefold claim (US-19 AC 5). After a move passes the turn and is not checkmate or stalemate, `game.isSeventyFiveMoveRule()` ends the game with no claim (US-19 AC 7). Checkmate is checked first, so it still wins (US-19 AC 8).
+- `void checkClock()` (issue #72 / GitHub US-23, docs US-23): passes to `game.checkTime()`. The main window calls it at least once per second so a timeout can end the game (AC 4 and AC 6). `Game` owns the clocks, a loss or draw on time, and ignoring a timeout after the game is already over, so the controller only forwards. Switching clocks after a move or a promotion choice is already `game.passTurn()`.
 - `boolean canOfferDraw()` (issue #61 / GitHub US-21, docs US-21): returns `game.canOfferDraw()`. The view offers Offer Draw only then.
 - `void offerDraw(PieceColor offeringColor)` (issue #61): passes the offer to `game.offerDraw(offeringColor)`.
 - `boolean isDrawOffered()` (issue #61): returns `game.isDrawOffered()`. The view shows the offer to the opponent, with Accept and Decline, only then.
@@ -399,3 +400,24 @@ is over is already TC40. A waiting move already uses TC55 and TC56.
 | TC76: a move that would make the count 100 waits for the claim | as TC22, but the game answers false for `canClaimDrawByRepetitionWith(b1, c3)` and true for `canClaimDrawByFiftyMoveWith(b1, c3)`; click b1, then c3; ask `isDrawClaimWithMovePending` | true; the board does not move any piece; the game does not pass the turn | :white_check_mark: |
 | TC77: a waiting fifty-move can be claimed | as TC76, and the game answers false for `canClaimDrawByRepetition` and for `canClaimDrawByFiftyMove`; ask `canClaimDraw` | true | :white_check_mark: |
 | TC78: claiming with a waiting fifty-move ends that draw | as TC76; `claimDraw` | the game ends by fifty-move; the board does not move any piece | :white_check_mark: |
+
+### Method under test: `checkClock()`
+
+Issue #72 (GitHub US-23, docs US-23). The main window asks the controller at
+least once per second to apply a timeout if the player to move has no time
+left (AC 4 and AC 6). `checkClock()` passes that to `game.checkTime()`.
+`Game` owns the clock, the bare-king draw, and stopping the clocks when the
+game is already over, so the controller only forwards. `Board` and `Game`
+are mocked with EasyMock. A click after a loss or draw on time is already
+TC40, because `isOver()` is true. Switching clocks on a completed move,
+including after a promotion choice, is already `game.passTurn()` in the
+move and promotion cases.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: calling `checkClock` | Cases | once |
+| Output: the game | Cases | `checkTime` is called |
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC79: a clock check is passed to the game | a controller for the mocked board and game; `checkClock` | the game is asked to `checkTime` | :x: |

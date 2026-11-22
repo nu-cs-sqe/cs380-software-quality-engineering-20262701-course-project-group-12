@@ -213,3 +213,39 @@ start at TC20, after dead position's TC19.
 - **TC21: refresh after a seventy-five-move draw** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByFiftyMove()` is false, `isDrawnBySeventyFiveMove()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by the seventy-five-move rule`
+
+Issue #72 (GitHub US-23, docs US-23). After a loss on time, the same line
+shows the winner's name and color and that the game was won on time
+(US-23 AC 10). After a draw on time under AC 7, the line shows a draw on
+time. Both clock labels and these result messages come from the Messages
+resource bundle (AC 11). `isDrawnOnTime()` is asked before `winnerName()`,
+so a draw never reads the winner. `isWonOnTime()` is asked before the
+checkmate line, so a win on time is not shown as checkmate.
+
+Step 1:
+- input (added): whether the game is won on time (`isWonOnTime()`); whether
+  it is drawn on time (`isDrawnOnTime()`)
+
+Step 2/3:
+- result of a game that is over -> Cases (added): win on time; draw on time
+- output (added):
+  - `On time: <winner's name> (<winner's color>) wins` once the other player
+    has lost on time
+  - `Draw on time` once the game is drawn because the opponent had only a
+    bare king
+
+TC10, TC11, and TC13 still hold: the game answers false for
+`isWonOnTime()` and `isDrawnOnTime()`, so a checkmate still shows the
+winner.
+
+- **TC22: refresh after Player 1 loses on time** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnOnTime()` is false, `isWonOnTime()` is true, `winnerName()` is Bo, `winnerColor()` is `BLACK`, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `On time: Bo (Black) wins`
+
+- **TC23: refresh after Player 2 loses on time** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnOnTime()` is false, `isWonOnTime()` is true, `winnerName()` is Ada, `winnerColor()` is `WHITE`, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `On time: Ada (White) wins`
+
+- **TC24: refresh after a draw on time** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnOnTime()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Draw on time`

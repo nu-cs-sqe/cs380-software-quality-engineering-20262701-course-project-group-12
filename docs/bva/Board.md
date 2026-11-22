@@ -457,3 +457,30 @@ Other dead positions, such as a blocked pawn wall, are outside this task.
 | TC127: king and pawn vs king | the two kings and the white pawn on a2 remain | false | :white_check_mark: |
 | TC128: the squares of the kings do not matter | only the white king on a1 and the black king on h8 remain | true | :white_check_mark: |
 | TC129: the query leaves the board unchanged | king vs king on e1 and e8 | `pieceAt(e1)` is still the white king, `pieceAt(e8)` is still the black king, and two squares are occupied | :white_check_mark: |
+
+### Method under test: `hasOnlyKing(PieceColor color)`
+
+Issue #72 (GitHub US-23, docs US-23). When a player runs out of time, the
+game is drawn instead of lost if the opponent has only a bare king (US-23
+AC 7). `hasOnlyKing` answers that question for one color. The other color's
+pieces do not change the answer. Callers never pass null.
+
+A color's pieces are a collection: one piece (the king alone) stands for the
+bare-king edge; many pieces stand for the other edge. Empty is impossible
+while a king is on the board, and this story does not remove kings.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: pieces of `color` | Collection | one (only the king); many (king and at least one other piece) |
+| Input: `color` | Cases | White; Black |
+| Output: `hasOnlyKing` | Boolean | true; false |
+| Output: the board after the query | Collection | unchanged |
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC130: White has only a bare king | only the white king on e1 and the black king on e8 remain; ask about White | true | :x: |
+| TC131: Black has only a bare king | as TC130; ask about Black | true | :x: |
+| TC132: White has a king and another piece | the two kings and the white queen on d1 remain; ask about White | false | :x: |
+| TC133: a starting position is not a bare king | a new `Board`; ask about White | false | :x: |
+| TC134: the other color's pieces do not matter | only the white king on e1, the black king on e8, and the black queen on d8 remain; ask about White | true | :x: |
+| TC135: the query leaves the board unchanged | as TC130; ask about White | `pieceAt(e1)` is still the white king, `pieceAt(e8)` is still the black king, and two squares are occupied | :x: |
