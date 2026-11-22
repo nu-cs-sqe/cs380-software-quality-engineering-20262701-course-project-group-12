@@ -69,6 +69,21 @@ public class ChessClockTests {
         assertEquals(Duration.ZERO, chessClock.remaining(PieceColor.WHITE));
     }
 
+    @Test
+    public void SwitchTurn_AfterWhiteUsedOneMillisecond_StartsBlack() {
+        ControllableClock clock = new ControllableClock(START);
+        ChessClock chessClock = new ChessClock(clock);
+        clock.advance(ONE_MILLISECOND);
+
+        chessClock.switchTurn();
+        clock.advance(ONE_MILLISECOND);
+
+        assertEquals(ChessClock.STARTING_TIME.minus(ONE_MILLISECOND),
+                chessClock.remaining(PieceColor.WHITE));
+        assertEquals(ChessClock.STARTING_TIME.minus(ONE_MILLISECOND),
+                chessClock.remaining(PieceColor.BLACK));
+    }
+
     private static final class ControllableClock extends Clock {
         private Instant instant;
 

@@ -66,7 +66,7 @@ cases are checked.
     starting time plus 1 ms.
   - **Expected output**: `remaining(WHITE)` is zero.
 
-- **TC-CLOCK-06 — Switching stops White and starts Black** ( :x: )
+- **TC-CLOCK-06 — Switching stops White and starts Black** ( :white_check_mark: )
   - **Method(s) under test**: `switchTurn()`, `remaining(PieceColor)`
   - **State of the system**: As TC-CLOCK-02, so White has used 1 ms, then
     `switchTurn()`, then the clock advances by 1 ms more.
