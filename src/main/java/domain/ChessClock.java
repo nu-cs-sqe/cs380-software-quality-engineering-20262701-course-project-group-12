@@ -19,9 +19,16 @@ public class ChessClock {
 
     public Duration remaining(PieceColor color) {
         if (color == PieceColor.WHITE) {
-            Duration elapsed = Duration.between(whiteStartedAt, timeSource.instant());
-            return STARTING_TIME.minus(elapsed);
+            return remainingAfter(Duration.between(whiteStartedAt, timeSource.instant()));
         }
         return STARTING_TIME;
+    }
+
+    private static Duration remainingAfter(Duration elapsed) {
+        Duration left = STARTING_TIME.minus(elapsed);
+        if (left.isNegative()) {
+            return Duration.ZERO;
+        }
+        return left;
     }
 }

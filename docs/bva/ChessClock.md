@@ -60,7 +60,7 @@ cases are checked.
   - **Expected output**: `remaining(WHITE)` is zero; `remaining(BLACK)` is
     still the starting time.
 
-- **TC-CLOCK-05 — A clock never shows less than zero** ( :x: )
+- **TC-CLOCK-05 — A clock never shows less than zero** ( :white_check_mark: )
   - **Method(s) under test**: `remaining(PieceColor)`
   - **State of the system**: As TC-CLOCK-01, then the clock advances by the
     starting time plus 1 ms.

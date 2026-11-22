@@ -59,6 +59,16 @@ public class ChessClockTests {
         assertEquals(ChessClock.STARTING_TIME, chessClock.remaining(PieceColor.BLACK));
     }
 
+    @Test
+    public void Remaining_PastStartingTime_WhiteStaysAtZero() {
+        ControllableClock clock = new ControllableClock(START);
+        ChessClock chessClock = new ChessClock(clock);
+
+        clock.advance(ChessClock.STARTING_TIME.plus(ONE_MILLISECOND));
+
+        assertEquals(Duration.ZERO, chessClock.remaining(PieceColor.WHITE));
+    }
+
     private static final class ControllableClock extends Clock {
         private Instant instant;
 
