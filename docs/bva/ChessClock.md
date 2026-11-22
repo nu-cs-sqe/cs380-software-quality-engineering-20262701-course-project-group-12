@@ -73,7 +73,7 @@ cases are checked.
   - **Expected output**: `remaining(WHITE)` stays at the starting time minus
     1 ms; `remaining(BLACK)` is the starting time minus 1 ms.
 
-- **TC-CLOCK-07 — A second switch returns the turn to White** ( :x: )
+- **TC-CLOCK-07 — A second switch returns the turn to White** ( :white_check_mark: )
   - **Method(s) under test**: `switchTurn()`, `remaining(PieceColor)`
   - **State of the system**: As TC-CLOCK-06, then `switchTurn()`, then the
     clock advances by 1 ms more.

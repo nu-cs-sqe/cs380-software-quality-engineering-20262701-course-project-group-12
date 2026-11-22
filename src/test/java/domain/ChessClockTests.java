@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ChessClockTests {
     private static final Instant START = Instant.parse("2026-01-01T00:00:00Z");
     private static final Duration ONE_MILLISECOND = Duration.ofMillis(1);
+    private static final Duration TWO_MILLISECONDS = Duration.ofMillis(2);
 
     @Test
     public void Remaining_AtConstruction_IsStartingTimeForBothPlayers() {
@@ -82,6 +83,23 @@ public class ChessClockTests {
                 chessClock.remaining(PieceColor.WHITE));
         assertEquals(ChessClock.STARTING_TIME.minus(ONE_MILLISECOND),
                 chessClock.remaining(PieceColor.BLACK));
+    }
+
+    @Test
+    public void SwitchTurn_SecondSwitch_ReturnsTheTurnToWhite() {
+        ControllableClock clock = new ControllableClock(START);
+        ChessClock chessClock = new ChessClock(clock);
+        clock.advance(ONE_MILLISECOND);
+        chessClock.switchTurn();
+        clock.advance(ONE_MILLISECOND);
+
+        chessClock.switchTurn();
+        clock.advance(ONE_MILLISECOND);
+
+        assertEquals(ChessClock.STARTING_TIME.minus(ONE_MILLISECOND),
+                chessClock.remaining(PieceColor.BLACK));
+        assertEquals(ChessClock.STARTING_TIME.minus(TWO_MILLISECONDS),
+                chessClock.remaining(PieceColor.WHITE));
     }
 
     private static final class ControllableClock extends Clock {

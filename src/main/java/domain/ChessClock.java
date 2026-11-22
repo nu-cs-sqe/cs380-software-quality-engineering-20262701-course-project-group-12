@@ -28,9 +28,18 @@ public class ChessClock {
     }
 
     public void switchTurn() {
-        whiteRemaining = remaining(PieceColor.WHITE);
-        active = PieceColor.BLACK;
+        settleActive();
+        active = other(active);
         segmentStartedAt = timeSource.instant();
+    }
+
+    private void settleActive() {
+        Duration left = remaining(active);
+        if (active == PieceColor.WHITE) {
+            whiteRemaining = left;
+        } else {
+            blackRemaining = left;
+        }
     }
 
     private Duration banked(PieceColor color) {
@@ -42,6 +51,13 @@ public class ChessClock {
 
     private Duration elapsed() {
         return Duration.between(segmentStartedAt, timeSource.instant());
+    }
+
+    private static PieceColor other(PieceColor color) {
+        if (color == PieceColor.WHITE) {
+            return PieceColor.BLACK;
+        }
+        return PieceColor.WHITE;
     }
 
     private static Duration remainingAfter(Duration banked, Duration elapsed) {
