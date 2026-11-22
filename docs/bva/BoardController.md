@@ -420,4 +420,4 @@ move and promotion cases.
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC79: a clock check is passed to the game | a controller for the mocked board and game; `checkClock` | the game is asked to `checkTime` | :x: |
+| TC79: a clock check is passed to the game | a controller for the mocked board and game; `checkClock` | the game is asked to `checkTime` | :white_check_mark: |
