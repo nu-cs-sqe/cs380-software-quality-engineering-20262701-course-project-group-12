@@ -1133,7 +1133,7 @@ onward); the game asks the real board after a start.
     starting time minus 1 ms, then `checkTime()`.
   - **Expected output**: `isOver()` returns `false`.
 
-- **TC-TIME-08 — Time past zero still ends as a loss on time** ( :x: )
+- **TC-TIME-08 — Time past zero still ends as a loss on time** ( :white_check_mark: )
   - **Method(s) under test**: `checkTime()`, `isWonOnTime()`,
     `remainingTime(PieceColor)`
   - **State of the system**: As TC-TIME-01, then the clock advances by the

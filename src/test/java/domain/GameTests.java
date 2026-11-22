@@ -1189,6 +1189,19 @@ public class GameTests {
         assertFalse(game.isOver());
     }
 
+    @Test
+    public void CheckTime_TimePastZero_StillEndsAsLossOnTime() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        clock.advance(ChessClock.STARTING_TIME.plusMillis(1));
+
+        game.checkTime();
+
+        assertTrue(game.isWonOnTime());
+        assertEquals(Duration.ZERO, game.remainingTime(PieceColor.WHITE));
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");
