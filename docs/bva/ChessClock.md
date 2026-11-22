@@ -46,7 +46,7 @@ cases are checked.
   - **Expected output**: `remaining(WHITE)` is the starting time minus 1 ms;
     `remaining(BLACK)` is still the starting time.
 
-- **TC-CLOCK-03 — White's clock has one millisecond left** ( :x: )
+- **TC-CLOCK-03 — White's clock has one millisecond left** ( :white_check_mark: )
   - **Method(s) under test**: `remaining(PieceColor)`
   - **State of the system**: As TC-CLOCK-01, then the clock advances by the
     starting time minus 1 ms.

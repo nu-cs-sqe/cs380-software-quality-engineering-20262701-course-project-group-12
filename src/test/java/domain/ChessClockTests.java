@@ -37,6 +37,17 @@ public class ChessClockTests {
         assertEquals(ChessClock.STARTING_TIME, chessClock.remaining(PieceColor.BLACK));
     }
 
+    @Test
+    public void Remaining_OneMillisecondBeforeExpiry_WhiteHasOneMillisecond() {
+        ControllableClock clock = new ControllableClock(START);
+        ChessClock chessClock = new ChessClock(clock);
+
+        clock.advance(ChessClock.STARTING_TIME.minus(ONE_MILLISECOND));
+
+        assertEquals(ONE_MILLISECOND, chessClock.remaining(PieceColor.WHITE));
+        assertEquals(ChessClock.STARTING_TIME, chessClock.remaining(PieceColor.BLACK));
+    }
+
     private static final class ControllableClock extends Clock {
         private Instant instant;
 
