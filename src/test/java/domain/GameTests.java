@@ -1137,6 +1137,16 @@ public class GameTests {
                 game.remainingTime(PieceColor.BLACK));
     }
 
+    @Test
+    public void IsWonOnTime_StartedGame_ReturnsFalse() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+
+        assertFalse(game.isWonOnTime());
+        assertFalse(game.isDrawnOnTime());
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

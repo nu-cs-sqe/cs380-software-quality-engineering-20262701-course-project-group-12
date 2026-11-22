@@ -1101,7 +1101,7 @@ onward); the game asks the real board after a start.
   - **Expected output**: `remainingTime(WHITE)` stays at the starting time
     minus 1 ms; `remainingTime(BLACK)` is the starting time minus 1 ms.
 
-- **TC-TIME-04 — A started game is not won or drawn on time** ( :x: )
+- **TC-TIME-04 — A started game is not won or drawn on time** ( :white_check_mark: )
   - **Method(s) under test**: `start(String, String)`, `isWonOnTime()`,
     `isDrawnOnTime()`
   - **State of the system**: As TC-TIME-01.

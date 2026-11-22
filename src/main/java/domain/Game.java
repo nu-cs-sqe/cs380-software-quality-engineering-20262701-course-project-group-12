@@ -64,6 +64,14 @@ public class Game {
         return chessClock.remaining(color);
     }
 
+    public boolean isWonOnTime() {
+        return false;
+    }
+
+    public boolean isDrawnOnTime() {
+        return false;
+    }
+
     public void passTurn() {
         requireStartedTo("pass the turn");
         keepDrawOfferOnlyIfMadeBy(playerToMove.getColor());
