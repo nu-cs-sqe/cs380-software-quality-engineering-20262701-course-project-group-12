@@ -1159,7 +1159,7 @@ onward); the game asks the real board after a start.
     `remainingTime(BLACK)` stays at the starting time.
 
 - **TC-TIME-11 — Checkmate stops the clocks before a timeout can apply**
-  ( :x: )
+  ( :white_check_mark: )
   - **Method(s) under test**: `endByCheckmate()`, `checkTime()`,
     `isWonOnTime()`, `remainingTime(PieceColor)`
   - **State of the system**: As TC-TIME-02, so White has used 1 ms, then

@@ -110,6 +110,7 @@ public class Game {
 
     public void endByCheckmate() {
         requireStartedTo("end the game");
+        chessClock.stop();
         winner = Optional.of(playerWaiting());
     }
 
