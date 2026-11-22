@@ -1121,6 +1121,22 @@ public class GameTests {
         assertEquals(ChessClock.STARTING_TIME, game.remainingTime(PieceColor.BLACK));
     }
 
+    @Test
+    public void PassTurn_AfterWhiteUsedOneMillisecond_SwitchesTheClocks() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        clock.advance(ONE_MILLISECOND);
+
+        game.passTurn();
+        clock.advance(ONE_MILLISECOND);
+
+        assertEquals(ChessClock.STARTING_TIME.minus(ONE_MILLISECOND),
+                game.remainingTime(PieceColor.WHITE));
+        assertEquals(ChessClock.STARTING_TIME.minus(ONE_MILLISECOND),
+                game.remainingTime(PieceColor.BLACK));
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

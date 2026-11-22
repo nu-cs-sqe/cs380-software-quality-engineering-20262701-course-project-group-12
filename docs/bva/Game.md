@@ -1094,7 +1094,7 @@ onward); the game asks the real board after a start.
   - **Expected output**: `remainingTime(WHITE)` is the starting time minus
     1 ms; `remainingTime(BLACK)` is still the starting time.
 
-- **TC-TIME-03 — Passing the turn switches the clocks** ( :x: )
+- **TC-TIME-03 — Passing the turn switches the clocks** ( :white_check_mark: )
   - **Method(s) under test**: `passTurn()`, `remainingTime(PieceColor)`
   - **State of the system**: As TC-TIME-02, then `passTurn()`, then the
     clock advances by 1 ms more.

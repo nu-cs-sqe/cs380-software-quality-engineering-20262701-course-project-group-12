@@ -70,6 +70,7 @@ public class Game {
         playerToMove = playerWaiting();
         movesMade++;
         recordPosition();
+        chessClock.switchTurn();
     }
 
     private void keepDrawOfferOnlyIfMadeBy(PieceColor movingColor) {
