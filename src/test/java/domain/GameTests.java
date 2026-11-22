@@ -1221,6 +1221,20 @@ public class GameTests {
         assertFalse(game.isWonOnTime());
     }
 
+    @Test
+    public void CheckTime_EndingOnTime_StopsBothClocks() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        clock.advance(ChessClock.STARTING_TIME);
+        game.checkTime();
+        game.passTurn();
+        clock.advance(ChessClock.STARTING_TIME);
+
+        assertEquals(Duration.ZERO, game.remainingTime(PieceColor.WHITE));
+        assertEquals(ChessClock.STARTING_TIME, game.remainingTime(PieceColor.BLACK));
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

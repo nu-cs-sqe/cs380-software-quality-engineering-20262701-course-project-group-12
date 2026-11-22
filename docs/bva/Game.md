@@ -1151,7 +1151,7 @@ onward); the game asks the real board after a start.
   - **Expected output**: `isOver()` returns `true`; `isDrawnOnTime()`
     returns `true`; `isWonOnTime()` returns `false`.
 
-- **TC-TIME-10 — Ending on time stops both clocks** ( :x: )
+- **TC-TIME-10 — Ending on time stops both clocks** ( :white_check_mark: )
   - **Method(s) under test**: `checkTime()`, `remainingTime(PieceColor)`
   - **State of the system**: As TC-TIME-05, then the clock advances by the
     starting time again.

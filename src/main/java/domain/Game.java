@@ -70,6 +70,7 @@ public class Game {
         if (!remainingTime(colorToMove()).isZero()) {
             return;
         }
+        chessClock.stop();
         if (board.hasOnlyKing(playerWaiting().getColor())) {
             drawnOnTime = true;
             return;
