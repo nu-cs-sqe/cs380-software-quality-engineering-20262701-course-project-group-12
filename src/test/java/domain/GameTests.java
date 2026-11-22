@@ -1252,6 +1252,21 @@ public class GameTests {
         assertEquals("Bob", game.winnerName());
     }
 
+    @Test
+    public void CheckTime_AfterResignation_DoesNotApplyTimeout() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        clock.advance(ONE_MILLISECOND);
+        game.resign(PieceColor.WHITE);
+        clock.advance(ChessClock.STARTING_TIME);
+
+        game.checkTime();
+
+        assertTrue(game.isWonByResignation());
+        assertFalse(game.isWonOnTime());
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

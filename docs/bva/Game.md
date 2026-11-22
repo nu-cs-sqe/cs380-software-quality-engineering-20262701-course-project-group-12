@@ -1169,7 +1169,7 @@ onward); the game asks the real board after a start.
     `remainingTime(WHITE)` stays at the starting time minus 1 ms;
     `winnerName()` still returns `Bob`.
 
-- **TC-TIME-12 — Resignation stops the clocks** ( :x: )
+- **TC-TIME-12 — Resignation stops the clocks** ( :white_check_mark: )
   - **Method(s) under test**: `resign(PieceColor)`, `checkTime()`,
     `isWonOnTime()`, `isWonByResignation()`
   - **State of the system**: As TC-TIME-02, then `resign(WHITE)`, then the

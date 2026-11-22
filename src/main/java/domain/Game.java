@@ -187,6 +187,7 @@ public class Game {
         if (isOver()) {
             return;
         }
+        chessClock.stop();
         winner = Optional.of(playerOtherThan(resigningColor));
         wonByResignation = true;
     }
