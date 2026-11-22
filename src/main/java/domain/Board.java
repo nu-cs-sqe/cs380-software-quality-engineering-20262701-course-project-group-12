@@ -196,6 +196,10 @@ public class Board {
                 || isTwoKingsAndTwoBishopsOnTheSameColor(pieces);
     }
 
+    public boolean hasOnlyKing(PieceColor color) {
+        return true;
+    }
+
     private boolean isKingAndBishopVsKing(long pieces) {
         return pieces == KING_AND_BISHOP_VS_KING && remainingPieceIsNotQueenRookOrPawn();
     }

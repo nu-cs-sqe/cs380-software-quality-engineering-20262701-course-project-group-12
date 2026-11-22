@@ -478,7 +478,7 @@ while a king is on the board, and this story does not remove kings.
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC130: White has only a bare king | only the white king on e1 and the black king on e8 remain; ask about White | true | :x: |
+| TC130: White has only a bare king | only the white king on e1 and the black king on e8 remain; ask about White | true | :white_check_mark: |
 | TC131: Black has only a bare king | as TC130; ask about Black | true | :x: |
 | TC132: White has a king and another piece | the two kings and the white queen on d1 remain; ask about White | false | :x: |
 | TC133: a starting position is not a bare king | a new `Board`; ask about White | false | :x: |
