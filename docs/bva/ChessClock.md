@@ -53,7 +53,7 @@ cases are checked.
   - **Expected output**: `remaining(WHITE)` is 1 ms; `remaining(BLACK)` is
     still the starting time.
 
-- **TC-CLOCK-04 — White's clock reaches exactly zero** ( :x: )
+- **TC-CLOCK-04 — White's clock reaches exactly zero** ( :white_check_mark: )
   - **Method(s) under test**: `remaining(PieceColor)`
   - **State of the system**: As TC-CLOCK-01, then the clock advances by the
     starting time.
