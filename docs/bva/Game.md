@@ -1088,7 +1088,7 @@ onward); the game asks the real board after a start.
   - **Expected output**: `remainingTime(WHITE)` is the starting time;
     `remainingTime(BLACK)` is the starting time.
 
-- **TC-TIME-02 — White's clock counts down before a move** ( :x: )
+- **TC-TIME-02 — White's clock counts down before a move** ( :white_check_mark: )
   - **Method(s) under test**: `remainingTime(PieceColor)`
   - **State of the system**: As TC-TIME-01, then the clock advances by 1 ms.
   - **Expected output**: `remainingTime(WHITE)` is the starting time minus
