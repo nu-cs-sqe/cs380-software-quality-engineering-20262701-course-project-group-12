@@ -1141,7 +1141,7 @@ onward); the game asks the real board after a start.
   - **Expected output**: `isWonOnTime()` returns `true`;
     `remainingTime(WHITE)` is zero.
 
-- **TC-TIME-09 — A bare-king opponent makes a draw on time** ( :x: )
+- **TC-TIME-09 — A bare-king opponent makes a draw on time** ( :white_check_mark: )
   - **Method(s) under test**: `checkTime()`, `isOver()`, `isDrawnOnTime()`,
     `isWonOnTime()`
   - **State of the system**: As TC-TIME-01, then every piece except the two

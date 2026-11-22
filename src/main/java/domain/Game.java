@@ -35,6 +35,7 @@ public class Game {
     private boolean drawnByFiftyMove;
     private boolean drawnBySeventyFiveMove;
     private boolean wonOnTime;
+    private boolean drawnOnTime;
 
     public Game() {
         this(Clock.systemUTC());
@@ -69,6 +70,10 @@ public class Game {
         if (!remainingTime(colorToMove()).isZero()) {
             return;
         }
+        if (board.hasOnlyKing(playerWaiting().getColor())) {
+            drawnOnTime = true;
+            return;
+        }
         winner = Optional.of(playerWaiting());
         wonOnTime = true;
     }
@@ -78,7 +83,7 @@ public class Game {
     }
 
     public boolean isDrawnOnTime() {
-        return false;
+        return drawnOnTime;
     }
 
     public void passTurn() {
@@ -244,7 +249,8 @@ public class Game {
 
     public boolean isOver() {
         return winner.isPresent() || stalemate || drawnByRepetition || drawnByAgreement
-                || drawnByDeadPosition || drawnByFiftyMove || drawnBySeventyFiveMove;
+                || drawnByDeadPosition || drawnByFiftyMove || drawnBySeventyFiveMove
+                || drawnOnTime;
     }
 
     public boolean isStalemate() {

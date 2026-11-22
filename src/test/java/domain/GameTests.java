@@ -9,6 +9,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -24,10 +26,12 @@ public class GameTests {
     private static final Location C6 = new Location(2, 6);
     private static final Location D1 = new Location(3, 1);
     private static final Location D8 = new Location(3, 8);
+    private static final Location E1 = new Location(4, 1);
     private static final Location E2 = new Location(4, 2);
     private static final Location E4 = new Location(4, 4);
     private static final Location E5 = new Location(4, 5);
     private static final Location E7 = new Location(4, 7);
+    private static final Location E8 = new Location(4, 8);
     private static final Location F2 = new Location(5, 2);
     private static final Location F3 = new Location(5, 3);
     private static final Location F6 = new Location(5, 6);
@@ -1202,6 +1206,21 @@ public class GameTests {
         assertEquals(Duration.ZERO, game.remainingTime(PieceColor.WHITE));
     }
 
+    @Test
+    public void CheckTime_OpponentHasOnlyBareKing_DrawsOnTime() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        leaveOnlyKings(game.board());
+        clock.advance(ChessClock.STARTING_TIME);
+
+        game.checkTime();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isDrawnOnTime());
+        assertFalse(game.isWonOnTime());
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");
@@ -1209,6 +1228,44 @@ public class GameTests {
             game.passTurn();
         }
         return game;
+    }
+
+    private static void leaveOnlyKings(Board board) {
+        leaveOnly(board, E1, E8);
+    }
+
+    private static void leaveOnly(Board board, Location... kept) {
+        List<Location> extras = extrasOn(board, kept);
+        Location capturer = extras.get(0);
+        for (int i = 1; i < extras.size(); i++) {
+            Location target = extras.get(i);
+            board.move(capturer, target);
+            capturer = target;
+        }
+        board.move(E1, capturer);
+        board.move(capturer, E1);
+    }
+
+    private static List<Location> extrasOn(Board board, Location[] kept) {
+        List<Location> extras = new ArrayList<>();
+        for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
+            for (int rank = Location.MIN_RANK; rank <= Location.MAX_RANK; rank++) {
+                Location square = new Location(file, rank);
+                if (board.isOccupied(square) && !isKept(square, kept)) {
+                    extras.add(square);
+                }
+            }
+        }
+        return extras;
+    }
+
+    private static boolean isKept(Location square, Location[] kept) {
+        for (Location keep : kept) {
+            if (square.isSameSquareAs(keep)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static final class ControllableClock extends Clock {
