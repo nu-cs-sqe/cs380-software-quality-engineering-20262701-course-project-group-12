@@ -1186,7 +1186,7 @@ onward); the game asks the real board after a start.
   - **Expected output**: `isDrawnByAgreement()` returns `true`;
     `isDrawnOnTime()` returns `false`.
 
-- **TC-TIME-14 — Reject reading remaining time before a start** ( :x: )
+- **TC-TIME-14 — Reject reading remaining time before a start** ( :white_check_mark: )
   - **Method(s) under test**: `remainingTime(PieceColor)`
   - **State of the system**: New `Game` before a successful `start`.
   - **Expected output**: Throws `IllegalStateException`.

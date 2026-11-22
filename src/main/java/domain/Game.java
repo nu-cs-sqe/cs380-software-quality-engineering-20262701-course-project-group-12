@@ -63,6 +63,7 @@ public class Game {
     }
 
     public Duration remainingTime(PieceColor color) {
+        requireStartedTo("read remaining time");
         return chessClock.remaining(color);
     }
 

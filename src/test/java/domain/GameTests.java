@@ -1286,6 +1286,14 @@ public class GameTests {
         assertEquals(ChessClock.STARTING_TIME, game.remainingTime(PieceColor.WHITE));
     }
 
+    @Test
+    public void RemainingTime_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class,
+                () -> game.remainingTime(PieceColor.WHITE));
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");
