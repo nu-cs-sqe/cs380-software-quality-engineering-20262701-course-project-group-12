@@ -66,6 +66,9 @@ public class Game {
     }
 
     public void checkTime() {
+        if (!remainingTime(colorToMove()).isZero()) {
+            return;
+        }
         winner = Optional.of(playerWaiting());
         wonOnTime = true;
     }

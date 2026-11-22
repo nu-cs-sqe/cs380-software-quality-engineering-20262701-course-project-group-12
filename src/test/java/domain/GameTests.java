@@ -1177,6 +1177,18 @@ public class GameTests {
         assertEquals(PieceColor.WHITE, game.winnerColor());
     }
 
+    @Test
+    public void CheckTime_OneMillisecondLeft_DoesNotEndTheGame() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        clock.advance(ChessClock.STARTING_TIME.minusMillis(1));
+
+        game.checkTime();
+
+        assertFalse(game.isOver());
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

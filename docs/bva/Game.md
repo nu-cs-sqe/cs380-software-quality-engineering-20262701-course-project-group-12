@@ -1127,7 +1127,7 @@ onward); the game asks the real board after a start.
   - **Expected output**: `isWonOnTime()` returns `true`; `winnerName()`
     returns `Alice`; `winnerColor()` returns `WHITE`.
 
-- **TC-TIME-07 — One millisecond left does not end the game** ( :x: )
+- **TC-TIME-07 — One millisecond left does not end the game** ( :white_check_mark: )
   - **Method(s) under test**: `checkTime()`, `isOver()`
   - **State of the system**: As TC-TIME-01, then the clock advances by the
     starting time minus 1 ms, then `checkTime()`.
