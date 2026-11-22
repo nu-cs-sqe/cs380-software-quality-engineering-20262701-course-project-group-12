@@ -1267,6 +1267,25 @@ public class GameTests {
         assertFalse(game.isWonOnTime());
     }
 
+    @Test
+    public void CheckTime_AfterDrawByAgreement_DoesNotApplyTimeout() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        game.passTurn();
+        game.passTurn();
+        game.offerDraw(PieceColor.WHITE);
+        game.acceptDrawOffer();
+        clock.advance(ChessClock.STARTING_TIME);
+
+        game.checkTime();
+
+        assertTrue(game.isDrawnByAgreement());
+        assertFalse(game.isDrawnOnTime());
+        assertFalse(game.isWonOnTime());
+        assertEquals(ChessClock.STARTING_TIME, game.remainingTime(PieceColor.WHITE));
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");

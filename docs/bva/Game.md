@@ -1177,7 +1177,7 @@ onward); the game asks the real board after a start.
   - **Expected output**: `isWonByResignation()` returns `true`;
     `isWonOnTime()` returns `false`.
 
-- **TC-TIME-13 — A draw by agreement stops the clocks** ( :x: )
+- **TC-TIME-13 — A draw by agreement stops the clocks** ( :white_check_mark: )
   - **Method(s) under test**: `passTurn()`, `offerDraw(PieceColor)`,
     `acceptDrawOffer()`, `checkTime()`, `isDrawnOnTime()`
   - **State of the system**: As TC-TIME-01, then `passTurn()` twice,

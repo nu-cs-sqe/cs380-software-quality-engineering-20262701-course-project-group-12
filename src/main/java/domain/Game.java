@@ -220,6 +220,7 @@ public class Game {
 
     public void acceptDrawOffer() {
         if (isDrawOffered()) {
+            chessClock.stop();
             drawnByAgreement = true;
         }
     }
