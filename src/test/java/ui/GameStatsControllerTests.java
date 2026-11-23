@@ -420,6 +420,25 @@ public class GameStatsControllerTests {
         assertEquals(GameStatsView.StatusTone.RESULT, view.statusTone());
     }
 
+    @Test
+    void RefreshStatus_AfterCheckIsLifted_ShowsTurnTone() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andReturn("Ada").andReturn("Bo");
+        expect(game.colorToMove()).andReturn(PieceColor.WHITE).andReturn(PieceColor.BLACK);
+        expect(game.isOver()).andStubReturn(false);
+        expect(game.isPlayerToMoveInCheck()).andReturn(true).andReturn(false);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals(GameStatsView.StatusTone.TURN, view.statusTone());
+    }
+
     private static Game gameAfterTurnToBlack(boolean blackInCheck) {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);

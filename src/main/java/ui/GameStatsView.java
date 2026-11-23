@@ -38,6 +38,7 @@ public class GameStatsView extends JPanel {
     public void showTurn(PieceColor colorToMove, String turnLine) {
         showCurrentPlayer(turnLine);
         highlightedColor = Optional.of(colorToMove);
+        statusTone = StatusTone.TURN;
     }
 
     public void showCheck(PieceColor colorToMove, String checkLine) {

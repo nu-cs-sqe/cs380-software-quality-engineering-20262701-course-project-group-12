@@ -287,6 +287,6 @@ The tone also has to change back. Once the player in check gets out of it and
 the turn passes, the next turn line is in the turn tone again. TC26 starts from
 a new view, so it does not cover this.
 
-- **TC29: the turn line after a check has the turn tone again** ( :x: )
+- **TC29: the turn line after a check has the turn tone again** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while the game was not over, `isPlayerToMoveInCheck()` was true, and `colorToMove()` was `WHITE`. Then the game is not over, `isPlayerToMoveInCheck()` is false, `playerToMoveName()` is Bo, `colorToMove()` is `BLACK`, and `refreshStatus()` runs.
     - **Expected output**: the status line has the turn tone
