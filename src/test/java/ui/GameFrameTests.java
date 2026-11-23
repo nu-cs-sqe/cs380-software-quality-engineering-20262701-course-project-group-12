@@ -11,11 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 public class GameFrameTests {
 
     @Test
-    void Arrange_StatsAndBoard_PlacesStatsAboveBoard() {
-        GameStatsView stats = new GameStatsView(
-                "Player 1: Ada (White)",
-                "Player 2: Bo (Black)",
-                "Current player: Ada");
+    void Arrange_StatsAndBoard_PlacesStatsBesideBoard() {
+        GameStatsView stats = new GameStatsView("Ada", "Bo");
         Game game = startedGame();
         BoardView board = new BoardView(new BoardController(game.board(), game));
         JPanel content = new JPanel();
@@ -23,7 +20,7 @@ public class GameFrameTests {
         GameFrame.arrange(content, stats, board);
 
         BorderLayout layout = (BorderLayout) content.getLayout();
-        assertSame(stats, layout.getLayoutComponent(BorderLayout.NORTH));
+        assertSame(stats, layout.getLayoutComponent(BorderLayout.EAST));
         assertSame(board, layout.getLayoutComponent(BorderLayout.CENTER));
     }
 

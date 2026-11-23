@@ -1,16 +1,14 @@
 package ui;
 
 import domain.Game;
+import domain.piece.PieceColor;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class GameFrame extends JFrame {
-    private static final int PANELS_HEIGHT = 100;
-
     public GameFrame(Game game) {
         GameStatsController stats = new GameStatsController(game);
         BoardController boardController = new BoardController(game.board(), game);
@@ -25,11 +23,13 @@ public class GameFrame extends JFrame {
             drawClaim.refresh();
             gameOver.showIfOver();
         };
-        arrange(getContentPane(), stats.createView(), new BoardView(boardController, afterAction));
-        JPanel endGameControls = new JPanel();
-        endGameControls.add(drawClaim);
-        endGameControls.add(new ResignView(boardController, afterAction));
-        getContentPane().add(endGameControls, BorderLayout.SOUTH);
+        GameStatsView statsView = stats.createView();
+        ResignView resign = new ResignView(boardController, afterAction);
+        for (PieceColor color : PieceColor.values()) {
+            statsView.addPlayerControl(color, resign.buttonFor(color));
+        }
+        statsView.addStatusControl(drawClaim);
+        arrange(getContentPane(), statsView, new BoardView(boardController, afterAction));
         setTitle(Messages.text("game.window.title"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fitToGameWindow(this);
@@ -38,13 +38,14 @@ public class GameFrame extends JFrame {
 
     static void fitToGameWindow(JFrame window) {
         window.getContentPane().setPreferredSize(
-                new Dimension(BoardView.SIDE_LENGTH, BoardView.SIDE_LENGTH + PANELS_HEIGHT));
+                new Dimension(
+                        BoardView.SIDE_LENGTH + GameStatsView.COLUMN_WIDTH, BoardView.SIDE_LENGTH));
         window.pack();
     }
 
     static void arrange(Container container, GameStatsView statsView, BoardView boardView) {
         container.setLayout(new BorderLayout());
-        container.add(statsView, BorderLayout.NORTH);
+        container.add(statsView, BorderLayout.EAST);
         container.add(boardView, BorderLayout.CENTER);
     }
 }

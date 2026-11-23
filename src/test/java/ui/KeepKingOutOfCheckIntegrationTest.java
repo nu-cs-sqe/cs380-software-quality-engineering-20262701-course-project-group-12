@@ -65,7 +65,7 @@ public class KeepKingOutOfCheckIntegrationTest {
 
         statsController.refreshStatus();
 
-        assertEquals("Current player: Bob (in check)", statsView.currentPlayerLine());
+        assertEquals("Current player: Bob (in check)", statsView.statusLine());
     }
 
     private void clickFromTo(Location from, Location to) {
