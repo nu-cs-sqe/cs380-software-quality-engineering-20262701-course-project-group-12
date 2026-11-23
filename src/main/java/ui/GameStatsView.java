@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 public class GameStatsView extends JPanel {
     public enum StatusTone {
-        TURN, CHECK
+        TURN, CHECK, RESULT
     }
 
     private final String whiteName;
@@ -49,6 +49,7 @@ public class GameStatsView extends JPanel {
     public void showResult(String resultLine) {
         showCurrentPlayer(resultLine);
         highlightedColor = Optional.empty();
+        statusTone = StatusTone.RESULT;
     }
 
     public String whiteName() {

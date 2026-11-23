@@ -279,6 +279,6 @@ the text of each result.
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is not over, `isPlayerToMoveInCheck()` is true, `playerToMoveName()` is Bo, `colorToMove()` is `BLACK`, and `refreshStatus()` runs.
     - **Expected output**: the status line has the check tone, and Black's card is still highlighted
 
-- **TC28: the result line has the result tone** ( :x: )
+- **TC28: the result line has the result tone** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is true, and `refreshStatus()` runs.
     - **Expected output**: the status line has the result tone

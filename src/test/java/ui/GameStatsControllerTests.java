@@ -403,6 +403,23 @@ public class GameStatsControllerTests {
         assertEquals(Optional.of(PieceColor.BLACK), view.highlightedColor());
     }
 
+    @Test
+    void RefreshStatus_DrawByRepetition_ShowsResultTone() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(true);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals(GameStatsView.StatusTone.RESULT, view.statusTone());
+    }
+
     private static Game gameAfterTurnToBlack(boolean blackInCheck) {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);
