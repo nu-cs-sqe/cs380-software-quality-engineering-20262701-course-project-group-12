@@ -10,6 +10,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OfferDrawViewTests {
     @Test
@@ -23,6 +24,20 @@ public class OfferDrawViewTests {
 
         assertFalse(whiteButton(view).isEnabled());
         assertFalse(blackButton(view).isEnabled());
+        verify(boardController);
+    }
+
+    @Test
+    public void Refresh_WhenCanOffer_EnablesBothButtons() {
+        BoardController boardController = createMock(BoardController.class);
+        expect(boardController.canOfferDraw()).andStubReturn(true);
+        replay(boardController);
+        OfferDrawView view = new OfferDrawView(boardController, () -> { });
+
+        view.refresh();
+
+        assertTrue(whiteButton(view).isEnabled());
+        assertTrue(blackButton(view).isEnabled());
         verify(boardController);
     }
 
