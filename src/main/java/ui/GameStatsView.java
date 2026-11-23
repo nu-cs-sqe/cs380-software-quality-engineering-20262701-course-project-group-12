@@ -35,6 +35,11 @@ public class GameStatsView extends JPanel {
         highlightedColor = Optional.of(colorToMove);
     }
 
+    public void showResult(String resultLine) {
+        showCurrentPlayer(resultLine);
+        highlightedColor = Optional.empty();
+    }
+
     public String whiteName() {
         return whiteName;
     }

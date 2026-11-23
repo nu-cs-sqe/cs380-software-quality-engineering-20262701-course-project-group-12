@@ -361,6 +361,34 @@ public class GameStatsControllerTests {
         assertEquals(Optional.of(PieceColor.BLACK), view.highlightedColor());
     }
 
+    @Test
+    void RefreshStatus_GameOver_HighlightsNoPlayer() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.colorToMove()).andStubReturn(PieceColor.WHITE);
+        expect(game.isPlayerToMoveInCheck()).andStubReturn(false);
+        expect(game.isOver()).andReturn(false).andReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(false);
+        expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
+        expect(game.isDrawnByDeadPosition()).andStubReturn(false);
+        expect(game.isDrawnByFiftyMove()).andStubReturn(false);
+        expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isWonByResignation()).andStubReturn(false);
+        expect(game.winnerName()).andStubReturn("Bo");
+        expect(game.winnerColor()).andStubReturn(PieceColor.BLACK);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals(Optional.empty(), view.highlightedColor());
+    }
+
     private static Game gameAfterTurnToBlack() {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);

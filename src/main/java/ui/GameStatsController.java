@@ -32,7 +32,7 @@ public class GameStatsController {
 
     public void refreshStatus() {
         if (game.isOver()) {
-            view.showCurrentPlayer(resultLine());
+            view.showResult(resultLine());
         } else if (game.isPlayerToMoveInCheck()) {
             view.showCurrentPlayer(Messages.format("stats.check", game.playerToMoveName()));
         } else {

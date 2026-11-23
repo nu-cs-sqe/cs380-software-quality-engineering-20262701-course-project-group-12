@@ -267,7 +267,7 @@ the text of each result.
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while `colorToMove()` was `WHITE`. Then the game is not over, `isPlayerToMoveInCheck()` is false, `playerToMoveName()` is Bo, `colorToMove()` is `BLACK`, and `refreshStatus()` runs.
     - **Expected output**: Black's card is highlighted
 
-- **TC25: refresh after the game is over highlights no card** ( :x: )
+- **TC25: refresh after the game is over highlights no card** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while the game was not over and `colorToMove()` was `WHITE`. Then the game is over, `winnerName()` is Bo, `winnerColor()` is `BLACK` (checkmate), and `refreshStatus()` runs.
     - **Expected output**: no card is highlighted
 
