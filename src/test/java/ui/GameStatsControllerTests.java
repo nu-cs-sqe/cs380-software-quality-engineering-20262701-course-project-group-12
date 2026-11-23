@@ -37,8 +37,8 @@ public class GameStatsControllerTests {
 
         GameStatsView view = new GameStatsController(game).createView();
 
-        assertEquals("Player 1: Ada (White)", view.playerOneLine());
-        assertEquals("Player 2: Bo (Black)", view.playerTwoLine());
+        assertEquals("Ada", view.whiteName());
+        assertEquals("Bo", view.blackName());
         assertEquals("Current player: Ada", view.currentPlayerLine());
     }
 
@@ -48,8 +48,8 @@ public class GameStatsControllerTests {
 
         GameStatsView view = new GameStatsController(game).createView();
 
-        assertEquals("Player 1: A (White)", view.playerOneLine());
-        assertEquals("Player 2: B (Black)", view.playerTwoLine());
+        assertEquals("A", view.whiteName());
+        assertEquals("B", view.blackName());
         assertEquals("Current player: A", view.currentPlayerLine());
     }
 
@@ -59,8 +59,8 @@ public class GameStatsControllerTests {
 
         GameStatsView view = new GameStatsController(game).createView();
 
-        assertEquals("Player 1: Ann Marie (White)", view.playerOneLine());
-        assertEquals("Player 2: Li Wei (Black)", view.playerTwoLine());
+        assertEquals("Ann Marie", view.whiteName());
+        assertEquals("Li Wei", view.blackName());
         assertEquals("Current player: Ann Marie", view.currentPlayerLine());
     }
 
@@ -70,8 +70,8 @@ public class GameStatsControllerTests {
 
         GameStatsView view = new GameStatsController(game).createView();
 
-        assertEquals("Player 1: Alex (White)", view.playerOneLine());
-        assertEquals("Player 2: Alexa (Black)", view.playerTwoLine());
+        assertEquals("Alex", view.whiteName());
+        assertEquals("Alexa", view.blackName());
         assertEquals("Current player: Alex", view.currentPlayerLine());
     }
 
@@ -81,8 +81,8 @@ public class GameStatsControllerTests {
 
         GameStatsView view = new GameStatsController(game).createView();
 
-        assertEquals("Player 1: Ada (White)", view.playerOneLine());
-        assertEquals("Player 2: Bo (Black)", view.playerTwoLine());
+        assertEquals("Ada", view.whiteName());
+        assertEquals("Bo", view.blackName());
         assertEquals("Current player: Bo", view.currentPlayerLine());
     }
 

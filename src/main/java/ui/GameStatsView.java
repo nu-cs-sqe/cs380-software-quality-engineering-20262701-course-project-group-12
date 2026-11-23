@@ -5,20 +5,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GameStatsView extends JPanel {
-    private final String playerOneLine;
-    private final String playerTwoLine;
+    private final String whiteName;
+    private final String blackName;
     private final JLabel currentPlayerLabel;
     private String currentPlayerLine;
 
-    public GameStatsView(String playerOneLine, String playerTwoLine, String currentPlayerLine) {
-        this.playerOneLine = playerOneLine;
-        this.playerTwoLine = playerTwoLine;
+    public GameStatsView(String whiteName, String blackName, String currentPlayerLine) {
+        this.whiteName = whiteName;
+        this.blackName = blackName;
         this.currentPlayerLine = currentPlayerLine;
         this.currentPlayerLabel = new JLabel(currentPlayerLine);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(new JLabel(playerOneLine));
-        add(new JLabel(playerTwoLine));
+        add(new JLabel(blackName));
         add(currentPlayerLabel);
+        add(new JLabel(whiteName));
     }
 
     public void showCurrentPlayer(String currentPlayerLine) {
@@ -26,12 +26,12 @@ public class GameStatsView extends JPanel {
         currentPlayerLabel.setText(currentPlayerLine);
     }
 
-    public String playerOneLine() {
-        return playerOneLine;
+    public String whiteName() {
+        return whiteName;
     }
 
-    public String playerTwoLine() {
-        return playerTwoLine;
+    public String blackName() {
+        return blackName;
     }
 
     public String currentPlayerLine() {

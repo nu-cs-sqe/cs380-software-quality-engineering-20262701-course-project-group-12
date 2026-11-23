@@ -36,43 +36,43 @@ Step 2/3:
 - names -> Cases: one character (shortest name that survived start), a normal name, a name with a space in the middle, two similar but different names (start now rejects equal names)
 - the name of the player to move -> Cases: Player 1 (what setup always does), Player 2 (the method still has to print that name)
 - output is always:
-  - `Player 1: <name> (White)`
-  - `Player 2: <name> (Black)`
+  - Player 1's name on White's card (issue #76; before it, `Player 1: <name> (White)`)
+  - Player 2's name on Black's card (issue #76; before it, `Player 2: <name> (Black)`)
   - `Current player: <name of the player to move>`
 
 - **TC4: normal names, Player 1 to move** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `playerToMoveName()` is Player 1's name.
     - **Expected output**: the view shows
-        - `Player 1: Ada (White)`
-        - `Player 2: Bo (Black)`
+        - `Ada` on White's card
+        - `Bo` on Black's card
         - `Current player: Ada`
 
 - **TC5: one-character names** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 A / White. Player 2 B / Black. `playerToMoveName()` is Player 1's name.
     - **Expected output**: the view shows
-        - `Player 1: A (White)`
-        - `Player 2: B (Black)`
+        - `A` on White's card
+        - `B` on Black's card
         - `Current player: A`
 
 - **TC6: names with a space in the middle** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ann Marie / White. Player 2 Li Wei / Black. `playerToMoveName()` is Player 1's name.
     - **Expected output**: the view shows
-        - `Player 1: Ann Marie (White)`
-        - `Player 2: Li Wei (Black)`
+        - `Ann Marie` on White's card
+        - `Li Wei` on Black's card
         - `Current player: Ann Marie`
 
 - **TC7: similar but different names** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Alex / White. Player 2 Alexa / Black. `playerToMoveName()` is Player 1's name.
     - **Expected output**: the view shows
-        - `Player 1: Alex (White)`
-        - `Player 2: Alexa (Black)`
+        - `Alex` on White's card
+        - `Alexa` on Black's card
         - `Current player: Alex`
 
 - **TC8: Player 2 is to move** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `playerToMoveName()` is Player 2's name.
     - **Expected output**: the view shows
-        - `Player 1: Ada (White)`
-        - `Player 2: Bo (Black)`
+        - `Ada` on White's card
+        - `Bo` on Black's card
         - `Current player: Bo`
 
 ### Method under test: `refreshStatus()`

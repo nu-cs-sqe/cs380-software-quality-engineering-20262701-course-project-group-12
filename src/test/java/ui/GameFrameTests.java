@@ -12,10 +12,7 @@ public class GameFrameTests {
 
     @Test
     void Arrange_StatsAndBoard_PlacesStatsAboveBoard() {
-        GameStatsView stats = new GameStatsView(
-                "Player 1: Ada (White)",
-                "Player 2: Bo (Black)",
-                "Current player: Ada");
+        GameStatsView stats = new GameStatsView("Ada", "Bo", "Current player: Ada");
         Game game = startedGame();
         BoardView board = new BoardView(new BoardController(game.board(), game));
         JPanel content = new JPanel();

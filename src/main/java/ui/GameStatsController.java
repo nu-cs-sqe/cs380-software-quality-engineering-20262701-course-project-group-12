@@ -26,9 +26,7 @@ public class GameStatsController {
 
     public GameStatsView createView() {
         view = new GameStatsView(
-                Messages.format("stats.playerOne", game.playerOneName()),
-                Messages.format("stats.playerTwo", game.playerTwoName()),
-                currentPlayerLine());
+                game.playerOneName(), game.playerTwoName(), currentPlayerLine());
         return view;
     }
 
