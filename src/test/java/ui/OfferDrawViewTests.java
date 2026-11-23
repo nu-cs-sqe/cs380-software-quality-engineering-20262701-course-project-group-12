@@ -71,11 +71,35 @@ public class OfferDrawViewTests {
         verify(boardController);
     }
 
+    @Test
+    public void BlackOffer_OpponentDeclines_AsksTheControllerToDecline() {
+        BoardController boardController = createMock(BoardController.class);
+        expect(boardController.canOfferDraw()).andStubReturn(true);
+        boardController.offerDraw(PieceColor.BLACK);
+        expect(boardController.isDrawOffered()).andReturn(true);
+        boardController.declineDrawOffer();
+        replay(boardController);
+        OfferDrawView view = decliningView(boardController);
+
+        blackButton(view).doClick();
+
+        verify(boardController);
+    }
+
     private static OfferDrawView acceptingView(BoardController boardController) {
         return new OfferDrawView(boardController, () -> { }) {
             @Override
             boolean opponentAccepts() {
                 return true;
+            }
+        };
+    }
+
+    private static OfferDrawView decliningView(BoardController boardController) {
+        return new OfferDrawView(boardController, () -> { }) {
+            @Override
+            boolean opponentAccepts() {
+                return false;
             }
         };
     }

@@ -11,15 +11,8 @@ public class OfferDrawView extends JPanel {
 
     public OfferDrawView(BoardController boardController, Runnable afterOffer) {
         this.boardController = boardController;
-        JButton whiteButton = new JButton(Messages.text("draw.offer.white"));
-        whiteButton.addActionListener(event -> {
-            boardController.offerDraw(PieceColor.WHITE);
-            if (boardController.isDrawOffered() && opponentAccepts()) {
-                boardController.acceptDrawOffer();
-            }
-        });
-        add(whiteButton);
-        add(new JButton(Messages.text("draw.offer.black")));
+        addOfferButton("draw.offer.white", PieceColor.WHITE);
+        addOfferButton("draw.offer.black", PieceColor.BLACK);
         refresh();
     }
 
@@ -27,6 +20,23 @@ public class OfferDrawView extends JPanel {
         boolean canOffer = boardController.canOfferDraw();
         for (Component button : getComponents()) {
             button.setEnabled(canOffer);
+        }
+    }
+
+    private void addOfferButton(String textKey, PieceColor offeringColor) {
+        JButton button = new JButton(Messages.text(textKey));
+        button.addActionListener(event -> offer(offeringColor));
+        add(button);
+    }
+
+    private void offer(PieceColor offeringColor) {
+        boardController.offerDraw(offeringColor);
+        if (boardController.isDrawOffered()) {
+            if (opponentAccepts()) {
+                boardController.acceptDrawOffer();
+            } else {
+                boardController.declineDrawOffer();
+            }
         }
     }
 
