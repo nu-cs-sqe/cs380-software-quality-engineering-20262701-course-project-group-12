@@ -4,6 +4,7 @@ import domain.Location;
 import domain.piece.Piece;
 import domain.piece.PieceType;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -13,6 +14,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -32,6 +34,12 @@ public class BoardView extends JPanel {
     private static final Color LIGHT_SQUARE = new Color(240, 217, 181);
     private static final Color DARK_SQUARE = new Color(181, 136, 99);
     private static final Color SELECTED_SQUARE = new Color(186, 202, 68);
+    private static final Color LAST_MOVE_SQUARE = new Color(246, 235, 97);
+    private static final Color CHECK_SQUARE = new Color(231, 76, 60);
+    private static final Color LEGAL_MARKER = new Color(20, 85, 30, 140);
+    private static final int LEGAL_DOT_DIAMETER = TILE_SIZE / 5;
+    private static final int CAPTURE_RING_INSET = TILE_SIZE / 8;
+    private static final int CAPTURE_RING_THICKNESS = TILE_SIZE / 20;
     private static final int LABEL_MARGIN = TILE_SIZE / 2;
     static final int SIDE_LENGTH = BOARD_LENGTH + LABEL_MARGIN;
     private static final char FIRST_FILE_LETTER = 'a';
@@ -151,14 +159,51 @@ public class BoardView extends JPanel {
         if (boardController.isOccupied(location)) {
             drawPiece(graphics, location);
         }
+        paintLegalMarker(graphics, location);
     }
 
     private Color colorOf(Location square) {
         if (boardController.isSelected(square)) {
             return SELECTED_SQUARE;
         }
+        if (boardController.isKingInCheck(square)) {
+            return CHECK_SQUARE;
+        }
+        if (boardController.isLastMoveSquare(square)) {
+            return LAST_MOVE_SQUARE;
+        }
         boolean isLightSquare = (square.getFile() + square.getRank()) % 2 == 0;
         return isLightSquare ? LIGHT_SQUARE : DARK_SQUARE;
+    }
+
+    private void paintLegalMarker(Graphics graphics, Location location) {
+        if (!boardController.isLegalDestination(location)) {
+            return;
+        }
+        if (boardController.isOccupied(location)) {
+            paintCaptureRing(graphics, location);
+        } else {
+            paintEmptyDestination(graphics, location);
+        }
+    }
+
+    private void paintEmptyDestination(Graphics graphics, Location location) {
+        graphics.setColor(LEGAL_MARKER);
+        int left = leftEdgeOf(location.getFile()) + (TILE_SIZE - LEGAL_DOT_DIAMETER) / 2;
+        int top = topEdgeOf(location.getRank()) + (TILE_SIZE - LEGAL_DOT_DIAMETER) / 2;
+        graphics.fillOval(left, top, LEGAL_DOT_DIAMETER, LEGAL_DOT_DIAMETER);
+    }
+
+    private void paintCaptureRing(Graphics graphics, Location location) {
+        Graphics2D graphics2D = (Graphics2D) graphics;
+        Stroke previous = graphics2D.getStroke();
+        graphics2D.setColor(LEGAL_MARKER);
+        graphics2D.setStroke(new BasicStroke(CAPTURE_RING_THICKNESS));
+        int left = leftEdgeOf(location.getFile()) + CAPTURE_RING_INSET;
+        int top = topEdgeOf(location.getRank()) + CAPTURE_RING_INSET;
+        int span = TILE_SIZE - 2 * CAPTURE_RING_INSET;
+        graphics2D.drawOval(left, top, span, span);
+        graphics2D.setStroke(previous);
     }
 
     private void drawPiece(Graphics graphics, Location location) {
