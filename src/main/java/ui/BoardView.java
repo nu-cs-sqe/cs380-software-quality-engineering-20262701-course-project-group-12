@@ -29,13 +29,13 @@ public class BoardView extends JPanel {
     private static final int LAST_RANK = Location.MAX_RANK;
     private static final int TILE_SIZE = 80;
     private static final int BOARD_LENGTH = BOARD_SIZE * TILE_SIZE;
-    private static final Color LIGHT_SQUARE = new Color(240, 217, 181);
-    private static final Color DARK_SQUARE = new Color(181, 136, 99);
+    static final Color LIGHT_SQUARE = new Color(240, 217, 181);
+    static final Color DARK_SQUARE = new Color(181, 136, 99);
     private static final Color SELECTED_SQUARE = new Color(186, 202, 68);
-    private static final int LABEL_MARGIN = TILE_SIZE / 2;
+    static final int LABEL_MARGIN = TILE_SIZE / 2;
     static final int SIDE_LENGTH = BOARD_LENGTH + LABEL_MARGIN;
     private static final char FIRST_FILE_LETTER = 'a';
-    private static final Color LABEL_INK = Color.DARK_GRAY;
+    static final Color LABEL_INK = Color.DARK_GRAY;
     private static final Font LABEL_FONT = new Font(Font.SANS_SERIF, Font.BOLD, TILE_SIZE / 5);
     private static final List<PieceType> PROMOTION_CHOICES =
             List.of(PieceType.QUEEN, PieceType.ROOK, PieceType.BISHOP, PieceType.KNIGHT);
