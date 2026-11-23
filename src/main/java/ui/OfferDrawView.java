@@ -9,8 +9,8 @@ public class OfferDrawView extends JPanel {
 
     public OfferDrawView(BoardController boardController, Runnable afterOffer) {
         this.boardController = boardController;
-        add(new JButton());
-        add(new JButton());
+        add(new JButton(Messages.text("draw.offer.white")));
+        add(new JButton(Messages.text("draw.offer.black")));
         refresh();
     }
 

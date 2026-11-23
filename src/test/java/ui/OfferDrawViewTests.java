@@ -9,6 +9,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,6 +39,19 @@ public class OfferDrawViewTests {
 
         assertTrue(whiteButton(view).isEnabled());
         assertTrue(blackButton(view).isEnabled());
+        verify(boardController);
+    }
+
+    @Test
+    public void Buttons_AfterConstruction_ShowMessagesLabels() {
+        BoardController boardController = createMock(BoardController.class);
+        expect(boardController.canOfferDraw()).andStubReturn(false);
+        replay(boardController);
+
+        OfferDrawView view = new OfferDrawView(boardController, () -> { });
+
+        assertEquals("White offers draw", whiteButton(view).getText());
+        assertEquals("Black offers draw", blackButton(view).getText());
         verify(boardController);
     }
 
