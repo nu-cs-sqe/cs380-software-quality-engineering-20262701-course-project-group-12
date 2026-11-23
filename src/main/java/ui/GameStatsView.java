@@ -14,41 +14,41 @@ public class GameStatsView extends JPanel {
 
     private final String whiteName;
     private final String blackName;
-    private final JLabel currentPlayerLabel;
-    private String currentPlayerLine;
+    private final JLabel statusLabel;
+    private String statusLine;
     private Optional<PieceColor> highlightedColor = Optional.empty();
     private StatusTone statusTone = StatusTone.TURN;
 
     public GameStatsView(String whiteName, String blackName) {
         this.whiteName = whiteName;
         this.blackName = blackName;
-        this.currentPlayerLine = "";
-        this.currentPlayerLabel = new JLabel();
+        this.statusLine = "";
+        this.statusLabel = new JLabel();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(new JLabel(blackName));
-        add(currentPlayerLabel);
+        add(statusLabel);
         add(new JLabel(whiteName));
     }
 
-    public void showCurrentPlayer(String currentPlayerLine) {
-        this.currentPlayerLine = currentPlayerLine;
-        currentPlayerLabel.setText(currentPlayerLine);
+    private void showStatusLine(String statusLine) {
+        this.statusLine = statusLine;
+        statusLabel.setText(statusLine);
     }
 
     public void showTurn(PieceColor colorToMove, String turnLine) {
-        showCurrentPlayer(turnLine);
+        showStatusLine(turnLine);
         highlightedColor = Optional.of(colorToMove);
         statusTone = StatusTone.TURN;
     }
 
     public void showCheck(PieceColor colorToMove, String checkLine) {
-        showCurrentPlayer(checkLine);
+        showStatusLine(checkLine);
         highlightedColor = Optional.of(colorToMove);
         statusTone = StatusTone.CHECK;
     }
 
     public void showResult(String resultLine) {
-        showCurrentPlayer(resultLine);
+        showStatusLine(resultLine);
         highlightedColor = Optional.empty();
         statusTone = StatusTone.RESULT;
     }
@@ -61,8 +61,8 @@ public class GameStatsView extends JPanel {
         return blackName;
     }
 
-    public String currentPlayerLine() {
-        return currentPlayerLine;
+    public String statusLine() {
+        return statusLine;
     }
 
     public Optional<PieceColor> highlightedColor() {

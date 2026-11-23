@@ -41,7 +41,7 @@ public class GameStatsControllerTests {
 
         assertEquals("Ada", view.whiteName());
         assertEquals("Bo", view.blackName());
-        assertEquals("Current player: Ada", view.currentPlayerLine());
+        assertEquals("Current player: Ada", view.statusLine());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class GameStatsControllerTests {
 
         assertEquals("A", view.whiteName());
         assertEquals("B", view.blackName());
-        assertEquals("Current player: A", view.currentPlayerLine());
+        assertEquals("Current player: A", view.statusLine());
     }
 
     @Test
@@ -63,7 +63,7 @@ public class GameStatsControllerTests {
 
         assertEquals("Ann Marie", view.whiteName());
         assertEquals("Li Wei", view.blackName());
-        assertEquals("Current player: Ann Marie", view.currentPlayerLine());
+        assertEquals("Current player: Ann Marie", view.statusLine());
     }
 
     @Test
@@ -74,7 +74,7 @@ public class GameStatsControllerTests {
 
         assertEquals("Alex", view.whiteName());
         assertEquals("Alexa", view.blackName());
-        assertEquals("Current player: Alex", view.currentPlayerLine());
+        assertEquals("Current player: Alex", view.statusLine());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class GameStatsControllerTests {
 
         assertEquals("Ada", view.whiteName());
         assertEquals("Bo", view.blackName());
-        assertEquals("Current player: Bo", view.currentPlayerLine());
+        assertEquals("Current player: Bo", view.statusLine());
     }
 
     @Test
@@ -96,7 +96,7 @@ public class GameStatsControllerTests {
 
         controller.refreshStatus();
 
-        assertEquals("Current player: Bo", view.currentPlayerLine());
+        assertEquals("Current player: Bo", view.statusLine());
     }
 
     @Test
@@ -122,7 +122,7 @@ public class GameStatsControllerTests {
 
         controller.refreshStatus();
 
-        assertEquals("Checkmate: Bo (Black) wins", view.currentPlayerLine());
+        assertEquals("Checkmate: Bo (Black) wins", view.statusLine());
     }
 
     @Test
@@ -148,7 +148,7 @@ public class GameStatsControllerTests {
 
         controller.refreshStatus();
 
-        assertEquals("Checkmate: Ada (White) wins", view.currentPlayerLine());
+        assertEquals("Checkmate: Ada (White) wins", view.statusLine());
     }
 
     @Test
@@ -166,7 +166,7 @@ public class GameStatsControllerTests {
 
         controller.refreshStatus();
 
-        assertEquals("Draw by repetition", view.currentPlayerLine());
+        assertEquals("Draw by repetition", view.statusLine());
     }
 
     @Test
@@ -186,7 +186,7 @@ public class GameStatsControllerTests {
 
         controller.refreshStatus();
 
-        assertEquals("Draw by stalemate", view.currentPlayerLine());
+        assertEquals("Draw by stalemate", view.statusLine());
     }
 
     @Test
@@ -205,7 +205,7 @@ public class GameStatsControllerTests {
 
         controller.refreshStatus();
 
-        assertEquals("Draw by agreement", view.currentPlayerLine());
+        assertEquals("Draw by agreement", view.statusLine());
     }
 
     @Test
@@ -227,7 +227,7 @@ public class GameStatsControllerTests {
 
         controller.refreshStatus();
 
-        assertEquals("Draw by the fifty-move rule", view.currentPlayerLine());
+        assertEquals("Draw by the fifty-move rule", view.statusLine());
     }
 
     @Test
@@ -250,7 +250,7 @@ public class GameStatsControllerTests {
 
         controller.refreshStatus();
 
-        assertEquals("Draw by the seventy-five-move rule", view.currentPlayerLine());
+        assertEquals("Draw by the seventy-five-move rule", view.statusLine());
     }
 
     @Test
@@ -261,7 +261,7 @@ public class GameStatsControllerTests {
 
         controller.refreshStatus();
 
-        assertEquals("Current player: Bo (in check)", view.currentPlayerLine());
+        assertEquals("Current player: Bo (in check)", view.statusLine());
     }
 
     @Test
@@ -288,7 +288,7 @@ public class GameStatsControllerTests {
 
         controller.refreshStatus();
 
-        assertEquals("Checkmate: Bo (Black) wins", view.currentPlayerLine());
+        assertEquals("Checkmate: Bo (Black) wins", view.statusLine());
     }
 
     @Test
@@ -299,7 +299,7 @@ public class GameStatsControllerTests {
 
         controller.refreshStatus();
 
-        assertEquals("Resignation: Bo (Black) wins", view.currentPlayerLine());
+        assertEquals("Resignation: Bo (Black) wins", view.statusLine());
     }
 
     @Test
@@ -310,7 +310,7 @@ public class GameStatsControllerTests {
 
         controller.refreshStatus();
 
-        assertEquals("Resignation: Ada (White) wins", view.currentPlayerLine());
+        assertEquals("Resignation: Ada (White) wins", view.statusLine());
     }
 
     @Test
@@ -331,7 +331,7 @@ public class GameStatsControllerTests {
 
         controller.refreshStatus();
 
-        assertEquals("Draw by dead position", view.currentPlayerLine());
+        assertEquals("Draw by dead position", view.statusLine());
     }
 
     @Test

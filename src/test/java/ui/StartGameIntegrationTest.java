@@ -41,7 +41,7 @@ public class StartGameIntegrationTest {
         GameStatsView statsView = new GameStatsController(game).createView();
         assertEquals("Alice", statsView.whiteName());
         assertEquals("Bob", statsView.blackName());
-        assertEquals("Current player: Alice", statsView.currentPlayerLine());
+        assertEquals("Current player: Alice", statsView.statusLine());
     }
 
     @Test
