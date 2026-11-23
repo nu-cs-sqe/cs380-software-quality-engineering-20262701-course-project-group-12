@@ -22,24 +22,36 @@ public class GameFrame extends JFrame {
 
     private GameFrame(
             GameStatsController stats, BoardController boardController, DrawClaimView drawClaim) {
+        this(stats, boardController, drawClaim, new StatusRefresh(stats, drawClaim));
+    }
+
+    private GameFrame(
+            GameStatsController stats,
+            BoardController boardController,
+            DrawClaimView drawClaim,
+            StatusRefresh statusRefresh) {
         this(
-                stats.createView(),
-                new BoardView(boardController, statusRefresh(stats, drawClaim)));
-        JPanel endGameControls = new JPanel();
-        endGameControls.add(drawClaim);
-        endGameControls.add(new ResignView(boardController, statusRefresh(stats, drawClaim)));
-        getContentPane().add(endGameControls, BorderLayout.SOUTH);
+                stats,
+                boardController,
+                drawClaim,
+                statusRefresh,
+                new OfferDrawView(boardController, statusRefresh));
+    }
+
+    private GameFrame(
+            GameStatsController stats,
+            BoardController boardController,
+            DrawClaimView drawClaim,
+            StatusRefresh statusRefresh,
+            OfferDrawView offerDraw) {
+        this(stats.createView(), new BoardView(boardController, statusRefresh));
+        statusRefresh.setOfferDraw(offerDraw);
+        addEndGameControls(
+                getContentPane(), boardController, drawClaim, offerDraw, statusRefresh);
         setTitle(Messages.text("game.window.title"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-    }
-
-    private static Runnable statusRefresh(GameStatsController stats, DrawClaimView drawClaim) {
-        return () -> {
-            stats.refreshStatus();
-            drawClaim.refresh();
-        };
     }
 
     public GameFrame(GameStatsView statsView, BoardView boardView) {
@@ -50,5 +62,42 @@ public class GameFrame extends JFrame {
         container.setLayout(new BorderLayout());
         container.add(statsView, BorderLayout.NORTH);
         container.add(boardView, BorderLayout.CENTER);
+    }
+
+    static void addEndGameControls(
+            Container container,
+            BoardController boardController,
+            DrawClaimView drawClaim,
+            OfferDrawView offerDraw,
+            Runnable statusRefresh) {
+        JPanel endGameControls = new JPanel();
+        endGameControls.add(drawClaim);
+        endGameControls.add(offerDraw);
+        endGameControls.add(new ResignView(boardController, statusRefresh));
+        container.add(endGameControls, BorderLayout.SOUTH);
+    }
+
+    private static final class StatusRefresh implements Runnable {
+        private final GameStatsController stats;
+        private final DrawClaimView drawClaim;
+        private OfferDrawView offerDraw;
+
+        StatusRefresh(GameStatsController stats, DrawClaimView drawClaim) {
+            this.stats = stats;
+            this.drawClaim = drawClaim;
+        }
+
+        void setOfferDraw(OfferDrawView offerDraw) {
+            this.offerDraw = offerDraw;
+        }
+
+        @Override
+        public void run() {
+            stats.refreshStatus();
+            drawClaim.refresh();
+            if (offerDraw != null) {
+                offerDraw.refresh();
+            }
+        }
     }
 }
