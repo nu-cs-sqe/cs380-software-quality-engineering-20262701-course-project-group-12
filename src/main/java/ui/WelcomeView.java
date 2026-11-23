@@ -83,6 +83,11 @@ public class WelcomeView extends JPanel {
         return constraints;
     }
 
+    public void fillNames(String playerOneName, String playerTwoName) {
+        playerOneField.setText(playerOneName);
+        playerTwoField.setText(playerTwoName);
+    }
+
     public void showNamesRequired() {
         showError(Messages.text("welcome.namesRequired"));
     }
