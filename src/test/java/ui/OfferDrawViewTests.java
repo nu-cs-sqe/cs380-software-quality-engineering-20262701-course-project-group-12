@@ -4,6 +4,7 @@ import domain.piece.PieceColor;
 import org.junit.jupiter.api.Test;
 
 import java.awt.Component;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JButton;
 
 import static org.easymock.EasyMock.createMock;
@@ -92,8 +93,33 @@ public class OfferDrawViewTests {
         assertEquals("Accept the draw offer?", Messages.text("draw.offer.question"));
     }
 
+    @Test
+    public void WhiteOffer_AfterAccept_RunsAfterOfferAndRefreshesButtons() {
+        BoardController boardController = createMock(BoardController.class);
+        expect(boardController.canOfferDraw()).andReturn(true);
+        boardController.offerDraw(PieceColor.WHITE);
+        expect(boardController.isDrawOffered()).andReturn(true);
+        boardController.acceptDrawOffer();
+        expect(boardController.canOfferDraw()).andReturn(false);
+        replay(boardController);
+        AtomicBoolean afterOfferRan = new AtomicBoolean(false);
+        OfferDrawView view = acceptingView(boardController, () -> afterOfferRan.set(true));
+
+        whiteButton(view).doClick();
+
+        assertTrue(afterOfferRan.get());
+        assertFalse(whiteButton(view).isEnabled());
+        assertFalse(blackButton(view).isEnabled());
+        verify(boardController);
+    }
+
     private static OfferDrawView acceptingView(BoardController boardController) {
-        return new OfferDrawView(boardController, () -> { }) {
+        return acceptingView(boardController, () -> { });
+    }
+
+    private static OfferDrawView acceptingView(
+            BoardController boardController, Runnable afterOffer) {
+        return new OfferDrawView(boardController, afterOffer) {
             @Override
             boolean opponentAccepts() {
                 return true;

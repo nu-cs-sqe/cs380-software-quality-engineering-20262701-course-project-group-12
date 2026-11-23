@@ -9,9 +9,11 @@ import javax.swing.JPanel;
 
 public class OfferDrawView extends JPanel {
     private final BoardController boardController;
+    private final Runnable afterOffer;
 
     public OfferDrawView(BoardController boardController, Runnable afterOffer) {
         this.boardController = boardController;
+        this.afterOffer = afterOffer;
         addOfferButton("draw.offer.white", PieceColor.WHITE);
         addOfferButton("draw.offer.black", PieceColor.BLACK);
         refresh();
@@ -39,6 +41,8 @@ public class OfferDrawView extends JPanel {
                 boardController.declineDrawOffer();
             }
         }
+        afterOffer.run();
+        refresh();
     }
 
     boolean opponentAccepts() {
