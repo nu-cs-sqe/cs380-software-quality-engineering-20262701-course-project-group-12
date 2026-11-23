@@ -90,7 +90,7 @@ public class GameStatsControllerTests {
 
     @Test
     void RefreshStatus_AfterTurn_ShowsPlayerTwo() {
-        Game game = gameAfterTurnToBlack();
+        Game game = gameAfterTurnToBlack(false);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
 
@@ -255,14 +255,7 @@ public class GameStatsControllerTests {
 
     @Test
     public void RefreshStatus_PlayerToMoveInCheck_ShowsTheCheck() {
-        Game game = createMock(Game.class);
-        expect(game.isStarted()).andStubReturn(true);
-        expect(game.playerOneName()).andStubReturn("Ada");
-        expect(game.playerTwoName()).andStubReturn("Bo");
-        expect(game.playerToMoveName()).andReturn("Ada").andReturn("Bo");
-        expect(game.isOver()).andStubReturn(false);
-        expect(game.isPlayerToMoveInCheck()).andStubReturn(true);
-        replay(game);
+        Game game = gameAfterTurnToBlack(true);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
 
@@ -352,7 +345,7 @@ public class GameStatsControllerTests {
 
     @Test
     void RefreshStatus_AfterTurn_HighlightsBlack() {
-        Game game = gameAfterTurnToBlack();
+        Game game = gameAfterTurnToBlack(false);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
 
@@ -398,7 +391,7 @@ public class GameStatsControllerTests {
         assertEquals(GameStatsView.StatusTone.TURN, view.statusTone());
     }
 
-    private static Game gameAfterTurnToBlack() {
+    private static Game gameAfterTurnToBlack(boolean blackInCheck) {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);
         expect(game.playerOneName()).andStubReturn("Ada");
@@ -406,7 +399,7 @@ public class GameStatsControllerTests {
         expect(game.playerToMoveName()).andReturn("Ada").andReturn("Bo");
         expect(game.colorToMove()).andReturn(PieceColor.WHITE).andReturn(PieceColor.BLACK);
         expect(game.isOver()).andStubReturn(false);
-        expect(game.isPlayerToMoveInCheck()).andStubReturn(false);
+        expect(game.isPlayerToMoveInCheck()).andStubReturn(blackInCheck);
         replay(game);
         return game;
     }
