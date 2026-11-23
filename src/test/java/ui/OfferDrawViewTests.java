@@ -1,0 +1,41 @@
+package ui;
+
+import org.junit.jupiter.api.Test;
+
+import java.awt.Component;
+import javax.swing.JButton;
+
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+public class OfferDrawViewTests {
+    @Test
+    public void Refresh_WhenCannotOffer_DisablesBothButtons() {
+        BoardController boardController = createMock(BoardController.class);
+        expect(boardController.canOfferDraw()).andStubReturn(false);
+        replay(boardController);
+        OfferDrawView view = new OfferDrawView(boardController, () -> { });
+
+        view.refresh();
+
+        assertFalse(whiteButton(view).isEnabled());
+        assertFalse(blackButton(view).isEnabled());
+        verify(boardController);
+    }
+
+    private static JButton whiteButton(OfferDrawView view) {
+        return buttonAt(view, 0);
+    }
+
+    private static JButton blackButton(OfferDrawView view) {
+        return buttonAt(view, 1);
+    }
+
+    private static JButton buttonAt(OfferDrawView view, int index) {
+        Component component = view.getComponent(index);
+        return (JButton) component;
+    }
+}
