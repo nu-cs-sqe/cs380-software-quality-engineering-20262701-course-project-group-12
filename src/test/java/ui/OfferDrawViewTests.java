@@ -86,6 +86,12 @@ public class OfferDrawViewTests {
         verify(boardController);
     }
 
+    @Test
+    public void DialogTexts_FromMessages_MatchOfferDrawCopy() {
+        assertEquals("Draw offer", Messages.text("draw.offer.title"));
+        assertEquals("Accept the draw offer?", Messages.text("draw.offer.question"));
+    }
+
     private static OfferDrawView acceptingView(BoardController boardController) {
         return new OfferDrawView(boardController, () -> { }) {
             @Override

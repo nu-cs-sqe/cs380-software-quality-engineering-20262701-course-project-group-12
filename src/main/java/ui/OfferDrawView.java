@@ -4,6 +4,7 @@ import domain.piece.PieceColor;
 
 import java.awt.Component;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class OfferDrawView extends JPanel {
@@ -41,6 +42,11 @@ public class OfferDrawView extends JPanel {
     }
 
     boolean opponentAccepts() {
-        return false;
+        int answer = JOptionPane.showConfirmDialog(
+                this,
+                Messages.text("draw.offer.question"),
+                Messages.text("draw.offer.title"),
+                JOptionPane.YES_NO_OPTION);
+        return answer == JOptionPane.YES_OPTION;
     }
 }
