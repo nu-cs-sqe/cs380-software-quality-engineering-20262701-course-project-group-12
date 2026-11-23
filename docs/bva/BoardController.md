@@ -416,7 +416,7 @@ made the move.
 
 ### `isLegalDestination(Location square)`, `isLastMoveSquare(Location square)`, and `isKingInCheck(Location square)`
 
-Issue #77. The case numbers start at TC79, after the fifty-move cases (TC70 to TC78, issue #51). `Board` and `Game` are mocked with EasyMock, because the controller owns neither legality nor check. The markers and tints are a `BoardView` change after the cases. Clicking is unchanged: these queries only answer what to draw.
+Issue #77. The case numbers start at TC80, after issue #75's TC79. `Board` and `Game` are mocked with EasyMock, because the controller owns neither legality nor check. The markers and tints are a `BoardView` change after the cases. Clicking is unchanged: these queries only answer what to draw.
 
 | Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
 | --- | --- | --- |
@@ -437,19 +437,19 @@ Issue #77. The case numbers start at TC79, after the fifty-move cases (TC70 to T
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC79: nothing selected is not a legal destination | a controller for the mocked board, no clicks yet; ask about c3 `(2, 3)` | false; the board is not asked `isLegalMove` | :white_check_mark: |
-| TC80: a selected piece with several legal squares marks a destination | White is to move; b1 `(1, 1)` holds a White piece; click b1; the board answers true for `isLegalMove(b1, c3)`; ask about c3 | true | :white_check_mark: |
-| TC81: a selected piece does not mark a square it cannot reach | as TC80, but the board answers false for `isLegalMove(b1, b3)`; ask about b3 `(1, 3)` | false | :white_check_mark: |
-| TC82: a selected piece with no legal moves marks nothing | as TC80, but the board answers false for `isLegalMove(b1, c3)`; ask about c3 | false | :white_check_mark: |
-| TC83: a pinned piece marks no destination off the pin | White is to move; c6 `(2, 6)` holds a White piece; click c6; the board answers false for `isLegalMove(c6, d4)`; ask about d4 `(3, 4)` | false | :white_check_mark: |
-| TC84: before any move, no square is a last-move square | a controller for the mocked board, no clicks yet; ask about b1 | false | :white_check_mark: |
-| TC85: after a move, the from square is a last-move square | as TC22; click b1, then c3; ask about b1 | true | :white_check_mark: |
-| TC86: after a move, the to square is a last-move square | as TC85; ask about c3 | true | :white_check_mark: |
-| TC87: after a move, another square is not a last-move square | as TC85; ask about a3 `(0, 3)` | false | :white_check_mark: |
-| TC88: a later move replaces the last-move squares | as TC85, then Black moves b8 `(1, 8)` to c6; ask about b1 | false | :white_check_mark: |
-| TC89: a waiting draw-claim is not yet a last move | as TC52; click b1, then c3; ask about c3 | false | :white_check_mark: |
-| TC90: when the player to move is not in check, no square is the king in check | the game answers false for `isPlayerToMoveInCheck`; ask about e1 `(4, 1)` | false; the board is not asked about e1 | :white_check_mark: |
-| TC91: the king of the player to move in check | the game answers true for `isPlayerToMoveInCheck`; e1 holds the White king; White is to move; ask about e1 | true | :white_check_mark: |
-| TC92: another square while the king is in check | as TC91, but b1 holds a White piece that is not the king; ask about b1 | false | :white_check_mark: |
-| TC93: an empty square while the king is in check | the game answers true for `isPlayerToMoveInCheck`; a3 is empty; ask about a3 | false | :white_check_mark: |
-| TC94: the opponent's king while the player to move is in check | as TC91, but e1 holds the Black king | false | :white_check_mark: |
+| TC80: nothing selected is not a legal destination | a controller for the mocked board, no clicks yet; ask about c3 `(2, 3)` | false; the board is not asked `isLegalMove` | :white_check_mark: |
+| TC81: a selected piece with several legal squares marks a destination | White is to move; b1 `(1, 1)` holds a White piece; click b1; the board answers true for `isLegalMove(b1, c3)`; ask about c3 | true | :white_check_mark: |
+| TC82: a selected piece does not mark a square it cannot reach | as TC81, but the board answers false for `isLegalMove(b1, b3)`; ask about b3 `(1, 3)` | false | :white_check_mark: |
+| TC83: a selected piece with no legal moves marks nothing | as TC81, but the board answers false for `isLegalMove(b1, c3)`; ask about c3 | false | :white_check_mark: |
+| TC84: a pinned piece marks no destination off the pin | White is to move; c6 `(2, 6)` holds a White piece; click c6; the board answers false for `isLegalMove(c6, d4)`; ask about d4 `(3, 4)` | false | :white_check_mark: |
+| TC85: before any move, no square is a last-move square | a controller for the mocked board, no clicks yet; ask about b1 | false | :white_check_mark: |
+| TC86: after a move, the from square is a last-move square | as TC22; click b1, then c3; ask about b1 | true | :white_check_mark: |
+| TC87: after a move, the to square is a last-move square | as TC86; ask about c3 | true | :white_check_mark: |
+| TC88: after a move, another square is not a last-move square | as TC86; ask about a3 `(0, 3)` | false | :white_check_mark: |
+| TC89: a later move replaces the last-move squares | as TC86, then Black moves b8 `(1, 8)` to c6; ask about b1 | false | :white_check_mark: |
+| TC90: a waiting draw-claim is not yet a last move | as TC52; click b1, then c3; ask about c3 | false | :white_check_mark: |
+| TC91: when the player to move is not in check, no square is the king in check | the game answers false for `isPlayerToMoveInCheck`; ask about e1 `(4, 1)` | false; the board is not asked about e1 | :white_check_mark: |
+| TC92: the king of the player to move in check | the game answers true for `isPlayerToMoveInCheck`; e1 holds the White king; White is to move; ask about e1 | true | :white_check_mark: |
+| TC93: another square while the king is in check | as TC92, but b1 holds a White piece that is not the king; ask about b1 | false | :white_check_mark: |
+| TC94: an empty square while the king is in check | the game answers true for `isPlayerToMoveInCheck`; a3 is empty; ask about a3 | false | :white_check_mark: |
+| TC95: the opponent's king while the player to move is in check | as TC92, but e1 holds the Black king | false | :white_check_mark: |
