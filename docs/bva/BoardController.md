@@ -399,3 +399,14 @@ is over is already TC40. A waiting move already uses TC55 and TC56.
 | TC76: a move that would make the count 100 waits for the claim | as TC22, but the game answers false for `canClaimDrawByRepetitionWith(b1, c3)` and true for `canClaimDrawByFiftyMoveWith(b1, c3)`; click b1, then c3; ask `isDrawClaimWithMovePending` | true; the board does not move any piece; the game does not pass the turn | :white_check_mark: |
 | TC77: a waiting fifty-move can be claimed | as TC76, and the game answers false for `canClaimDrawByRepetition` and for `canClaimDrawByFiftyMove`; ask `canClaimDraw` | true | :white_check_mark: |
 | TC78: claiming with a waiting fifty-move ends that draw | as TC76; `claimDraw` | the game ends by fifty-move; the board does not move any piece | :white_check_mark: |
+
+### Method under test: `claimDraw()` and `isDrawClaimWithMovePending()` after a claim with a waiting move
+
+Issue #75. Once a claim with a waiting move ends the game, the move no longer
+waits. Before this case the move stayed waiting, so `BoardView` asked the
+claim question again after every click on the finished game, and declining it
+made the move.
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC79: claiming with a waiting move leaves no move waiting | as TC54; `claimDraw`, then ask `isDrawClaimWithMovePending` | false; the game ends by repetition; the board does not move any piece | :white_check_mark: |
