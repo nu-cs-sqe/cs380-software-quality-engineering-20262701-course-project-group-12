@@ -90,15 +90,7 @@ public class GameStatsControllerTests {
 
     @Test
     void RefreshStatus_AfterTurn_ShowsPlayerTwo() {
-        Game game = createMock(Game.class);
-        expect(game.isStarted()).andStubReturn(true);
-        expect(game.playerOneName()).andStubReturn("Ada");
-        expect(game.playerTwoName()).andStubReturn("Bo");
-        expect(game.playerToMoveName()).andReturn("Ada").andReturn("Bo");
-        expect(game.colorToMove()).andReturn(PieceColor.WHITE).andReturn(PieceColor.BLACK);
-        expect(game.isOver()).andStubReturn(false);
-        expect(game.isPlayerToMoveInCheck()).andStubReturn(false);
-        replay(game);
+        Game game = gameAfterTurnToBlack();
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
 
@@ -356,6 +348,19 @@ public class GameStatsControllerTests {
         GameStatsView view = new GameStatsController(game).createView();
 
         assertEquals(Optional.of(PieceColor.WHITE), view.highlightedColor());
+    }
+
+    private static Game gameAfterTurnToBlack() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andReturn("Ada").andReturn("Bo");
+        expect(game.colorToMove()).andReturn(PieceColor.WHITE).andReturn(PieceColor.BLACK);
+        expect(game.isOver()).andStubReturn(false);
+        expect(game.isPlayerToMoveInCheck()).andStubReturn(false);
+        replay(game);
+        return game;
     }
 
     private static Game gameWonByResignation(String winnerName, PieceColor winnerColor) {
