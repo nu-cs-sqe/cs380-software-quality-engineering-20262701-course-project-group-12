@@ -373,6 +373,8 @@ public class GameStatsControllerTests {
         expect(game.playerOneName()).andStubReturn(playerOneName);
         expect(game.playerTwoName()).andStubReturn(playerTwoName);
         expect(game.playerToMoveName()).andStubReturn(playerToMoveName);
+        expect(game.isOver()).andStubReturn(false);
+        expect(game.isPlayerToMoveInCheck()).andStubReturn(false);
         replay(game);
         return game;
     }

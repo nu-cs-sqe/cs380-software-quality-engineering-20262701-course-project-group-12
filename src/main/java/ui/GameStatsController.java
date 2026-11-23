@@ -25,8 +25,8 @@ public class GameStatsController {
     }
 
     public GameStatsView createView() {
-        view = new GameStatsView(
-                game.playerOneName(), game.playerTwoName(), currentPlayerLine());
+        view = new GameStatsView(game.playerOneName(), game.playerTwoName());
+        refreshStatus();
         return view;
     }
 

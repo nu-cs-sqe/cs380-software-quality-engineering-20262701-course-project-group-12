@@ -10,11 +10,11 @@ public class GameStatsView extends JPanel {
     private final JLabel currentPlayerLabel;
     private String currentPlayerLine;
 
-    public GameStatsView(String whiteName, String blackName, String currentPlayerLine) {
+    public GameStatsView(String whiteName, String blackName) {
         this.whiteName = whiteName;
         this.blackName = blackName;
-        this.currentPlayerLine = currentPlayerLine;
-        this.currentPlayerLabel = new JLabel(currentPlayerLine);
+        this.currentPlayerLine = "";
+        this.currentPlayerLabel = new JLabel();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(new JLabel(blackName));
         add(currentPlayerLabel);
