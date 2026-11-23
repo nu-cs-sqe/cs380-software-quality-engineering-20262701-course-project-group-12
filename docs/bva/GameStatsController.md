@@ -224,3 +224,61 @@ cases are the game-over cases above.
 - **TC22: the result of a game that is over** ( implemented in TC10, TC11, TC13 to TC21 )
     - **State of the system**: the game is over, as in each of those cases.
     - **Expected output**: the same line those cases show
+
+### Issue #76: player cards, turn highlight, and status tone
+
+Issue #76 styles the panel beside the board. Each player gets a card, Black's at
+the top of the column (level with rank 8) and White's at the bottom (level with
+rank 1). The card of the player to move is highlighted, and the status line shows
+check and the result in their own colors.
+
+The cards show each name on its own line in a larger font, so `createView()` now
+gives the view the bare names. Player 1 is always White and Player 2 always Black
+(`Game.start`), so the view takes them as White's and Black's names, and the card
+shows "Player 1 · White" or "Player 2 · Black" under the name. TC4 to TC8 keep
+their states; their expected output changes from the `Player 1: <name> (White)`
+and `Player 2: <name> (Black)` lines to the bare names on White's and Black's
+cards. Their current-player line is unchanged.
+
+`createView()` now shows the status the same way `refreshStatus()` does, so a new
+view already highlights the player to move.
+
+Step 1:
+- input (added): the color to move (`colorToMove()`)
+- output (added): which card is highlighted (White's, Black's, or none), and the
+  tone of the status line (turn, check, or result)
+
+Step 2/3:
+- color to move -> Cases: `WHITE`, `BLACK`
+- game over -> Boolean: false, true (no card is highlighted once the game is over)
+- in check -> Boolean: false, true
+- highlighted card -> Cases: White's, Black's, none
+- status tone -> Cases: turn (not over, not in check), check (not over, in check), result (over)
+
+The result tone covers every way a game ends: they all reach the same
+`isOver()` branch, so one result is enough here. TC10 to TC21 already check
+the text of each result.
+
+- **TC23: a new view highlights White when White is to move** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. The game is not over, `isPlayerToMoveInCheck()` is false, `playerToMoveName()` is Ada, `colorToMove()` is `WHITE`, and `createView()` runs.
+    - **Expected output**: White's card is highlighted
+
+- **TC24: refresh after the turn passes highlights Black** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while `colorToMove()` was `WHITE`. Then the game is not over, `isPlayerToMoveInCheck()` is false, `playerToMoveName()` is Bo, `colorToMove()` is `BLACK`, and `refreshStatus()` runs.
+    - **Expected output**: Black's card is highlighted
+
+- **TC25: refresh after the game is over highlights no card** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while the game was not over and `colorToMove()` was `WHITE`. Then the game is over, `winnerName()` is Bo, `winnerColor()` is `BLACK` (checkmate), and `refreshStatus()` runs.
+    - **Expected output**: no card is highlighted
+
+- **TC26: the turn line has the turn tone** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. The game is not over, `isPlayerToMoveInCheck()` is false, `colorToMove()` is `WHITE`, and `createView()` runs.
+    - **Expected output**: the status line has the turn tone
+
+- **TC27: the check line has the check tone** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is not over, `isPlayerToMoveInCheck()` is true, `playerToMoveName()` is Bo, `colorToMove()` is `BLACK`, and `refreshStatus()` runs.
+    - **Expected output**: the status line has the check tone, and Black's card is still highlighted
+
+- **TC28: the result line has the result tone** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the status line has the result tone
