@@ -20,10 +20,11 @@ public class Main {
         view.fillNames(playerOneName, playerTwoName);
         controller.setView(view);
         window.add(view);
-        window.pack();
+        GameFrame.fitToGameWindow(window);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+        view.playerOneField().requestFocusInWindow();
     }
 
     static WelcomeView createWelcomeView(WelcomeController controller, Runnable closeWindow) {
