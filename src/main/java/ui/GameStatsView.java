@@ -1,5 +1,8 @@
 package ui;
 
+import domain.piece.PieceColor;
+
+import java.util.Optional;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -9,6 +12,7 @@ public class GameStatsView extends JPanel {
     private final String blackName;
     private final JLabel currentPlayerLabel;
     private String currentPlayerLine;
+    private Optional<PieceColor> highlightedColor = Optional.empty();
 
     public GameStatsView(String whiteName, String blackName) {
         this.whiteName = whiteName;
@@ -26,6 +30,11 @@ public class GameStatsView extends JPanel {
         currentPlayerLabel.setText(currentPlayerLine);
     }
 
+    public void showTurn(PieceColor colorToMove, String turnLine) {
+        showCurrentPlayer(turnLine);
+        highlightedColor = Optional.of(colorToMove);
+    }
+
     public String whiteName() {
         return whiteName;
     }
@@ -36,5 +45,9 @@ public class GameStatsView extends JPanel {
 
     public String currentPlayerLine() {
         return currentPlayerLine;
+    }
+
+    public Optional<PieceColor> highlightedColor() {
+        return highlightedColor;
     }
 }

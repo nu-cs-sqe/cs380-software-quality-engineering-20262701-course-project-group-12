@@ -259,7 +259,7 @@ The result tone covers every way a game ends: they all reach the same
 `isOver()` branch, so one result is enough here. TC10 to TC21 already check
 the text of each result.
 
-- **TC23: a new view highlights White when White is to move** ( :x: )
+- **TC23: a new view highlights White when White is to move** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. The game is not over, `isPlayerToMoveInCheck()` is false, `playerToMoveName()` is Ada, `colorToMove()` is `WHITE`, and `createView()` runs.
     - **Expected output**: White's card is highlighted
 

@@ -31,17 +31,13 @@ public class GameStatsController {
     }
 
     public void refreshStatus() {
-        view.showCurrentPlayer(statusLine());
-    }
-
-    private String statusLine() {
         if (game.isOver()) {
-            return resultLine();
+            view.showCurrentPlayer(resultLine());
+        } else if (game.isPlayerToMoveInCheck()) {
+            view.showCurrentPlayer(Messages.format("stats.check", game.playerToMoveName()));
+        } else {
+            view.showTurn(game.colorToMove(), currentPlayerLine());
         }
-        if (game.isPlayerToMoveInCheck()) {
-            return Messages.format("stats.check", game.playerToMoveName());
-        }
-        return currentPlayerLine();
     }
 
     public String resultLine() {

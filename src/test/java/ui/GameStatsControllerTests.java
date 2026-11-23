@@ -4,6 +4,8 @@ import domain.Game;
 import domain.piece.PieceColor;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -33,7 +35,7 @@ public class GameStatsControllerTests {
 
     @Test
     void CreateView_PlayerOneToMove_ShowsSetupLines() {
-        Game game = startedGame("Ada", "Bo", "Ada");
+        Game game = startedGame("Ada", "Bo", "Ada", PieceColor.WHITE);
 
         GameStatsView view = new GameStatsController(game).createView();
 
@@ -44,7 +46,7 @@ public class GameStatsControllerTests {
 
     @Test
     void CreateView_OneCharacterNames_ShowsSetupLines() {
-        Game game = startedGame("A", "B", "A");
+        Game game = startedGame("A", "B", "A", PieceColor.WHITE);
 
         GameStatsView view = new GameStatsController(game).createView();
 
@@ -55,7 +57,7 @@ public class GameStatsControllerTests {
 
     @Test
     void CreateView_NamesWithSpaces_ShowsSetupLines() {
-        Game game = startedGame("Ann Marie", "Li Wei", "Ann Marie");
+        Game game = startedGame("Ann Marie", "Li Wei", "Ann Marie", PieceColor.WHITE);
 
         GameStatsView view = new GameStatsController(game).createView();
 
@@ -66,7 +68,7 @@ public class GameStatsControllerTests {
 
     @Test
     void CreateView_SimilarButDifferentNames_ShowsBothPlayers() {
-        Game game = startedGame("Alex", "Alexa", "Alex");
+        Game game = startedGame("Alex", "Alexa", "Alex", PieceColor.WHITE);
 
         GameStatsView view = new GameStatsController(game).createView();
 
@@ -77,7 +79,7 @@ public class GameStatsControllerTests {
 
     @Test
     void CreateView_PlayerTwoToMove_ShowsPlayerTwoAsCurrent() {
-        Game game = startedGame("Ada", "Bo", "Bo");
+        Game game = startedGame("Ada", "Bo", "Bo", PieceColor.BLACK);
 
         GameStatsView view = new GameStatsController(game).createView();
 
@@ -93,6 +95,7 @@ public class GameStatsControllerTests {
         expect(game.playerOneName()).andStubReturn("Ada");
         expect(game.playerTwoName()).andStubReturn("Bo");
         expect(game.playerToMoveName()).andReturn("Ada").andReturn("Bo");
+        expect(game.colorToMove()).andReturn(PieceColor.WHITE).andReturn(PieceColor.BLACK);
         expect(game.isOver()).andStubReturn(false);
         expect(game.isPlayerToMoveInCheck()).andStubReturn(false);
         replay(game);
@@ -346,6 +349,15 @@ public class GameStatsControllerTests {
         assertEquals("Draw by dead position", view.currentPlayerLine());
     }
 
+    @Test
+    void CreateView_WhiteToMove_HighlightsWhite() {
+        Game game = startedGame("Ada", "Bo", "Ada", PieceColor.WHITE);
+
+        GameStatsView view = new GameStatsController(game).createView();
+
+        assertEquals(Optional.of(PieceColor.WHITE), view.highlightedColor());
+    }
+
     private static Game gameWonByResignation(String winnerName, PieceColor winnerColor) {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);
@@ -366,13 +378,14 @@ public class GameStatsControllerTests {
         return game;
     }
 
-    private static Game startedGame(
-            String playerOneName, String playerTwoName, String playerToMoveName) {
+    private static Game startedGame(String playerOneName, String playerTwoName,
+            String playerToMoveName, PieceColor colorToMove) {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);
         expect(game.playerOneName()).andStubReturn(playerOneName);
         expect(game.playerTwoName()).andStubReturn(playerTwoName);
         expect(game.playerToMoveName()).andStubReturn(playerToMoveName);
+        expect(game.colorToMove()).andStubReturn(colorToMove);
         expect(game.isOver()).andStubReturn(false);
         expect(game.isPlayerToMoveInCheck()).andStubReturn(false);
         replay(game);
