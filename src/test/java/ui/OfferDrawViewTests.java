@@ -1,5 +1,6 @@
 package ui;
 
+import domain.piece.PieceColor;
 import org.junit.jupiter.api.Test;
 
 import java.awt.Component;
@@ -53,6 +54,30 @@ public class OfferDrawViewTests {
         assertEquals("White offers draw", whiteButton(view).getText());
         assertEquals("Black offers draw", blackButton(view).getText());
         verify(boardController);
+    }
+
+    @Test
+    public void WhiteOffer_OpponentAccepts_AsksTheControllerToAccept() {
+        BoardController boardController = createMock(BoardController.class);
+        expect(boardController.canOfferDraw()).andStubReturn(true);
+        boardController.offerDraw(PieceColor.WHITE);
+        expect(boardController.isDrawOffered()).andReturn(true);
+        boardController.acceptDrawOffer();
+        replay(boardController);
+        OfferDrawView view = acceptingView(boardController);
+
+        whiteButton(view).doClick();
+
+        verify(boardController);
+    }
+
+    private static OfferDrawView acceptingView(BoardController boardController) {
+        return new OfferDrawView(boardController, () -> { }) {
+            @Override
+            boolean opponentAccepts() {
+                return true;
+            }
+        };
     }
 
     private static JButton whiteButton(OfferDrawView view) {
