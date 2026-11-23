@@ -271,7 +271,7 @@ the text of each result.
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while the game was not over and `colorToMove()` was `WHITE`. Then the game is over, `winnerName()` is Bo, `winnerColor()` is `BLACK` (checkmate), and `refreshStatus()` runs.
     - **Expected output**: no card is highlighted
 
-- **TC26: the turn line has the turn tone** ( :x: )
+- **TC26: the turn line has the turn tone** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. The game is not over, `isPlayerToMoveInCheck()` is false, `colorToMove()` is `WHITE`, and `createView()` runs.
     - **Expected output**: the status line has the turn tone
 

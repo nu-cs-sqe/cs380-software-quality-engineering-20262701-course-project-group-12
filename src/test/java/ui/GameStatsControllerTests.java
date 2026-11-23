@@ -389,6 +389,15 @@ public class GameStatsControllerTests {
         assertEquals(Optional.empty(), view.highlightedColor());
     }
 
+    @Test
+    void CreateView_NotInCheck_ShowsTurnTone() {
+        Game game = startedGame("Ada", "Bo", "Ada", PieceColor.WHITE);
+
+        GameStatsView view = new GameStatsController(game).createView();
+
+        assertEquals(GameStatsView.StatusTone.TURN, view.statusTone());
+    }
+
     private static Game gameAfterTurnToBlack() {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);

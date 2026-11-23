@@ -8,11 +8,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GameStatsView extends JPanel {
+    public enum StatusTone {
+        TURN
+    }
+
     private final String whiteName;
     private final String blackName;
     private final JLabel currentPlayerLabel;
     private String currentPlayerLine;
     private Optional<PieceColor> highlightedColor = Optional.empty();
+    private StatusTone statusTone = StatusTone.TURN;
 
     public GameStatsView(String whiteName, String blackName) {
         this.whiteName = whiteName;
@@ -54,5 +59,9 @@ public class GameStatsView extends JPanel {
 
     public Optional<PieceColor> highlightedColor() {
         return highlightedColor;
+    }
+
+    public StatusTone statusTone() {
+        return statusTone;
     }
 }
