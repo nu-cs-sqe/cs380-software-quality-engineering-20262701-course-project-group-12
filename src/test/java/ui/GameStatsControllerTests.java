@@ -350,6 +350,17 @@ public class GameStatsControllerTests {
         assertEquals(Optional.of(PieceColor.WHITE), view.highlightedColor());
     }
 
+    @Test
+    void RefreshStatus_AfterTurn_HighlightsBlack() {
+        Game game = gameAfterTurnToBlack();
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals(Optional.of(PieceColor.BLACK), view.highlightedColor());
+    }
+
     private static Game gameAfterTurnToBlack() {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);
