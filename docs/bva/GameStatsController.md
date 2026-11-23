@@ -275,7 +275,7 @@ the text of each result.
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. The game is not over, `isPlayerToMoveInCheck()` is false, `colorToMove()` is `WHITE`, and `createView()` runs.
     - **Expected output**: the status line has the turn tone
 
-- **TC27: the check line has the check tone** ( :x: )
+- **TC27: the check line has the check tone** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is not over, `isPlayerToMoveInCheck()` is true, `playerToMoveName()` is Bo, `colorToMove()` is `BLACK`, and `refreshStatus()` runs.
     - **Expected output**: the status line has the check tone, and Black's card is still highlighted
 

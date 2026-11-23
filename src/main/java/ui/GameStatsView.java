@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 public class GameStatsView extends JPanel {
     public enum StatusTone {
-        TURN
+        TURN, CHECK
     }
 
     private final String whiteName;
@@ -38,6 +38,12 @@ public class GameStatsView extends JPanel {
     public void showTurn(PieceColor colorToMove, String turnLine) {
         showCurrentPlayer(turnLine);
         highlightedColor = Optional.of(colorToMove);
+    }
+
+    public void showCheck(PieceColor colorToMove, String checkLine) {
+        showCurrentPlayer(checkLine);
+        highlightedColor = Optional.of(colorToMove);
+        statusTone = StatusTone.CHECK;
     }
 
     public void showResult(String resultLine) {

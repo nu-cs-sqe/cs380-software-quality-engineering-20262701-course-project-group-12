@@ -34,7 +34,8 @@ public class GameStatsController {
         if (game.isOver()) {
             view.showResult(resultLine());
         } else if (game.isPlayerToMoveInCheck()) {
-            view.showCurrentPlayer(Messages.format("stats.check", game.playerToMoveName()));
+            view.showCheck(game.colorToMove(),
+                    Messages.format("stats.check", game.playerToMoveName()));
         } else {
             view.showTurn(game.colorToMove(), currentPlayerLine());
         }

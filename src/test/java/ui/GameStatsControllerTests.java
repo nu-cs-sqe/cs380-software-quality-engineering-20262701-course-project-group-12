@@ -391,6 +391,18 @@ public class GameStatsControllerTests {
         assertEquals(GameStatsView.StatusTone.TURN, view.statusTone());
     }
 
+    @Test
+    void RefreshStatus_PlayerToMoveInCheck_ShowsCheckToneAndHighlightsBlack() {
+        Game game = gameAfterTurnToBlack(true);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals(GameStatsView.StatusTone.CHECK, view.statusTone());
+        assertEquals(Optional.of(PieceColor.BLACK), view.highlightedColor());
+    }
+
     private static Game gameAfterTurnToBlack(boolean blackInCheck) {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);
