@@ -58,6 +58,30 @@ public class GameStatsControllerTests {
     }
 
     @Test
+    void RefreshStatus_WhiteTimeReduced_ShowsUpdatedWhiteClock() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.colorToMove()).andStubReturn(PieceColor.WHITE);
+        expect(game.isOver()).andStubReturn(false);
+        expect(game.isPlayerToMoveInCheck()).andStubReturn(false);
+        expect(game.remainingTime(PieceColor.WHITE))
+                .andReturn(Duration.ofMinutes(10))
+                .andReturn(Duration.ofMinutes(9).plusSeconds(59));
+        expect(game.remainingTime(PieceColor.BLACK)).andStubReturn(Duration.ofMinutes(10));
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("9:59", view.remainingTime(PieceColor.WHITE));
+        assertEquals("10:00", view.remainingTime(PieceColor.BLACK));
+    }
+
+    @Test
     void CreateView_OneCharacterNames_ShowsSetupLines() {
         Game game = startedGame("A", "B", "A", PieceColor.WHITE);
 

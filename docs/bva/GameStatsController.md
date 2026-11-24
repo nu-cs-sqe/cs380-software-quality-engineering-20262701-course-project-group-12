@@ -351,6 +351,6 @@ Step 2/3:
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `remainingTime(WHITE)` and `remainingTime(BLACK)` are each ten minutes, and `createView()` runs.
     - **Expected output**: White's card shows `10:00`; Black's card shows `10:00`
 
-- **TC34: refresh after White's time drops updates White's clock** ( :x: )
+- **TC34: refresh after White's time drops updates White's clock** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while both remaining times were ten minutes. Then `remainingTime(WHITE)` is nine minutes and fifty-nine seconds, `remainingTime(BLACK)` is still ten minutes, and `refreshStatus()` runs.
     - **Expected output**: White's card shows `9:59`; Black's card shows `10:00`
