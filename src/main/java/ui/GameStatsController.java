@@ -3,6 +3,7 @@ package ui;
 import domain.Game;
 import domain.piece.PieceColor;
 
+import java.time.Duration;
 import java.util.Map;
 
 public class GameStatsController {
@@ -34,6 +35,7 @@ public class GameStatsController {
     }
 
     public void refreshStatus() {
+        refreshClocks();
         if (game.isOver()) {
             view.showResult(resultLine());
         } else if (game.isPlayerToMoveInCheck()) {
@@ -42,6 +44,18 @@ public class GameStatsController {
         } else {
             view.showTurn(game.colorToMove(), currentPlayerLine());
         }
+    }
+
+    private void refreshClocks() {
+        view.showRemainingTime(PieceColor.WHITE, formatClock(game.remainingTime(PieceColor.WHITE)));
+        view.showRemainingTime(PieceColor.BLACK, formatClock(game.remainingTime(PieceColor.BLACK)));
+    }
+
+    private static String formatClock(Duration remaining) {
+        long totalSeconds = remaining.getSeconds();
+        long minutes = totalSeconds / 60;
+        long seconds = totalSeconds % 60;
+        return String.format("%d:%02d", minutes, seconds);
     }
 
     public String resultLine() {

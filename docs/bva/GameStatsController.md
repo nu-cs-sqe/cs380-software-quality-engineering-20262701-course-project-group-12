@@ -347,7 +347,7 @@ Step 2/3:
   White; zero
 - clock text -> Cases: `10:00`; `9:59`; `0:00`
 
-- **TC33: a new view shows both clocks at ten minutes** ( :x: )
+- **TC33: a new view shows both clocks at ten minutes** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `remainingTime(WHITE)` and `remainingTime(BLACK)` are each ten minutes, and `createView()` runs.
     - **Expected output**: White's card shows `10:00`; Black's card shows `10:00`
 
