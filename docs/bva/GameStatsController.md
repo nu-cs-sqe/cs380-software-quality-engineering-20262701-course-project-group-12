@@ -327,3 +327,30 @@ winner. TC22 also covers these results through `resultLine()`.
 - **TC32: refresh after a draw on time** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnOnTime()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw on time`
+
+### Remaining time on each player card
+
+Issue #72 (GitHub US-23, docs US-23). Each player card shows that
+player's remaining time from `game.remainingTime`, so both clocks are
+visible while the game runs (AC 11). Times are shown as minutes and
+seconds (`m:ss`). `createView()` and `refreshStatus()` both refresh the
+clocks. `GameStatsView` and `PlayerCardView` are views, so they have no
+BVA file.
+
+Step 1:
+- input (added): White's remaining time; Black's remaining time
+- output (added): the clock text on White's card; the clock text on Black's
+  card
+
+Step 2/3:
+- remaining time -> Cases: the starting ten minutes; one second less for
+  White; zero
+- clock text -> Cases: `10:00`; `9:59`; `0:00`
+
+- **TC33: a new view shows both clocks at ten minutes** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `remainingTime(WHITE)` and `remainingTime(BLACK)` are each ten minutes, and `createView()` runs.
+    - **Expected output**: White's card shows `10:00`; Black's card shows `10:00`
+
+- **TC34: refresh after White's time drops updates White's clock** ( :x: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while both remaining times were ten minutes. Then `remainingTime(WHITE)` is nine minutes and fifty-nine seconds, `remainingTime(BLACK)` is still ten minutes, and `refreshStatus()` runs.
+    - **Expected output**: White's card shows `9:59`; Black's card shows `10:00`
