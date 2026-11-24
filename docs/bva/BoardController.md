@@ -24,6 +24,7 @@
 - `void resign(PieceColor resigningColor)` (issue #60 / GitHub US-20, docs US-20): passes the resignation to `game.resign(resigningColor)`. `Game` decides who wins and ignores a resignation after the game is over, so the controller only forwards it. Once the game is over, `clickSquare` already refuses further moves (US-20 AC 5), and `canClaimDraw` returns false, so a resignation cannot be turned into a draw (US-20 AC 4).
 - `void declineDrawClaim()` (issue #59): makes the waiting move as usual: the board moves the piece, the game passes the turn, and the checks for checkmate and fivefold repetition run. Issue #51 also checks `game.isSeventyFiveMoveRule()` after checkmate and stalemate and before fivefold repetition, and calls `game.endBySeventyFiveMove()` when the count has reached 150.
 - `void clickSquare(Location square)`, fifty-move (issue #51 / GitHub US-18, docs US-19): when the board answers true for `isLegalMove` and `game.canClaimDrawByFiftyMoveWith(from, to)` is true, and the move is not also a threefold claim, the board does not move yet. The move waits the same way as a threefold claim (US-19 AC 5). After a move passes the turn and is not checkmate or stalemate, `game.isSeventyFiveMoveRule()` ends the game with no claim (US-19 AC 7). Checkmate is checked first, so it still wins (US-19 AC 8).
+- `void checkClock()` (issue #72 / GitHub US-23, docs US-23): passes to `game.checkTime()`. The main window calls it at least once per second so a timeout can end the game (AC 4 and AC 6). `Game` owns the clocks, a loss or draw on time, and ignoring a timeout after the game is already over, so the controller only forwards. Switching clocks after a move or a promotion choice is already `game.passTurn()`.
 - `boolean canOfferDraw()` (issue #61 / GitHub US-21, docs US-21): returns `game.canOfferDraw()`. The view offers Offer Draw only then.
 - `void offerDraw(PieceColor offeringColor)` (issue #61): passes the offer to `game.offerDraw(offeringColor)`.
 - `boolean isDrawOffered()` (issue #61): returns `game.isDrawOffered()`. The view shows the offer to the opponent, with Accept and Decline, only then.
@@ -39,7 +40,7 @@
   does not change them. `OfferDrawView` and `GameFrame` are views, so they have
   no BVA file. The controller cases for the pass-through are TC59 through TC65
   below (already implemented). If this task adds new controller logic, its
-  cases continue after TC95 as TC96 onward.
+  cases continue after TC96 as TC97 onward.
 - `void clickSquare(Location square)`, the piece makes the move (issue #45 / US-12): when the board answers true for `isLegalMove` from the selected square to the clicked square, the controller calls the selected piece's `move(from, to, board)` instead of `board.move(from, to)`, so a castling king also moves its rook (`King.md`). A waiting move that the player declines to claim is made the same way. In every earlier case, "the board moves the piece" now means the selected piece's `move` is called with the controller's board.
 - `void clickSquare(Location square)`, dead position (issue #50 / GitHub US-17, docs US-17): after a move passes the turn, if the player now to move is not checkmated and not stalemated, the controller asks `board.isDeadPosition()`. When the position is dead, it calls `game.endByDeadPosition()`, so the game is a draw. Checkmate and stalemate are asked first. A click after the game is over is already TC40.
 - `boolean isLegalDestination(Location square)` (issue #77): returns true when a piece is selected and `board.isLegalMove` from that square to `square` is true. Legal means the same moves the game accepts: castling, en passant, and moves that keep the king out of check. With nothing selected, every square is false. A piece with no legal moves, including a piece pinned to its king, answers false for every destination. `BoardView` uses it to mark empty destinations with a dot and occupied ones with a ring. It does not change the selection or the board.
@@ -465,6 +466,28 @@ Issue #77. The case numbers start at TC80, after issue #75's TC79. `Board` and `
 | TC94: an empty square while the king is in check | the game answers true for `isPlayerToMoveInCheck`; a3 is empty; ask about a3 | false | :white_check_mark: |
 | TC95: the opponent's king while the player to move is in check | as TC92, but e1 holds the Black king | false | :white_check_mark: |
 
+### Method under test: `checkClock()`
+
+Issue #72 (GitHub US-23, docs US-23). The case number continues after the
+legal-destination cases (TC95, issue #77). The main window asks the
+controller at least once per second to apply a timeout if the player to
+move has no time left (AC 4 and AC 6). `checkClock()` passes that to
+`game.checkTime()`. `Game` owns the clock, the bare-king draw, and
+stopping the clocks when the game is already over, so the controller only
+forwards. `Board` and `Game` are mocked with EasyMock. A click after a
+loss or draw on time is already TC40, because `isOver()` is true.
+Switching clocks on a completed move, including after a promotion choice,
+is already `game.passTurn()` in the move and promotion cases.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: calling `checkClock` | Cases | once |
+| Output: the game | Cases | `checkTime` is called |
+
+| | State of the System | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| TC96: a clock check is passed to the game | a controller for the mocked board and game; `checkClock` | the game is asked to `checkTime` | :white_check_mark: |
+
 ### Offer a draw from the game window (issue #78)
 
 Issue #78 wires Offer Draw into the running window. It does not change
@@ -478,5 +501,5 @@ refreshes status and the game-over dialog the way `ResignView` and
 `OfferDrawView` and `GameFrame` are views, so they have no BVA file and no
 new Step 4 rows here. No new `BoardController` method is planned for this
 task, so there are no new `:x:` controller cases. If implementation adds
-one, its Steps 1–3 and TC96+ cases go in this file before the code, and the
+one, its Steps 1–3 and TC97+ cases go in this file before the code, and the
 view remains a view change after those cases.

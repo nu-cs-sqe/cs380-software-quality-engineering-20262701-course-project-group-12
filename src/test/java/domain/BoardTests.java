@@ -573,6 +573,64 @@ public class BoardTests {
     }
 
     @Test
+    public void HasOnlyKing_WhiteWithBareKing_ReturnsTrue() {
+        Board board = boardHoldingOnly(E1, E8);
+
+        boolean onlyKing = board.hasOnlyKing(PieceColor.WHITE);
+
+        assertTrue(onlyKing);
+    }
+
+    @Test
+    public void HasOnlyKing_BlackWithBareKing_ReturnsTrue() {
+        Board board = boardHoldingOnly(E1, E8);
+
+        boolean onlyKing = board.hasOnlyKing(PieceColor.BLACK);
+
+        assertTrue(onlyKing);
+    }
+
+    @Test
+    public void HasOnlyKing_WhiteWithKingAndQueen_ReturnsFalse() {
+        Board board = boardHoldingOnly(E1, E8, D1);
+
+        boolean onlyKing = board.hasOnlyKing(PieceColor.WHITE);
+
+        assertFalse(onlyKing);
+    }
+
+    @Test
+    public void HasOnlyKing_StartingPosition_ReturnsFalse() {
+        Board board = new Board();
+
+        boolean onlyKing = board.hasOnlyKing(PieceColor.WHITE);
+
+        assertFalse(onlyKing);
+    }
+
+    @Test
+    public void HasOnlyKing_WhiteBareKingWhileBlackHasQueen_ReturnsTrue() {
+        Board board = boardHoldingOnly(E1, E8, D8);
+
+        boolean onlyKing = board.hasOnlyKing(PieceColor.WHITE);
+
+        assertTrue(onlyKing);
+    }
+
+    @Test
+    public void HasOnlyKing_WhiteBareKing_LeavesTheBoardUnchanged() {
+        Board board = boardHoldingOnly(E1, E8);
+        Piece whiteKing = board.pieceAt(E1);
+        Piece blackKing = board.pieceAt(E8);
+
+        board.hasOnlyKing(PieceColor.WHITE);
+
+        assertSame(whiteKing, board.pieceAt(E1));
+        assertSame(blackKing, board.pieceAt(E8));
+        assertEquals(TWO_KINGS, countPieces(board));
+    }
+
+    @Test
     public void IsInCheck_NewBoard_ReturnsFalse() {
         Board board = new Board();
 

@@ -103,6 +103,14 @@ public class GameStatsView extends JPanel {
         statusControls.add(control);
     }
 
+    public void showRemainingTime(PieceColor color, String time) {
+        cards.get(color).showRemainingTime(time);
+    }
+
+    public String remainingTime(PieceColor color) {
+        return cards.get(color).remainingTime();
+    }
+
     public void showTurn(PieceColor colorToMove, String turnLine) {
         show(turnLine, Optional.of(colorToMove), StatusTone.TURN);
     }

@@ -3,6 +3,7 @@ package ui;
 import domain.Game;
 import domain.piece.PieceColor;
 
+import java.time.Duration;
 import java.util.Map;
 
 public class GameStatsController {
@@ -12,6 +13,9 @@ public class GameStatsController {
     private static final Map<PieceColor, String> RESIGNATION_KEYS = Map.of(
             PieceColor.WHITE, "stats.resignation.white",
             PieceColor.BLACK, "stats.resignation.black");
+    private static final Map<PieceColor, String> ON_TIME_KEYS = Map.of(
+            PieceColor.WHITE, "stats.onTime.white",
+            PieceColor.BLACK, "stats.onTime.black");
 
     private final Game game;
     private GameStatsView view;
@@ -31,6 +35,7 @@ public class GameStatsController {
     }
 
     public void refreshStatus() {
+        refreshClocks();
         if (game.isOver()) {
             view.showResult(resultLine());
         } else if (game.isPlayerToMoveInCheck()) {
@@ -39,6 +44,18 @@ public class GameStatsController {
         } else {
             view.showTurn(game.colorToMove(), currentPlayerLine());
         }
+    }
+
+    private void refreshClocks() {
+        view.showRemainingTime(PieceColor.WHITE, formatClock(game.remainingTime(PieceColor.WHITE)));
+        view.showRemainingTime(PieceColor.BLACK, formatClock(game.remainingTime(PieceColor.BLACK)));
+    }
+
+    private static String formatClock(Duration remaining) {
+        long totalSeconds = remaining.getSeconds();
+        long minutes = totalSeconds / 60;
+        long seconds = totalSeconds % 60;
+        return String.format("%d:%02d", minutes, seconds);
     }
 
     public String resultLine() {
@@ -59,6 +76,12 @@ public class GameStatsController {
         }
         if (game.isDrawnBySeventyFiveMove()) {
             return Messages.text("stats.drawBySeventyFiveMove");
+        }
+        if (game.isDrawnOnTime()) {
+            return Messages.text("stats.drawOnTime");
+        }
+        if (game.isWonOnTime()) {
+            return winnerLine(ON_TIME_KEYS);
         }
         if (game.isWonByResignation()) {
             return winnerLine(RESIGNATION_KEYS);

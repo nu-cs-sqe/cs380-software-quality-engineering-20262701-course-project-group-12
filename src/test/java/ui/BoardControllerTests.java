@@ -717,6 +717,16 @@ public class BoardControllerTests {
     }
 
     @Test
+    public void CheckClock_GameInProgress_AsksTheGameToCheckTime() {
+        game.checkTime();
+        BoardController controller = replayedController();
+
+        controller.checkClock();
+
+        verify(board, piece, game);
+    }
+
+    @Test
     public void CanOfferDraw_GameRefusesAnOffer_ReturnsFalse() {
         expect(game.canOfferDraw()).andStubReturn(false);
         BoardController controller = replayedController();

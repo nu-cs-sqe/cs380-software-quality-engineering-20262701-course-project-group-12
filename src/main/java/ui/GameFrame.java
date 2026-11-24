@@ -7,8 +7,11 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import javax.swing.JFrame;
+import javax.swing.Timer;
 
 public class GameFrame extends JFrame {
+    private static final int CLOCK_TICK_MILLIS = 1000;
+
     public GameFrame(Game game) {
         GameStatsController stats = new GameStatsController(game);
         BoardController boardController = new BoardController(game.board(), game);
@@ -37,10 +40,22 @@ public class GameFrame extends JFrame {
         statsView.addStatusControl(drawClaim);
         statsView.addStatusControl(offerDraw);
         arrange(getContentPane(), statsView, new BoardView(boardController, afterAction));
+        startClockTicker(boardController, afterAction);
         setTitle(Messages.text("game.window.title"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fitToGameWindow(this);
         setLocationRelativeTo(null);
+    }
+
+    static void onClockTick(BoardController boardController, Runnable afterTick) {
+        boardController.checkClock();
+        afterTick.run();
+    }
+
+    private static void startClockTicker(BoardController boardController, Runnable afterTick) {
+        Timer ticker = new Timer(CLOCK_TICK_MILLIS,
+                event -> onClockTick(boardController, afterTick));
+        ticker.start();
     }
 
     static void fitToGameWindow(JFrame window) {
