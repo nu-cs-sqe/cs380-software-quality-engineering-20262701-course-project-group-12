@@ -34,11 +34,8 @@ public class GameFrame extends JFrame {
         };
         GameStatsView statsView = stats.createView();
         ResignView resign = new ResignView(boardController, afterAction);
-        for (PieceColor color : PieceColor.values()) {
-            statsView.addPlayerControl(color, resign.buttonFor(color));
-        }
+        addPlayerControls(statsView, resign, offerDraw);
         statsView.addStatusControl(drawClaim);
-        statsView.addStatusControl(offerDraw);
         arrange(getContentPane(), statsView, new BoardView(boardController, afterAction));
         startClockTicker(boardController, afterAction);
         setTitle(Messages.text("game.window.title"));
@@ -71,7 +68,11 @@ public class GameFrame extends JFrame {
         container.add(boardView, BorderLayout.CENTER);
     }
 
-    static void addOfferDrawControl(GameStatsView statsView, OfferDrawView offerDraw) {
-        statsView.addStatusControl(offerDraw);
+    static void addPlayerControls(
+            GameStatsView statsView, ResignView resign, OfferDrawView offerDraw) {
+        for (PieceColor color : PieceColor.values()) {
+            statsView.addPlayerControl(color, resign.buttonFor(color));
+            statsView.addPlayerControl(color, offerDraw.buttonFor(color));
+        }
     }
 }

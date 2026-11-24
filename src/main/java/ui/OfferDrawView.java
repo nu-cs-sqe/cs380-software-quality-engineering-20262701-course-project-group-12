@@ -2,34 +2,38 @@ package ui;
 
 import domain.piece.PieceColor;
 
-import java.awt.Component;
+import java.util.EnumMap;
+import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
-public class OfferDrawView extends JPanel {
+public class OfferDrawView {
+    private final Map<PieceColor, JButton> buttons = new EnumMap<>(PieceColor.class);
     private final BoardController boardController;
     private final Runnable afterOffer;
 
     public OfferDrawView(BoardController boardController, Runnable afterOffer) {
         this.boardController = boardController;
         this.afterOffer = afterOffer;
-        addOfferButton("draw.offer.white", PieceColor.WHITE);
-        addOfferButton("draw.offer.black", PieceColor.BLACK);
+        for (PieceColor color : PieceColor.values()) {
+            buttons.put(color, offerButton(color));
+        }
         refresh();
     }
 
     public void refresh() {
         boolean canOffer = boardController.canOfferDraw();
-        for (Component button : getComponents()) {
-            button.setEnabled(canOffer);
-        }
+        buttons.values().forEach(button -> button.setEnabled(canOffer));
     }
 
-    private void addOfferButton(String textKey, PieceColor offeringColor) {
-        JButton button = new JButton(Messages.text(textKey));
+    public JButton buttonFor(PieceColor color) {
+        return buttons.get(color);
+    }
+
+    private JButton offerButton(PieceColor offeringColor) {
+        JButton button = new JButton(Messages.text("draw.offer"));
         button.addActionListener(event -> offer(offeringColor));
-        add(button);
+        return button;
     }
 
     private void offer(PieceColor offeringColor) {
@@ -47,7 +51,7 @@ public class OfferDrawView extends JPanel {
 
     boolean opponentAccepts() {
         int answer = JOptionPane.showConfirmDialog(
-                this,
+                buttons.get(PieceColor.WHITE).getTopLevelAncestor(),
                 Messages.text("draw.offer.question"),
                 Messages.text("draw.offer.title"),
                 JOptionPane.YES_NO_OPTION);
