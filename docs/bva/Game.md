@@ -1031,3 +1031,167 @@ f3 to g1, and f6 to g8, each `board().move` then `passTurn()`. It adds 4.
   - **State of the system**: `start("Alice", "Bob")` has completed, then
     `endByFiftyMove()`.
   - **Expected output**: Throws `IllegalStateException`.
+
+### Methods under test: `remainingTime(PieceColor color)`, `checkTime()`, `passTurn()` with the clock, `isWonOnTime()`, and `isDrawnOnTime()`
+
+Issue #72 (GitHub US-23, docs US-23). `Game` owns a `ChessClock` that reads
+time from an injected `java.time.Clock`. A no-arg `Game` uses the system
+clock. Tests construct `Game(Clock)` so they can advance time instantly.
+`start` creates the clock: both players have ten minutes, and White's clock
+is running (AC 1 and AC 2). The ten-minute starting time is a named constant
+on `ChessClock`, not a magic number.
+
+- `remainingTime(color)` returns what the clock reports for that player,
+  never less than zero (AC 5).
+- `passTurn()` also switches the clocks, so the mover's clock stops and the
+  opponent's starts (AC 3). A promotion finishes with `passTurn` after the
+  choice, so that switch is the same path.
+- `checkTime()` ends the game when the player to move has no time left and
+  the game is still in progress (AC 6). The opponent wins on time unless
+  that opponent has only a bare king, in which case the game is drawn
+  (AC 7). Both clocks stop. When the game is already over, `checkTime`
+  changes nothing (AC 8).
+- `isWonOnTime()` and `isDrawnOnTime()` let `GameStatsController` show the
+  result (AC 10).
+- Every way the game ends (`endByCheckmate`, `endByStalemate`,
+  `endByRepetition`, `endByDeadPosition`, `endByFiftyMove`,
+  `endBySeventyFiveMove`, `resign`, `acceptDrawOffer`) stops both clocks
+  and keeps the remaining times (AC 8). A later `checkTime` then does
+  nothing.
+- Dialogs (promotion, draw offer, draw claim, resignation) do not call
+  `passTurn` or `stop` until the action finishes, so the active clock keeps
+  running (AC 9). That needs no separate case beyond leaving the clock
+  running until `passTurn` or an ending method.
+
+`ChessClock` owns the countdown math. These cases check that `Game` starts
+the clock, switches it on a move, ends on time, and stops it when the game
+ends another way. Bare-king detection is `board().hasOnlyKing` (Board TC130
+onward); the game asks the real board after a start.
+
+| Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
+| --- | --- | --- |
+| Input: elapsed time on the player to move's clock | Interval at the edges 0 and the starting time | 0 ms after start; starting time − 1 ms; starting time; starting time + 1 ms |
+| Input: the player to move when time runs out | Cases | White (at the start); Black (after one `passTurn`) |
+| Input: whether the opponent has only a bare king | Boolean | false (starting material); true (only that player's king left with the other king) |
+| Input: the game's state when `checkTime` runs | Cases | in progress; over by checkmate; over by resignation; drawn by agreement |
+| Input: `color` for `remainingTime` | Cases | White; Black |
+| Output: `remainingTime` | Interval floored at zero | starting time; starting time − 1 ms; 0 |
+| Output: `isOver()`, `isWonOnTime()`, `isDrawnOnTime()` | Boolean | true; false |
+| Output: the winner after a loss on time | Cases | Player 2 / Black when White times out; Player 1 / White when Black times out; none when drawn on time |
+| Output: signal for an unstarted game | Cases | `IllegalStateException` |
+
+- **TC-TIME-01 — Both clocks start at ten minutes** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`,
+    `remainingTime(PieceColor)`
+  - **State of the system**: `Game` with a fixed clock at `T0`;
+    `start("Alice", "Bob")` has completed.
+  - **Expected output**: `remainingTime(WHITE)` is the starting time;
+    `remainingTime(BLACK)` is the starting time.
+
+- **TC-TIME-02 — White's clock counts down before a move** ( :white_check_mark: )
+  - **Method(s) under test**: `remainingTime(PieceColor)`
+  - **State of the system**: As TC-TIME-01, then the clock advances by 1 ms.
+  - **Expected output**: `remainingTime(WHITE)` is the starting time minus
+    1 ms; `remainingTime(BLACK)` is still the starting time.
+
+- **TC-TIME-03 — Passing the turn switches the clocks** ( :white_check_mark: )
+  - **Method(s) under test**: `passTurn()`, `remainingTime(PieceColor)`
+  - **State of the system**: As TC-TIME-02, then `passTurn()`, then the
+    clock advances by 1 ms more.
+  - **Expected output**: `remainingTime(WHITE)` stays at the starting time
+    minus 1 ms; `remainingTime(BLACK)` is the starting time minus 1 ms.
+
+- **TC-TIME-04 — A started game is not won or drawn on time** ( :white_check_mark: )
+  - **Method(s) under test**: `start(String, String)`, `isWonOnTime()`,
+    `isDrawnOnTime()`
+  - **State of the system**: As TC-TIME-01.
+  - **Expected output**: `isWonOnTime()` returns `false`;
+    `isDrawnOnTime()` returns `false`.
+
+- **TC-TIME-05 — White loses on time when Black has mating material**
+  ( :white_check_mark: )
+  - **Method(s) under test**: `checkTime()`, `isOver()`, `isWonOnTime()`,
+    `winnerName()`, `winnerColor()`
+  - **State of the system**: As TC-TIME-01, so White is to move and the
+    starting board still has Black's pieces, then the clock advances by the
+    starting time, then `checkTime()`.
+  - **Expected output**: `isOver()` returns `true`; `isWonOnTime()` returns
+    `true`; `winnerName()` returns `Bob`; `winnerColor()` returns `BLACK`.
+
+- **TC-TIME-06 — Black loses on time when White has mating material**
+  ( :white_check_mark: )
+  - **Method(s) under test**: `passTurn()`, `checkTime()`, `isWonOnTime()`,
+    `winnerName()`, `winnerColor()`
+  - **State of the system**: As TC-TIME-01, then `passTurn()` so Black is to
+    move, then the clock advances by the starting time, then `checkTime()`.
+  - **Expected output**: `isWonOnTime()` returns `true`; `winnerName()`
+    returns `Alice`; `winnerColor()` returns `WHITE`.
+
+- **TC-TIME-07 — One millisecond left does not end the game** ( :white_check_mark: )
+  - **Method(s) under test**: `checkTime()`, `isOver()`
+  - **State of the system**: As TC-TIME-01, then the clock advances by the
+    starting time minus 1 ms, then `checkTime()`.
+  - **Expected output**: `isOver()` returns `false`.
+
+- **TC-TIME-08 — Time past zero still ends as a loss on time** ( :white_check_mark: )
+  - **Method(s) under test**: `checkTime()`, `isWonOnTime()`,
+    `remainingTime(PieceColor)`
+  - **State of the system**: As TC-TIME-01, then the clock advances by the
+    starting time plus 1 ms, then `checkTime()`.
+  - **Expected output**: `isWonOnTime()` returns `true`;
+    `remainingTime(WHITE)` is zero.
+
+- **TC-TIME-09 — A bare-king opponent makes a draw on time** ( :white_check_mark: )
+  - **Method(s) under test**: `checkTime()`, `isOver()`, `isDrawnOnTime()`,
+    `isWonOnTime()`
+  - **State of the system**: As TC-TIME-01, then every piece except the two
+    kings is removed from the board by captures so Black has only a bare
+    king, White is still to move, the clock advances by the starting time,
+    then `checkTime()`.
+  - **Expected output**: `isOver()` returns `true`; `isDrawnOnTime()`
+    returns `true`; `isWonOnTime()` returns `false`.
+
+- **TC-TIME-10 — Ending on time stops both clocks** ( :white_check_mark: )
+  - **Method(s) under test**: `checkTime()`, `remainingTime(PieceColor)`
+  - **State of the system**: As TC-TIME-05, then the clock advances by the
+    starting time again.
+  - **Expected output**: `remainingTime(WHITE)` stays at zero;
+    `remainingTime(BLACK)` stays at the starting time.
+
+- **TC-TIME-11 — Checkmate stops the clocks before a timeout can apply**
+  ( :white_check_mark: )
+  - **Method(s) under test**: `endByCheckmate()`, `checkTime()`,
+    `isWonOnTime()`, `remainingTime(PieceColor)`
+  - **State of the system**: As TC-TIME-02, so White has used 1 ms, then
+    `endByCheckmate()`, then the clock advances by the starting time, then
+    `checkTime()`.
+  - **Expected output**: `isWonOnTime()` returns `false`;
+    `remainingTime(WHITE)` stays at the starting time minus 1 ms;
+    `winnerName()` still returns `Bob`.
+
+- **TC-TIME-12 — Resignation stops the clocks** ( :white_check_mark: )
+  - **Method(s) under test**: `resign(PieceColor)`, `checkTime()`,
+    `isWonOnTime()`, `isWonByResignation()`
+  - **State of the system**: As TC-TIME-02, then `resign(WHITE)`, then the
+    clock advances by the starting time, then `checkTime()`.
+  - **Expected output**: `isWonByResignation()` returns `true`;
+    `isWonOnTime()` returns `false`.
+
+- **TC-TIME-13 — A draw by agreement stops the clocks** ( :white_check_mark: )
+  - **Method(s) under test**: `passTurn()`, `offerDraw(PieceColor)`,
+    `acceptDrawOffer()`, `checkTime()`, `isDrawnOnTime()`
+  - **State of the system**: As TC-TIME-01, then `passTurn()` twice,
+    `offerDraw(WHITE)`, `acceptDrawOffer()`, then the clock advances by the
+    starting time, then `checkTime()`.
+  - **Expected output**: `isDrawnByAgreement()` returns `true`;
+    `isDrawnOnTime()` returns `false`.
+
+- **TC-TIME-14 — Reject reading remaining time before a start** ( :white_check_mark: )
+  - **Method(s) under test**: `remainingTime(PieceColor)`
+  - **State of the system**: New `Game` before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.
+
+- **TC-TIME-15 — Reject checking time before a start** ( :white_check_mark: )
+  - **Method(s) under test**: `checkTime()`
+  - **State of the system**: New `Game` before a successful `start`.
+  - **Expected output**: Throws `IllegalStateException`.

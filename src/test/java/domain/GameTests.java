@@ -4,6 +4,14 @@ import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import org.junit.jupiter.api.Test;
 
+import java.time.Clock;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -18,10 +26,12 @@ public class GameTests {
     private static final Location C6 = new Location(2, 6);
     private static final Location D1 = new Location(3, 1);
     private static final Location D8 = new Location(3, 8);
+    private static final Location E1 = new Location(4, 1);
     private static final Location E2 = new Location(4, 2);
     private static final Location E4 = new Location(4, 4);
     private static final Location E5 = new Location(4, 5);
     private static final Location E7 = new Location(4, 7);
+    private static final Location E8 = new Location(4, 8);
     private static final Location F2 = new Location(5, 2);
     private static final Location F3 = new Location(5, 3);
     private static final Location F6 = new Location(5, 6);
@@ -40,6 +50,8 @@ public class GameTests {
     private static final int ROUND_TRIPS_FOR_ONE_HUNDRED_HALF_MOVES = 25;
     private static final int ROUND_TRIPS_FOR_ONE_HUNDRED_FORTY_NINE_HALF_MOVES = 37;
     private static final int MOVES_BY_BOTH_PLAYERS = 2;
+    private static final Instant CLOCK_START = Instant.parse("2026-01-01T00:00:00Z");
+    private static final Duration ONE_MILLISECOND = Duration.ofMillis(1);
 
     @Test
     public void IsStarted_NewGame_ReturnsFalse() {
@@ -1090,6 +1102,205 @@ public class GameTests {
         assertThrows(IllegalStateException.class, game::winnerName);
     }
 
+    @Test
+    public void RemainingTime_AtStart_IsStartingTimeForBothPlayers() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+
+        assertEquals(ChessClock.STARTING_TIME, game.remainingTime(PieceColor.WHITE));
+        assertEquals(ChessClock.STARTING_TIME, game.remainingTime(PieceColor.BLACK));
+    }
+
+    @Test
+    public void RemainingTime_AfterOneMillisecond_WhiteHasUsedOneMillisecond() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+
+        clock.advance(ONE_MILLISECOND);
+
+        assertEquals(ChessClock.STARTING_TIME.minus(ONE_MILLISECOND),
+                game.remainingTime(PieceColor.WHITE));
+        assertEquals(ChessClock.STARTING_TIME, game.remainingTime(PieceColor.BLACK));
+    }
+
+    @Test
+    public void PassTurn_AfterWhiteUsedOneMillisecond_SwitchesTheClocks() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        clock.advance(ONE_MILLISECOND);
+
+        game.passTurn();
+        clock.advance(ONE_MILLISECOND);
+
+        assertEquals(ChessClock.STARTING_TIME.minus(ONE_MILLISECOND),
+                game.remainingTime(PieceColor.WHITE));
+        assertEquals(ChessClock.STARTING_TIME.minus(ONE_MILLISECOND),
+                game.remainingTime(PieceColor.BLACK));
+    }
+
+    @Test
+    public void IsWonOnTime_StartedGame_ReturnsFalse() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+
+        assertFalse(game.isWonOnTime());
+        assertFalse(game.isDrawnOnTime());
+    }
+
+    @Test
+    public void CheckTime_WhiteOutOfTimeWithBlackMatingMaterial_BobWinsOnTime() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        clock.advance(ChessClock.STARTING_TIME);
+
+        game.checkTime();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isWonOnTime());
+        assertEquals("Bob", game.winnerName());
+        assertEquals(PieceColor.BLACK, game.winnerColor());
+    }
+
+    @Test
+    public void CheckTime_BlackOutOfTimeWithWhiteMatingMaterial_AliceWinsOnTime() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        game.passTurn();
+        clock.advance(ChessClock.STARTING_TIME);
+
+        game.checkTime();
+
+        assertTrue(game.isWonOnTime());
+        assertEquals("Alice", game.winnerName());
+        assertEquals(PieceColor.WHITE, game.winnerColor());
+    }
+
+    @Test
+    public void CheckTime_OneMillisecondLeft_DoesNotEndTheGame() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        clock.advance(ChessClock.STARTING_TIME.minusMillis(1));
+
+        game.checkTime();
+
+        assertFalse(game.isOver());
+    }
+
+    @Test
+    public void CheckTime_TimePastZero_StillEndsAsLossOnTime() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        clock.advance(ChessClock.STARTING_TIME.plusMillis(1));
+
+        game.checkTime();
+
+        assertTrue(game.isWonOnTime());
+        assertEquals(Duration.ZERO, game.remainingTime(PieceColor.WHITE));
+    }
+
+    @Test
+    public void CheckTime_OpponentHasOnlyBareKing_DrawsOnTime() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        leaveOnlyKings(game.board());
+        clock.advance(ChessClock.STARTING_TIME);
+
+        game.checkTime();
+
+        assertTrue(game.isOver());
+        assertTrue(game.isDrawnOnTime());
+        assertFalse(game.isWonOnTime());
+    }
+
+    @Test
+    public void CheckTime_EndingOnTime_StopsBothClocks() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        clock.advance(ChessClock.STARTING_TIME);
+        game.checkTime();
+        game.passTurn();
+        clock.advance(ChessClock.STARTING_TIME);
+
+        assertEquals(Duration.ZERO, game.remainingTime(PieceColor.WHITE));
+        assertEquals(ChessClock.STARTING_TIME, game.remainingTime(PieceColor.BLACK));
+    }
+
+    @Test
+    public void CheckTime_AfterCheckmate_DoesNotApplyTimeout() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        clock.advance(ONE_MILLISECOND);
+        game.endByCheckmate();
+        clock.advance(ChessClock.STARTING_TIME);
+
+        game.checkTime();
+
+        assertFalse(game.isWonOnTime());
+        assertEquals(ChessClock.STARTING_TIME.minus(ONE_MILLISECOND),
+                game.remainingTime(PieceColor.WHITE));
+        assertEquals("Bob", game.winnerName());
+    }
+
+    @Test
+    public void CheckTime_AfterResignation_DoesNotApplyTimeout() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        clock.advance(ONE_MILLISECOND);
+        game.resign(PieceColor.WHITE);
+        clock.advance(ChessClock.STARTING_TIME);
+
+        game.checkTime();
+
+        assertTrue(game.isWonByResignation());
+        assertFalse(game.isWonOnTime());
+    }
+
+    @Test
+    public void CheckTime_AfterDrawByAgreement_DoesNotApplyTimeout() {
+        ControllableClock clock = new ControllableClock(CLOCK_START);
+        Game game = new Game(clock);
+        game.start("Alice", "Bob");
+        game.passTurn();
+        game.passTurn();
+        game.offerDraw(PieceColor.WHITE);
+        game.acceptDrawOffer();
+        clock.advance(ChessClock.STARTING_TIME);
+
+        game.checkTime();
+
+        assertTrue(game.isDrawnByAgreement());
+        assertFalse(game.isDrawnOnTime());
+        assertFalse(game.isWonOnTime());
+        assertEquals(ChessClock.STARTING_TIME, game.remainingTime(PieceColor.WHITE));
+    }
+
+    @Test
+    public void RemainingTime_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class,
+                () -> game.remainingTime(PieceColor.WHITE));
+    }
+
+    @Test
+    public void CheckTime_UnstartedGame_ThrowsIllegalStateException() {
+        Game game = new Game();
+
+        assertThrows(IllegalStateException.class, game::checkTime);
+    }
+
     private static Game gameAfterMoves(int moves) {
         Game game = new Game();
         game.start("Alice", "Bob");
@@ -1097,5 +1308,70 @@ public class GameTests {
             game.passTurn();
         }
         return game;
+    }
+
+    private static void leaveOnlyKings(Board board) {
+        leaveOnly(board, E1, E8);
+    }
+
+    private static void leaveOnly(Board board, Location... kept) {
+        List<Location> extras = extrasOn(board, kept);
+        Location capturer = extras.get(0);
+        for (int i = 1; i < extras.size(); i++) {
+            Location target = extras.get(i);
+            board.move(capturer, target);
+            capturer = target;
+        }
+        board.move(E1, capturer);
+        board.move(capturer, E1);
+    }
+
+    private static List<Location> extrasOn(Board board, Location[] kept) {
+        List<Location> extras = new ArrayList<>();
+        for (int file = Location.MIN_FILE; file <= Location.MAX_FILE; file++) {
+            for (int rank = Location.MIN_RANK; rank <= Location.MAX_RANK; rank++) {
+                Location square = new Location(file, rank);
+                if (board.isOccupied(square) && !isKept(square, kept)) {
+                    extras.add(square);
+                }
+            }
+        }
+        return extras;
+    }
+
+    private static boolean isKept(Location square, Location[] kept) {
+        for (Location keep : kept) {
+            if (square.isSameSquareAs(keep)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static final class ControllableClock extends Clock {
+        private Instant instant;
+
+        private ControllableClock(Instant start) {
+            instant = start;
+        }
+
+        private void advance(Duration amount) {
+            instant = instant.plus(amount);
+        }
+
+        @Override
+        public ZoneOffset getZone() {
+            return ZoneOffset.UTC;
+        }
+
+        @Override
+        public Clock withZone(ZoneId zone) {
+            return Clock.fixed(instant, zone);
+        }
+
+        @Override
+        public Instant instant() {
+            return instant;
+        }
     }
 }

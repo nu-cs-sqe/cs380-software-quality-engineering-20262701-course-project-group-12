@@ -2,6 +2,8 @@ package domain;
 
 import domain.piece.PieceColor;
 
+import java.time.Clock;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,12 +16,14 @@ public class Game {
     private static final int ONE_MORE_OCCURRENCE = 1;
     private static final int MOVES_BY_BOTH_PLAYERS = 2;
 
+    private final Clock timeSource;
     private final List<Position> positions = new ArrayList<>();
     private boolean started;
     private Player playerOne;
     private Player playerTwo;
     private Player playerToMove;
     private Board board;
+    private ChessClock chessClock;
     private Optional<Player> winner = Optional.empty();
     private boolean stalemate;
     private boolean drawnByRepetition;
@@ -30,6 +34,16 @@ public class Game {
     private boolean drawnByAgreement;
     private boolean drawnByFiftyMove;
     private boolean drawnBySeventyFiveMove;
+    private boolean wonOnTime;
+    private boolean drawnOnTime;
+
+    public Game() {
+        this(Clock.systemUTC());
+    }
+
+    public Game(Clock timeSource) {
+        this.timeSource = timeSource;
+    }
 
     public void start(String player1Name, String player2Name) {
         if (player1Name.trim().isEmpty() || player2Name.trim().isEmpty()) {
@@ -43,8 +57,35 @@ public class Game {
         playerTwo = new Player(player2Name, PieceColor.BLACK);
         playerToMove = playerOne;
         board = new Board();
+        chessClock = new ChessClock(timeSource);
         started = true;
         recordPosition();
+    }
+
+    public Duration remainingTime(PieceColor color) {
+        requireStartedTo("read remaining time");
+        return chessClock.remaining(color);
+    }
+
+    public void checkTime() {
+        if (!remainingTime(colorToMove()).isZero()) {
+            return;
+        }
+        chessClock.stop();
+        if (board.hasOnlyKing(playerWaiting().getColor())) {
+            drawnOnTime = true;
+            return;
+        }
+        winner = Optional.of(playerWaiting());
+        wonOnTime = true;
+    }
+
+    public boolean isWonOnTime() {
+        return wonOnTime;
+    }
+
+    public boolean isDrawnOnTime() {
+        return drawnOnTime;
     }
 
     public void passTurn() {
@@ -53,6 +94,7 @@ public class Game {
         playerToMove = playerWaiting();
         movesMade++;
         recordPosition();
+        chessClock.switchTurn();
     }
 
     private void keepDrawOfferOnlyIfMadeBy(PieceColor movingColor) {
@@ -69,6 +111,7 @@ public class Game {
 
     public void endByCheckmate() {
         requireStartedTo("end the game");
+        chessClock.stop();
         winner = Optional.of(playerWaiting());
     }
 
@@ -145,6 +188,7 @@ public class Game {
         if (isOver()) {
             return;
         }
+        chessClock.stop();
         winner = Optional.of(playerOtherThan(resigningColor));
         wonByResignation = true;
     }
@@ -177,6 +221,7 @@ public class Game {
 
     public void acceptDrawOffer() {
         if (isDrawOffered()) {
+            chessClock.stop();
             drawnByAgreement = true;
         }
     }
@@ -209,7 +254,8 @@ public class Game {
 
     public boolean isOver() {
         return winner.isPresent() || stalemate || drawnByRepetition || drawnByAgreement
-                || drawnByDeadPosition || drawnByFiftyMove || drawnBySeventyFiveMove;
+                || drawnByDeadPosition || drawnByFiftyMove || drawnBySeventyFiveMove
+                || drawnOnTime;
     }
 
     public boolean isStalemate() {

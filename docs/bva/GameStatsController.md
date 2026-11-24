@@ -290,3 +290,67 @@ a new view, so it does not cover this.
 - **TC29: the turn line after a check has the turn tone again** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while the game was not over, `isPlayerToMoveInCheck()` was true, and `colorToMove()` was `WHITE`. Then the game is not over, `isPlayerToMoveInCheck()` is false, `playerToMoveName()` is Bo, `colorToMove()` is `BLACK`, and `refreshStatus()` runs.
     - **Expected output**: the status line has the turn tone
+
+Issue #72 (GitHub US-23, docs US-23). The case numbers continue after the
+player-panel cases (TC29, issue #76). After a loss on time, the same line
+shows the winner's name and color and that the game was won on time
+(US-23 AC 10). After a draw on time under AC 7, the line shows a draw on
+time. Both clock labels and these result messages come from the Messages
+resource bundle (AC 11). `isDrawnOnTime()` is asked before `winnerName()`,
+so a draw never reads the winner. `isWonOnTime()` is asked before the
+checkmate line, so a win on time is not shown as checkmate.
+
+Step 1:
+- input (added): whether the game is won on time (`isWonOnTime()`); whether
+  it is drawn on time (`isDrawnOnTime()`)
+
+Step 2/3:
+- result of a game that is over -> Cases (added): win on time; draw on time
+- output (added):
+  - `On time: <winner's name> (<winner's color>) wins` once the other player
+    has lost on time
+  - `Draw on time` once the game is drawn because the opponent had only a
+    bare king
+
+TC10, TC11, and TC13 still hold: the game answers false for
+`isWonOnTime()` and `isDrawnOnTime()`, so a checkmate still shows the
+winner. TC22 also covers these results through `resultLine()`.
+
+- **TC30: refresh after Player 1 loses on time** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnOnTime()` is false, `isWonOnTime()` is true, `winnerName()` is Bo, `winnerColor()` is `BLACK`, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `On time: Bo (Black) wins`
+
+- **TC31: refresh after Player 2 loses on time** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnOnTime()` is false, `isWonOnTime()` is true, `winnerName()` is Ada, `winnerColor()` is `WHITE`, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `On time: Ada (White) wins`
+
+- **TC32: refresh after a draw on time** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnOnTime()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the view shows `Draw on time`
+
+### Remaining time on each player card
+
+Issue #72 (GitHub US-23, docs US-23). Each player card shows that
+player's remaining time from `game.remainingTime`, so both clocks are
+visible while the game runs (AC 11). Times are shown as minutes and
+seconds (`m:ss`). `createView()` and `refreshStatus()` both refresh the
+clocks. `GameStatsView` and `PlayerCardView` are views, so they have no
+BVA file.
+
+Step 1:
+- input (added): White's remaining time; Black's remaining time
+- output (added): the clock text on White's card; the clock text on Black's
+  card
+
+Step 2/3:
+- remaining time -> Cases: the starting ten minutes; one second less for
+  White; zero
+- clock text -> Cases: `10:00`; `9:59`; `0:00`
+
+- **TC33: a new view shows both clocks at ten minutes** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `remainingTime(WHITE)` and `remainingTime(BLACK)` are each ten minutes, and `createView()` runs.
+    - **Expected output**: White's card shows `10:00`; Black's card shows `10:00`
+
+- **TC34: refresh after White's time drops updates White's clock** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while both remaining times were ten minutes. Then `remainingTime(WHITE)` is nine minutes and fifty-nine seconds, `remainingTime(BLACK)` is still ten minutes, and `refreshStatus()` runs.
+    - **Expected output**: White's card shows `9:59`; Black's card shows `10:00`

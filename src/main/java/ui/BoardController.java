@@ -123,6 +123,10 @@ public class BoardController {
         game.resign(resigningColor);
     }
 
+    public void checkClock() {
+        game.checkTime();
+    }
+
     public boolean canOfferDraw() {
         return game.canOfferDraw();
     }

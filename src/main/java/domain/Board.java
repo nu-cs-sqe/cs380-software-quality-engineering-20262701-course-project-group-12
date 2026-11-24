@@ -31,6 +31,7 @@ public class Board {
     private static final int BLACK_BACK_RANK = Location.MAX_RANK;
     private static final int TWO_RANKS = 2;
     private static final int TWO_KINGS = 2;
+    private static final int ONE_PIECE = 1;
     private static final int KING_AND_BISHOP_VS_KING = 3;
     private static final int TWO_KINGS_AND_TWO_BISHOPS = 4;
     private static final int ONE_SQUARE_COLOR = 1;
@@ -194,6 +195,12 @@ public class Board {
         return pieces == TWO_KINGS
                 || isKingAndBishopVsKing(pieces)
                 || isTwoKingsAndTwoBishopsOnTheSameColor(pieces);
+    }
+
+    public boolean hasOnlyKing(PieceColor color) {
+        return occupiedSquares()
+                .filter(square -> pieceAt(square).getColor() == color)
+                .count() == ONE_PIECE;
     }
 
     private boolean isKingAndBishopVsKing(long pieces) {

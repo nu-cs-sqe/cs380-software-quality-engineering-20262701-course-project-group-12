@@ -20,15 +20,19 @@ public class PlayerCardView extends JPanel {
     private static final int OUTLINE_THICKNESS = 3;
     private static final float NAME_FONT_SIZE = 20f;
     private static final float CAPTION_FONT_SIZE = 12f;
+    private static final float CLOCK_FONT_SIZE = 22f;
     private static final Color CARD_BACKGROUND = new Color(252, 248, 240);
     private static final Color CAPTION_INK = new Color(110, 95, 80);
 
     private final JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT, PADDING, 0));
+    private final JLabel remainingTime =
+            label("", Font.BOLD, CLOCK_FONT_SIZE, BoardView.LABEL_INK);
 
     public PlayerCardView(String name, String caption, Image pieceImage) {
         setLayout(new BorderLayout(PADDING, PADDING));
         add(iconOf(pieceImage), BorderLayout.WEST);
         add(namePanel(name, caption), BorderLayout.CENTER);
+        add(remainingTime, BorderLayout.EAST);
         controls.setOpaque(false);
         add(controls, BorderLayout.SOUTH);
         clearHighlight();
@@ -59,6 +63,14 @@ public class PlayerCardView extends JPanel {
 
     public void addControl(JComponent control) {
         controls.add(control);
+    }
+
+    public void showRemainingTime(String time) {
+        remainingTime.setText(time);
+    }
+
+    public String remainingTime() {
+        return remainingTime.getText();
     }
 
     public void highlight() {

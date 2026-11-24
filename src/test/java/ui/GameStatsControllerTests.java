@@ -4,6 +4,7 @@ import domain.Game;
 import domain.piece.PieceColor;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.Optional;
 
 import static org.easymock.EasyMock.createMock;
@@ -19,6 +20,7 @@ public class GameStatsControllerTests {
     void GameStatsController_StartedGame_IsCreated() {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(true);
+        expectStartingClocks(game);
         replay(game);
 
         assertDoesNotThrow(() -> new GameStatsController(game));
@@ -28,6 +30,7 @@ public class GameStatsControllerTests {
     void GameStatsController_UnstartedGame_ThrowsIllegalArgumentException() {
         Game game = createMock(Game.class);
         expect(game.isStarted()).andStubReturn(false);
+        expectStartingClocks(game);
         replay(game);
 
         assertThrows(IllegalArgumentException.class, () -> new GameStatsController(game));
@@ -42,6 +45,40 @@ public class GameStatsControllerTests {
         assertEquals("Ada", view.whiteName());
         assertEquals("Bo", view.blackName());
         assertEquals("Current player: Ada", view.statusLine());
+    }
+
+    @Test
+    void CreateView_StartedGame_ShowsBothClocksAtTenMinutes() {
+        Game game = startedGame("Ada", "Bo", "Ada", PieceColor.WHITE);
+
+        GameStatsView view = new GameStatsController(game).createView();
+
+        assertEquals("10:00", view.remainingTime(PieceColor.WHITE));
+        assertEquals("10:00", view.remainingTime(PieceColor.BLACK));
+    }
+
+    @Test
+    void RefreshStatus_WhiteTimeReduced_ShowsUpdatedWhiteClock() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.colorToMove()).andStubReturn(PieceColor.WHITE);
+        expect(game.isOver()).andStubReturn(false);
+        expect(game.isPlayerToMoveInCheck()).andStubReturn(false);
+        expect(game.remainingTime(PieceColor.WHITE))
+                .andReturn(Duration.ofMinutes(10))
+                .andReturn(Duration.ofMinutes(9).plusSeconds(59));
+        expect(game.remainingTime(PieceColor.BLACK)).andStubReturn(Duration.ofMinutes(10));
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("9:59", view.remainingTime(PieceColor.WHITE));
+        assertEquals("10:00", view.remainingTime(PieceColor.BLACK));
     }
 
     @Test
@@ -113,9 +150,12 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(false);
+        expect(game.isWonOnTime()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Bo");
         expect(game.winnerColor()).andStubReturn(PieceColor.BLACK);
+        expectStartingClocks(game);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
@@ -139,9 +179,12 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(false);
+        expect(game.isWonOnTime()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Ada");
         expect(game.winnerColor()).andStubReturn(PieceColor.WHITE);
+        expectStartingClocks(game);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
@@ -160,6 +203,7 @@ public class GameStatsControllerTests {
         expect(game.playerToMoveName()).andStubReturn("Ada");
         expect(game.isOver()).andStubReturn(true);
         expect(game.isDrawnByRepetition()).andStubReturn(true);
+        expectStartingClocks(game);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
@@ -180,6 +224,7 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByRepetition()).andStubReturn(false);
         expect(game.isDrawnByAgreement()).andStubReturn(false);
         expect(game.isStalemate()).andStubReturn(true);
+        expectStartingClocks(game);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
@@ -199,6 +244,7 @@ public class GameStatsControllerTests {
         expect(game.isOver()).andStubReturn(true);
         expect(game.isDrawnByRepetition()).andStubReturn(false);
         expect(game.isDrawnByAgreement()).andStubReturn(true);
+        expectStartingClocks(game);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
@@ -221,6 +267,7 @@ public class GameStatsControllerTests {
         expect(game.isStalemate()).andStubReturn(false);
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(true);
+        expectStartingClocks(game);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
@@ -244,6 +291,7 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(true);
+        expectStartingClocks(game);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
@@ -279,9 +327,12 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(false);
+        expect(game.isWonOnTime()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Bo");
         expect(game.winnerColor()).andStubReturn(PieceColor.BLACK);
+        expectStartingClocks(game);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
@@ -325,6 +376,7 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByAgreement()).andStubReturn(false);
         expect(game.isStalemate()).andStubReturn(false);
         expect(game.isDrawnByDeadPosition()).andStubReturn(true);
+        expectStartingClocks(game);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
@@ -370,9 +422,12 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(false);
+        expect(game.isWonOnTime()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(false);
         expect(game.winnerName()).andStubReturn("Bo");
         expect(game.winnerColor()).andStubReturn(PieceColor.BLACK);
+        expectStartingClocks(game);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
@@ -411,6 +466,7 @@ public class GameStatsControllerTests {
         expect(game.playerTwoName()).andStubReturn("Bo");
         expect(game.isOver()).andStubReturn(true);
         expect(game.isDrawnByRepetition()).andStubReturn(true);
+        expectStartingClocks(game);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
@@ -430,6 +486,7 @@ public class GameStatsControllerTests {
         expect(game.colorToMove()).andReturn(PieceColor.WHITE).andReturn(PieceColor.BLACK);
         expect(game.isOver()).andStubReturn(false);
         expect(game.isPlayerToMoveInCheck()).andReturn(true).andReturn(false);
+        expectStartingClocks(game);
         replay(game);
         GameStatsController controller = new GameStatsController(game);
         GameStatsView view = controller.createView();
@@ -448,8 +505,90 @@ public class GameStatsControllerTests {
         expect(game.colorToMove()).andReturn(PieceColor.WHITE).andReturn(PieceColor.BLACK);
         expect(game.isOver()).andStubReturn(false);
         expect(game.isPlayerToMoveInCheck()).andStubReturn(blackInCheck);
+        expectStartingClocks(game);
         replay(game);
         return game;
+    }
+
+    @Test
+    void RefreshStatus_PlayerOneLosesOnTime_ShowsPlayerTwoWinsOnTime() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(false);
+        expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
+        expect(game.isDrawnByDeadPosition()).andStubReturn(false);
+        expect(game.isDrawnByFiftyMove()).andStubReturn(false);
+        expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(false);
+        expect(game.isWonOnTime()).andStubReturn(true);
+        expect(game.winnerName()).andStubReturn("Bo");
+        expect(game.winnerColor()).andStubReturn(PieceColor.BLACK);
+        expectStartingClocks(game);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("On time: Bo (Black) wins", view.statusLine());
+    }
+
+    @Test
+    void RefreshStatus_PlayerTwoLosesOnTime_ShowsPlayerOneWinsOnTime() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(false);
+        expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
+        expect(game.isDrawnByDeadPosition()).andStubReturn(false);
+        expect(game.isDrawnByFiftyMove()).andStubReturn(false);
+        expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(false);
+        expect(game.isWonOnTime()).andStubReturn(true);
+        expect(game.winnerName()).andStubReturn("Ada");
+        expect(game.winnerColor()).andStubReturn(PieceColor.WHITE);
+        expectStartingClocks(game);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("On time: Ada (White) wins", view.statusLine());
+    }
+
+    @Test
+    void RefreshStatus_DrawOnTime_ShowsTheDraw() {
+        Game game = createMock(Game.class);
+        expect(game.isStarted()).andStubReturn(true);
+        expect(game.playerOneName()).andStubReturn("Ada");
+        expect(game.playerTwoName()).andStubReturn("Bo");
+        expect(game.playerToMoveName()).andStubReturn("Ada");
+        expect(game.isOver()).andStubReturn(true);
+        expect(game.isDrawnByRepetition()).andStubReturn(false);
+        expect(game.isDrawnByAgreement()).andStubReturn(false);
+        expect(game.isStalemate()).andStubReturn(false);
+        expect(game.isDrawnByDeadPosition()).andStubReturn(false);
+        expect(game.isDrawnByFiftyMove()).andStubReturn(false);
+        expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(true);
+        expectStartingClocks(game);
+        replay(game);
+        GameStatsController controller = new GameStatsController(game);
+        GameStatsView view = controller.createView();
+
+        controller.refreshStatus();
+
+        assertEquals("Draw on time", view.statusLine());
     }
 
     private static Game gameWonByResignation(String winnerName, PieceColor winnerColor) {
@@ -465,9 +604,12 @@ public class GameStatsControllerTests {
         expect(game.isDrawnByDeadPosition()).andStubReturn(false);
         expect(game.isDrawnByFiftyMove()).andStubReturn(false);
         expect(game.isDrawnBySeventyFiveMove()).andStubReturn(false);
+        expect(game.isDrawnOnTime()).andStubReturn(false);
+        expect(game.isWonOnTime()).andStubReturn(false);
         expect(game.isWonByResignation()).andStubReturn(true);
         expect(game.winnerName()).andStubReturn(winnerName);
         expect(game.winnerColor()).andStubReturn(winnerColor);
+        expectStartingClocks(game);
         replay(game);
         return game;
     }
@@ -482,7 +624,13 @@ public class GameStatsControllerTests {
         expect(game.colorToMove()).andStubReturn(colorToMove);
         expect(game.isOver()).andStubReturn(false);
         expect(game.isPlayerToMoveInCheck()).andStubReturn(false);
+        expectStartingClocks(game);
         replay(game);
         return game;
+    }
+
+    private static void expectStartingClocks(Game game) {
+        expect(game.remainingTime(PieceColor.WHITE)).andStubReturn(Duration.ofMinutes(10));
+        expect(game.remainingTime(PieceColor.BLACK)).andStubReturn(Duration.ofMinutes(10));
     }
 }
