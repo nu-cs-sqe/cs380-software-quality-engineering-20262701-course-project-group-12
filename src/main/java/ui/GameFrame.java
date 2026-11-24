@@ -21,9 +21,15 @@ public class GameFrame extends JFrame {
             stats.refreshStatus();
             gameOver.showIfOver();
         });
+        OfferDrawView offerDraw = new OfferDrawView(boardController, () -> {
+            stats.refreshStatus();
+            drawClaim.refresh();
+            gameOver.showIfOver();
+        });
         Runnable afterAction = () -> {
             stats.refreshStatus();
             drawClaim.refresh();
+            offerDraw.refresh();
             gameOver.showIfOver();
         };
         GameStatsView statsView = stats.createView();
@@ -32,6 +38,7 @@ public class GameFrame extends JFrame {
             statsView.addPlayerControl(color, resign.buttonFor(color));
         }
         statsView.addStatusControl(drawClaim);
+        statsView.addStatusControl(offerDraw);
         arrange(getContentPane(), statsView, new BoardView(boardController, afterAction));
         startClockTicker(boardController, afterAction);
         setTitle(Messages.text("game.window.title"));
@@ -62,5 +69,9 @@ public class GameFrame extends JFrame {
         container.setLayout(new BorderLayout());
         container.add(statsView, BorderLayout.EAST);
         container.add(boardView, BorderLayout.CENTER);
+    }
+
+    static void addOfferDrawControl(GameStatsView statsView, OfferDrawView offerDraw) {
+        statsView.addStatusControl(offerDraw);
     }
 }

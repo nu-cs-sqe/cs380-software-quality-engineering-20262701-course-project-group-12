@@ -30,6 +30,17 @@
 - `boolean isDrawOffered()` (issue #61): returns `game.isDrawOffered()`. The view shows the offer to the opponent, with Accept and Decline, only then.
 - `void acceptDrawOffer()` and `void declineDrawOffer()` (issue #61): pass the answer to `game.acceptDrawOffer()` and `game.declineDrawOffer()`. `Game` decides when an offer can be made, ends it after the opponent's move, and ends the game on an acceptance, so the controller only forwards. Once the game is drawn by agreement, `clickSquare` already refuses further moves through `game.isOver()` (US-21 AC 7).
 - `boolean canClaimDraw()`, after the game is over (issue #61): TC58 (issue #60) already returns false once `game.isOver()` is true, so after a draw by agreement a position that occurred three times cannot be claimed, and the window shows a draw by agreement, not a draw by repetition (US-21 AC 7).
+- Offer Draw from the game window (issue #78 / GitHub, UI polish for US-21): a new
+  draw-offer view and `GameFrame` call the methods above. Each player has an
+  Offer Draw button, enabled only when `canOfferDraw()` is true (either color
+  may offer under US-21). Offering calls `offerDraw` for that color; when
+  `isDrawOffered()` is true, a dialog asks the opponent to accept or decline
+  through `acceptDrawOffer` / `declineDrawOffer`. Button and dialog text come
+  from `Messages`. The draw-offer rules stay in `Game` (issue #61); this task
+  does not change them. `OfferDrawView` and `GameFrame` are views, so they have
+  no BVA file. The controller cases for the pass-through are TC59 through TC65
+  below (already implemented). If this task adds new controller logic, its
+  cases continue after TC96 as TC97 onward.
 - `void clickSquare(Location square)`, the piece makes the move (issue #45 / US-12): when the board answers true for `isLegalMove` from the selected square to the clicked square, the controller calls the selected piece's `move(from, to, board)` instead of `board.move(from, to)`, so a castling king also moves its rook (`King.md`). A waiting move that the player declines to claim is made the same way. In every earlier case, "the board moves the piece" now means the selected piece's `move` is called with the controller's board.
 - `void clickSquare(Location square)`, dead position (issue #50 / GitHub US-17, docs US-17): after a move passes the turn, if the player now to move is not checkmated and not stalemated, the controller asks `board.isDeadPosition()`. When the position is dead, it calls `game.endByDeadPosition()`, so the game is a draw. Checkmate and stalemate are asked first. A click after the game is over is already TC40.
 - `boolean isLegalDestination(Location square)` (issue #77): returns true when a piece is selected and `board.isLegalMove` from that square to `square` is true. Legal means the same moves the game accepts: castling, en passant, and moves that keep the king out of check. With nothing selected, every square is false. A piece with no legal moves, including a piece pinned to its king, answers false for every destination. `BoardView` uses it to mark empty destinations with a dot and occupied ones with a ring. It does not change the selection or the board.
@@ -176,7 +187,7 @@ A resignation can end the game while the position has occurred three times. Clai
 
 ### `canOfferDraw()`, `offerDraw(PieceColor offeringColor)`, `isDrawOffered()`, `acceptDrawOffer()`, and `declineDrawOffer()`
 
-`Game` is mocked with EasyMock, because the controller does not own the offer or the result. Each boolean answer is checked both ways, so a controller that always answered the same would fail. The Offer Draw, Accept, and Decline buttons are a view change after the cases. A draw claim after a draw by agreement is refused by TC58, which covers any game that is over.
+`Game` is mocked with EasyMock, because the controller does not own the offer or the result. Each boolean answer is checked both ways, so a controller that always answered the same would fail. The Offer Draw buttons and the accept/decline dialog are a view change after the cases (issue #78). A draw claim after a draw by agreement is refused by TC58, which covers any game that is over.
 
 | Step 1: Input / output | Step 2: Category | Step 3: Partitions and values |
 | --- | --- | --- |
@@ -476,3 +487,19 @@ is already `game.passTurn()` in the move and promotion cases.
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | TC96: a clock check is passed to the game | a controller for the mocked board and game; `checkClock` | the game is asked to `checkTime` | :white_check_mark: |
+
+### Offer a draw from the game window (issue #78)
+
+Issue #78 wires Offer Draw into the running window. It does not change
+`canOfferDraw`, `offerDraw`, `isDrawOffered`, `acceptDrawOffer`, or
+`declineDrawOffer`. Those stay covered by TC59 through TC65 (issue #61),
+all already implemented. `GameStatsController` TC17 already shows
+"Draw by agreement" after an acceptance. After accept or decline, the view
+refreshes status and the game-over dialog the way `ResignView` and
+`DrawClaimView` do after their actions.
+
+`OfferDrawView` and `GameFrame` are views, so they have no BVA file and no
+new Step 4 rows here. No new `BoardController` method is planned for this
+task, so there are no new `:x:` controller cases. If implementation adds
+one, its Steps 1–3 and TC97+ cases go in this file before the code, and the
+view remains a view change after those cases.

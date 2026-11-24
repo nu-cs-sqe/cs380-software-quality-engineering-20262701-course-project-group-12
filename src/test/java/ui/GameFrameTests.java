@@ -4,6 +4,8 @@ import domain.Game;
 import org.junit.jupiter.api.Test;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JPanel;
 
@@ -30,6 +32,18 @@ public class GameFrameTests {
     }
 
     @Test
+    public void AddOfferDrawControl_WithOfferDraw_IncludesOfferDraw() {
+        Game game = startedGame();
+        BoardController boardController = new BoardController(game.board(), game);
+        OfferDrawView offerDraw = new OfferDrawView(boardController, () -> { });
+        GameStatsView stats = new GameStatsView("Ada", "Bo");
+
+        GameFrame.addOfferDrawControl(stats, offerDraw);
+
+        assertTrue(containsOfferDraw(stats));
+    }
+
+    @Test
     public void OnClockTick_WhenCalled_ChecksTheClockThenRunsAfterTick() {
         BoardController boardController = createMock(BoardController.class);
         boardController.checkClock();
@@ -40,6 +54,18 @@ public class GameFrameTests {
 
         assertTrue(afterTickRan.get());
         verify(boardController);
+    }
+
+    private static boolean containsOfferDraw(Container container) {
+        for (Component component : container.getComponents()) {
+            if (component instanceof OfferDrawView) {
+                return true;
+            }
+            if (component instanceof Container && containsOfferDraw((Container) component)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static Game startedGame() {
