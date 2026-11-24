@@ -9,13 +9,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MessagesTests {
     private static final String WELCOME_START_KEY = "welcome.start";
-    private static final String PLAYER_ONE_KEY = "stats.playerOne";
+    private static final String CURRENT_PLAYER_KEY = "stats.currentPlayer";
     private static final String CHECK_KEY = "stats.check";
     private static final String PLAYER_NAME = "Ada";
     private static final String START_GAME_ENGLISH = "Start Game";
     private static final String START_GAME_FRENCH = "Démarrer la partie";
-    private static final String PLAYER_ONE_ENGLISH = "Player 1: " + PLAYER_NAME + " (White)";
-    private static final String PLAYER_ONE_FRENCH = "Joueur 1 : " + PLAYER_NAME + " (Blancs)";
+    private static final String CURRENT_PLAYER_ENGLISH = "Current player: " + PLAYER_NAME;
+    private static final String CURRENT_PLAYER_FRENCH = "Joueur au trait : " + PLAYER_NAME;
     private static final String CHECK_ENGLISH = "Current player: " + PLAYER_NAME + " (in check)";
     private static final String CHECK_FRENCH = PLAYER_NAME + " est en échec";
 
@@ -62,18 +62,18 @@ public class MessagesTests {
     public void format_EnglishLocale_FillsNamePlaceholder() {
         Messages.useLocale(Locale.ENGLISH);
 
-        String text = Messages.format(PLAYER_ONE_KEY, PLAYER_NAME);
+        String text = Messages.format(CURRENT_PLAYER_KEY, PLAYER_NAME);
 
-        assertEquals(PLAYER_ONE_ENGLISH, text);
+        assertEquals(CURRENT_PLAYER_ENGLISH, text);
     }
 
     @Test
     public void format_FrenchLocale_FillsNamePlaceholder() {
         Messages.useLocale(Locale.FRENCH);
 
-        String text = Messages.format(PLAYER_ONE_KEY, PLAYER_NAME);
+        String text = Messages.format(CURRENT_PLAYER_KEY, PLAYER_NAME);
 
-        assertEquals(PLAYER_ONE_FRENCH, text);
+        assertEquals(CURRENT_PLAYER_FRENCH, text);
     }
 
     @Test

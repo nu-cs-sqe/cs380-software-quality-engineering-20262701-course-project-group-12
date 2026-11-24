@@ -31,11 +31,11 @@ The language picker is a view/`Main` change after the cases.
 | --- | --- | --- |
 | Input: whether a locale has been chosen when asking `text` | Cases | none (English default); `Locale.ENGLISH`; `Locale.FRENCH`; `Locale.FRANCE` (`fr_FR`) |
 | Input: `key` for `text` | Cases | a string with no placeholder (`welcome.start`) |
-| Input: `key` for `format` | Cases | a name placeholder (`stats.playerOne`); a pattern whose French word order differs (`stats.check`) |
+| Input: `key` for `format` | Cases | a name placeholder (`stats.currentPlayer`); a pattern whose French word order differs (`stats.check`) |
 | Input: `format` arguments | Collection | one (`Ada`) |
 | Input: `locale` for `useLocale` | Cases | `Locale.ENGLISH`; `Locale.FRENCH`; `Locale.FRANCE` (no null: callers never pass one) |
 | Output: `text` | Cases | `Start Game`; `Démarrer la partie` |
-| Output: `format` | Cases | `Player 1: Ada (White)`; `Joueur 1 : Ada (Blancs)`; `Current player: Ada (in check)`; `Ada est en échec` |
+| Output: `format` | Cases | `Current player: Ada`; `Joueur au trait : Ada`; `Current player: Ada (in check)`; `Ada est en échec` |
 
 ## Step 4: Test cases (each-choice strategy)
 
@@ -55,7 +55,7 @@ setter case of its own.
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC5: English fills a name placeholder | `useLocale(Locale.ENGLISH)`; ask `format("stats.playerOne", "Ada")` | `Player 1: Ada (White)` | :white_check_mark: |
-| TC6: French fills a name placeholder | `useLocale(Locale.FRENCH)`; ask `format("stats.playerOne", "Ada")` | `Joueur 1 : Ada (Blancs)` | :white_check_mark: |
+| TC5: English fills a name placeholder | `useLocale(Locale.ENGLISH)`; ask `format("stats.currentPlayer", "Ada")` | `Current player: Ada` | :white_check_mark: |
+| TC6: French fills a name placeholder | `useLocale(Locale.FRENCH)`; ask `format("stats.currentPlayer", "Ada")` | `Joueur au trait : Ada` | :white_check_mark: |
 | TC7: English keeps the name after the label | `useLocale(Locale.ENGLISH)`; ask `format("stats.check", "Ada")` | `Current player: Ada (in check)` | :white_check_mark: |
 | TC8: French can put the name first | `useLocale(Locale.FRENCH)`; ask `format("stats.check", "Ada")` | `Ada est en échec` | :white_check_mark: |
