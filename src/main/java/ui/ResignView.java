@@ -2,34 +2,38 @@ package ui;
 
 import domain.piece.PieceColor;
 
-import java.awt.Component;
+import java.util.EnumMap;
+import java.util.Map;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
-public class ResignView extends JPanel {
+public class ResignView {
+    private final Map<PieceColor, JButton> buttons = new EnumMap<>(PieceColor.class);
     private final BoardController boardController;
     private final Runnable afterResign;
 
     public ResignView(BoardController boardController, Runnable afterResign) {
         this.boardController = boardController;
         this.afterResign = afterResign;
-        addResignButton("resign.white", PieceColor.WHITE);
-        addResignButton("resign.black", PieceColor.BLACK);
+        for (PieceColor color : PieceColor.values()) {
+            buttons.put(color, resignButton(color));
+        }
     }
 
-    private void addResignButton(String textKey, PieceColor resigningColor) {
-        JButton button = new JButton(Messages.text(textKey));
+    private JButton resignButton(PieceColor resigningColor) {
+        JButton button = new JButton(Messages.text("resign"));
         button.addActionListener(event -> {
             boardController.resign(resigningColor);
             afterResign.run();
             disableButtons();
         });
-        add(button);
+        return button;
     }
 
     private void disableButtons() {
-        for (Component button : getComponents()) {
-            button.setEnabled(false);
-        }
+        buttons.values().forEach(button -> button.setEnabled(false));
+    }
+
+    public JButton buttonFor(PieceColor color) {
+        return buttons.get(color);
     }
 }

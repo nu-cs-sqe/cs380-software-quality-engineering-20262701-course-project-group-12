@@ -72,7 +72,9 @@ public class BoardControllerTests {
     private static final Location B1 = new Location(1, 1);
     private static final Location B3 = new Location(1, 3);
     private static final Location C3 = new Location(2, 3);
+    private static final Location C6 = new Location(2, 6);
     private static final Location D2 = new Location(3, 2);
+    private static final Location D4 = new Location(3, 4);
     private static final Location E1 = new Location(4, 1);
     private static final Location G1 = new Location(6, 1);
     private static final Location B8 = new Location(1, Location.MAX_RANK);
@@ -653,6 +655,19 @@ public class BoardControllerTests {
     }
 
     @Test
+    public void ClaimDraw_MoveWaitsForTheClaim_LeavesNoMoveWaiting() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        expect(game.canClaimDrawByRepetition()).andStubReturn(false);
+        game.endByRepetition();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        controller.claimDraw();
+
+        assertFalse(controller.isDrawClaimWithMovePending());
+        verify(board, piece, game);
+    }
+
+    @Test
     public void DeclineDrawClaim_MoveWaitsForTheClaim_MakesTheMove() {
         expectMoveFromB1ToC3MakingThirdOccurrence();
         piece.move(B1, C3, board);
@@ -1048,6 +1063,219 @@ public class BoardControllerTests {
         controller.claimDraw();
 
         verify(board, piece, game);
+    }
+
+    @Test
+    public void IsLegalDestination_NothingSelected_ReturnsFalse() {
+        BoardController controller = replayedController();
+
+        boolean legal = controller.isLegalDestination(C3);
+
+        assertFalse(legal);
+        verify(board, piece);
+    }
+
+    @Test
+    public void IsLegalDestination_SelectedPieceCanReachSquare_ReturnsTrue() {
+        expectSelectableWhitePiece(B1);
+        expect(board.isLegalMove(B1, C3)).andReturn(true);
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+
+        boolean legal = controller.isLegalDestination(C3);
+
+        assertTrue(legal);
+        verify(board, piece);
+    }
+
+    @Test
+    public void IsLegalDestination_SelectedPieceCannotReachSquare_ReturnsFalse() {
+        expectSelectableWhitePiece(B1);
+        expect(board.isLegalMove(B1, B3)).andReturn(false);
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+
+        boolean legal = controller.isLegalDestination(B3);
+
+        assertFalse(legal);
+        verify(board, piece);
+    }
+
+    @Test
+    public void IsLegalDestination_SelectedPieceHasNoLegalMoves_ReturnsFalse() {
+        expectSelectableWhitePiece(B1);
+        expect(board.isLegalMove(B1, C3)).andReturn(false);
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+
+        boolean legal = controller.isLegalDestination(C3);
+
+        assertFalse(legal);
+        verify(board, piece);
+    }
+
+    @Test
+    public void IsLegalDestination_PinnedPieceOffThePin_ReturnsFalse() {
+        expectSelectableWhitePiece(C6);
+        expect(board.isLegalMove(C6, D4)).andReturn(false);
+        BoardController controller = replayedController();
+        controller.clickSquare(C6);
+
+        boolean legal = controller.isLegalDestination(D4);
+
+        assertFalse(legal);
+        verify(board, piece);
+    }
+
+    @Test
+    public void IsLastMoveSquare_BeforeAnyMove_ReturnsFalse() {
+        BoardController controller = replayedController();
+
+        boolean lastMove = controller.isLastMoveSquare(B1);
+
+        assertFalse(lastMove);
+        verify(board, piece);
+    }
+
+    @Test
+    public void IsLastMoveSquare_AfterMove_FromSquareReturnsTrue() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        boolean lastMove = controller.isLastMoveSquare(B1);
+
+        assertTrue(lastMove);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void IsLastMoveSquare_AfterMove_ToSquareReturnsTrue() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        boolean lastMove = controller.isLastMoveSquare(C3);
+
+        assertTrue(lastMove);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void IsLastMoveSquare_AfterMove_OtherSquareReturnsFalse() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        BoardController controller = replayedController();
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+
+        boolean lastMove = controller.isLastMoveSquare(A3);
+
+        assertFalse(lastMove);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void IsLastMoveSquare_AfterLaterMove_PreviousFromSquareReturnsFalse() {
+        expectWhiteMoveFromB1ToC3ThenBlackToMove();
+        Piece blackPiece = mock(Piece.class);
+        expect(board.isOccupied(B8)).andReturn(true);
+        expect(board.pieceAt(B8)).andReturn(blackPiece);
+        expect(blackPiece.getColor()).andReturn(PieceColor.BLACK);
+        expect(game.colorToMove()).andReturn(PieceColor.BLACK);
+        expect(board.pieceAt(B8)).andReturn(blackPiece);
+        expect(board.isLegalMove(B8, C6)).andReturn(true);
+        blackPiece.move(B8, C6, board);
+        expect(blackPiece.promotesOn(C6)).andReturn(false);
+        game.passTurn();
+        expect(game.colorToMove()).andReturn(PieceColor.WHITE);
+        replay(board, piece, game, blackPiece);
+        BoardController controller = new BoardController(board, game);
+        controller.clickSquare(B1);
+        controller.clickSquare(C3);
+        controller.clickSquare(B8);
+        controller.clickSquare(C6);
+
+        boolean lastMove = controller.isLastMoveSquare(B1);
+
+        assertFalse(lastMove);
+        verify(board, piece, game, blackPiece);
+    }
+
+    @Test
+    public void IsLastMoveSquare_WaitingDrawClaim_ReturnsFalse() {
+        expectMoveFromB1ToC3MakingThirdOccurrence();
+        BoardController controller = controllerWithMoveWaitingForTheClaim();
+
+        boolean lastMove = controller.isLastMoveSquare(C3);
+
+        assertFalse(lastMove);
+        verify(board, piece, game);
+    }
+
+    @Test
+    public void IsKingInCheck_PlayerToMoveNotInCheck_ReturnsFalse() {
+        expect(game.isPlayerToMoveInCheck()).andReturn(false);
+        BoardController controller = replayedController();
+
+        boolean inCheck = controller.isKingInCheck(E1);
+
+        assertFalse(inCheck);
+        verify(board, game);
+    }
+
+    @Test
+    public void IsKingInCheck_SquareHoldsKingToMoveInCheck_ReturnsTrue() {
+        expect(game.isPlayerToMoveInCheck()).andReturn(true);
+        expect(board.isOccupied(E1)).andReturn(true);
+        expect(board.pieceAt(E1)).andReturn(new Piece(PieceType.KING, PieceColor.WHITE));
+        expect(game.colorToMove()).andReturn(PieceColor.WHITE);
+        BoardController controller = replayedController();
+
+        boolean inCheck = controller.isKingInCheck(E1);
+
+        assertTrue(inCheck);
+        verify(board, game);
+    }
+
+    @Test
+    public void IsKingInCheck_OtherSquareWhileKingIsInCheck_ReturnsFalse() {
+        expect(game.isPlayerToMoveInCheck()).andReturn(true);
+        expect(board.isOccupied(B1)).andReturn(true);
+        expect(board.pieceAt(B1)).andReturn(new Piece(PieceType.PAWN, PieceColor.WHITE));
+        BoardController controller = replayedController();
+
+        boolean inCheck = controller.isKingInCheck(B1);
+
+        assertFalse(inCheck);
+        verify(board, game);
+    }
+
+    @Test
+    public void IsKingInCheck_EmptySquareWhileKingIsInCheck_ReturnsFalse() {
+        expect(game.isPlayerToMoveInCheck()).andReturn(true);
+        expect(board.isOccupied(A3)).andReturn(false);
+        BoardController controller = replayedController();
+
+        boolean inCheck = controller.isKingInCheck(A3);
+
+        assertFalse(inCheck);
+        verify(board, game);
+    }
+
+    @Test
+    public void IsKingInCheck_OpponentKingWhilePlayerToMoveIsInCheck_ReturnsFalse() {
+        expect(game.isPlayerToMoveInCheck()).andReturn(true);
+        expect(board.isOccupied(E1)).andReturn(true);
+        expect(board.pieceAt(E1)).andReturn(new Piece(PieceType.KING, PieceColor.BLACK));
+        expect(game.colorToMove()).andReturn(PieceColor.WHITE);
+        BoardController controller = replayedController();
+
+        boolean inCheck = controller.isKingInCheck(E1);
+
+        assertFalse(inCheck);
+        verify(board, game);
     }
 
     private void expectPieceOnB1() {

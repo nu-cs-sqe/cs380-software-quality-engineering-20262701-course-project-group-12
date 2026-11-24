@@ -1,54 +1,51 @@
 package ui;
 
 import domain.Game;
+import domain.piece.PieceColor;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class GameFrame extends JFrame {
     public GameFrame(Game game) {
-        this(game, new GameStatsController(game));
-    }
-
-    private GameFrame(Game game, GameStatsController stats) {
-        this(stats, new BoardController(game.board(), game));
-    }
-
-    private GameFrame(GameStatsController stats, BoardController boardController) {
-        this(stats, boardController, new DrawClaimView(boardController, stats::refreshStatus));
-    }
-
-    private GameFrame(
-            GameStatsController stats, BoardController boardController, DrawClaimView drawClaim) {
-        this(
-                stats.createView(),
-                new BoardView(boardController, statusRefresh(stats, drawClaim)));
-        JPanel endGameControls = new JPanel();
-        endGameControls.add(drawClaim);
-        endGameControls.add(new ResignView(boardController, statusRefresh(stats, drawClaim)));
-        getContentPane().add(endGameControls, BorderLayout.SOUTH);
+        GameStatsController stats = new GameStatsController(game);
+        BoardController boardController = new BoardController(game.board(), game);
+        GameOverController gameOver =
+                new GameOverController(game, stats, new GameOverView(this));
+        DrawClaimView drawClaim = new DrawClaimView(boardController, () -> {
+            stats.refreshStatus();
+            gameOver.showIfOver();
+        });
+        Runnable afterAction = () -> {
+            stats.refreshStatus();
+            drawClaim.refresh();
+            gameOver.showIfOver();
+        };
+        GameStatsView statsView = stats.createView();
+        ResignView resign = new ResignView(boardController, afterAction);
+        for (PieceColor color : PieceColor.values()) {
+            statsView.addPlayerControl(color, resign.buttonFor(color));
+        }
+        statsView.addStatusControl(drawClaim);
+        arrange(getContentPane(), statsView, new BoardView(boardController, afterAction));
         setTitle(Messages.text("game.window.title"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
+        fitToGameWindow(this);
         setLocationRelativeTo(null);
     }
 
-    private static Runnable statusRefresh(GameStatsController stats, DrawClaimView drawClaim) {
-        return () -> {
-            stats.refreshStatus();
-            drawClaim.refresh();
-        };
-    }
-
-    public GameFrame(GameStatsView statsView, BoardView boardView) {
-        arrange(getContentPane(), statsView, boardView);
+    static void fitToGameWindow(JFrame window) {
+        window.getContentPane().setPreferredSize(
+                new Dimension(
+                        BoardView.SIDE_LENGTH + GameStatsView.COLUMN_WIDTH, BoardView.SIDE_LENGTH));
+        window.pack();
     }
 
     static void arrange(Container container, GameStatsView statsView, BoardView boardView) {
         container.setLayout(new BorderLayout());
-        container.add(statsView, BorderLayout.NORTH);
+        container.add(statsView, BorderLayout.EAST);
         container.add(boardView, BorderLayout.CENTER);
     }
 }
