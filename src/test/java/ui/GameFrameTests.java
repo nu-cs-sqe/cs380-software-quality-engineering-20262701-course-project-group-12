@@ -8,17 +8,14 @@ import java.awt.Component;
 import java.awt.Container;
 import javax.swing.JPanel;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameFrameTests {
 
     @Test
-    void Arrange_StatsAndBoard_PlacesStatsAboveBoard() {
-        GameStatsView stats = new GameStatsView(
-                "Player 1: Ada (White)",
-                "Player 2: Bo (Black)",
-                "Current player: Ada");
+    void Arrange_StatsAndBoard_PlacesStatsBesideBoard() {
+        GameStatsView stats = new GameStatsView("Ada", "Bo");
         Game game = startedGame();
         BoardView board = new BoardView(new BoardController(game.board(), game));
         JPanel content = new JPanel();
@@ -26,37 +23,32 @@ public class GameFrameTests {
         GameFrame.arrange(content, stats, board);
 
         BorderLayout layout = (BorderLayout) content.getLayout();
-        assertSame(stats, layout.getLayoutComponent(BorderLayout.NORTH));
+        assertSame(stats, layout.getLayoutComponent(BorderLayout.EAST));
         assertSame(board, layout.getLayoutComponent(BorderLayout.CENTER));
     }
 
     @Test
-    public void AddEndGameControls_WithOfferDraw_PlacesItInSouth() {
+    public void AddOfferDrawControl_WithOfferDraw_IncludesOfferDraw() {
         Game game = startedGame();
         BoardController boardController = new BoardController(game.board(), game);
-        DrawClaimView drawClaim = new DrawClaimView(boardController, () -> { });
         OfferDrawView offerDraw = new OfferDrawView(boardController, () -> { });
-        JPanel content = new JPanel(new BorderLayout());
+        GameStatsView stats = new GameStatsView("Ada", "Bo");
 
-        GameFrame.addEndGameControls(
-                content, boardController, drawClaim, offerDraw, () -> { });
+        GameFrame.addOfferDrawControl(stats, offerDraw);
 
-        assertNotNull(findOfferDraw(content));
+        assertTrue(containsOfferDraw(stats));
     }
 
-    private static OfferDrawView findOfferDraw(Container container) {
+    private static boolean containsOfferDraw(Container container) {
         for (Component component : container.getComponents()) {
             if (component instanceof OfferDrawView) {
-                return (OfferDrawView) component;
+                return true;
             }
-            if (component instanceof Container) {
-                OfferDrawView nested = findOfferDraw((Container) component);
-                if (nested != null) {
-                    return nested;
-                }
+            if (component instanceof Container && containsOfferDraw((Container) component)) {
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     private static Game startedGame() {

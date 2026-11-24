@@ -13,6 +13,8 @@ public class BoardController {
     private final Board board;
     private final Game game;
     private Optional<Location> selectedSquare = Optional.empty();
+    private Optional<Location> lastMoveFrom = Optional.empty();
+    private Optional<Location> lastMoveTo = Optional.empty();
     private Optional<Location> promotionSquare = Optional.empty();
     private Optional<WaitingMove> moveWaitingForClaim = Optional.empty();
 
@@ -31,6 +33,30 @@ public class BoardController {
 
     public boolean isSelected(Location square) {
         return selectedSquare.filter(square::isSameSquareAs).isPresent();
+    }
+
+    public boolean isLegalDestination(Location square) {
+        return selectedSquare
+                .map(from -> board.isLegalMove(from, square))
+                .orElse(false);
+    }
+
+    public boolean isLastMoveSquare(Location square) {
+        return lastMoveFrom.filter(square::isSameSquareAs).isPresent()
+                || lastMoveTo.filter(square::isSameSquareAs).isPresent();
+    }
+
+    public boolean isKingInCheck(Location square) {
+        return game.isPlayerToMoveInCheck() && holdsKingToMove(square);
+    }
+
+    private boolean holdsKingToMove(Location square) {
+        if (!board.isOccupied(square)) {
+            return false;
+        }
+        Piece occupant = board.pieceAt(square);
+        return occupant.getType() == PieceType.KING
+                && occupant.getColor() == game.colorToMove();
     }
 
     public boolean isPromotionPending() {
@@ -73,6 +99,7 @@ public class BoardController {
     public void claimDraw() {
         if (canClaimDraw()) {
             endByClaimedDraw();
+            moveWaitingForClaim = Optional.empty();
         }
     }
 
@@ -157,6 +184,8 @@ public class BoardController {
     }
 
     private void makeMove(Piece movingPiece, Location from, Location to) {
+        lastMoveFrom = Optional.of(from);
+        lastMoveTo = Optional.of(to);
         movingPiece.move(from, to, board);
         passTurnUnlessPromoting(movingPiece, to);
     }

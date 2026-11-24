@@ -25,28 +25,23 @@ public class GameStatsController {
     }
 
     public GameStatsView createView() {
-        view = new GameStatsView(
-                Messages.format("stats.playerOne", game.playerOneName()),
-                Messages.format("stats.playerTwo", game.playerTwoName()),
-                currentPlayerLine());
+        view = new GameStatsView(game.playerOneName(), game.playerTwoName());
+        refreshStatus();
         return view;
     }
 
     public void refreshStatus() {
-        view.showCurrentPlayer(statusLine());
-    }
-
-    private String statusLine() {
         if (game.isOver()) {
-            return resultLine();
+            view.showResult(resultLine());
+        } else if (game.isPlayerToMoveInCheck()) {
+            view.showCheck(game.colorToMove(),
+                    Messages.format("stats.check", game.playerToMoveName()));
+        } else {
+            view.showTurn(game.colorToMove(), currentPlayerLine());
         }
-        if (game.isPlayerToMoveInCheck()) {
-            return Messages.format("stats.check", game.playerToMoveName());
-        }
-        return currentPlayerLine();
     }
 
-    private String resultLine() {
+    public String resultLine() {
         if (game.isDrawnByRepetition()) {
             return Messages.text("stats.drawByRepetition");
         }

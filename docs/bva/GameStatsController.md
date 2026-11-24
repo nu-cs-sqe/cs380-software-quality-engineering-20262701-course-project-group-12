@@ -36,43 +36,43 @@ Step 2/3:
 - names -> Cases: one character (shortest name that survived start), a normal name, a name with a space in the middle, two similar but different names (start now rejects equal names)
 - the name of the player to move -> Cases: Player 1 (what setup always does), Player 2 (the method still has to print that name)
 - output is always:
-  - `Player 1: <name> (White)`
-  - `Player 2: <name> (Black)`
+  - Player 1's name on White's card (issue #76; before it, `Player 1: <name> (White)`)
+  - Player 2's name on Black's card (issue #76; before it, `Player 2: <name> (Black)`)
   - `Current player: <name of the player to move>`
 
 - **TC4: normal names, Player 1 to move** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `playerToMoveName()` is Player 1's name.
     - **Expected output**: the view shows
-        - `Player 1: Ada (White)`
-        - `Player 2: Bo (Black)`
+        - `Ada` on White's card
+        - `Bo` on Black's card
         - `Current player: Ada`
 
 - **TC5: one-character names** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 A / White. Player 2 B / Black. `playerToMoveName()` is Player 1's name.
     - **Expected output**: the view shows
-        - `Player 1: A (White)`
-        - `Player 2: B (Black)`
+        - `A` on White's card
+        - `B` on Black's card
         - `Current player: A`
 
 - **TC6: names with a space in the middle** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ann Marie / White. Player 2 Li Wei / Black. `playerToMoveName()` is Player 1's name.
     - **Expected output**: the view shows
-        - `Player 1: Ann Marie (White)`
-        - `Player 2: Li Wei (Black)`
+        - `Ann Marie` on White's card
+        - `Li Wei` on Black's card
         - `Current player: Ann Marie`
 
 - **TC7: similar but different names** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Alex / White. Player 2 Alexa / Black. `playerToMoveName()` is Player 1's name.
     - **Expected output**: the view shows
-        - `Player 1: Alex (White)`
-        - `Player 2: Alexa (Black)`
+        - `Alex` on White's card
+        - `Alexa` on Black's card
         - `Current player: Alex`
 
 - **TC8: Player 2 is to move** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `playerToMoveName()` is Player 2's name.
     - **Expected output**: the view shows
-        - `Player 1: Ada (White)`
-        - `Player 2: Bo (Black)`
+        - `Ada` on White's card
+        - `Bo` on Black's card
         - `Current player: Bo`
 
 ### Method under test: `refreshStatus()`
@@ -213,3 +213,80 @@ start at TC20, after dead position's TC19.
 - **TC21: refresh after a seventy-five-move draw** ( :white_check_mark: )
     - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByFiftyMove()` is false, `isDrawnBySeventyFiveMove()` is true, and `refreshStatus()` runs.
     - **Expected output**: the view shows `Draw by the seventy-five-move rule`
+
+### Method under test: `resultLine()`
+
+Issue #75. The game-over dialog shows the same text as the status line, so
+`resultLine()` is public and `GameOverController` asks it for the dialog's
+text. It is the line `refreshStatus()` shows once the game is over, so its
+cases are the game-over cases above.
+
+- **TC22: the result of a game that is over** ( implemented in TC10, TC11, TC13 to TC21 )
+    - **State of the system**: the game is over, as in each of those cases.
+    - **Expected output**: the same line those cases show
+
+### Issue #76: player cards, turn highlight, and status tone
+
+Issue #76 styles the panel beside the board. Each player gets a card, Black's at
+the top of the column (level with rank 8) and White's at the bottom (level with
+rank 1). The card of the player to move is highlighted, and the status line shows
+check and the result in their own colors.
+
+The cards show each name on its own line in a larger font, so `createView()` now
+gives the view the bare names. Player 1 is always White and Player 2 always Black
+(`Game.start`), so the view takes them as White's and Black's names, and the card
+shows "Player 1 · White" or "Player 2 · Black" under the name. TC4 to TC8 keep
+their states; their expected output changes from the `Player 1: <name> (White)`
+and `Player 2: <name> (Black)` lines to the bare names on White's and Black's
+cards. Their current-player line is unchanged.
+
+`createView()` now shows the status the same way `refreshStatus()` does, so a new
+view already highlights the player to move.
+
+Step 1:
+- input (added): the color to move (`colorToMove()`)
+- output (added): which card is highlighted (White's, Black's, or none), and the
+  tone of the status line (turn, check, or result)
+
+Step 2/3:
+- color to move -> Cases: `WHITE`, `BLACK`
+- game over -> Boolean: false, true (no card is highlighted once the game is over)
+- in check -> Boolean: false, true
+- highlighted card -> Cases: White's, Black's, none
+- status tone -> Cases: turn (not over, not in check), check (not over, in check), result (over)
+
+The result tone covers every way a game ends: they all reach the same
+`isOver()` branch, so one result is enough here. TC10 to TC21 already check
+the text of each result.
+
+- **TC23: a new view highlights White when White is to move** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. The game is not over, `isPlayerToMoveInCheck()` is false, `playerToMoveName()` is Ada, `colorToMove()` is `WHITE`, and `createView()` runs.
+    - **Expected output**: White's card is highlighted
+
+- **TC24: refresh after the turn passes highlights Black** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while `colorToMove()` was `WHITE`. Then the game is not over, `isPlayerToMoveInCheck()` is false, `playerToMoveName()` is Bo, `colorToMove()` is `BLACK`, and `refreshStatus()` runs.
+    - **Expected output**: Black's card is highlighted
+
+- **TC25: refresh after the game is over highlights no card** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while the game was not over and `colorToMove()` was `WHITE`. Then the game is over, `winnerName()` is Bo, `winnerColor()` is `BLACK` (checkmate), and `refreshStatus()` runs.
+    - **Expected output**: no card is highlighted
+
+- **TC26: the turn line has the turn tone** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. The game is not over, `isPlayerToMoveInCheck()` is false, `colorToMove()` is `WHITE`, and `createView()` runs.
+    - **Expected output**: the status line has the turn tone
+
+- **TC27: the check line has the check tone** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is not over, `isPlayerToMoveInCheck()` is true, `playerToMoveName()` is Bo, `colorToMove()` is `BLACK`, and `refreshStatus()` runs.
+    - **Expected output**: the status line has the check tone, and Black's card is still highlighted
+
+- **TC28: the result line has the result tone** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran. Then the game is over, `isDrawnByRepetition()` is true, and `refreshStatus()` runs.
+    - **Expected output**: the status line has the result tone
+
+The tone also has to change back. Once the player in check gets out of it and
+the turn passes, the next turn line is in the turn tone again. TC26 starts from
+a new view, so it does not cover this.
+
+- **TC29: the turn line after a check has the turn tone again** ( :white_check_mark: )
+    - **State of the system**: started game. Player 1 Ada / White. Player 2 Bo / Black. `createView()` ran while the game was not over, `isPlayerToMoveInCheck()` was true, and `colorToMove()` was `WHITE`. Then the game is not over, `isPlayerToMoveInCheck()` is false, `playerToMoveName()` is Bo, `colorToMove()` is `BLACK`, and `refreshStatus()` runs.
+    - **Expected output**: the status line has the turn tone
