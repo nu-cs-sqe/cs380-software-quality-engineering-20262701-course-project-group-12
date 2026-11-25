@@ -56,6 +56,31 @@ We assigned the piece movement issues.
 20. [Not started] Vanessa: Offer a draw from the game window ([#78](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/78))
 21. [Not started] Unassigned: Polish the user interface ([#73](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/73))
 
+# Week 8 (11/16/2026-11/22/2026)
+**Planning and Progress Tracking**:
+We split the UI polish task (#73) into sub-issues and started the timer and locale stories. Three tasks merged this week; the other four had pull requests open or in progress at the end of the week.
+1. [Done] Souvenir: Size the welcome window like the game window ([#80](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/80))
+2. [Done] Souvenir: Show a game-over dialog with New Game and Close ([#81](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/81))
+3. [Done] Jay: Highlight the last move, legal squares, and a king in check ([#83](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/83))
+4. [In review] Souvenir: Style the player panel and controls around the board ([#87](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/87))
+5. [In review] Jay: US-22: Internationalize the user interface ([#84](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/84))
+6. [In review] Vanessa: US-23: Game timer ([#85](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/85))
+7. [In review] Vanessa: Offer a draw from the game window ([#86](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/86))
+8. [In progress] Unassigned: Polish the user interface ([#73](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/73))
+
+# Week 9 (11/23/2026-11/29/2026)
+**Planning and Progress Tracking**:
+We merged the four reviews left from week 8 and checked main against the grading rubric. The check found three gaps, each with its own task below.
+1. [Done] Souvenir: Style the player panel and controls around the board ([#87](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/87))
+2. [Done] Jay: US-22: Internationalize the user interface ([#84](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/84))
+3. [Done] Vanessa: US-23: Game timer ([#85](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/85))
+4. [Done] Vanessa: Offer a draw from the game window ([#86](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/86))
+5. [Done] Souvenir: Fix the draw buttons and the last-move highlight ([#89](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/89))
+6. [In review] Souvenir: Update the last-move BVA cases ([#91](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/91))
+7. [In progress] Souvenir: Add the week 8 report
+8. [In progress] Souvenir: Add a language by adding its messages file only ([#92](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/92))
+9. [In progress] Unassigned: Polish the user interface ([#73](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/73))
+
 # One section per week until the last week of class (the week before the Finals week)
 
 
