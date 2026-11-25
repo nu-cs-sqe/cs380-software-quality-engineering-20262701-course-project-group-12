@@ -77,7 +77,7 @@ We merged the four reviews left from week 8 and checked main against the grading
 4. [Done] Vanessa: Offer a draw from the game window ([#86](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/86))
 5. [Done] Souvenir: Fix the draw buttons and the last-move highlight ([#89](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/89))
 6. [In review] Souvenir: Update the last-move BVA cases ([#91](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/91))
-7. [In progress] Souvenir: Add the week 8 report
+7. [In review] Souvenir: Add the week 8 report ([#93](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/93))
 8. [In progress] Souvenir: Add a language by adding its messages file only ([#92](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/92))
 9. [In progress] Unassigned: Polish the user interface ([#73](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/73))
 
