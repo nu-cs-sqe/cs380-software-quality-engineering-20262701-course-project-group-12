@@ -1,23 +1,22 @@
 package ui;
 
 import java.awt.GraphicsEnvironment;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.JOptionPane;
 
 public class LanguageView {
-    private static final int ENGLISH_CHOICE = 0;
-    private static final Locale[] LOCALES = {Locale.ENGLISH, Locale.FRENCH};
+    private static final int DEFAULT_CHOICE = 0;
 
     private LanguageView() {
     }
 
     static Locale choose() {
+        List<Locale> locales = Messages.availableLocales();
         if (GraphicsEnvironment.isHeadless()) {
-            return Locale.ENGLISH;
+            return locales.get(DEFAULT_CHOICE);
         }
-        String english = Messages.text("language.english");
-        String french = Messages.text("language.french");
-        String[] labels = {english, french};
+        String[] names = locales.stream().map(Messages::languageName).toArray(String[]::new);
         int choice = JOptionPane.showOptionDialog(
                 null,
                 Messages.text("language.prompt"),
@@ -25,11 +24,11 @@ public class LanguageView {
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
-                labels,
-                english);
-        if (choice < ENGLISH_CHOICE || choice >= LOCALES.length) {
-            return Locale.ENGLISH;
+                names,
+                names[DEFAULT_CHOICE]);
+        if (choice == JOptionPane.CLOSED_OPTION) {
+            return locales.get(DEFAULT_CHOICE);
         }
-        return LOCALES[choice];
+        return locales.get(choice);
     }
 }
