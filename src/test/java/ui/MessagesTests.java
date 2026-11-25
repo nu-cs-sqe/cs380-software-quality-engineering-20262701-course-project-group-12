@@ -20,6 +20,7 @@ public class MessagesTests {
     private static final String CHECK_ENGLISH = "Current player: " + PLAYER_NAME + " (in check)";
     private static final String CHECK_FRENCH = PLAYER_NAME + " est en échec";
     private static final Locale ESPERANTO = new Locale("eo");
+    private static final String ENGLISH_NAME = "English";
 
     @AfterEach
     public void restoreEnglish() {
@@ -101,5 +102,12 @@ public class MessagesTests {
         List<Locale> locales = Messages.availableLocales();
 
         assertEquals(List.of(Locale.ENGLISH, ESPERANTO, Locale.FRENCH), locales);
+    }
+
+    @Test
+    public void languageName_English_IsEnglish() {
+        String name = Messages.languageName(Locale.ENGLISH);
+
+        assertEquals(ENGLISH_NAME, name);
     }
 }

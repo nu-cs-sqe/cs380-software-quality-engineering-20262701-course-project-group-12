@@ -14,6 +14,7 @@ final class Messages {
                     ResourceBundle.Control.FORMAT_PROPERTIES);
 
     private static final Locale ROOT_LANGUAGE = Locale.ENGLISH;
+    private static final String LANGUAGE_NAME_KEY = "language.name";
 
     private static ResourceBundle bundle = load(ROOT_LANGUAGE);
 
@@ -38,6 +39,10 @@ final class Messages {
                 .filter(Messages::hasOwnFile);
         return Stream.concat(Stream.of(ROOT_LANGUAGE), fileLanguages)
                 .collect(Collectors.toList());
+    }
+
+    static String languageName(Locale language) {
+        return load(language).getString(LANGUAGE_NAME_KEY);
     }
 
     private static boolean hasOwnFile(Locale language) {
