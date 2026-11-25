@@ -99,7 +99,7 @@ The dialog that shows the list is a view change after the cases.
 
 | | State of the System | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| TC9: English first, then each language with its own file | the English root, `messages_eo` (test only), and `messages_fr` are on the classpath | `[Locale.ENGLISH, eo, Locale.FRENCH]` | :x: |
+| TC9: English first, then each language with its own file | the English root, `messages_eo` (test only), and `messages_fr` are on the classpath | `[Locale.ENGLISH, eo, Locale.FRENCH]` | :white_check_mark: |
 
 #### Method under test: `languageName(Locale locale)`
 
