@@ -107,5 +107,5 @@ The dialog that shows the list is a view change after the cases.
 | --- | --- | --- | --- |
 | TC10: English names itself | English in use; ask `languageName(Locale.ENGLISH)` | `English` | :white_check_mark: |
 | TC11: French names itself | English in use; ask `languageName(Locale.FRENCH)` | `Français` | :white_check_mark: |
-| TC12: a name does not follow the language in use | `useLocale(Locale.FRENCH)`; ask `languageName(Locale.ENGLISH)` | `English` | :x: |
+| TC12: a name does not follow the language in use | `useLocale(Locale.FRENCH)`; ask `languageName(Locale.ENGLISH)` | `English` | :white_check_mark: |
 | TC13: a language added as a file names itself | English in use; ask `languageName(eo)` | `Esperanto` | :x: |

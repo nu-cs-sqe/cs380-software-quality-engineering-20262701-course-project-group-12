@@ -118,4 +118,13 @@ public class MessagesTests {
 
         assertEquals(FRENCH_NAME, name);
     }
+
+    @Test
+    public void languageName_EnglishWhileFrenchInUse_IsStillEnglish() {
+        Messages.useLocale(Locale.FRENCH);
+
+        String name = Messages.languageName(Locale.ENGLISH);
+
+        assertEquals(ENGLISH_NAME, name);
+    }
 }
