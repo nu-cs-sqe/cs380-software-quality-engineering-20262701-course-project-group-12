@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +39,7 @@ public class GameStatsView extends JPanel {
     private final String blackName;
     private final Map<PieceColor, PlayerCardView> cards = new EnumMap<>(PieceColor.class);
     private final JTextPane statusText = statusText();
-    private final JPanel statusControls = new JPanel();
+    private final JPanel statusControls = new JPanel(new GridBagLayout());
     private String statusLine = "";
     private Optional<PieceColor> highlightedColor = Optional.empty();
     private StatusTone statusTone = StatusTone.TURN;
@@ -100,7 +101,12 @@ public class GameStatsView extends JPanel {
     }
 
     public void addStatusControl(JComponent control) {
-        statusControls.add(control);
+        GridBagConstraints ownRow = new GridBagConstraints();
+        ownRow.gridx = 0;
+        ownRow.weightx = 1;
+        ownRow.fill = GridBagConstraints.HORIZONTAL;
+        ownRow.insets = new Insets(GAP / 2, 0, 0, 0);
+        statusControls.add(control, ownRow);
     }
 
     public void showRemainingTime(PieceColor color, String time) {

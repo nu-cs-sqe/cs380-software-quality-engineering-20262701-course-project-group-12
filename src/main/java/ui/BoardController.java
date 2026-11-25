@@ -13,7 +13,6 @@ public class BoardController {
     private final Board board;
     private final Game game;
     private Optional<Location> selectedSquare = Optional.empty();
-    private Optional<Location> lastMoveFrom = Optional.empty();
     private Optional<Location> lastMoveTo = Optional.empty();
     private Optional<Location> promotionSquare = Optional.empty();
     private Optional<WaitingMove> moveWaitingForClaim = Optional.empty();
@@ -42,8 +41,7 @@ public class BoardController {
     }
 
     public boolean isLastMoveSquare(Location square) {
-        return lastMoveFrom.filter(square::isSameSquareAs).isPresent()
-                || lastMoveTo.filter(square::isSameSquareAs).isPresent();
+        return lastMoveTo.filter(square::isSameSquareAs).isPresent();
     }
 
     public boolean isKingInCheck(Location square) {
@@ -188,7 +186,6 @@ public class BoardController {
     }
 
     private void makeMove(Piece movingPiece, Location from, Location to) {
-        lastMoveFrom = Optional.of(from);
         lastMoveTo = Optional.of(to);
         movingPiece.move(from, to, board);
         passTurnUnlessPromoting(movingPiece, to);

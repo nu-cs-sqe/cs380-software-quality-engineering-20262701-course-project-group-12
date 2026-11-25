@@ -3,7 +3,6 @@ package ui;
 import domain.piece.PieceColor;
 import org.junit.jupiter.api.Test;
 
-import java.awt.Component;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JButton;
 
@@ -52,8 +51,8 @@ public class OfferDrawViewTests {
 
         OfferDrawView view = new OfferDrawView(boardController, () -> { });
 
-        assertEquals("White offers draw", whiteButton(view).getText());
-        assertEquals("Black offers draw", blackButton(view).getText());
+        assertEquals("Offer draw", whiteButton(view).getText());
+        assertEquals("Offer draw", blackButton(view).getText());
         verify(boardController);
     }
 
@@ -137,15 +136,10 @@ public class OfferDrawViewTests {
     }
 
     private static JButton whiteButton(OfferDrawView view) {
-        return buttonAt(view, 0);
+        return view.buttonFor(PieceColor.WHITE);
     }
 
     private static JButton blackButton(OfferDrawView view) {
-        return buttonAt(view, 1);
-    }
-
-    private static JButton buttonAt(OfferDrawView view, int index) {
-        Component component = view.getComponent(index);
-        return (JButton) component;
+        return view.buttonFor(PieceColor.BLACK);
     }
 }

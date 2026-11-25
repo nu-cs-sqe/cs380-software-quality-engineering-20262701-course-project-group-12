@@ -1138,7 +1138,7 @@ public class BoardControllerTests {
     }
 
     @Test
-    public void IsLastMoveSquare_AfterMove_FromSquareReturnsTrue() {
+    public void IsLastMoveSquare_AfterMove_FromSquareReturnsFalse() {
         expectWhiteMoveFromB1ToC3ThenBlackToMove();
         BoardController controller = replayedController();
         controller.clickSquare(B1);
@@ -1146,7 +1146,7 @@ public class BoardControllerTests {
 
         boolean lastMove = controller.isLastMoveSquare(B1);
 
-        assertTrue(lastMove);
+        assertFalse(lastMove);
         verify(board, piece, game);
     }
 
@@ -1177,7 +1177,7 @@ public class BoardControllerTests {
     }
 
     @Test
-    public void IsLastMoveSquare_AfterLaterMove_PreviousFromSquareReturnsFalse() {
+    public void IsLastMoveSquare_AfterLaterMove_PreviousToSquareReturnsFalse() {
         expectWhiteMoveFromB1ToC3ThenBlackToMove();
         Piece blackPiece = mock(Piece.class);
         expect(board.isOccupied(B8)).andReturn(true);
@@ -1197,7 +1197,7 @@ public class BoardControllerTests {
         controller.clickSquare(B8);
         controller.clickSquare(C6);
 
-        boolean lastMove = controller.isLastMoveSquare(B1);
+        boolean lastMove = controller.isLastMoveSquare(C3);
 
         assertFalse(lastMove);
         verify(board, piece, game, blackPiece);

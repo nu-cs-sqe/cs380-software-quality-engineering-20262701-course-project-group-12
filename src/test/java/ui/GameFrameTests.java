@@ -1,13 +1,14 @@
 package ui;
 
 import domain.Game;
+import domain.piece.PieceColor;
 import org.junit.jupiter.api.Test;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Container;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;
@@ -32,15 +33,37 @@ public class GameFrameTests {
     }
 
     @Test
-    public void AddOfferDrawControl_WithOfferDraw_IncludesOfferDraw() {
+    public void AddPlayerControls_WhiteAndBlack_PutsEachOfferDrawButtonOnItsOwnCard() {
         Game game = startedGame();
         BoardController boardController = new BoardController(game.board(), game);
+        ResignView resign = new ResignView(boardController, () -> { });
         OfferDrawView offerDraw = new OfferDrawView(boardController, () -> { });
         GameStatsView stats = new GameStatsView("Ada", "Bo");
 
-        GameFrame.addOfferDrawControl(stats, offerDraw);
+        GameFrame.addPlayerControls(stats, resign, offerDraw);
 
-        assertTrue(containsOfferDraw(stats));
+        BorderLayout layout = (BorderLayout) stats.getLayout();
+        assertSame(layout.getLayoutComponent(BorderLayout.SOUTH),
+                cardHolding(offerDraw.buttonFor(PieceColor.WHITE)));
+        assertSame(layout.getLayoutComponent(BorderLayout.NORTH),
+                cardHolding(offerDraw.buttonFor(PieceColor.BLACK)));
+    }
+
+    @Test
+    public void AddPlayerControls_WhiteAndBlack_PutsEachResignButtonOnItsOwnCard() {
+        Game game = startedGame();
+        BoardController boardController = new BoardController(game.board(), game);
+        ResignView resign = new ResignView(boardController, () -> { });
+        OfferDrawView offerDraw = new OfferDrawView(boardController, () -> { });
+        GameStatsView stats = new GameStatsView("Ada", "Bo");
+
+        GameFrame.addPlayerControls(stats, resign, offerDraw);
+
+        BorderLayout layout = (BorderLayout) stats.getLayout();
+        assertSame(layout.getLayoutComponent(BorderLayout.SOUTH),
+                cardHolding(resign.buttonFor(PieceColor.WHITE)));
+        assertSame(layout.getLayoutComponent(BorderLayout.NORTH),
+                cardHolding(resign.buttonFor(PieceColor.BLACK)));
     }
 
     @Test
@@ -56,16 +79,8 @@ public class GameFrameTests {
         verify(boardController);
     }
 
-    private static boolean containsOfferDraw(Container container) {
-        for (Component component : container.getComponents()) {
-            if (component instanceof OfferDrawView) {
-                return true;
-            }
-            if (component instanceof Container && containsOfferDraw((Container) component)) {
-                return true;
-            }
-        }
-        return false;
+    private static Component cardHolding(Component control) {
+        return SwingUtilities.getAncestorOfClass(PlayerCardView.class, control);
     }
 
     private static Game startedGame() {
