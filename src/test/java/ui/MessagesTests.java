@@ -3,6 +3,7 @@ package ui;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,6 +19,10 @@ public class MessagesTests {
     private static final String CURRENT_PLAYER_FRENCH = "Joueur au trait : " + PLAYER_NAME;
     private static final String CHECK_ENGLISH = "Current player: " + PLAYER_NAME + " (in check)";
     private static final String CHECK_FRENCH = PLAYER_NAME + " est en échec";
+    private static final Locale ESPERANTO = new Locale("eo");
+    private static final String ENGLISH_NAME = "English";
+    private static final String FRENCH_NAME = "Français";
+    private static final String ESPERANTO_NAME = "Esperanto";
 
     @AfterEach
     public void restoreEnglish() {
@@ -92,5 +97,42 @@ public class MessagesTests {
         String text = Messages.format(CHECK_KEY, PLAYER_NAME);
 
         assertEquals(CHECK_FRENCH, text);
+    }
+
+    @Test
+    public void availableLocales_RootFrenchAndTestFiles_ListsEnglishThenEachFileLanguage() {
+        List<Locale> locales = Messages.availableLocales();
+
+        assertEquals(List.of(Locale.ENGLISH, ESPERANTO, Locale.FRENCH), locales);
+    }
+
+    @Test
+    public void languageName_English_IsEnglish() {
+        String name = Messages.languageName(Locale.ENGLISH);
+
+        assertEquals(ENGLISH_NAME, name);
+    }
+
+    @Test
+    public void languageName_French_IsFrancais() {
+        String name = Messages.languageName(Locale.FRENCH);
+
+        assertEquals(FRENCH_NAME, name);
+    }
+
+    @Test
+    public void languageName_EnglishWhileFrenchInUse_IsStillEnglish() {
+        Messages.useLocale(Locale.FRENCH);
+
+        String name = Messages.languageName(Locale.ENGLISH);
+
+        assertEquals(ENGLISH_NAME, name);
+    }
+
+    @Test
+    public void languageName_LanguageAddedAsFileOnly_IsNameFromItsFile() {
+        String name = Messages.languageName(ESPERANTO);
+
+        assertEquals(ESPERANTO_NAME, name);
     }
 }
