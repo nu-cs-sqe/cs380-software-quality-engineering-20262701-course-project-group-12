@@ -2,6 +2,8 @@ package ui;
 
 import domain.Game;
 
+import java.util.Locale;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -9,7 +11,10 @@ public class Main {
     private static final String NO_NAME = "";
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> openWelcomeWindow(NO_NAME, NO_NAME));
+        SwingUtilities.invokeLater(() -> {
+            applyChosenLanguage();
+            openWelcomeWindow(NO_NAME, NO_NAME);
+        });
     }
 
     static void openWelcomeWindow(String playerOneName, String playerTwoName) {
@@ -29,5 +34,12 @@ public class Main {
 
     static WelcomeView createWelcomeView(WelcomeController controller, Runnable closeWindow) {
         return new WelcomeView(controller, closeWindow);
+    }
+
+    private static void applyChosenLanguage() {
+        Locale locale = LanguageView.choose();
+        Locale.setDefault(locale);
+        JComponent.setDefaultLocale(locale);
+        Messages.useLocale(locale);
     }
 }
