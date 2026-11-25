@@ -70,16 +70,16 @@ We split the UI polish task (#73) into sub-issues and started the timer and loca
 
 # Week 9 (11/23/2026-11/29/2026)
 **Planning and Progress Tracking**:
-We merged the four reviews left from week 8 and checked main against the grading rubric. The check found three gaps, each with its own task below; the BVA and locale fixes are merged and this report is in review.
+We merged the four reviews left from week 8 and checked main against the grading rubric. The check found three gaps, each with its own task below; all three are merged.
 1. [Done] Souvenir: Style the player panel and controls around the board ([#87](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/87))
 2. [Done] Jay: US-22: Internationalize the user interface ([#84](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/84))
 3. [Done] Vanessa: US-23: Game timer ([#85](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/85))
 4. [Done] Vanessa: Offer a draw from the game window ([#86](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/86))
 5. [Done] Souvenir: Fix the draw buttons and the last-move highlight ([#89](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/89))
 6. [Done] Souvenir: Update the last-move BVA cases ([#91](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/91))
-7. [In review] Souvenir: Add the week 8 report ([#93](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/93))
+7. [Done] Souvenir: Add the week 8 and week 9 reports ([#93](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/93))
 8. [Done] Souvenir: Add a language by adding its messages file only ([#94](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/pull/94))
-9. [In progress] Unassigned: Polish the user interface ([#73](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/73)): all seven sub-issues (#74 to #78, #88, #90) are done; the parent task is still open
+9. [Done] Team: Polish the user interface ([#73](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-12/issues/73)): closed after all seven sub-issues (#74 to #78, #88, #90) were done
 
 # One section per week until the last week of class (the week before the Finals week)
 
