@@ -31,6 +31,11 @@ java {
 
 tasks.compileJava {
     options.release = 11
+    options.encoding = "UTF-8"
+}
+
+tasks.compileTestJava {
+    options.encoding = "UTF-8"
 }
 
 tasks.test {
