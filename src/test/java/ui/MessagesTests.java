@@ -22,6 +22,7 @@ public class MessagesTests {
     private static final Locale ESPERANTO = new Locale("eo");
     private static final String ENGLISH_NAME = "English";
     private static final String FRENCH_NAME = "Français";
+    private static final String ESPERANTO_NAME = "Esperanto";
 
     @AfterEach
     public void restoreEnglish() {
@@ -126,5 +127,12 @@ public class MessagesTests {
         String name = Messages.languageName(Locale.ENGLISH);
 
         assertEquals(ENGLISH_NAME, name);
+    }
+
+    @Test
+    public void languageName_LanguageAddedAsFileOnly_IsNameFromItsFile() {
+        String name = Messages.languageName(ESPERANTO);
+
+        assertEquals(ESPERANTO_NAME, name);
     }
 }
